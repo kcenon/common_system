@@ -93,7 +93,7 @@ jobs:
         zip -r common_system-$VERSION.zip common_system-$VERSION
 
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           common_system-*.tar.gz
