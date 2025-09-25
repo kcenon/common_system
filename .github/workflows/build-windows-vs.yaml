@@ -56,6 +56,9 @@ jobs:
       run: |
         cmake --install build --config Debug --prefix install_test
 
+    - name: Setup MSVC Developer Command Prompt
+      uses: ilammy/msvc-dev-cmd@v1
+
     - name: Example Build Test
       shell: cmd
       run: |
