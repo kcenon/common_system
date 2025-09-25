@@ -1,9 +1,14 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, kcenon
+// See the LICENSE file in the project root for full license information.
+
 /**
  * @file result.h
- * @brief Standard Result<T> type for consistent error handling
+ * @brief Result<T> type for exception-free error handling.
  *
- * Provides a Result type similar to Rust's Result or C++23's std::expected
- * for handling errors without exceptions at module boundaries.
+ * Provides a `Result<T>` type similar to Rust's Result or C++23's
+ * `std::expected`, enabling explicit error propagation at module boundaries
+ * without using exceptions.
  */
 
 #pragma once
@@ -19,6 +24,10 @@ namespace common {
  * @struct error_info
  * @brief Standard error information structure
  */
+/**
+ * @struct error_info
+ * @brief Standard error information used by Result<T>.
+ */
 struct error_info {
     int code;
     std::string message;
@@ -27,9 +36,11 @@ struct error_info {
 
     error_info() : code(0) {}
 
+    /** @brief Construct with code, message and optional module. */
     error_info(int c, const std::string& msg, const std::string& mod = "")
         : code(c), message(msg), module(mod) {}
 
+    /** @brief Construct with code, message, module and details. */
     error_info(int c, const std::string& msg, const std::string& mod,
                const std::string& det)
         : code(c), message(msg), module(mod), details(det) {}
@@ -49,6 +60,9 @@ struct error_info {
  *
  * A Result<T> can contain either a value of type T or an error_info.
  * This provides a type-safe way to handle errors without exceptions.
+ */
+/**
+ * @brief Discriminated union holding either a value of T or an error.
  */
 template<typename T>
 using Result = std::variant<T, error_info>;

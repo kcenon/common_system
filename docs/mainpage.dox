@@ -1,0 +1,25 @@
+/**
+@mainpage Common System
+
+@section overview Overview
+Common System provides foundational C++ interfaces and patterns that promote
+loose coupling and consistent error handling across the project. It is
+primarily a header-only library designed to be easy to integrate in other
+system modules (thread, logger, monitoring, container, database, network).
+
+@section features Key Features
+- Result<T> type for exception-free error handling
+- Event bus abstraction with optional monitoring-system integration
+- Executor interfaces for pluggable threading backends
+
+@section usage Usage
+The library is installed as a set of headers. After installation or adding the
+repository as a submodule, include the headers from `kcenon/common` and link
+the CMake interface target `kcenon::common` when needed.
+
+@section build Build
+The project uses CMake. It can be consumed as a header-only target by default,
+and optionally built as a static library by turning off `COMMON_HEADER_ONLY`.
+
+*/
+

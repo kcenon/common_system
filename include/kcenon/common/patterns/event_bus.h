@@ -1,22 +1,21 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, kcenon
+// See the LICENSE file in the project root for full license information.
+
 /**
  * @file event_bus.h
- * @brief Forwarding header for the monitoring system's event bus
+ * @brief Event bus abstraction and common events.
  *
- * This header provides a standardized way to access the event bus
- * functionality across all modules, enabling loose coupling through
- * publish-subscribe patterns.
+ * This header defines a uniform way to publish/subscribe events across
+ * modules. When monitoring integration is enabled, it forwards to the
+ * monitoring_system implementation; otherwise it provides a no-op stub
+ * that keeps client code consistent.
  *
- * Usage:
- *   #include <common/event_bus.h>
- *
- *   // Publishing an event
- *   auto bus = monitoring_system::event_bus::instance();
- *   bus->publish(my_event);
- *
- *   // Subscribing to events
- *   bus->subscribe<MyEventType>([](const MyEventType& event) {
- *       // Handle event
- *   });
+ * Example:
+ * @code
+ * auto bus = common::get_event_bus();
+ * bus->publish(common::events::module_started_event{"network_system"});
+ * @endcode
  */
 
 #pragma once
@@ -49,6 +48,9 @@ namespace common {
      * This provides a convenient way to access the event bus
      * without direct dependency on monitoring_system namespace.
      */
+    /**
+     * @brief Access the global event bus instance.
+     */
     inline std::shared_ptr<monitoring_system::event_bus_interface> get_event_bus() {
         return monitoring_system::event_bus::instance();
     }
@@ -72,6 +74,10 @@ namespace common {
     /**
      * @class null_event_bus
      * @brief No-op event bus implementation for when monitoring is disabled
+     */
+    /**
+     * @class null_event_bus
+     * @brief No-op event bus used when monitoring is disabled.
      */
     class null_event_bus {
     public:
@@ -104,6 +110,9 @@ namespace common {
     template<typename T>
     using event_handler = std::function<void(const T&)>;
 
+    /**
+     * @brief Access the (no-op) global event bus instance.
+     */
     inline std::shared_ptr<null_event_bus> get_event_bus() {
         return null_event_bus::instance();
     }
@@ -117,7 +126,7 @@ namespace events {
 
 /**
  * @struct module_started_event
- * @brief Event published when a module starts
+ * @brief Event published when a module starts.
  */
 struct module_started_event {
     std::string module_name;
@@ -130,7 +139,7 @@ struct module_started_event {
 
 /**
  * @struct module_stopped_event
- * @brief Event published when a module stops
+ * @brief Event published when a module stops.
  */
 struct module_stopped_event {
     std::string module_name;
@@ -143,7 +152,7 @@ struct module_stopped_event {
 
 /**
  * @struct error_event
- * @brief Event published when an error occurs
+ * @brief Event published when an error occurs.
  */
 struct error_event {
     std::string module_name;
@@ -158,7 +167,7 @@ struct error_event {
 
 /**
  * @struct metric_event
- * @brief Event for publishing metrics
+ * @brief Event for publishing metrics.
  */
 struct metric_event {
     std::string name;
