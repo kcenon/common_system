@@ -22,7 +22,7 @@ jobs:
         submodules: recursive
 
     - name: Setup Visual Studio
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v1.3
       with:
         msbuild-architecture: ${{ matrix.arch }}
 
