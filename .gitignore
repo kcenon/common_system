@@ -1,0 +1,90 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+bin/
+lib/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Visual Studio files
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.sln
+CMakeSettings.json
+
+# CLion
+cmake-build-debug/
+cmake-build-release/
+
+# XCode
+*.xcodeproj/
+*.xcworkspace/
+
+# Compilation database
+compile_commands.json
+
+# Dependencies
+vcpkg_installed/
+conan/
+.conan/
+
+# Cache
+.cache/
+CMakeCache.txt
+CMakeFiles/
+
+# Test and coverage outputs
+Testing/
+test_results/
+*.gcov
+*.gcda
+*.gcno
+coverage.info
+coverage_html/
+
+# Benchmark results
+benchmark_results/
+*.bench
+
+# Documentation
+docs/html/
+docs/latex/
+Doxyfile.bak
+
+# Log files
+*.log
+*.tlog
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# Package files
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Installation
+install_manifest.txt
+
+# CTest
+CTestTestfile.cmake
+DartConfiguration.tcl

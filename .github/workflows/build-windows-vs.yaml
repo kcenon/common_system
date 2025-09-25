@@ -1,0 +1,96 @@
+name: Windows-VisualStudio
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
+        arch: [x64, Win32]
+        std: [17, 20]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup Visual Studio
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: ${{ matrix.arch }}
+
+    - name: Setup vcpkg
+      run: |
+        git clone https://github.com/Microsoft/vcpkg.git C:\vcpkg
+        C:\vcpkg\bootstrap-vcpkg.bat
+        C:\vcpkg\vcpkg integrate install
+        echo "VCPKG_ROOT=C:\vcpkg" >> $env:GITHUB_ENV
+
+    - name: Install dependencies
+      run: |
+        C:\vcpkg\vcpkg install gtest:${{ matrix.arch }}-windows
+        C:\vcpkg\vcpkg install benchmark:${{ matrix.arch }}-windows
+        C:\vcpkg\vcpkg install fmt:${{ matrix.arch }}-windows
+
+    - name: Configure CMake
+      run: |
+        $arch_flag = if ("${{ matrix.arch }}" -eq "x64") { "x64" } else { "Win32" }
+        cmake -B build `
+          -G "Visual Studio 17 2022" `
+          -A $arch_flag `
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
+          -DCMAKE_CXX_STANDARD=${{ matrix.std }} `
+          -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake `
+          -DCOMMON_BUILD_TESTS=ON `
+          -DCOMMON_BUILD_EXAMPLES=ON `
+          -DCOMMON_BUILD_BENCHMARKS=OFF `
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }} --parallel
+
+    - name: Test
+      working-directory: build
+      run: ctest -C ${{ matrix.build_type }} --output-on-failure --verbose
+
+    - name: Install Test
+      run: |
+        cmake --install build --config ${{ matrix.build_type }} --prefix install_test
+
+    - name: Example Build Test
+      if: matrix.build_type == 'Release'
+      shell: cmd
+      run: |
+        echo #include ^<kcenon/common/interfaces/executor_interface.h^> > test_install.cpp
+        echo #include ^<kcenon/common/patterns/result.h^> >> test_install.cpp
+        echo int main() { >> test_install.cpp
+        echo     auto result = common::ok(42); >> test_install.cpp
+        echo     return common::is_ok(result) ? 0 : 1; >> test_install.cpp
+        echo } >> test_install.cpp
+
+        set INCLUDE=%CD%\install_test\include;%INCLUDE%
+        cl /std:c++${{ matrix.std }} /EHsc test_install.cpp /Fe:test_install.exe
+        test_install.exe
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-vs-${{ matrix.arch }}-${{ matrix.build_type }}-c++${{ matrix.std }}
+        path: build/Testing/
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      if: matrix.build_type == 'Release'
+      with:
+        name: common-system-vs-${{ matrix.arch }}-release
+        path: |
+          install_test/include/
+          install_test/lib/cmake/

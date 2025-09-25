@@ -1,0 +1,104 @@
+name: Ubuntu-Clang
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
+        clang_version: [11, 12, 13, 14, 15]
+        std: [17, 20]
+        exclude:
+          - clang_version: 11
+            std: 20
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup Clang
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh ${{ matrix.clang_version }}
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{ matrix.clang_version }} 100
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{ matrix.clang_version }} 100
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build
+        sudo apt-get install -y libgtest-dev libbenchmark-dev
+        sudo apt-get install -y libc++-${{ matrix.clang_version }}-dev libc++abi-${{ matrix.clang_version }}-dev
+
+    - name: Setup vcpkg
+      run: |
+        git clone https://github.com/Microsoft/vcpkg.git $HOME/vcpkg
+        $HOME/vcpkg/bootstrap-vcpkg.sh
+        echo "VCPKG_ROOT=$HOME/vcpkg" >> $GITHUB_ENV
+
+    - name: Configure CMake
+      run: |
+        cmake -B build \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DCMAKE_CXX_STANDARD=${{ matrix.std }} \
+          -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
+          -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
+          -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake \
+          -DCOMMON_BUILD_TESTS=ON \
+          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_BUILD_BENCHMARKS=OFF \
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }}
+
+    - name: Test
+      working-directory: build
+      run: ctest -C ${{ matrix.build_type }} --output-on-failure --verbose
+
+    - name: Install Test
+      run: |
+        sudo cmake --install build --config ${{ matrix.build_type }}
+
+    - name: Example Build Test
+      if: matrix.build_type == 'Release'
+      run: |
+        # Test that installed headers work
+        cat > test_install.cpp << 'EOF'
+        #include <kcenon/common/interfaces/executor_interface.h>
+        #include <kcenon/common/patterns/result.h>
+        int main() {
+            auto result = common::ok(42);
+            return common::is_ok(result) ? 0 : 1;
+        }
+        EOF
+        clang++-${{ matrix.clang_version }} -std=c++${{ matrix.std }} test_install.cpp -o test_install
+        ./test_install
+
+    - name: Static Analysis
+      if: matrix.build_type == 'Debug'
+      run: |
+        # Run clang-tidy
+        if [ -f "build/compile_commands.json" ]; then
+          find include -name "*.h" -o -name "*.hpp" | xargs clang-tidy-${{ matrix.clang_version }} \
+            -p build \
+            --checks='-*,bugprone-*,performance-*,readability-*,modernize-*,-modernize-use-trailing-return-type' \
+            --warnings-as-errors='' || true
+        fi
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results-clang${{ matrix.clang_version }}-${{ matrix.build_type }}-c++${{ matrix.std }}
+        path: build/Testing/

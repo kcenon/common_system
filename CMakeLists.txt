@@ -1,0 +1,136 @@
+cmake_minimum_required(VERSION 3.16)
+project(common_system VERSION 1.0.0 LANGUAGES CXX)
+
+# C++17 as minimum standard (compatible with all modules)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Export compile commands for IDE support
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Options
+option(COMMON_BUILD_TESTS "Build unit tests for common_system" ON)
+option(COMMON_BUILD_EXAMPLES "Build examples for common_system" ON)
+option(COMMON_BUILD_DOCS "Generate documentation" OFF)
+option(COMMON_HEADER_ONLY "Use as header-only library" ON)
+
+# Create interface library (header-only by default)
+add_library(common_system INTERFACE)
+add_library(kcenon::common ALIAS common_system)
+
+# Set include directories
+target_include_directories(common_system INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+# C++ feature requirements
+target_compile_features(common_system INTERFACE cxx_std_17)
+
+# Optional: If not header-only, add source files
+if(NOT COMMON_HEADER_ONLY)
+    # Convert to static library
+    add_library(common_system_static STATIC
+        src/placeholder.cpp  # Add actual source files here
+    )
+
+    target_include_directories(common_system_static PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    )
+
+    target_compile_features(common_system_static PUBLIC cxx_std_17)
+endif()
+
+# Installation rules
+include(GNUInstallDirs)
+
+# Install headers
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+
+# Install CMake config files
+install(TARGETS common_system
+    EXPORT common_systemTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT common_systemTargets
+    FILE common_systemTargets.cmake
+    NAMESPACE kcenon::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
+)
+
+# Create Config.cmake file
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common_systemConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
+)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
+)
+
+# Export for build tree
+export(EXPORT common_systemTargets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/common_systemTargets.cmake"
+    NAMESPACE kcenon::
+)
+
+# Tests
+if(COMMON_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# Examples
+if(COMMON_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+# Documentation
+if(COMMON_BUILD_DOCS)
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+        set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+        configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+        add_custom_target(common_docs ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM
+        )
+    endif()
+endif()
+
+# Print configuration summary
+message(STATUS "")
+message(STATUS "=== common_system Configuration ===")
+message(STATUS "Version:          ${PROJECT_VERSION}")
+message(STATUS "Header-only:      ${COMMON_HEADER_ONLY}")
+message(STATUS "Build tests:      ${COMMON_BUILD_TESTS}")
+message(STATUS "Build examples:   ${COMMON_BUILD_EXAMPLES}")
+message(STATUS "Build docs:       ${COMMON_BUILD_DOCS}")
+message(STATUS "Install prefix:   ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "==================================")
+message(STATUS "")

@@ -1,0 +1,47 @@
+{
+  "name": "common-system",
+  "version-string": "1.0.0",
+  "description": "Common interfaces and patterns for system module integration",
+  "homepage": "https://github.com/kcenon/common_system",
+  "maintainers": ["kcenon <kcenon@naver.com>"],
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "gtest",
+      "features": [],
+      "$comment": "Google Test for unit testing"
+    },
+    {
+      "name": "benchmark",
+      "$comment": "Google Benchmark for performance testing"
+    },
+    {
+      "name": "fmt",
+      "$comment": "Modern formatting library"
+    }
+  ],
+  "features": {
+    "tests": {
+      "description": "Build unit tests",
+      "dependencies": [
+        "gtest"
+      ]
+    },
+    "benchmarks": {
+      "description": "Build performance benchmarks",
+      "dependencies": [
+        "benchmark"
+      ]
+    },
+    "docs": {
+      "description": "Generate documentation",
+      "dependencies": []
+    }
+  },
+  "default-features": ["tests"],
+  "builtin-baseline": "2024.01.12",
+  "overrides": [],
+  "vcpkg-configuration": {
+    "registries": []
+  }
+}

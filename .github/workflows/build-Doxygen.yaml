@@ -1,0 +1,173 @@
+name: Doxygen
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Install Doxygen and dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y doxygen graphviz
+        sudo apt-get install -y python3-pip
+        pip3 install breathe sphinx sphinx_rtd_theme
+
+    - name: Create Doxyfile
+      run: |
+        cat > Doxyfile << 'EOF'
+        # Doxyfile for common_system
+
+        # Project related
+        PROJECT_NAME           = "Common System"
+        PROJECT_NUMBER         = "1.0.0"
+        PROJECT_BRIEF          = "Foundational interfaces and patterns for modular C++ architecture"
+        PROJECT_LOGO           =
+        OUTPUT_DIRECTORY       = docs/doxygen
+        CREATE_SUBDIRS         = YES
+
+        # Input
+        INPUT                  = include/kcenon/common \
+                                README.md \
+                                docs
+        INPUT_ENCODING         = UTF-8
+        FILE_PATTERNS          = *.h \
+                                *.hpp \
+                                *.cpp \
+                                *.md
+        RECURSIVE              = YES
+        EXCLUDE                =
+        EXCLUDE_PATTERNS       = */tests/* \
+                                */build/* \
+                                */cmake-build-*/*
+
+        # Build related
+        EXTRACT_ALL            = YES
+        EXTRACT_PRIVATE        = YES
+        EXTRACT_STATIC         = YES
+        EXTRACT_LOCAL_CLASSES  = YES
+        EXTRACT_ANON_NSPACES   = YES
+
+        # Output formats
+        GENERATE_HTML          = YES
+        GENERATE_LATEX         = NO
+        GENERATE_XML           = YES
+
+        # HTML output
+        HTML_OUTPUT            = html
+        HTML_FILE_EXTENSION    = .html
+        HTML_HEADER            =
+        HTML_FOOTER            =
+        HTML_STYLESHEET        =
+        HTML_TIMESTAMP         = YES
+        HTML_DYNAMIC_SECTIONS  = YES
+        HTML_INDEX_NUM_ENTRIES = 100
+
+        # Source browsing
+        SOURCE_BROWSER         = YES
+        INLINE_SOURCES         = NO
+        STRIP_CODE_COMMENTS    = NO
+        REFERENCED_BY_RELATION = YES
+        REFERENCES_RELATION    = YES
+        REFERENCES_LINK_SOURCE = YES
+
+        # Diagrams
+        HAVE_DOT               = YES
+        DOT_NUM_THREADS        = 0
+        DOT_FONTNAME           = Helvetica
+        DOT_FONTSIZE           = 10
+        DOT_IMAGE_FORMAT       = svg
+        DOT_TRANSPARENT        = YES
+        DOT_MULTI_TARGETS      = YES
+        GENERATE_LEGEND        = YES
+
+        CLASS_DIAGRAMS         = YES
+        COLLABORATION_GRAPH    = YES
+        GROUP_GRAPHS           = YES
+        UML_LOOK               = YES
+        TEMPLATE_RELATIONS     = YES
+        INCLUDE_GRAPH          = YES
+        INCLUDED_BY_GRAPH      = YES
+        CALL_GRAPH             = YES
+        CALLER_GRAPH           = YES
+        GRAPHICAL_HIERARCHY    = YES
+        DIRECTORY_GRAPH        = YES
+
+        # Preprocessor
+        ENABLE_PREPROCESSING   = YES
+        MACRO_EXPANSION        = YES
+        EXPAND_ONLY_PREDEF     = NO
+        SEARCH_INCLUDES        = YES
+        INCLUDE_PATH           = include
+        PREDEFINED             =
+
+        # External references
+        GENERATE_TAGFILE       = docs/doxygen/common_system.tag
+        ALLEXTERNALS           = NO
+        EXTERNAL_GROUPS        = YES
+        EXTERNAL_PAGES         = YES
+
+        # Warnings
+        QUIET                  = NO
+        WARNINGS               = YES
+        WARN_IF_UNDOCUMENTED   = YES
+        WARN_IF_DOC_ERROR      = YES
+        WARN_FORMAT            = "$file:$line: $text"
+        WARN_LOGFILE           = doxygen_warnings.log
+        EOF
+
+    - name: Run Doxygen
+      run: |
+        doxygen Doxyfile
+        echo "Documentation generated successfully"
+
+    - name: Check for warnings
+      run: |
+        if [ -f doxygen_warnings.log ]; then
+          echo "::warning::Doxygen warnings detected"
+          cat doxygen_warnings.log
+        fi
+
+    - name: Upload documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/doxygen/html/
+
+    - name: Deploy to GitHub Pages
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/doxygen/html
+        destination_dir: docs
+
+    - name: Create documentation summary
+      run: |
+        echo "# Documentation Build Summary" > $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -d "docs/doxygen/html" ]; then
+          echo "- HTML files: $(find docs/doxygen/html -name "*.html" | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "- Total size: $(du -sh docs/doxygen/html | cut -f1)" >> $GITHUB_STEP_SUMMARY
+        fi
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -f "doxygen_warnings.log" ]; then
+          echo "## Warnings" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          head -20 doxygen_warnings.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        else
+          echo "✅ No warnings detected" >> $GITHUB_STEP_SUMMARY
+        fi
