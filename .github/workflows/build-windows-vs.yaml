@@ -80,14 +80,14 @@ jobs:
         test_install.exe
 
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results-vs-${{ matrix.arch }}-${{ matrix.build_type }}-c++${{ matrix.std }}
         path: build/Testing/
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: matrix.build_type == 'Release'
       with:
         name: common-system-vs-${{ matrix.arch }}-release
