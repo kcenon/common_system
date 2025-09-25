@@ -15,8 +15,8 @@
 #include "patterns/result.h"
 #include "patterns/event_bus.h"
 
-// Configuration
-#include "config/features.cmake"
+// Configuration (build-time only)
+// Note: CMake configuration is handled in CMake scripts, not headers.
 
 namespace kcenon {
 namespace common {
