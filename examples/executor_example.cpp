@@ -9,6 +9,9 @@
 #include <chrono>
 #include <vector>
 #include <atomic>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
 
 using namespace common::interfaces;
 using namespace std::chrono_literals;

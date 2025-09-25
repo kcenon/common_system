@@ -34,13 +34,23 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get install -y cmake ninja-build
-        sudo apt-get install -y libgtest-dev libbenchmark-dev
+
+    - name: Cache vcpkg
+      uses: actions/cache@v3
+      with:
+        path: $HOME/vcpkg
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
 
     - name: Setup vcpkg
       run: |
-        git clone https://github.com/Microsoft/vcpkg.git $HOME/vcpkg
+        if [ ! -d "$HOME/vcpkg" ]; then
+          git clone https://github.com/Microsoft/vcpkg.git $HOME/vcpkg
+        fi
         $HOME/vcpkg/bootstrap-vcpkg.sh
         echo "VCPKG_ROOT=$HOME/vcpkg" >> $GITHUB_ENV
+        $HOME/vcpkg/vcpkg install
 
     - name: Configure CMake
       run: |

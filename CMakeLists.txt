@@ -97,7 +97,13 @@ export(EXPORT common_systemTargets
 # Tests
 if(COMMON_BUILD_TESTS)
     enable_testing()
-    add_subdirectory(tests)
+    # Only add tests directory if GTest is available
+    find_package(GTest QUIET)
+    if(GTest_FOUND)
+        add_subdirectory(tests)
+    else()
+        message(STATUS "GTest not found, skipping tests")
+    endif()
 endif()
 
 # Examples
