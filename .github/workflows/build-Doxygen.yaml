@@ -1,4 +1,4 @@
-name: Doxygen
+name: Generate-Documentation
 
 on:
   push:
@@ -8,7 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-documentation:
+  generate_docs:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -36,4 +38,5 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./documents/html
-        destination_dir: docs
+        enable_jekyll: false
+        commit_message: "docs(gh-pages): update API docs via CI"
