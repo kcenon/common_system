@@ -1,9 +1,8 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/kcenon/common_system/badge)](https://www.codefactor.io/repository/github/kcenon/common_system)
-
 [![Ubuntu-GCC](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-gcc.yaml)
 [![Ubuntu-Clang](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-clang.yaml)
 [![Windows-MSYS2](https://github.com/kcenon/common_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-windows-msys2.yaml)
 [![Windows-VisualStudio](https://github.com/kcenon/common_system/actions/workflows/build-windows-vs.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-windows-vs.yaml)
+[![License](https://img.shields.io/github/license/kcenon/common_system)](https://github.com/kcenon/common_system/blob/main/LICENSE)
 
 # Common System Project
 
