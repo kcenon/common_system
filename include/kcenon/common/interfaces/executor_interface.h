@@ -1,9 +1,14 @@
+// BSD 3-Clause License
+// Copyright (c) 2025, kcenon
+// See the LICENSE file in the project root for full license information.
+
 /**
  * @file executor_interface.h
- * @brief Common executor interface for task submission and management
+ * @brief Executor interfaces for task submission and management.
  *
- * This header-only interface provides a unified abstraction for different
- * threading implementations, enabling loose coupling between modules.
+ * This header defines the public interfaces for an execution service
+ * abstraction so that different threading backends can be plugged in
+ * without creating hard dependencies between modules.
  */
 
 #ifndef COMMON_INTERFACES_EXECUTOR_INTERFACE_H
@@ -24,6 +29,10 @@ namespace interfaces {
  * This interface defines the contract for any task executor implementation,
  * allowing modules to work with different threading backends without
  * direct dependencies.
+ */
+/**
+ * @class IExecutor
+ * @brief Abstract interface for task execution systems.
  */
 class IExecutor {
 public:
@@ -74,11 +83,18 @@ public:
 /**
  * @brief Factory function type for creating executor instances
  */
+/**
+ * @brief Factory function to create executor instances.
+ */
 using ExecutorFactory = std::function<std::shared_ptr<IExecutor>()>;
 
 /**
  * @interface IExecutorProvider
  * @brief Interface for modules that provide executor implementations
+ */
+/**
+ * @class IExecutorProvider
+ * @brief Provider for obtaining executor implementations.
  */
 class IExecutorProvider {
 public:
