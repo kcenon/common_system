@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-# Find GTest
+# Find GTest (should already be checked by parent)
 find_package(GTest REQUIRED)
+find_package(Threads REQUIRED)
 
 # Create test executable
 add_executable(common_system_tests
