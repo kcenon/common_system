@@ -21,6 +21,10 @@
 
 #pragma once
 
+#include <string>
+#include <chrono>
+#include <cstdint>
+
 // Check if monitoring system integration is enabled
 #if defined(ENABLE_MONITORING_INTEGRATION) || defined(WITH_MONITORING_SYSTEM) || defined(USE_MONITORING_SYSTEM)
 
