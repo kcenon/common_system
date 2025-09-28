@@ -316,6 +316,13 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 }
 ```
 
+### Ecosystem Integration Flags
+
+- Modules in the ecosystem expose build flags to toggle integrations:
+  - network_system: `BUILD_WITH_THREAD_SYSTEM`, `BUILD_WITH_CONTAINER_SYSTEM`, `BUILD_WITH_LOGGER_SYSTEM`
+  - database_system: define `DATABASE_USE_COMMON_SYSTEM` to enable `common::Result` wrappers
+- Recommendation: use `common_system` as the canonical source for `Result<T>` and `IExecutor`, and adapt modules via their integration adapters.
+
 ## Testing
 
 The project includes comprehensive unit tests:
