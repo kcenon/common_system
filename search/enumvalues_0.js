@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['high_0',['high',['../d9/d0c/namespacecommon.html#a834415b61751d2aae72aab7cc200e05ca8d966b2253a917086c8604959e152243',1,'common']]]
+  ['critical_0',['critical',['../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004a7e85bcb66fb9a809d5ab4f62a8b8bea8',1,'common::interfaces']]]
 ];

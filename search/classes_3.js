@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['null_5fevent_5fbus_0',['null_event_bus',['../d4/d2b/classcommon_1_1null__event__bus.html',1,'common']]]
+  ['log_5fentry_0',['log_entry',['../d7/d16/structcommon_1_1interfaces_1_1log__entry.html',1,'common::interfaces']]]
 ];

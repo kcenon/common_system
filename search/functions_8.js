@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['shutdown_0',['shutdown',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#aeb841d6ace2cf36d668859715b89d37c',1,'common::interfaces::IExecutor']]],
-  ['start_1',['start',['../d4/d2b/classcommon_1_1null__event__bus.html#a7a9c1699256f3ac5b08caae7f6e70795',1,'common::null_event_bus']]],
-  ['stop_2',['stop',['../d4/d2b/classcommon_1_1null__event__bus.html#ae0c2938819ef997af989769081e9bd0b',1,'common::null_event_bus']]],
-  ['submit_3',['submit',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a68a2e88cce32a45809ad43fd6cd97581',1,'common::interfaces::IExecutor']]],
-  ['submit_5fdelayed_4',['submit_delayed',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a6db6e8e3f35d7770f01e4ea27be57bef',1,'common::interfaces::IExecutor']]],
-  ['subscribe_5',['subscribe',['../d4/d2b/classcommon_1_1null__event__bus.html#afd05d70a8f769141ed88519ba5b2d4b6',1,'common::null_event_bus']]]
+  ['map_0',['map',['../d9/d0c/namespacecommon.html#abec16fa2e091e6c8e060911989acdee0',1,'common']]],
+  ['metric_5fevent_1',['metric_event',['../d8/d0f/structcommon_1_1events_1_1metric__event.html#a9d6ba3ad9256118a0d44dacda44afcb0',1,'common::events::metric_event']]],
+  ['metric_5fvalue_2',['metric_value',['../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#ac4e6b40ab9f6ec0f8ea12226b2c20e45',1,'common::interfaces::metric_value']]],
+  ['metrics_5fsnapshot_3',['metrics_snapshot',['../db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html#a97c5e6462a8a5154dfe7a8d3754b694e',1,'common::interfaces::metrics_snapshot']]],
+  ['module_5fstarted_5fevent_4',['module_started_event',['../d3/d13/structcommon_1_1events_1_1module__started__event.html#a22c74f9bc7a1da1eb98fb79803a90188',1,'common::events::module_started_event']]],
+  ['module_5fstopped_5fevent_5',['module_stopped_event',['../df/dce/structcommon_1_1events_1_1module__stopped__event.html#a4cd416b118fd469b0cb5a1c741c33558',1,'common::events::module_stopped_event']]]
 ];

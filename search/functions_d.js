@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['_7eiexecutor_0',['~IExecutor',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5ef4f725ca125b9d4b1d264a08faecd5',1,'common::interfaces::IExecutor']]],
-  ['_7eiexecutorprovider_1',['~IExecutorProvider',['../d6/d85/classcommon_1_1interfaces_1_1IExecutorProvider.html#af5feb71bc3ff6b3a2cf8c34e804b48ed',1,'common::interfaces::IExecutorProvider']]]
+  ['to_5fstring_0',['to_string',['../d8/d27/namespacecommon_1_1interfaces.html#a37ab7f0332b69b4a7eab3d9fa7de2085',1,'common::interfaces::to_string(log_level level)'],['../d8/d27/namespacecommon_1_1interfaces.html#a18d77affa4f0e8d7f89b49653675e358',1,'common::interfaces::to_string(health_status status)']]],
+  ['try_5fcatch_1',['try_catch',['../d9/d0c/namespacecommon.html#a258fc55a9522864ad1fed6586b785c82',1,'common']]]
 ];

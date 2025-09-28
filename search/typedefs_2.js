@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['voidresult_0',['VoidResult',['../d9/d0c/namespacecommon.html#a8592ffca119a0284cfca2ce9a6ae7ee5',1,'common']]]
+  ['monitorfactory_0',['MonitorFactory',['../d8/d27/namespacecommon_1_1interfaces.html#ac9ba97b743eeded0ae733d0c5ce3e936',1,'common::interfaces']]]
 ];

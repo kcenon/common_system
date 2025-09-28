@@ -386,7 +386,17 @@ With network_system</h3>
 <div class="line">    network_system::server server(adapted_pool);</div>
 <div class="line">    <span class="comment">// Network operations now use the common executor</span></div>
 <div class="line">}</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md29"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md29"></a>
+Ecosystem Integration Flags</h3>
+<ul>
+<li>Modules in the ecosystem expose build flags to toggle integrations:<ul>
+<li>network_system: <code>BUILD_WITH_THREAD_SYSTEM</code>, <code>BUILD_WITH_CONTAINER_SYSTEM</code>, <code>BUILD_WITH_LOGGER_SYSTEM</code></li>
+<li>database_system: define <code>DATABASE_USE_COMMON_SYSTEM</code> to enable <code><a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad" title="Result type for error handling.">common::Result</a></code> wrappers</li>
+</ul>
+</li>
+<li>Recommendation: use <code>common_system</code> as the canonical source for <code>Result&lt;T&gt;</code> and <code>IExecutor</code>, and adapt modules via their integration adapters.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md30"></a>
 Testing</h2>
 <p>The project includes comprehensive unit tests:</p>
 <div class="fragment"><div class="line"># Run all tests</div>
@@ -400,7 +410,7 @@ Testing</h2>
 <div class="line"> </div>
 <div class="line"># Benchmark tests</div>
 <div class="line">./test.sh --benchmark</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md30"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md31"></a>
 Documentation</h2>
 <ul>
 <li>API Reference</li>
@@ -409,7 +419,7 @@ Documentation</h2>
 <li>Error Handling Guide</li>
 <li>Migration Guide</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 Performance Benchmarks</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -424,10 +434,10 @@ Performance Benchmarks</h2>
 <td class="markdownTableBodyNone">Event publish   </td><td class="markdownTableBodyNone">12.4   </td><td class="markdownTableBodyNone">0   </td></tr>
 </table>
 <p><em>Benchmarked on Intel i7-9700K @ 3.6GHz with GCC 11.2 -O3</em></p>
-<h2><a class="anchor" id="autotoc_md32"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 Contributing</h2>
 <p>We welcome contributions! Please see CONTRIBUTING.md for guidelines.</p>
-<h3><a class="anchor" id="autotoc_md33"></a>
+<h3><a class="anchor" id="autotoc_md34"></a>
 Development Workflow</h3>
 <ol type="1">
 <li>Fork the repository</li>
@@ -436,7 +446,7 @@ Development Workflow</h3>
 <li><code>Push to the branch (</code>git push origin feature/amazing-feature`)</li>
 <li>Open a Pull Request</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md34"></a>
+<h3><a class="anchor" id="autotoc_md35"></a>
 Code Style</h3>
 <ul>
 <li>Follow the existing code style (clang-format configuration provided)</li>
@@ -444,7 +454,7 @@ Code Style</h3>
 <li>Update documentation as needed</li>
 <li>Ensure all tests pass before submitting PR</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md36"></a>
 Roadmap</h2>
 <ul>
 <li>[x] IExecutor interface standardization</li>
@@ -457,17 +467,17 @@ Roadmap</h2>
 <li>[ ] Additional design patterns (Observer, Command)</li>
 <li>[ ] Package manager official support</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 Support</h2>
 <ul>
 <li><b>Issues</b>: <a href="https://github.com/kcenon/common_system/issues">GitHub Issues</a></li>
 <li><b>Discussions</b>: <a href="https://github.com/kcenon/common_system/discussions">GitHub Discussions</a></li>
 <li><b>Email</b>: <a href="#" onclick="location.href='mai'+'lto:'+'kce'+'no'+'n@n'+'av'+'er.'+'co'+'m'; return false;">kceno<span class="obfuscator">.nosp@m.</span>n@na<span class="obfuscator">.nosp@m.</span>ver.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 License</h2>
 <p>This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.</p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md39"></a>
 Acknowledgments</h2>
 <ul>
 <li>Inspired by Rust's Result&lt;T,E&gt; type and error handling</li>
@@ -475,7 +485,7 @@ Acknowledgments</h2>
 <li>Event bus pattern from reactive programming frameworks</li>
 <li>Build system patterns from modern C++ best practices</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md39"></a>
+<h2><a class="anchor" id="autotoc_md40"></a>
 Citation</h2>
 <p>If you use this project in your research or commercial projects, please cite:</p>
 <div class="fragment"><div class="line">@software{common_system,</div>
@@ -491,7 +501,7 @@ Citation</h2>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 25 2025 11:33:58 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Sun Sep 28 2025 09:29:47 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

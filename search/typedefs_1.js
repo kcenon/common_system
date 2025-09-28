@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['result_0',['Result',['../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad',1,'common']]]
+  ['loggerfactory_0',['LoggerFactory',['../d8/d27/namespacecommon_1_1interfaces.html#ac8093c46b1ca1b8bb98219d4d88fb164',1,'common::interfaces']]]
 ];
