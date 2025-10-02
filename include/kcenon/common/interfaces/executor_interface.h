@@ -18,9 +18,40 @@
 #include <functional>
 #include <future>
 #include <memory>
+#include <string>
+#include "../patterns/result.h"
 
 namespace common {
 namespace interfaces {
+
+/**
+ * @interface IJob
+ * @brief Abstract job interface for task execution
+ *
+ * Phase 2: Job-based execution support for better control and testability
+ */
+class IJob {
+public:
+    virtual ~IJob() = default;
+
+    /**
+     * @brief Execute the job
+     * @return VoidResult indicating success or failure
+     */
+    virtual VoidResult execute() = 0;
+
+    /**
+     * @brief Get the name of the job (for logging/debugging)
+     * @return Job name
+     */
+    virtual std::string get_name() const { return "unnamed_job"; }
+
+    /**
+     * @brief Get the priority of the job (higher = more important)
+     * @return Job priority (default: 0)
+     */
+    virtual int get_priority() const { return 0; }
+};
 
 /**
  * @interface IExecutor
@@ -33,10 +64,14 @@ namespace interfaces {
 /**
  * @class IExecutor
  * @brief Abstract interface for task execution systems.
+ *
+ * Phase 2: Extended with job-based execution support
  */
 class IExecutor {
 public:
     virtual ~IExecutor() = default;
+
+    // ===== Function-based execution (legacy, kept for compatibility) =====
 
     /**
      * @brief Submit a task for immediate execution
@@ -54,6 +89,29 @@ public:
     virtual std::future<void> submit_delayed(
         std::function<void()> task,
         std::chrono::milliseconds delay) = 0;
+
+    // ===== Job-based execution (Phase 2: new, preferred) =====
+
+    /**
+     * @brief Execute a job with Result-based error handling
+     * @param job The job to execute
+     * @return Result containing future or error
+     *
+     * Phase 2: Job-based execution provides better control and testability
+     */
+    virtual Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) = 0;
+
+    /**
+     * @brief Execute a job with delay
+     * @param job The job to execute
+     * @param delay The delay before execution
+     * @return Result containing future or error
+     */
+    virtual Result<std::future<void>> execute_delayed(
+        std::unique_ptr<IJob>&& job,
+        std::chrono::milliseconds delay) = 0;
+
+    // ===== Status and control =====
 
     /**
      * @brief Get the number of worker threads
