@@ -8,5 +8,6 @@ var searchData=
   ['_7eiloggerregistry_5',['~ILoggerRegistry',['../dc/de7/classcommon_1_1interfaces_1_1ILoggerRegistry.html#a810af3be5e25bff622c994223ae2e2da',1,'common::interfaces::ILoggerRegistry']]],
   ['_7eimonitor_6',['~IMonitor',['../d5/d4f/classcommon_1_1interfaces_1_1IMonitor.html#afab18a5479e93e86576dd39f7b0b731f',1,'common::interfaces::IMonitor']]],
   ['_7eimonitorable_7',['~IMonitorable',['../d6/d63/classcommon_1_1interfaces_1_1IMonitorable.html#aa80537910343a0d8705174114c58e249',1,'common::interfaces::IMonitorable']]],
-  ['_7eimonitorprovider_8',['~IMonitorProvider',['../db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#aae8bf8603159b84e69f2aa0c85fa89a5',1,'common::interfaces::IMonitorProvider']]]
+  ['_7eimonitorprovider_8',['~IMonitorProvider',['../db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#aae8bf8603159b84e69f2aa0c85fa89a5',1,'common::interfaces::IMonitorProvider']]],
+  ['_7etyped_5fadapter_9',['~typed_adapter',['../de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a8345764436b6ed7aeae41d195b164788',1,'common::adapters::typed_adapter']]]
 ];

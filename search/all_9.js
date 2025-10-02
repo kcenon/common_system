@@ -16,6 +16,7 @@ var searchData=
   ['get_5fname_13',['get_name',['../df/d94/classcommon_1_1interfaces_1_1IJob.html#acebb4186750687893910565f6c5e4917',1,'common::interfaces::IJob']]],
   ['get_5fpriority_14',['get_priority',['../df/d94/classcommon_1_1interfaces_1_1IJob.html#abc7a5326fd85c354ecea527e693e6831',1,'common::interfaces::IJob']]],
   ['get_5fvalue_15',['get_value',['../d9/d0c/namespacecommon.html#af32356cd3182ec940ccc98ef09fb669d',1,'common::get_value(const Result&lt; T &gt; &amp;result)'],['../d9/d0c/namespacecommon.html#ac8c38a356e0011af658efb43dd9123bd',1,'common::get_value(Result&lt; T &gt; &amp;result)']]],
-  ['getting_20started_16',['Getting Started',['../d0/d30/md_README.html#autotoc_md14',1,'']]],
-  ['grade_20reliability_20strong_17',['🛡️ &lt;strong&gt;Production-Grade Reliability&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md10',1,'']]]
+  ['get_5fwrapper_5fdepth_16',['get_wrapper_depth',['../de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a8b72563e449c4f575a43923d569c351b',1,'common::adapters::typed_adapter']]],
+  ['getting_20started_17',['Getting Started',['../d0/d30/md_README.html#autotoc_md14',1,'']]],
+  ['grade_20reliability_20strong_18',['🛡️ &lt;strong&gt;Production-Grade Reliability&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md10',1,'']]]
 ];

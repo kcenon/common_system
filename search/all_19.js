@@ -9,5 +9,6 @@ var searchData=
   ['worker_5fid_6',['worker_id',['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a05a411ce3c04f750eff9608e0e89dd25',1,'common::interfaces::worker_metrics']]],
   ['worker_5fmetrics_7',['worker_metrics',['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html',1,'common::interfaces::worker_metrics'],['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#aeb68987ddfeea6b5e784ef07f36c4c1c',1,'common::interfaces::worker_metrics::worker_metrics()=default'],['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a744ab018fe73cde8cec151ece30640c2',1,'common::interfaces::worker_metrics::worker_metrics(std::size_t id)']]],
   ['worker_5fthreads_8',['worker_threads',['../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#adfbc66af8a985c407674709a984cfbd5',1,'common::interfaces::thread_pool_metrics']]],
-  ['workflow_9',['Development Workflow',['../d0/d30/md_README.html#autotoc_md34',1,'']]]
+  ['workflow_9',['Development Workflow',['../d0/d30/md_README.html#autotoc_md34',1,'']]],
+  ['wrapper_5fdepth_5f_10',['wrapper_depth_',['../de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a82e4bc7981e40e8a1c9890f9db5f4ecc',1,'common::adapters::typed_adapter']]]
 ];

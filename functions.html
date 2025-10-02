@@ -74,6 +74,7 @@ $(function() {
 
 <h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
 <li>active_threads&#160;:&#160;<a class="el" href="db/dad/structcommon_1_1interfaces_1_1system__metrics.html#a68d2678df9352de46bdfd6e705b6d5a4">common::interfaces::system_metrics</a></li>
+<li>adapter_type_name()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#abe9048244c7143164de7a2f1bf7bb143">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 <li>add_metric()&#160;:&#160;<a class="el" href="db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html#a9388d7176bad411aaa3b96dd05fee6c9">common::interfaces::metrics_snapshot</a></li>
 <li>async_mode&#160;:&#160;<a class="el" href="d9/d7f/structcommon_1_1interfaces_1_1logger__config.html#a0fb0d9feba2841a71e99d30c25e086a3">common::interfaces::logger_config</a></li>
 <li>average_latency_ns&#160;:&#160;<a class="el" href="db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#abcbe8ace234d5ae684e92ec6ed090c7b">common::interfaces::thread_pool_metrics</a></li>
@@ -81,6 +82,7 @@ $(function() {
 
 
 <h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
+<li>calculate_depth()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a8f22aac421dfba8d990f1fa4796ffb8a">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 <li>capture_time&#160;:&#160;<a class="el" href="db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html#a65fa776eaf69b5e6a9c5bbfefb2d84cc">common::interfaces::metrics_snapshot</a></li>
 <li>check_duration&#160;:&#160;<a class="el" href="db/d66/structcommon_1_1interfaces_1_1health__check__result.html#aa9fd24c1733cd32eba49dfc0baa2501c">common::interfaces::health_check_result</a></li>
 <li>check_health()&#160;:&#160;<a class="el" href="d5/d4f/classcommon_1_1interfaces_1_1IMonitor.html#af80041ee68bbbf13e7186cdd37f59c63">common::interfaces::IMonitor</a></li>
@@ -127,6 +129,7 @@ $(function() {
 <li>get_monitoring_data()&#160;:&#160;<a class="el" href="d6/d63/classcommon_1_1interfaces_1_1IMonitorable.html#ab5838cfd12af770471614333fe90d05d">common::interfaces::IMonitorable</a></li>
 <li>get_name()&#160;:&#160;<a class="el" href="df/d94/classcommon_1_1interfaces_1_1IJob.html#acebb4186750687893910565f6c5e4917">common::interfaces::IJob</a></li>
 <li>get_priority()&#160;:&#160;<a class="el" href="df/d94/classcommon_1_1interfaces_1_1IJob.html#abc7a5326fd85c354ecea527e693e6831">common::interfaces::IJob</a></li>
+<li>get_wrapper_depth()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a8b72563e449c4f575a43923d569c351b">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 </ul>
 
 
@@ -139,11 +142,14 @@ $(function() {
 <h3><a id="index_i" name="index_i"></a>- i -</h3><ul>
 <li>idle_threads&#160;:&#160;<a class="el" href="db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#ad1ceae7792432ca85bdafe0c2830ad60">common::interfaces::thread_pool_metrics</a></li>
 <li>idle_time_ns&#160;:&#160;<a class="el" href="d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#acd2e5b820f6c363fe2a0fa974210a576">common::interfaces::worker_metrics</a></li>
+<li>impl_&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#aca42a8826a4fe03ad0ca8a7909df70bf">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 <li>instance()&#160;:&#160;<a class="el" href="d4/d2b/classcommon_1_1null__event__bus.html#aa16a91d1b8cf503c66d01620ee43fc23">common::null_event_bus</a></li>
 <li>is_enabled()&#160;:&#160;<a class="el" href="d3/daa/classcommon_1_1interfaces_1_1ILogger.html#add02688fb8ba123e1dc943793469e260">common::interfaces::ILogger</a></li>
 <li>is_healthy()&#160;:&#160;<a class="el" href="db/d66/structcommon_1_1interfaces_1_1health__check__result.html#a3795f3360ebf8ec75d672f41641e4ff1">common::interfaces::health_check_result</a></li>
 <li>is_operational()&#160;:&#160;<a class="el" href="db/d66/structcommon_1_1interfaces_1_1health__check__result.html#acf0a60a9c1309a1bc2e5b34e8e7e23bf">common::interfaces::health_check_result</a></li>
 <li>is_running()&#160;:&#160;<a class="el" href="d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a14c493550c72fa527cdbbb93a154646b">common::interfaces::IExecutor</a>, <a class="el" href="d4/d2b/classcommon_1_1null__event__bus.html#ac54c52f3c942e0004b9405e40793cf86">common::null_event_bus</a></li>
+<li>is_wrapped_adapter()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#ab9f59388d5aeb30b01244511f9454d5f">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
+<li>is_zero_cost()&#160;:&#160;<a class="el" href="d9/dd6/classcommon_1_1adapters_1_1smart__adapter__factory.html#ae91a88b3c880800605b2857b2fcebda5">common::adapters::smart_adapter_factory</a></li>
 </ul>
 
 
@@ -165,6 +171,10 @@ $(function() {
 
 <h3><a id="index_m" name="index_m"></a>- m -</h3><ul>
 <li>major&#160;:&#160;<a class="el" href="db/d7d/structkcenon_1_1common_1_1version__info.html#a3683a94968b1bbca53f8fbcd8cf90ca0">kcenon::common::version_info</a></li>
+<li>make_adapter()&#160;:&#160;<a class="el" href="d9/dd6/classcommon_1_1adapters_1_1smart__adapter__factory.html#a0dbcb4fa79312887e985eb106e9c3590">common::adapters::smart_adapter_factory</a></li>
+<li>make_explicit_adapter()&#160;:&#160;<a class="el" href="d9/dd6/classcommon_1_1adapters_1_1smart__adapter__factory.html#a9355ccf1797313df177d24b7070fe231">common::adapters::smart_adapter_factory</a></li>
+<li>max_depth()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#aac728ba416592361ebb0efe2121be3ad">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
+<li>max_wrapper_depth_&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a495e95aa0a9a2368f48998663f11a7e0">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 <li>memory_usage_bytes&#160;:&#160;<a class="el" href="db/dad/structcommon_1_1interfaces_1_1system__metrics.html#a0b17411a1026c096cf58db98923075ca">common::interfaces::system_metrics</a></li>
 <li>message&#160;:&#160;<a class="el" href="d7/d8d/structcommon_1_1error__info.html#aad818b307074c6cccf7643b3e82e60de">common::error_info</a>, <a class="el" href="db/d66/structcommon_1_1interfaces_1_1health__check__result.html#a04ef64c71b4346b7fbdc60f2911108c6">common::interfaces::health_check_result</a>, <a class="el" href="d7/d16/structcommon_1_1interfaces_1_1log__entry.html#a47da5ce85700ba5edf11e7a21592393c">common::interfaces::log_entry</a></li>
 <li>metadata&#160;:&#160;<a class="el" href="db/d66/structcommon_1_1interfaces_1_1health__check__result.html#a36d50619a647dd57b3f66b2d72c2d4f1">common::interfaces::health_check_result</a></li>
@@ -236,7 +246,9 @@ $(function() {
 <li>total_allocations&#160;:&#160;<a class="el" href="db/dad/structcommon_1_1interfaces_1_1system__metrics.html#abce02f39da17caf4caa04eb2a26ef048">common::interfaces::system_metrics</a></li>
 <li>total_execution_time_ns&#160;:&#160;<a class="el" href="db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#adb9cc3ed3c171dc6463a16c521e94c3f">common::interfaces::thread_pool_metrics</a></li>
 <li>total_processing_time_ns&#160;:&#160;<a class="el" href="d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a73fb87cb431bbcbad93b958c2478464c">common::interfaces::worker_metrics</a></li>
+<li>try_unwrap()&#160;:&#160;<a class="el" href="d9/dd6/classcommon_1_1adapters_1_1smart__adapter__factory.html#a8c448062425121bfe2ae34055c99efdd">common::adapters::smart_adapter_factory</a></li>
 <li>type&#160;:&#160;<a class="el" href="d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#a8157ee006540c07ddc670d36bc661030">common::interfaces::metric_value</a></li>
+<li>typed_adapter()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#acff3768e29a979acf6c485c1bb8762fa">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 </ul>
 
 
@@ -244,6 +256,7 @@ $(function() {
 <li>unit&#160;:&#160;<a class="el" href="d8/d0f/structcommon_1_1events_1_1metric__event.html#aceeccc0ef268da5b8da46711d03323bf">common::events::metric_event</a></li>
 <li>unregister_logger()&#160;:&#160;<a class="el" href="dc/de7/classcommon_1_1interfaces_1_1ILoggerRegistry.html#aa56f78bb43a4ac63ca66a238f59472cf">common::interfaces::ILoggerRegistry</a></li>
 <li>unsubscribe()&#160;:&#160;<a class="el" href="d4/d2b/classcommon_1_1null__event__bus.html#a3bf574e0f875615dbc99c4666d8ec723">common::null_event_bus</a></li>
+<li>unwrap()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a77d065fb07b79c8d29a52375af148bc1">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 </ul>
 
 
@@ -257,6 +270,7 @@ $(function() {
 <li>worker_id&#160;:&#160;<a class="el" href="d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a05a411ce3c04f750eff9608e0e89dd25">common::interfaces::worker_metrics</a></li>
 <li>worker_metrics()&#160;:&#160;<a class="el" href="d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#aeb68987ddfeea6b5e784ef07f36c4c1c">common::interfaces::worker_metrics</a></li>
 <li>worker_threads&#160;:&#160;<a class="el" href="db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#adfbc66af8a985c407674709a984cfbd5">common::interfaces::thread_pool_metrics</a></li>
+<li>wrapper_depth_&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a82e4bc7981e40e8a1c9890f9db5f4ecc">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 </ul>
 
 
@@ -270,11 +284,12 @@ $(function() {
 <li>~IMonitor()&#160;:&#160;<a class="el" href="d5/d4f/classcommon_1_1interfaces_1_1IMonitor.html#afab18a5479e93e86576dd39f7b0b731f">common::interfaces::IMonitor</a></li>
 <li>~IMonitorable()&#160;:&#160;<a class="el" href="d6/d63/classcommon_1_1interfaces_1_1IMonitorable.html#aa80537910343a0d8705174114c58e249">common::interfaces::IMonitorable</a></li>
 <li>~IMonitorProvider()&#160;:&#160;<a class="el" href="db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#aae8bf8603159b84e69f2aa0c85fa89a5">common::interfaces::IMonitorProvider</a></li>
+<li>~typed_adapter()&#160;:&#160;<a class="el" href="de/dcf/classcommon_1_1adapters_1_1typed__adapter.html#a8345764436b6ed7aeae41d195b164788">common::adapters::typed_adapter&lt; Interface, Implementation &gt;</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 14:06:29 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 14:34:11 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

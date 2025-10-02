@@ -1,12 +1,13 @@
 <map id="include/kcenon/common" name="include/kcenon/common">
-<area shape="rect" id="node2" href="dir_c22009b773361b56cdbc18c2492c435f.html" title="interfaces" alt="" coords="38,136,125,161"/>
-<area shape="poly" id="edge2" href="dir_000000_000003.html" alt="" coords="96,89,89,123,84,122,91,88"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000000_000003.html" title="1" alt="" coords="91,113,100,127"/>
-<area shape="rect" id="node3" href="dir_71480fc479203e255be2af86968b637d.html" title="patterns" alt="" coords="59,209,135,235"/>
-<area shape="poly" id="edge1" href="dir_000000_000005.html" alt="" coords="109,87,126,108,140,135,142,153,138,170,120,200,116,197,133,168,136,153,135,137,122,111,105,90"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000000_000005.html" title="5" alt="" coords="123,193,132,208"/>
-<area shape="poly" id="edge3" href="dir_000003_000005.html" alt="" coords="87,161,94,196,89,197,81,162"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000003_000005.html" title="3" alt="" coords="94,182,104,197"/>
-<area shape="rect" id="clust2" href="dir_fb09ca1ea6b992f69b977542e67d431c.html" alt="" coords="27,52,163,245"/>
-<area shape="rect" id="clust1" href="dir_04ff978e9ec7aa1563365d68aefc5309.html" title="kcenon" alt="" coords="16,16,173,256"/>
+<area shape="rect" id="node3" href="dir_c22009b773361b56cdbc18c2492c435f.html" title="interfaces" alt="" coords="85,136,171,161"/>
+<area shape="poly" id="edge2" href="dir_000001_000004.html" alt="" coords="174,90,147,126,142,123,169,87"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000001_000004.html" title="1" alt="" coords="149,119,159,134"/>
+<area shape="rect" id="node4" href="dir_71480fc479203e255be2af86968b637d.html" title="patterns" alt="" coords="125,209,201,235"/>
+<area shape="poly" id="edge1" href="dir_000001_000006.html" alt="" coords="185,88,188,121,187,162,176,197,171,196,181,161,183,121,179,89"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000001_000006.html" title="5" alt="" coords="178,188,188,203"/>
+<area shape="rect" id="node2" href="dir_db68f0e3ef88c3eb6591c7796db578e9.html" title="adapters" alt="" coords="38,63,117,88"/>
+<area shape="poly" id="edge3" href="dir_000004_000006.html" alt="" coords="136,160,153,196,149,198,131,163"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000004_000006.html" title="3" alt="" coords="152,182,161,197"/>
+<area shape="rect" id="clust2" href="dir_fb09ca1ea6b992f69b977542e67d431c.html" alt="" coords="27,52,231,245"/>
+<area shape="rect" id="clust1" href="dir_04ff978e9ec7aa1563365d68aefc5309.html" title="kcenon" alt="" coords="16,16,241,256"/>
 </map>
