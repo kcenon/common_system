@@ -86,7 +86,8 @@ $(function() {
 
 <p>Standard logger interface for all systems.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;chrono&gt;</code><br />
+<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -96,24 +97,26 @@ Include dependency graph for logger_interface.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d8/d41/logger__interface_8h__incl.png" border="0" usemap="#ainclude_2kcenon_2common_2interfaces_2logger__interface_8h" alt=""/></div>
 <map name="ainclude_2kcenon_2common_2interfaces_2logger__interface_8h" id="ainclude_2kcenon_2common_2interfaces_2logger__interface_8h">
-<area shape="rect" title="Standard logger interface for all systems." alt="" coords="140,5,353,45"/>
-<area shape="rect" title=" " alt="" coords="5,93,72,119"/>
-<area shape="poly" title=" " alt="" coords="198,48,83,91,81,86,196,43"/>
-<area shape="rect" title=" " alt="" coords="97,93,183,119"/>
-<area shape="poly" title=" " alt="" coords="222,48,169,87,166,83,219,43"/>
-<area shape="rect" title=" " alt="" coords="208,93,285,119"/>
-<area shape="poly" title=" " alt="" coords="249,46,249,79,244,79,244,46"/>
-<area shape="rect" title=" " alt="" coords="293,167,352,192"/>
-<area shape="poly" title=" " alt="" coords="266,44,284,66,300,92,312,123,320,152,315,154,307,125,295,95,279,69,262,47"/>
-<area shape="rect" href="../../de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="360,93,501,119"/>
-<area shape="poly" title=" " alt="" coords="292,43,392,85,390,90,290,48"/>
-<area shape="poly" title=" " alt="" coords="415,121,353,161,350,157,412,116"/>
-<area shape="rect" title=" " alt="" coords="377,167,445,192"/>
-<area shape="poly" title=" " alt="" coords="430,120,420,154,415,153,425,118"/>
-<area shape="rect" title=" " alt="" coords="469,167,544,192"/>
-<area shape="poly" title=" " alt="" coords="445,117,486,155,482,159,441,121"/>
-<area shape="rect" title=" " alt="" coords="569,167,661,192"/>
-<area shape="poly" title=" " alt="" coords="461,116,573,159,571,164,459,121"/>
+<area shape="rect" title="Standard logger interface for all systems." alt="" coords="196,5,409,45"/>
+<area shape="rect" title=" " alt="" coords="5,93,91,119"/>
+<area shape="poly" title=" " alt="" coords="242,48,99,92,98,87,241,43"/>
+<area shape="rect" title=" " alt="" coords="115,93,181,119"/>
+<area shape="poly" title=" " alt="" coords="267,48,184,89,182,85,264,43"/>
+<area shape="rect" title=" " alt="" coords="206,93,293,119"/>
+<area shape="poly" title=" " alt="" coords="292,47,267,83,263,80,288,44"/>
+<area shape="rect" title=" " alt="" coords="317,93,395,119"/>
+<area shape="poly" title=" " alt="" coords="318,44,342,80,338,83,313,47"/>
+<area shape="rect" title=" " alt="" coords="403,167,461,192"/>
+<area shape="poly" title=" " alt="" coords="347,43,380,64,409,92,424,122,432,152,427,154,419,124,405,95,377,68,344,48"/>
+<area shape="rect" href="../../de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="469,93,611,119"/>
+<area shape="poly" title=" " alt="" coords="360,43,493,87,492,92,359,48"/>
+<area shape="poly" title=" " alt="" coords="524,121,463,161,460,157,521,116"/>
+<area shape="rect" title=" " alt="" coords="486,167,554,192"/>
+<area shape="poly" title=" " alt="" coords="539,120,529,154,524,153,534,118"/>
+<area shape="rect" title=" " alt="" coords="579,167,653,192"/>
+<area shape="poly" title=" " alt="" coords="554,117,595,155,592,159,550,121"/>
+<area shape="rect" title=" " alt="" coords="678,167,770,192"/>
+<area shape="poly" title=" " alt="" coords="571,116,682,159,680,164,569,121"/>
 </map>
 </div>
 </div>
@@ -129,6 +132,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/da8/classcommon_1_1interfaces_1_1ILoggerProvider.html">common::interfaces::ILoggerProvider</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for modules that provide logger implementations.  <a href="../../d6/da8/classcommon_1_1interfaces_1_1ILoggerProvider.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d7f/structcommon_1_1interfaces_1_1logger__config.html">common::interfaces::logger_config</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration for logger instances.  <a href="../../d9/d7f/structcommon_1_1interfaces_1_1logger__config.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/de7/classcommon_1_1interfaces_1_1ILoggerRegistry.html">common::interfaces::ILoggerRegistry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Phase 2: Global logger registry interface.  <a href="../../dc/de7/classcommon_1_1interfaces_1_1ILoggerRegistry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
@@ -166,7 +175,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:a37ab7f0332b69b4a7eab3d9fa7de2085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert log level to string.  <br /></td></tr>
 <tr class="separator:a37ab7f0332b69b4a7eab3d9fa7de2085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a861b98c7d68be3d2996df040585ab707" id="r_a861b98c7d68be3d2996df040585ab707"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004">log_level</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a861b98c7d68be3d2996df040585ab707">common::interfaces::from_string</a> (const std::string &amp;str)</td></tr>
-<tr class="memdesc:a861b98c7d68be3d2996df040585ab707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse log level from string.  <br /></td></tr>
+<tr class="memdesc:a861b98c7d68be3d2996df040585ab707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse log level from string (case-insensitive)  <br /></td></tr>
 <tr class="separator:a861b98c7d68be3d2996df040585ab707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -177,7 +186,7 @@ Functions</h2></td></tr>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 10:10:24 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 12:44:26 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

@@ -96,6 +96,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6db6e8e3f35d7770f01e4ea27be57bef" id="r_a6db6e8e3f35d7770f01e4ea27be57bef"><td class="memItemLeft" align="right" valign="top">virtual std::future&lt; void &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a6db6e8e3f35d7770f01e4ea27be57bef">submit_delayed</a> (std::function&lt; void()&gt; task, std::chrono::milliseconds delay)=0</td></tr>
 <tr class="memdesc:a6db6e8e3f35d7770f01e4ea27be57bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Submit a task for delayed execution.  <br /></td></tr>
 <tr class="separator:a6db6e8e3f35d7770f01e4ea27be57bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc6f4174f70c8e0d47febd69f8d5bdfd" id="r_abc6f4174f70c8e0d47febd69f8d5bdfd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; std::future&lt; void &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#abc6f4174f70c8e0d47febd69f8d5bdfd">execute</a> (std::unique_ptr&lt; <a class="el" href="../../df/d94/classcommon_1_1interfaces_1_1IJob.html">IJob</a> &gt; &amp;&amp;job)=0</td></tr>
+<tr class="memdesc:abc6f4174f70c8e0d47febd69f8d5bdfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a job with Result-based error handling.  <br /></td></tr>
+<tr class="separator:abc6f4174f70c8e0d47febd69f8d5bdfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b09e6f4426928311437ffb4f375a766" id="r_a5b09e6f4426928311437ffb4f375a766"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; std::future&lt; void &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5b09e6f4426928311437ffb4f375a766">execute_delayed</a> (std::unique_ptr&lt; <a class="el" href="../../df/d94/classcommon_1_1interfaces_1_1IJob.html">IJob</a> &gt; &amp;&amp;job, std::chrono::milliseconds delay)=0</td></tr>
+<tr class="memdesc:a5b09e6f4426928311437ffb4f375a766"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a job with delay.  <br /></td></tr>
+<tr class="separator:a5b09e6f4426928311437ffb4f375a766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5aaa4f1418dfed11a417efe14f3801bf" id="r_a5aaa4f1418dfed11a417efe14f3801bf"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5aaa4f1418dfed11a417efe14f3801bf">worker_count</a> () const =0</td></tr>
 <tr class="memdesc:a5aaa4f1418dfed11a417efe14f3801bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of worker threads.  <br /></td></tr>
 <tr class="separator:a5aaa4f1418dfed11a417efe14f3801bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -111,9 +117,10 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Abstract interface for task execution systems. </p>
-<p>This interface defines the contract for any task executor implementation, allowing modules to work with different threading backends without direct dependencies. </p>
+<p>This interface defines the contract for any task executor implementation, allowing modules to work with different threading backends without direct dependencies.</p>
+<p>Phase 2: Extended with job-based execution support </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d6/d99/executor__interface_8h_source.html#l00037">37</a> of file <a class="el" href="../../d6/d99/executor__interface_8h_source.html">executor_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d6/d99/executor__interface_8h_source.html#l00070">70</a> of file <a class="el" href="../../d6/d99/executor__interface_8h_source.html">executor_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5ef4f725ca125b9d4b1d264a08faecd5" name="a5ef4f725ca125b9d4b1d264a08faecd5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ef4f725ca125b9d4b1d264a08faecd5">&#9670;&#160;</a></span>~IExecutor()</h2>
@@ -141,6 +148,88 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="abc6f4174f70c8e0d47febd69f8d5bdfd" name="abc6f4174f70c8e0d47febd69f8d5bdfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc6f4174f70c8e0d47febd69f8d5bdfd">&#9670;&#160;</a></span>execute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; std::future&lt; void &gt; &gt; common::interfaces::IExecutor::execute </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="../../df/d94/classcommon_1_1interfaces_1_1IJob.html">IJob</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>job</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Execute a job with Result-based error handling. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">job</td><td>The job to execute </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Result containing future or error</dd></dl>
+<p>Phase 2: Job-based execution provides better control and testability </p>
+
+</div>
+</div>
+<a id="a5b09e6f4426928311437ffb4f375a766" name="a5b09e6f4426928311437ffb4f375a766"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b09e6f4426928311437ffb4f375a766">&#9670;&#160;</a></span>execute_delayed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; std::future&lt; void &gt; &gt; common::interfaces::IExecutor::execute_delayed </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="../../df/d94/classcommon_1_1interfaces_1_1IJob.html">IJob</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>job</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::chrono::milliseconds&#160;</td>
+          <td class="paramname"><em>delay</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Execute a job with delay. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">job</td><td>The job to execute </td></tr>
+    <tr><td class="paramname">delay</td><td>The delay before execution </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Result containing future or error </dd></dl>
+
+</div>
+</div>
 <a id="a14c493550c72fa527cdbbb93a154646b" name="a14c493550c72fa527cdbbb93a154646b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a14c493550c72fa527cdbbb93a154646b">&#9670;&#160;</a></span>is_running()</h2>
 
@@ -346,7 +435,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 10:10:24 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 12:44:26 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>
