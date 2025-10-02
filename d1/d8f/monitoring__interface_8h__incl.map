@@ -1,24 +1,28 @@
 <map id="include/kcenon/common/interfaces/monitoring_interface.h" name="include/kcenon/common/interfaces/monitoring_interface.h">
-<area shape="rect" id="Node000001" title="Standard monitoring interface for all systems." alt="" coords="232,5,413,60"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,72,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="237,63,86,108,84,103,235,58"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="97,108,183,133"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,62,178,105,176,100,266,58"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="208,108,285,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="301,62,268,99,264,96,297,58"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="373,181,432,207"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="328,60,336,95,350,132,364,152,380,170,376,173,360,155,346,135,331,97,323,61"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="361,108,485,133"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="355,58,400,97,397,101,351,62"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="509,108,571,133"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="390,58,499,101,497,105,388,63"/>
-<area shape="rect" id="Node000008" href="$de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="596,108,737,133"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="414,54,608,102,607,107,413,59"/>
-<area shape="poly" id="edge10_Node000008_Node000005" title=" " alt="" coords="625,136,446,184,445,179,624,131"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="537,181,605,207"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="653,136,599,175,596,171,650,131"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="629,181,704,207"/>
-<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="669,134,669,168,664,168,664,134"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="729,181,821,207"/>
-<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="685,131,747,171,744,176,683,136"/>
+<area shape="rect" id="Node000001" title="Standard monitoring interface for all systems." alt="" coords="356,5,537,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,91,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="356,56,105,110,104,105,355,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,108,181,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="357,63,195,109,194,103,355,57"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="205,108,272,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="384,63,280,105,278,100,382,58"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="297,108,383,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="416,62,367,101,364,97,412,58"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="408,108,485,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="449,60,449,94,444,94,444,60"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="573,181,632,207"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="474,58,584,169,580,173,471,62"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="561,108,685,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="502,58,588,100,586,104,499,62"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="709,108,771,133"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="537,58,696,104,695,109,536,63"/>
+<area shape="rect" id="Node000010" href="$de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="796,108,937,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="538,50,798,103,797,108,537,55"/>
+<area shape="poly" id="edge12_Node000010_Node000007" title=" " alt="" coords="825,136,646,184,645,179,824,131"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="737,181,805,207"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="853,136,799,175,796,171,850,131"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="829,181,904,207"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="869,134,869,168,864,168,864,134"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="929,181,1021,207"/>
+<area shape="poly" id="edge13_Node000010_Node000013" title=" " alt="" coords="885,131,947,171,944,176,883,136"/>
 </map>

@@ -1,12 +1,13 @@
 var searchData=
 [
-  ['_7eiexecutor_0',['~IExecutor',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5ef4f725ca125b9d4b1d264a08faecd5',1,'common::interfaces::IExecutor']]],
-  ['_7eiexecutorprovider_1',['~IExecutorProvider',['../d6/d85/classcommon_1_1interfaces_1_1IExecutorProvider.html#af5feb71bc3ff6b3a2cf8c34e804b48ed',1,'common::interfaces::IExecutorProvider']]],
-  ['_7eijob_2',['~IJob',['../df/d94/classcommon_1_1interfaces_1_1IJob.html#a521a956583bb771436808bc6f7b1c452',1,'common::interfaces::IJob']]],
-  ['_7eilogger_3',['~ILogger',['../d3/daa/classcommon_1_1interfaces_1_1ILogger.html#a95fc5383c87f7a821fa7f0d47ef764f1',1,'common::interfaces::ILogger']]],
-  ['_7eiloggerprovider_4',['~ILoggerProvider',['../d6/da8/classcommon_1_1interfaces_1_1ILoggerProvider.html#a2035ed3ce308aa1f7754cfd306b3ea76',1,'common::interfaces::ILoggerProvider']]],
-  ['_7eiloggerregistry_5',['~ILoggerRegistry',['../dc/de7/classcommon_1_1interfaces_1_1ILoggerRegistry.html#a810af3be5e25bff622c994223ae2e2da',1,'common::interfaces::ILoggerRegistry']]],
-  ['_7eimonitor_6',['~IMonitor',['../d5/d4f/classcommon_1_1interfaces_1_1IMonitor.html#afab18a5479e93e86576dd39f7b0b731f',1,'common::interfaces::IMonitor']]],
-  ['_7eimonitorable_7',['~IMonitorable',['../d6/d63/classcommon_1_1interfaces_1_1IMonitorable.html#aa80537910343a0d8705174114c58e249',1,'common::interfaces::IMonitorable']]],
-  ['_7eimonitorprovider_8',['~IMonitorProvider',['../db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#aae8bf8603159b84e69f2aa0c85fa89a5',1,'common::interfaces::IMonitorProvider']]]
+  ['warning_0',['warning',['../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004a7b83d3f08fa392b79e3f553b585971cd',1,'common::interfaces']]],
+  ['wide_20installation_1',['Option 3: System-wide Installation',['../d0/d30/md_README.html#autotoc_md19',1,'']]],
+  ['windows_20build_2',['Windows Build',['../d0/d30/md_README.html#autotoc_md21',1,'']]],
+  ['with_20network_5fsystem_3',['With network_system',['../d0/d30/md_README.html#autotoc_md28',1,'']]],
+  ['with_20thread_5fsystem_4',['With thread_system',['../d0/d30/md_README.html#autotoc_md27',1,'']]],
+  ['worker_5fcount_5',['worker_count',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5aaa4f1418dfed11a417efe14f3801bf',1,'common::interfaces::IExecutor']]],
+  ['worker_5fid_6',['worker_id',['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a05a411ce3c04f750eff9608e0e89dd25',1,'common::interfaces::worker_metrics']]],
+  ['worker_5fmetrics_7',['worker_metrics',['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html',1,'common::interfaces::worker_metrics'],['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#aeb68987ddfeea6b5e784ef07f36c4c1c',1,'common::interfaces::worker_metrics::worker_metrics()=default'],['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a744ab018fe73cde8cec151ece30640c2',1,'common::interfaces::worker_metrics::worker_metrics(std::size_t id)']]],
+  ['worker_5fthreads_8',['worker_threads',['../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#adfbc66af8a985c407674709a984cfbd5',1,'common::interfaces::thread_pool_metrics']]],
+  ['workflow_9',['Development Workflow',['../d0/d30/md_README.html#autotoc_md34',1,'']]]
 ];

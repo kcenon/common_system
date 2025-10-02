@@ -1,19 +1,14 @@
 var searchData=
 [
-  ['patch_0',['patch',['../db/d7d/structkcenon_1_1common_1_1version__info.html#a0ddbd008d3ad953f1db95f45d58a34cc',1,'kcenon::common::version_info']]],
-  ['pattern_1',['pattern',['../d9/d7f/structcommon_1_1interfaces_1_1logger__config.html#acdd8f1162ad5d811457420a21e3502f5',1,'common::interfaces::logger_config::pattern'],['../d0/d30/md_README.html#autotoc_md24',1,'Result&lt;T&gt; Pattern']]],
-  ['pending_5ftasks_2',['pending_tasks',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a8e4a920102e7d1d7bcfd2c2b1fdeb64f',1,'common::interfaces::IExecutor']]],
-  ['performance_20benchmarks_3',['Performance Benchmarks',['../d0/d30/md_README.html#autotoc_md32',1,'']]],
-  ['performance_20excellence_20strong_4',['🚀 &lt;strong&gt;Performance Excellence&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md9',1,'']]],
-  ['permission_5fdenied_5',['PERMISSION_DENIED',['../d2/dc9/namespacecommon_1_1error__codes.html#a46d4ccbed09c5cb264856c9ab6871f1f',1,'common::error_codes']]],
-  ['production_20grade_20reliability_20strong_6',['🛡️ &lt;strong&gt;Production-Grade Reliability&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md10',1,'']]],
-  ['productivity_20strong_7',['🔧 &lt;strong&gt;Developer Productivity&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md11',1,'']]],
-  ['project_8',['Common System Project',['../d0/d30/md_README.html#autotoc_md0',1,'']]],
-  ['project_20ecosystem_20inter_20dependencies_9',['🔗 Project Ecosystem &amp; Inter-Dependencies',['../d0/d30/md_README.html#autotoc_md2',1,'']]],
-  ['project_20overview_10',['Project Overview',['../d0/d30/md_README.html#autotoc_md1',1,'']]],
-  ['project_20purpose_20mission_11',['Project Purpose &amp; Mission',['../d0/d30/md_README.html#autotoc_md7',1,'']]],
-  ['projects_12',['Dependent Projects',['../d0/d30/md_README.html#autotoc_md4',1,'']]],
-  ['publish_13',['publish',['../d4/d2b/classcommon_1_1null__event__bus.html#a4b20301fb24d76ffaa3f06ad5e72bffb',1,'common::null_event_bus']]],
-  ['purpose_14',['Core Purpose',['../d0/d30/md_README.html#autotoc_md3',1,'']]],
-  ['purpose_20mission_15',['Project Purpose &amp; Mission',['../d0/d30/md_README.html#autotoc_md7',1,'']]]
+  ['off_0',['off',['../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004a3262d48df5d75e3452f0f16b313b7808',1,'common::interfaces']]],
+  ['ok_1',['ok',['../d9/d0c/namespacecommon.html#a8ec968b6761268d34e6eaf88f504b03b',1,'common::ok(T value)'],['../d9/d0c/namespacecommon.html#a0dc355c1a84773961a9291a646c0baad',1,'common::ok()']]],
+  ['only_20usage_20simplest_2',['Option 1: Header-Only Usage (Simplest)',['../d0/d30/md_README.html#autotoc_md17',1,'']]],
+  ['operator_21_3d_3',['operator!=',['../d7/d8d/structcommon_1_1error__info.html#af0fe11bf4d362fbe6241f638fddbab9b',1,'common::error_info']]],
+  ['operator_3d_3d_4',['operator==',['../d7/d8d/structcommon_1_1error__info.html#a941c5168ff751ddd0b4778821b48a497',1,'common::error_info']]],
+  ['option_201_3a_20header_20only_20usage_20simplest_5',['Option 1: Header-Only Usage (Simplest)',['../d0/d30/md_README.html#autotoc_md17',1,'']]],
+  ['option_202_3a_20cmake_20integration_6',['Option 2: CMake Integration',['../d0/d30/md_README.html#autotoc_md18',1,'']]],
+  ['option_203_3a_20system_20wide_20installation_7',['Option 3: System-wide Installation',['../d0/d30/md_README.html#autotoc_md19',1,'']]],
+  ['or_5felse_8',['or_else',['../d9/d0c/namespacecommon.html#a16591221b364dfa6fb86fddf6afcb6ae',1,'common']]],
+  ['out_5fof_5fmemory_9',['OUT_OF_MEMORY',['../d2/dc9/namespacecommon_1_1error__codes.html#abe34f5e95327ee42056a6a4ec9792850',1,'common::error_codes']]],
+  ['overview_10',['overview',['../index.html#overview',1,'Overview'],['../d0/d30/md_README.html#autotoc_md1',1,'Project Overview']]]
 ];

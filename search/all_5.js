@@ -19,12 +19,15 @@ var searchData=
   ['compatibility_20strong_16',['🌐 &lt;strong&gt;Universal Compatibility&lt;/strong&gt;',['../d0/d30/md_README.html#autotoc_md12',1,'']]],
   ['components_17',['Core Components',['../d0/d30/md_README.html#autotoc_md22',1,'']]],
   ['container_5ferror_5fbase_18',['CONTAINER_ERROR_BASE',['../d2/dc9/namespacecommon_1_1error__codes.html#a23caa50548f4414f8bec05eb959620ea',1,'common::error_codes']]],
-  ['contributing_19',['Contributing',['../d0/d30/md_README.html#autotoc_md33',1,'']]],
-  ['core_20advantages_20benefits_20',['Core Advantages &amp; Benefits',['../d0/d30/md_README.html#autotoc_md8',1,'']]],
-  ['core_20components_21',['Core Components',['../d0/d30/md_README.html#autotoc_md22',1,'']]],
-  ['core_20purpose_22',['Core Purpose',['../d0/d30/md_README.html#autotoc_md3',1,'']]],
-  ['create_5fexecutor_23',['create_executor',['../d6/d85/classcommon_1_1interfaces_1_1IExecutorProvider.html#a02dfb105623f56cdf3dba3ce05dbba6b',1,'common::interfaces::IExecutorProvider']]],
-  ['create_5flogger_24',['create_logger',['../d6/da8/classcommon_1_1interfaces_1_1ILoggerProvider.html#a7e0c7dc44bbf076f64ae78466b858d30',1,'common::interfaces::ILoggerProvider']]],
-  ['create_5fmonitor_25',['create_monitor',['../db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#a82a8d68443d7af5ee92c5a1444982310',1,'common::interfaces::IMonitorProvider']]],
-  ['critical_26',['critical',['../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004a7e85bcb66fb9a809d5ab4f62a8b8bea8',1,'common::interfaces']]]
+  ['context_5fswitches_19',['context_switches',['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a449f2687be23c22f6fc000010c3f98e4',1,'common::interfaces::worker_metrics']]],
+  ['contributing_20',['Contributing',['../d0/d30/md_README.html#autotoc_md33',1,'']]],
+  ['core_20advantages_20benefits_21',['Core Advantages &amp; Benefits',['../d0/d30/md_README.html#autotoc_md8',1,'']]],
+  ['core_20components_22',['Core Components',['../d0/d30/md_README.html#autotoc_md22',1,'']]],
+  ['core_20purpose_23',['Core Purpose',['../d0/d30/md_README.html#autotoc_md3',1,'']]],
+  ['counter_24',['counter',['../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba886bb73b3156b0aa24aac99d2de0b238',1,'common::interfaces']]],
+  ['cpu_5fusage_5fpercent_25',['cpu_usage_percent',['../db/dad/structcommon_1_1interfaces_1_1system__metrics.html#aa60d0d09b279298692485212e789a879',1,'common::interfaces::system_metrics']]],
+  ['create_5fexecutor_26',['create_executor',['../d6/d85/classcommon_1_1interfaces_1_1IExecutorProvider.html#a02dfb105623f56cdf3dba3ce05dbba6b',1,'common::interfaces::IExecutorProvider']]],
+  ['create_5flogger_27',['create_logger',['../d6/da8/classcommon_1_1interfaces_1_1ILoggerProvider.html#a7e0c7dc44bbf076f64ae78466b858d30',1,'common::interfaces::ILoggerProvider']]],
+  ['create_5fmonitor_28',['create_monitor',['../db/db9/classcommon_1_1interfaces_1_1IMonitorProvider.html#a82a8d68443d7af5ee92c5a1444982310',1,'common::interfaces::IMonitorProvider']]],
+  ['critical_29',['critical',['../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004a7e85bcb66fb9a809d5ab4f62a8b8bea8',1,'common::interfaces']]]
 ];

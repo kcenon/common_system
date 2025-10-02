@@ -86,7 +86,9 @@ $(function() {
 
 <p>Standard monitoring interface for all systems.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;chrono&gt;</code><br />
+<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
@@ -98,28 +100,32 @@ Include dependency graph for monitoring_interface.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d8f/monitoring__interface_8h__incl.png" border="0" usemap="#ainclude_2kcenon_2common_2interfaces_2monitoring__interface_8h" alt=""/></div>
 <map name="ainclude_2kcenon_2common_2interfaces_2monitoring__interface_8h" id="ainclude_2kcenon_2common_2interfaces_2monitoring__interface_8h">
-<area shape="rect" title="Standard monitoring interface for all systems." alt="" coords="232,5,413,60"/>
-<area shape="rect" title=" " alt="" coords="5,108,72,133"/>
-<area shape="poly" title=" " alt="" coords="237,63,86,108,84,103,235,58"/>
-<area shape="rect" title=" " alt="" coords="97,108,183,133"/>
-<area shape="poly" title=" " alt="" coords="268,62,178,105,176,100,266,58"/>
-<area shape="rect" title=" " alt="" coords="208,108,285,133"/>
-<area shape="poly" title=" " alt="" coords="301,62,268,99,264,96,297,58"/>
-<area shape="rect" title=" " alt="" coords="373,181,432,207"/>
-<area shape="poly" title=" " alt="" coords="328,60,336,95,350,132,364,152,380,170,376,173,360,155,346,135,331,97,323,61"/>
-<area shape="rect" title=" " alt="" coords="361,108,485,133"/>
-<area shape="poly" title=" " alt="" coords="355,58,400,97,397,101,351,62"/>
-<area shape="rect" title=" " alt="" coords="509,108,571,133"/>
-<area shape="poly" title=" " alt="" coords="390,58,499,101,497,105,388,63"/>
-<area shape="rect" href="../../de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="596,108,737,133"/>
-<area shape="poly" title=" " alt="" coords="414,54,608,102,607,107,413,59"/>
-<area shape="poly" title=" " alt="" coords="625,136,446,184,445,179,624,131"/>
-<area shape="rect" title=" " alt="" coords="537,181,605,207"/>
-<area shape="poly" title=" " alt="" coords="653,136,599,175,596,171,650,131"/>
-<area shape="rect" title=" " alt="" coords="629,181,704,207"/>
-<area shape="poly" title=" " alt="" coords="669,134,669,168,664,168,664,134"/>
-<area shape="rect" title=" " alt="" coords="729,181,821,207"/>
-<area shape="poly" title=" " alt="" coords="685,131,747,171,744,176,683,136"/>
+<area shape="rect" title="Standard monitoring interface for all systems." alt="" coords="356,5,537,60"/>
+<area shape="rect" title=" " alt="" coords="5,108,91,133"/>
+<area shape="poly" title=" " alt="" coords="356,56,105,110,104,105,355,51"/>
+<area shape="rect" title=" " alt="" coords="115,108,181,133"/>
+<area shape="poly" title=" " alt="" coords="357,63,195,109,194,103,355,57"/>
+<area shape="rect" title=" " alt="" coords="205,108,272,133"/>
+<area shape="poly" title=" " alt="" coords="384,63,280,105,278,100,382,58"/>
+<area shape="rect" title=" " alt="" coords="297,108,383,133"/>
+<area shape="poly" title=" " alt="" coords="416,62,367,101,364,97,412,58"/>
+<area shape="rect" title=" " alt="" coords="408,108,485,133"/>
+<area shape="poly" title=" " alt="" coords="449,60,449,94,444,94,444,60"/>
+<area shape="rect" title=" " alt="" coords="573,181,632,207"/>
+<area shape="poly" title=" " alt="" coords="474,58,584,169,580,173,471,62"/>
+<area shape="rect" title=" " alt="" coords="561,108,685,133"/>
+<area shape="poly" title=" " alt="" coords="502,58,588,100,586,104,499,62"/>
+<area shape="rect" title=" " alt="" coords="709,108,771,133"/>
+<area shape="poly" title=" " alt="" coords="537,58,696,104,695,109,536,63"/>
+<area shape="rect" href="../../de/d93/result_8h.html" title="Result&lt;T&gt; type for exception&#45;free error handling." alt="" coords="796,108,937,133"/>
+<area shape="poly" title=" " alt="" coords="538,50,798,103,797,108,537,55"/>
+<area shape="poly" title=" " alt="" coords="825,136,646,184,645,179,824,131"/>
+<area shape="rect" title=" " alt="" coords="737,181,805,207"/>
+<area shape="poly" title=" " alt="" coords="853,136,799,175,796,171,850,131"/>
+<area shape="rect" title=" " alt="" coords="829,181,904,207"/>
+<area shape="poly" title=" " alt="" coords="869,134,869,168,864,168,864,134"/>
+<area shape="rect" title=" " alt="" coords="929,181,1021,207"/>
+<area shape="poly" title=" " alt="" coords="885,131,947,171,944,176,883,136"/>
 </map>
 </div>
 </div>
@@ -128,10 +134,19 @@ Include dependency graph for monitoring_interface.h:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html">common::interfaces::metric_value</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard metric value structure.  <a href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard metric value structure with type information.  <a href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html">common::interfaces::metrics_snapshot</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Complete snapshot of metrics at a point in time.  <a href="../../db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html">common::interfaces::thread_pool_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for thread pool monitoring.  <a href="../../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html">common::interfaces::worker_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for worker thread monitoring.  <a href="../../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/dad/structcommon_1_1interfaces_1_1system__metrics.html">common::interfaces::system_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for system-level monitoring.  <a href="../../db/dad/structcommon_1_1interfaces_1_1system__metrics.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d66/structcommon_1_1interfaces_1_1health__check__result.html">common::interfaces::health_check_result</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result of a health check operation.  <a href="../../db/d66/structcommon_1_1interfaces_1_1health__check__result.html#details">More...</a><br /></td></tr>
@@ -161,6 +176,13 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a0a9b2f30c5760ab51d484448cb7b8a8b" id="r_a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">common::interfaces::metric_type</a> { <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">common::interfaces::gauge</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba886bb73b3156b0aa24aac99d2de0b238">common::interfaces::counter</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8babdfb01f3ea1f6351d0d53d79625c347f">common::interfaces::histogram</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8baa80da1282f2c775bbc5f2c92c836968b">common::interfaces::summary</a>
+ }</td></tr>
+<tr class="memdesc:a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types of metrics supported by the monitoring system.  <a href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">More...</a><br /></td></tr>
+<tr class="separator:a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb395eef6fc1b7250086e32f29141767" id="r_abb395eef6fc1b7250086e32f29141767"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767">common::interfaces::health_status</a> { <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767a741839f346d6e8126ae38ee76a96fd12">common::interfaces::healthy</a> = 0
 , <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767a8377f5fd94f84ea08829f36e1ded3b74">common::interfaces::degraded</a> = 1
 , <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767ab7a582af4c2e181215b55161560713e5">common::interfaces::unhealthy</a> = 2
@@ -171,6 +193,12 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a6478e71c09e5f7461f734db813428144" id="r_a6478e71c09e5f7461f734db813428144"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a6478e71c09e5f7461f734db813428144">common::interfaces::to_string</a> (<a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> type)</td></tr>
+<tr class="memdesc:a6478e71c09e5f7461f734db813428144"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert metric type to string.  <br /></td></tr>
+<tr class="separator:a6478e71c09e5f7461f734db813428144"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a240b5932933dda866af4fad2e759789c" id="r_a240b5932933dda866af4fad2e759789c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a240b5932933dda866af4fad2e759789c">common::interfaces::metric_type_from_string</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a240b5932933dda866af4fad2e759789c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert string to metric type.  <br /></td></tr>
+<tr class="separator:a240b5932933dda866af4fad2e759789c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18d77affa4f0e8d7f89b49653675e358" id="r_a18d77affa4f0e8d7f89b49653675e358"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a18d77affa4f0e8d7f89b49653675e358">common::interfaces::to_string</a> (<a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767">health_status</a> status)</td></tr>
 <tr class="memdesc:a18d77affa4f0e8d7f89b49653675e358"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert health status to string.  <br /></td></tr>
 <tr class="separator:a18d77affa4f0e8d7f89b49653675e358"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,7 +211,7 @@ Functions</h2></td></tr>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 12:44:26 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 13:14:35 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

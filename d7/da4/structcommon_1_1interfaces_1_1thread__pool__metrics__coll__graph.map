@@ -1,0 +1,13 @@
+<map id="common::interfaces::thread_pool_metrics" name="common::interfaces::thread_pool_metrics">
+<area shape="rect" id="Node000001" title="Specialized metrics for thread pool monitoring." alt="" coords="5,505,168,545"/>
+<area shape="rect" id="Node000002" href="$d9/d1d/structcommon_1_1interfaces_1_1metric__value.html" title="Standard metric value structure with type information." alt="" coords="103,315,255,355"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,368,98,506,94,504,161,366"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="119,95,206,120"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="152,133,121,197,106,236,95,277,85,341,83,406,87,505,82,505,77,406,80,341,89,275,101,234,116,195,147,131"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="167,134,180,314,175,315,162,134"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="228,197,380,252"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="189,126,273,195,270,199,185,131"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="93,5,232,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="165,59,165,94,160,94,160,59"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="264,263,202,317,199,312,261,259"/>
+</map>

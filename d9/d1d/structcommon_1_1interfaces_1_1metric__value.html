@@ -82,7 +82,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Standard metric value structure.  
+<p>Standard metric value structure with type information.  
  <a href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>&gt;</code></p>
@@ -91,7 +91,7 @@ Collaboration diagram for common::interfaces::metric_value:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/d38/structcommon_1_1interfaces_1_1metric__value__coll__graph.png" border="0" usemap="#acommon_1_1interfaces_1_1metric__value_coll__map" alt="Collaboration graph"/></div>
 <map name="acommon_1_1interfaces_1_1metric__value_coll__map" id="acommon_1_1interfaces_1_1metric__value_coll__map">
-<area shape="rect" title="Standard metric value structure." alt="" coords="5,315,157,355"/>
+<area shape="rect" title="Standard metric value structure with type information." alt="" coords="5,315,157,355"/>
 <area shape="rect" title=" " alt="" coords="38,95,125,120"/>
 <area shape="poly" title=" " alt="" coords="81,134,75,197,75,252,81,314,76,315,69,252,69,197,75,134"/>
 <area shape="rect" title=" " alt="" coords="125,197,277,252"/>
@@ -104,8 +104,8 @@ Collaboration diagram for common::interfaces::metric_value:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac4e6b40ab9f6ec0f8ea12226b2c20e45" id="r_ac4e6b40ab9f6ec0f8ea12226b2c20e45"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#ac4e6b40ab9f6ec0f8ea12226b2c20e45">metric_value</a> (const std::string &amp;n=&quot;&quot;, double v=0.0)</td></tr>
-<tr class="separator:ac4e6b40ab9f6ec0f8ea12226b2c20e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af59145be74496855eeb473fbdea85d0e" id="r_af59145be74496855eeb473fbdea85d0e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#af59145be74496855eeb473fbdea85d0e">metric_value</a> (const std::string &amp;n=&quot;&quot;, double v=0.0, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> t=<a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">metric_type::gauge</a>)</td></tr>
+<tr class="separator:af59145be74496855eeb473fbdea85d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -113,18 +113,20 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a936e0bfdb327a435f1462e23711e04cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f8460ff379924c9a7f5edefc640e708" id="r_a1f8460ff379924c9a7f5edefc640e708"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#a1f8460ff379924c9a7f5edefc640e708">value</a></td></tr>
 <tr class="separator:a1f8460ff379924c9a7f5edefc640e708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8157ee006540c07ddc670d36bc661030" id="r_a8157ee006540c07ddc670d36bc661030"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#a8157ee006540c07ddc670d36bc661030">type</a> = <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">metric_type::gauge</a></td></tr>
+<tr class="separator:a8157ee006540c07ddc670d36bc661030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4a177865a091037be81eeefc136cfd4" id="r_ac4a177865a091037be81eeefc136cfd4"><td class="memItemLeft" align="right" valign="top">std::chrono::system_clock::time_point&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#ac4a177865a091037be81eeefc136cfd4">timestamp</a></td></tr>
 <tr class="separator:ac4a177865a091037be81eeefc136cfd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fad44c0053817e022d9f4b047abebb8" id="r_a4fad44c0053817e022d9f4b047abebb8"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#a4fad44c0053817e022d9f4b047abebb8">tags</a></td></tr>
 <tr class="separator:a4fad44c0053817e022d9f4b047abebb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Standard metric value structure. </p>
+<div class="textblock"><p>Standard metric value structure with type information. </p>
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00030">30</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00071">71</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac4e6b40ab9f6ec0f8ea12226b2c20e45" name="ac4e6b40ab9f6ec0f8ea12226b2c20e45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4e6b40ab9f6ec0f8ea12226b2c20e45">&#9670;&#160;</a></span>metric_value()</h2>
+<a id="af59145be74496855eeb473fbdea85d0e" name="af59145be74496855eeb473fbdea85d0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af59145be74496855eeb473fbdea85d0e">&#9670;&#160;</a></span>metric_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -142,7 +144,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>v</em> = <code>0.0</code>&#160;</td>
+          <td class="paramname"><em>v</em> = <code>0.0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a>&#160;</td>
+          <td class="paramname"><em>t</em> = <code><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">metric_type::gauge</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -157,7 +165,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00036">36</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00078">78</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -174,7 +182,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00031">31</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00072">72</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -190,7 +198,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00034">34</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00076">76</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -206,7 +214,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00033">33</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00075">75</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+
+</div>
+</div>
+<a id="a8157ee006540c07ddc670d36bc661030" name="a8157ee006540c07ddc670d36bc661030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8157ee006540c07ddc670d36bc661030">&#9670;&#160;</a></span>type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> common::interfaces::metric_value::type = <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">metric_type::gauge</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00074">74</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -222,7 +246,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00032">32</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00073">73</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -232,7 +256,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 12:44:26 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 13:14:35 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

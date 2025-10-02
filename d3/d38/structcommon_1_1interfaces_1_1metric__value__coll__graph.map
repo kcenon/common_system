@@ -1,5 +1,5 @@
 <map id="common::interfaces::metric_value" name="common::interfaces::metric_value">
-<area shape="rect" id="Node000001" title="Standard metric value structure." alt="" coords="5,315,157,355"/>
+<area shape="rect" id="Node000001" title="Standard metric value structure with type information." alt="" coords="5,315,157,355"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="38,95,125,120"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,134,75,197,75,252,81,314,76,315,69,252,69,197,75,134"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="125,197,277,252"/>

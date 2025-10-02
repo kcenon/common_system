@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['unhealthy_0',['unhealthy',['../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767ab7a582af4c2e181215b55161560713e5',1,'common::interfaces']]],
-  ['unknown_1',['unknown',['../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767aad921d60486366258809553a3db49a4a',1,'common::interfaces']]]
+  ['summary_0',['summary',['../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8baa80da1282f2c775bbc5f2c92c836968b',1,'common::interfaces']]]
 ];

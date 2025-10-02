@@ -1,0 +1,12 @@
+<map id="common::interfaces::system_metrics" name="common::interfaces::system_metrics">
+<area shape="rect" id="Node000001" title="Specialized metrics for system&#45;level monitoring." alt="" coords="5,461,157,501"/>
+<area shape="rect" id="Node000002" href="$d9/d1d/structcommon_1_1interfaces_1_1metric__value.html" title="Standard metric value structure with type information." alt="" coords="5,315,157,355"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,369,84,461,79,461,79,369"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="38,95,125,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="81,134,75,197,75,252,81,314,76,315,69,252,69,197,75,134"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="125,197,277,252"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="105,128,176,195,172,199,101,131"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="12,5,151,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="84,59,84,94,79,94,79,59"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="163,263,104,317,101,313,160,259"/>
+</map>

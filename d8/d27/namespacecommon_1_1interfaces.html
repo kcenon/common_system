@@ -122,10 +122,19 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration for logger instances.  <a href="../../d9/d7f/structcommon_1_1interfaces_1_1logger__config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html">metric_value</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard metric value structure.  <a href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard metric value structure with type information.  <a href="../../d9/d1d/structcommon_1_1interfaces_1_1metric__value.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html">metrics_snapshot</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Complete snapshot of metrics at a point in time.  <a href="../../db/da2/structcommon_1_1interfaces_1_1metrics__snapshot.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/dad/structcommon_1_1interfaces_1_1system__metrics.html">system_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for system-level monitoring.  <a href="../../db/dad/structcommon_1_1interfaces_1_1system__metrics.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html">thread_pool_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for thread pool monitoring.  <a href="../../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html">worker_metrics</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specialized metrics for worker thread monitoring.  <a href="../../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -155,6 +164,13 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ae13a720800dffacebaf1f3a99623f004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Standard log levels.  <a href="../../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004">More...</a><br /></td></tr>
 <tr class="separator:ae13a720800dffacebaf1f3a99623f004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a9b2f30c5760ab51d484448cb7b8a8b" id="r_a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> { <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff">gauge</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8ba886bb73b3156b0aa24aac99d2de0b238">counter</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8babdfb01f3ea1f6351d0d53d79625c347f">histogram</a>
+, <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8baa80da1282f2c775bbc5f2c92c836968b">summary</a>
+ }</td></tr>
+<tr class="memdesc:a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types of metrics supported by the monitoring system.  <a href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">More...</a><br /></td></tr>
+<tr class="separator:a0a9b2f30c5760ab51d484448cb7b8a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb395eef6fc1b7250086e32f29141767" id="r_abb395eef6fc1b7250086e32f29141767"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767">health_status</a> { <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767a741839f346d6e8126ae38ee76a96fd12">healthy</a> = 0
 , <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767a8377f5fd94f84ea08829f36e1ded3b74">degraded</a> = 1
 , <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767ab7a582af4c2e181215b55161560713e5">unhealthy</a> = 2
@@ -171,6 +187,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a861b98c7d68be3d2996df040585ab707" id="r_a861b98c7d68be3d2996df040585ab707"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#ae13a720800dffacebaf1f3a99623f004">log_level</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a861b98c7d68be3d2996df040585ab707">from_string</a> (const std::string &amp;str)</td></tr>
 <tr class="memdesc:a861b98c7d68be3d2996df040585ab707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse log level from string (case-insensitive)  <br /></td></tr>
 <tr class="separator:a861b98c7d68be3d2996df040585ab707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6478e71c09e5f7461f734db813428144" id="r_a6478e71c09e5f7461f734db813428144"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a6478e71c09e5f7461f734db813428144">to_string</a> (<a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> type)</td></tr>
+<tr class="memdesc:a6478e71c09e5f7461f734db813428144"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert metric type to string.  <br /></td></tr>
+<tr class="separator:a6478e71c09e5f7461f734db813428144"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a240b5932933dda866af4fad2e759789c" id="r_a240b5932933dda866af4fad2e759789c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a240b5932933dda866af4fad2e759789c">metric_type_from_string</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:a240b5932933dda866af4fad2e759789c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert string to metric type.  <br /></td></tr>
+<tr class="separator:a240b5932933dda866af4fad2e759789c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18d77affa4f0e8d7f89b49653675e358" id="r_a18d77affa4f0e8d7f89b49653675e358"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a18d77affa4f0e8d7f89b49653675e358">to_string</a> (<a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#abb395eef6fc1b7250086e32f29141767">health_status</a> status)</td></tr>
 <tr class="memdesc:a18d77affa4f0e8d7f89b49653675e358"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert health status to string.  <br /></td></tr>
 <tr class="separator:a18d77affa4f0e8d7f89b49653675e358"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -227,7 +249,7 @@ Functions</h2></td></tr>
 
 <p>Factory function type for creating monitor instances. </p>
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00177">177</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00313">313</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -260,7 +282,7 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="abb395eef6fc1b7250086e32f29141767aad921d60486366258809553a3db49a4a" name="abb395eef6fc1b7250086e32f29141767aad921d60486366258809553a3db49a4a"></a>unknown&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00063">63</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00199">199</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
@@ -299,6 +321,38 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a0a9b2f30c5760ab51d484448cb7b8a8b" name="a0a9b2f30c5760ab51d484448cb7b8a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a9b2f30c5760ab51d484448cb7b8a8b">&#9670;&#160;</a></span>metric_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">common::interfaces::metric_type</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Types of metrics supported by the monitoring system. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff" name="a0a9b2f30c5760ab51d484448cb7b8a8ba37e1a9c3ba6042b79266687d13f3c5ff"></a>gauge&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0a9b2f30c5760ab51d484448cb7b8a8ba886bb73b3156b0aa24aac99d2de0b238" name="a0a9b2f30c5760ab51d484448cb7b8a8ba886bb73b3156b0aa24aac99d2de0b238"></a>counter&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0a9b2f30c5760ab51d484448cb7b8a8babdfb01f3ea1f6351d0d53d79625c347f" name="a0a9b2f30c5760ab51d484448cb7b8a8babdfb01f3ea1f6351d0d53d79625c347f"></a>histogram&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a0a9b2f30c5760ab51d484448cb7b8a8baa80da1282f2c775bbc5f2c92c836968b" name="a0a9b2f30c5760ab51d484448cb7b8a8baa80da1282f2c775bbc5f2c92c836968b"></a>summary&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00032">32</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a861b98c7d68be3d2996df040585ab707" name="a861b98c7d68be3d2996df040585ab707"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a861b98c7d68be3d2996df040585ab707">&#9670;&#160;</a></span>from_string()</h2>
@@ -330,8 +384,38 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a240b5932933dda866af4fad2e759789c" name="a240b5932933dda866af4fad2e759789c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a240b5932933dda866af4fad2e759789c">&#9670;&#160;</a></span>metric_type_from_string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad">Result</a>&lt; <a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a> &gt; common::interfaces::metric_type_from_string </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert string to metric type. </p>
+
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00055">55</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+
+</div>
+</div>
 <a id="a18d77affa4f0e8d7f89b49653675e358" name="a18d77affa4f0e8d7f89b49653675e358"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18d77affa4f0e8d7f89b49653675e358">&#9670;&#160;</a></span>to_string() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d77affa4f0e8d7f89b49653675e358">&#9670;&#160;</a></span>to_string() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,12 +440,12 @@ Functions</h2></td></tr>
 
 <p>Convert health status to string. </p>
 
-<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00204">204</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00340">340</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
 
 </div>
 </div>
 <a id="a37ab7f0332b69b4a7eab3d9fa7de2085" name="a37ab7f0332b69b4a7eab3d9fa7de2085"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a37ab7f0332b69b4a7eab3d9fa7de2085">&#9670;&#160;</a></span>to_string() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a37ab7f0332b69b4a7eab3d9fa7de2085">&#9670;&#160;</a></span>to_string() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -390,10 +474,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a6478e71c09e5f7461f734db813428144" name="a6478e71c09e5f7461f734db813428144"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6478e71c09e5f7461f734db813428144">&#9670;&#160;</a></span>to_string() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string common::interfaces::to_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d8/d27/namespacecommon_1_1interfaces.html#a0a9b2f30c5760ab51d484448cb7b8a8b">metric_type</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert metric type to string. </p>
+
+<p class="definition">Definition at line <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html#l00042">42</a> of file <a class="el" href="../../db/d4f/monitoring__interface_8h_source.html">monitoring_interface.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 12:44:26 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 13:14:35 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

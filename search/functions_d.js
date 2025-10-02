@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['to_5fstring_0',['to_string',['../d8/d27/namespacecommon_1_1interfaces.html#a37ab7f0332b69b4a7eab3d9fa7de2085',1,'common::interfaces::to_string(log_level level)'],['../d8/d27/namespacecommon_1_1interfaces.html#a18d77affa4f0e8d7f89b49653675e358',1,'common::interfaces::to_string(health_status status)']]],
-  ['try_5fcatch_1',['try_catch',['../d9/d0c/namespacecommon.html#a258fc55a9522864ad1fed6586b785c82',1,'common']]]
+  ['thread_5fpool_5fmetrics_0',['thread_pool_metrics',['../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#ab10e14360e902ce0542b1cc854a42b07',1,'common::interfaces::thread_pool_metrics::thread_pool_metrics()=default'],['../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#a2d6ee14ae26a1725650d581fd0dc132e',1,'common::interfaces::thread_pool_metrics::thread_pool_metrics(const std::string &amp;name, std::uint32_t instance_id=0)']]],
+  ['to_5fmetrics_1',['to_metrics',['../db/d57/structcommon_1_1interfaces_1_1thread__pool__metrics.html#afe2e69e5a72862b3ef9132f9dc561188',1,'common::interfaces::thread_pool_metrics::to_metrics()'],['../d6/d75/structcommon_1_1interfaces_1_1worker__metrics.html#a2db32f61ce910e3d86e3676fee7f7ba1',1,'common::interfaces::worker_metrics::to_metrics()'],['../db/dad/structcommon_1_1interfaces_1_1system__metrics.html#a0e8a055a050809bc97d3ddfecb666075',1,'common::interfaces::system_metrics::to_metrics()']]],
+  ['to_5fstring_2',['to_string',['../d8/d27/namespacecommon_1_1interfaces.html#a37ab7f0332b69b4a7eab3d9fa7de2085',1,'common::interfaces::to_string(log_level level)'],['../d8/d27/namespacecommon_1_1interfaces.html#a6478e71c09e5f7461f734db813428144',1,'common::interfaces::to_string(metric_type type)'],['../d8/d27/namespacecommon_1_1interfaces.html#a18d77affa4f0e8d7f89b49653675e358',1,'common::interfaces::to_string(health_status status)']]],
+  ['try_5fcatch_3',['try_catch',['../d9/d0c/namespacecommon.html#a258fc55a9522864ad1fed6586b785c82',1,'common']]]
 ];
