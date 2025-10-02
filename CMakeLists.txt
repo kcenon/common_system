@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(common_system VERSION 1.0.0 LANGUAGES CXX)
 
-# C++17 as minimum standard (compatible with all modules)
-set(CMAKE_CXX_STANDARD 17)
+# C++20 as required standard (unified across all systems)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -26,7 +26,7 @@ target_include_directories(common_system INTERFACE
 )
 
 # C++ feature requirements
-target_compile_features(common_system INTERFACE cxx_std_17)
+target_compile_features(common_system INTERFACE cxx_std_20)
 
 # Optional: If not header-only, add source files
 if(NOT COMMON_HEADER_ONLY)
@@ -40,7 +40,7 @@ if(NOT COMMON_HEADER_ONLY)
         $<INSTALL_INTERFACE:include>
     )
 
-    target_compile_features(common_system_static PUBLIC cxx_std_17)
+    target_compile_features(common_system_static PUBLIC cxx_std_20)
 endif()
 
 # Installation rules
