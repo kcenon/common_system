@@ -64,39 +64,43 @@ public:
     // Phase 2: Job-based execution support
     common::Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
         if (!job) {
-            return common::Result<std::future<void>>(
-                common::error_info(1, "Job is null", "mock_executor"));
+            return common::error_info(1, "Job is null", "mock_executor");
         }
 
-        // Wrap job execution in a lambda
-        auto task = [j = std::move(job)]() {
-            auto result = j->execute();
-            if (!result) {
+        // Use shared_ptr to make lambda copy-constructible
+        auto shared_job = std::shared_ptr<IJob>(std::move(job));
+
+        auto task = [shared_job]() {
+            auto result = shared_job->execute();
+            if (common::is_error(result)) {
                 // Log error but don't throw - already handled by Result
-                std::cerr << "Job execution failed: " << result.error().message << std::endl;
+                auto& err = common::get_error(result);
+                std::cerr << "Job execution failed: " << err.message << std::endl;
             }
         };
 
-        return common::Result<std::future<void>>(submit(std::move(task)));
+        return submit(std::move(task));
     }
 
     common::Result<std::future<void>> execute_delayed(
         std::unique_ptr<IJob>&& job,
         std::chrono::milliseconds delay) override {
         if (!job) {
-            return common::Result<std::future<void>>(
-                common::error_info(1, "Job is null", "mock_executor"));
+            return common::error_info(1, "Job is null", "mock_executor");
         }
 
-        // Wrap job execution in a lambda
-        auto task = [j = std::move(job)]() {
-            auto result = j->execute();
-            if (!result) {
-                std::cerr << "Job execution failed: " << result.error().message << std::endl;
+        // Use shared_ptr to make lambda copy-constructible
+        auto shared_job = std::shared_ptr<IJob>(std::move(job));
+
+        auto task = [shared_job]() {
+            auto result = shared_job->execute();
+            if (common::is_error(result)) {
+                auto& err = common::get_error(result);
+                std::cerr << "Job execution failed: " << err.message << std::endl;
             }
         };
 
-        return common::Result<std::future<void>>(submit_delayed(std::move(task), delay));
+        return submit_delayed(std::move(task), delay);
     }
 
     size_t worker_count() const override {
@@ -326,11 +330,12 @@ int main() {
             auto job = std::make_unique<calculation_job>(i, job_sum);
             auto result = job_executor.execute(std::move(job));
 
-            if (result) {
-                job_futures.push_back(std::move(result.value()));
+            if (common::is_ok(result)) {
+                job_futures.push_back(std::move(common::get_value(result)));
             } else {
+                auto& err = common::get_error(result);
                 std::cout << "   Failed to submit job: "
-                         << result.error().message << "\n";
+                         << err.message << "\n";
             }
         }
 
