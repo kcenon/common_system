@@ -56,12 +56,12 @@ inline Result<metric_type> metric_type_from_string(const std::string& str) {
     std::string upper = str;
     std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
 
-    if (upper == "GAUGE") return make_result(metric_type::gauge);
-    if (upper == "COUNTER") return make_result(metric_type::counter);
-    if (upper == "HISTOGRAM") return make_result(metric_type::histogram);
-    if (upper == "SUMMARY") return make_result(metric_type::summary);
+    if (upper == "GAUGE") return ok(metric_type::gauge);
+    if (upper == "COUNTER") return ok(metric_type::counter);
+    if (upper == "HISTOGRAM") return ok(metric_type::histogram);
+    if (upper == "SUMMARY") return ok(metric_type::summary);
 
-    return make_error<metric_type>("Invalid metric type: " + str);
+    return error<metric_type>(1, "Invalid metric type: " + str, "monitoring_interface");
 }
 
 /**
