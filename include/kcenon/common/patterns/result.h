@@ -278,3 +278,60 @@ Result<T> try_catch(F&& func, const std::string& module = "") {
 }
 
 } // namespace common
+
+// Convenience macros for Result<T> pattern usage
+
+/**
+ * @brief Return early if expression is an error
+ *
+ * Usage:
+ *   RETURN_IF_ERROR(some_operation());
+ *   // Continue only if successful
+ */
+#define RETURN_IF_ERROR(expr) \
+    do { \
+        auto _result_temp = (expr); \
+        if (common::is_error(_result_temp)) { \
+            return common::get_error(_result_temp); \
+        } \
+    } while(false)
+
+/**
+ * @brief Assign value or return error
+ *
+ * Usage:
+ *   ASSIGN_OR_RETURN(auto value, get_value());
+ *   // Use 'value' here
+ */
+#define ASSIGN_OR_RETURN(decl, expr) \
+    auto _result_##decl = (expr); \
+    if (common::is_error(_result_##decl)) { \
+        return common::get_error(_result_##decl); \
+    } \
+    decl = common::get_value(std::move(_result_##decl))
+
+/**
+ * @brief Return error if condition is false
+ *
+ * Usage:
+ *   RETURN_ERROR_IF(!ptr, error_codes::INVALID_ARGUMENT, "Null pointer", "MyModule");
+ */
+#define RETURN_ERROR_IF(condition, code, message, module) \
+    do { \
+        if (condition) { \
+            return common::error_info{code, message, module}; \
+        } \
+    } while(false)
+
+/**
+ * @brief Return error with details if condition is false
+ *
+ * Usage:
+ *   RETURN_ERROR_IF_WITH_DETAILS(!valid, -1, "Invalid", "Module", "Details");
+ */
+#define RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) \
+    do { \
+        if (condition) { \
+            return common::error_info{code, message, module, details}; \
+        } \
+    } while(false)
