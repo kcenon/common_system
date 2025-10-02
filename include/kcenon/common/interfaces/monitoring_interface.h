@@ -12,7 +12,9 @@
 
 #pragma once
 
+#include <algorithm>
 #include <chrono>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
@@ -24,18 +26,59 @@ namespace common {
 namespace interfaces {
 
 /**
+ * @enum metric_type
+ * @brief Types of metrics supported by the monitoring system
+ */
+enum class metric_type {
+    gauge,      // Instant value that can go up or down
+    counter,    // Monotonic increasing value
+    histogram,  // Distribution of values across buckets
+    summary     // Statistical summary (min, max, mean, percentiles)
+};
+
+/**
+ * @brief Convert metric type to string
+ */
+inline std::string to_string(metric_type type) {
+    switch(type) {
+        case metric_type::gauge: return "GAUGE";
+        case metric_type::counter: return "COUNTER";
+        case metric_type::histogram: return "HISTOGRAM";
+        case metric_type::summary: return "SUMMARY";
+        default: return "UNKNOWN";
+    }
+}
+
+/**
+ * @brief Convert string to metric type
+ */
+inline Result<metric_type> metric_type_from_string(const std::string& str) {
+    std::string upper = str;
+    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+
+    if (upper == "GAUGE") return make_result(metric_type::gauge);
+    if (upper == "COUNTER") return make_result(metric_type::counter);
+    if (upper == "HISTOGRAM") return make_result(metric_type::histogram);
+    if (upper == "SUMMARY") return make_result(metric_type::summary);
+
+    return make_error<metric_type>("Invalid metric type: " + str);
+}
+
+/**
  * @struct metric_value
- * @brief Standard metric value structure
+ * @brief Standard metric value structure with type information
  */
 struct metric_value {
     std::string name;
     double value;
+    metric_type type = metric_type::gauge;
     std::chrono::system_clock::time_point timestamp;
     std::unordered_map<std::string, std::string> tags;
 
-    metric_value(const std::string& n = "", double v = 0.0)
+    metric_value(const std::string& n = "", double v = 0.0, metric_type t = metric_type::gauge)
         : name(n)
         , value(v)
+        , type(t)
         , timestamp(std::chrono::system_clock::now()) {}
 };
 
@@ -53,6 +96,99 @@ struct metrics_snapshot {
 
     void add_metric(const std::string& name, double value) {
         metrics.emplace_back(name, value);
+    }
+};
+
+/**
+ * @struct thread_pool_metrics
+ * @brief Specialized metrics for thread pool monitoring
+ */
+struct thread_pool_metrics {
+    metric_value jobs_completed{"jobs_completed", 0, metric_type::counter};
+    metric_value jobs_pending{"jobs_pending", 0, metric_type::gauge};
+    metric_value worker_threads{"worker_threads", 0, metric_type::gauge};
+    metric_value idle_threads{"idle_threads", 0, metric_type::gauge};
+    metric_value average_latency_ns{"average_latency_ns", 0, metric_type::gauge};
+    metric_value total_execution_time_ns{"total_execution_time_ns", 0, metric_type::counter};
+
+    std::chrono::system_clock::time_point timestamp = std::chrono::system_clock::now();
+
+    // Pool identification for multi-pool scenarios
+    std::string pool_name;
+    std::uint32_t pool_instance_id{0};
+
+    thread_pool_metrics() = default;
+
+    explicit thread_pool_metrics(const std::string& name, std::uint32_t instance_id = 0)
+        : pool_name(name), pool_instance_id(instance_id) {}
+
+    /**
+     * @brief Convert to vector of metric_value
+     */
+    std::vector<metric_value> to_metrics() const {
+        return {
+            jobs_completed,
+            jobs_pending,
+            worker_threads,
+            idle_threads,
+            average_latency_ns,
+            total_execution_time_ns
+        };
+    }
+};
+
+/**
+ * @struct worker_metrics
+ * @brief Specialized metrics for worker thread monitoring
+ */
+struct worker_metrics {
+    metric_value jobs_processed{"jobs_processed", 0, metric_type::counter};
+    metric_value total_processing_time_ns{"total_processing_time_ns", 0, metric_type::counter};
+    metric_value idle_time_ns{"idle_time_ns", 0, metric_type::counter};
+    metric_value context_switches{"context_switches", 0, metric_type::counter};
+
+    std::chrono::system_clock::time_point timestamp = std::chrono::system_clock::now();
+    std::size_t worker_id{0};
+
+    worker_metrics() = default;
+
+    explicit worker_metrics(std::size_t id) : worker_id(id) {}
+
+    /**
+     * @brief Convert to vector of metric_value
+     */
+    std::vector<metric_value> to_metrics() const {
+        return {
+            jobs_processed,
+            total_processing_time_ns,
+            idle_time_ns,
+            context_switches
+        };
+    }
+};
+
+/**
+ * @struct system_metrics
+ * @brief Specialized metrics for system-level monitoring
+ */
+struct system_metrics {
+    metric_value cpu_usage_percent{"cpu_usage_percent", 0, metric_type::gauge};
+    metric_value memory_usage_bytes{"memory_usage_bytes", 0, metric_type::gauge};
+    metric_value active_threads{"active_threads", 0, metric_type::gauge};
+    metric_value total_allocations{"total_allocations", 0, metric_type::counter};
+
+    std::chrono::system_clock::time_point timestamp = std::chrono::system_clock::now();
+
+    /**
+     * @brief Convert to vector of metric_value
+     */
+    std::vector<metric_value> to_metrics() const {
+        return {
+            cpu_usage_percent,
+            memory_usage_bytes,
+            active_threads,
+            total_allocations
+        };
     }
 };
 
