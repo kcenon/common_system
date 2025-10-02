@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <chrono>
 #include <functional>
 #include <memory>
@@ -152,6 +153,72 @@ public:
 };
 
 /**
+ * @struct logger_config
+ * @brief Configuration for logger instances
+ *
+ * Phase 2: Extended configuration structure for advanced logger features
+ */
+struct logger_config {
+    log_level min_level = log_level::info;
+    std::string pattern = "[%Y-%m-%d %H:%M:%S.%e] [%l] %v";
+    bool async_mode = false;
+    size_t queue_size = 8192;
+    bool color_enabled = false;
+
+    logger_config() = default;
+
+    logger_config(log_level level, const std::string& fmt = "")
+        : min_level(level)
+        , pattern(fmt.empty() ? pattern : fmt) {}
+};
+
+/**
+ * @interface ILoggerRegistry
+ * @brief Phase 2: Global logger registry interface
+ *
+ * Provides thread-safe access to named logger instances
+ */
+class ILoggerRegistry {
+public:
+    virtual ~ILoggerRegistry() = default;
+
+    /**
+     * @brief Register a logger with a name
+     * @param name Logger name
+     * @param logger Logger instance
+     * @return VoidResult indicating success or error
+     */
+    virtual VoidResult register_logger(const std::string& name, std::shared_ptr<ILogger> logger) = 0;
+
+    /**
+     * @brief Get a logger by name
+     * @param name Logger name
+     * @return Logger instance or nullptr if not found
+     */
+    virtual std::shared_ptr<ILogger> get_logger(const std::string& name) = 0;
+
+    /**
+     * @brief Remove a logger by name
+     * @param name Logger name
+     * @return VoidResult indicating success or error
+     */
+    virtual VoidResult unregister_logger(const std::string& name) = 0;
+
+    /**
+     * @brief Get the default logger
+     * @return Default logger instance or nullptr
+     */
+    virtual std::shared_ptr<ILogger> get_default_logger() = 0;
+
+    /**
+     * @brief Set the default logger
+     * @param logger Logger instance
+     * @return VoidResult indicating success or error
+     */
+    virtual VoidResult set_default_logger(std::shared_ptr<ILogger> logger) = 0;
+};
+
+/**
  * @brief Convert log level to string
  */
 inline std::string to_string(log_level level) {
@@ -168,16 +235,19 @@ inline std::string to_string(log_level level) {
 }
 
 /**
- * @brief Parse log level from string
+ * @brief Parse log level from string (case-insensitive)
  */
 inline log_level from_string(const std::string& str) {
-    if (str == "TRACE") return log_level::trace;
-    if (str == "DEBUG") return log_level::debug;
-    if (str == "INFO") return log_level::info;
-    if (str == "WARNING") return log_level::warning;
-    if (str == "ERROR") return log_level::error;
-    if (str == "CRITICAL") return log_level::critical;
-    if (str == "OFF") return log_level::off;
+    std::string upper = str;
+    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+
+    if (upper == "TRACE") return log_level::trace;
+    if (upper == "DEBUG") return log_level::debug;
+    if (upper == "INFO") return log_level::info;
+    if (upper == "WARNING" || upper == "WARN") return log_level::warning;
+    if (upper == "ERROR") return log_level::error;
+    if (upper == "CRITICAL" || upper == "FATAL") return log_level::critical;
+    if (upper == "OFF") return log_level::off;
     return log_level::info; // default
 }
 
