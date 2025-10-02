@@ -11,5 +11,8 @@ var searchData=
   ['result_8',['Result',['../d9/d0c/namespacecommon.html#aa3f4f788826486362407fe8e5dcc0dad',1,'common']]],
   ['result_20t_20pattern_9',['Result&lt;T&gt; Pattern',['../d0/d30/md_README.html#autotoc_md24',1,'']]],
   ['result_2eh_10',['result.h',['../de/d93/result_8h.html',1,'']]],
-  ['roadmap_11',['Roadmap',['../d0/d30/md_README.html#autotoc_md36',1,'']]]
+  ['return_5ferror_5fif_11',['RETURN_ERROR_IF',['../de/d93/result_8h.html#add82d023fe57dd340c1c993cdf7b3392',1,'result.h']]],
+  ['return_5ferror_5fif_5fwith_5fdetails_12',['RETURN_ERROR_IF_WITH_DETAILS',['../de/d93/result_8h.html#a6d963dd9375f4462c610bc5b1477985f',1,'result.h']]],
+  ['return_5fif_5ferror_13',['RETURN_IF_ERROR',['../de/d93/result_8h.html#acdc223d8c59d5c591dc6b4e88257627b',1,'result.h']]],
+  ['roadmap_14',['Roadmap',['../d0/d30/md_README.html#autotoc_md36',1,'']]]
 ];

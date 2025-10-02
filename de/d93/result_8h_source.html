@@ -321,6 +321,45 @@ $(document).ready(function() { init_codefold(1); });
 </div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
 <div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>} <span class="comment">// namespace common</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="comment">// Convenience macros for Result&lt;T&gt; pattern usage</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="foldopen" id="foldopen00291" data-start="" data-end="">
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno"><a class="line" href="../../de/d93/result_8h.html#acdc223d8c59d5c591dc6b4e88257627b">  291</a></span><span class="preprocessor">#define RETURN_IF_ERROR(expr) \</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="preprocessor">    do { \</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="preprocessor">        auto _result_temp = (expr); \</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="preprocessor">        if (common::is_error(_result_temp)) { \</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="preprocessor">            return common::get_error(_result_temp); \</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="preprocessor">        } \</span></div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="preprocessor">    } while(false)</span></div>
+</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
+<div class="foldopen" id="foldopen00306" data-start="" data-end="">
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno"><a class="line" href="../../de/d93/result_8h.html#a3f126405badf1293a8ecc9699563b1e9">  306</a></span><span class="preprocessor">#define ASSIGN_OR_RETURN(decl, expr) \</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="preprocessor">    auto _result_##decl = (expr); \</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="preprocessor">    if (common::is_error(_result_##decl)) { \</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="preprocessor">        return common::get_error(_result_##decl); \</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="preprocessor">    } \</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="preprocessor">    decl = common::get_value(std::move(_result_##decl))</span></div>
+</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span> </div>
+<div class="foldopen" id="foldopen00319" data-start="" data-end="">
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno"><a class="line" href="../../de/d93/result_8h.html#add82d023fe57dd340c1c993cdf7b3392">  319</a></span><span class="preprocessor">#define RETURN_ERROR_IF(condition, code, message, module) \</span></div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="preprocessor">    do { \</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="preprocessor">        if (condition) { \</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="preprocessor">            return common::error_info{code, message, module}; \</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="preprocessor">        } \</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="preprocessor">    } while(false)</span></div>
+</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
+<div class="foldopen" id="foldopen00332" data-start="" data-end="">
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno"><a class="line" href="../../de/d93/result_8h.html#a6d963dd9375f4462c610bc5b1477985f">  332</a></span><span class="preprocessor">#define RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) \</span></div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span><span class="preprocessor">    do { \</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="preprocessor">        if (condition) { \</span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="preprocessor">            return common::error_info{code, message, module, details}; \</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="preprocessor">        } \</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span><span class="preprocessor">    } while(false)</span></div>
+</div>
 <div class="ttc" id="anamespacecommon_1_1error__codes_html_a0578712333ff7801626d4a7856b71b87"><div class="ttname"><a href="../../d2/dc9/namespacecommon_1_1error__codes.html#a0578712333ff7801626d4a7856b71b87">common::error_codes::INTERNAL_ERROR</a></div><div class="ttdeci">constexpr int INTERNAL_ERROR</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00248">result.h:248</a></div></div>
 <div class="ttc" id="anamespacecommon_1_1error__codes_html_a17b859cce5fee0d0f323766703eaf7a0"><div class="ttname"><a href="../../d2/dc9/namespacecommon_1_1error__codes.html#a17b859cce5fee0d0f323766703eaf7a0">common::error_codes::NOT_INITIALIZED</a></div><div class="ttdeci">constexpr int NOT_INITIALIZED</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00243">result.h:243</a></div></div>
 <div class="ttc" id="anamespacecommon_1_1error__codes_html_a1b025f78bd187154fc1b65a6545edc1b"><div class="ttname"><a href="../../d2/dc9/namespacecommon_1_1error__codes.html#a1b025f78bd187154fc1b65a6545edc1b">common::error_codes::ALREADY_EXISTS</a></div><div class="ttdeci">constexpr int ALREADY_EXISTS</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00244">result.h:244</a></div></div>
@@ -367,7 +406,7 @@ $(document).ready(function() { init_codefold(1); });
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 13:14:35 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 13:35:11 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>

@@ -77,6 +77,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -138,6 +139,21 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:d2/dc9/namespacecommon_1_1error__codes" id="r_d2/dc9/namespacecommon_1_1error__codes"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dc9/namespacecommon_1_1error__codes.html">common::error_codes</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:acdc223d8c59d5c591dc6b4e88257627b" id="r_acdc223d8c59d5c591dc6b4e88257627b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d93/result_8h.html#acdc223d8c59d5c591dc6b4e88257627b">RETURN_IF_ERROR</a>(expr)</td></tr>
+<tr class="memdesc:acdc223d8c59d5c591dc6b4e88257627b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return early if expression is an error.  <br /></td></tr>
+<tr class="separator:acdc223d8c59d5c591dc6b4e88257627b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f126405badf1293a8ecc9699563b1e9" id="r_a3f126405badf1293a8ecc9699563b1e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d93/result_8h.html#a3f126405badf1293a8ecc9699563b1e9">ASSIGN_OR_RETURN</a>(decl,  expr)</td></tr>
+<tr class="memdesc:a3f126405badf1293a8ecc9699563b1e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign value or return error.  <br /></td></tr>
+<tr class="separator:a3f126405badf1293a8ecc9699563b1e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add82d023fe57dd340c1c993cdf7b3392" id="r_add82d023fe57dd340c1c993cdf7b3392"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d93/result_8h.html#add82d023fe57dd340c1c993cdf7b3392">RETURN_ERROR_IF</a>(condition,  code,  message,  module)</td></tr>
+<tr class="memdesc:add82d023fe57dd340c1c993cdf7b3392"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return error if condition is false.  <br /></td></tr>
+<tr class="separator:add82d023fe57dd340c1c993cdf7b3392"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d963dd9375f4462c610bc5b1477985f" id="r_a6d963dd9375f4462c610bc5b1477985f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d93/result_8h.html#a6d963dd9375f4462c610bc5b1477985f">RETURN_ERROR_IF_WITH_DETAILS</a>(condition,  code,  message,  module,  details)</td></tr>
+<tr class="memdesc:a6d963dd9375f4462c610bc5b1477985f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return error with details if condition is false.  <br /></td></tr>
+<tr class="separator:a6d963dd9375f4462c610bc5b1477985f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -263,10 +279,188 @@ Variables</h2></td></tr>
 <p>Provides a <code>Result&lt;T&gt;</code> type similar to Rust's Result or C++23's <code>std::expected</code>, enabling explicit error propagation at module boundaries without using exceptions. </p>
 
 <p class="definition">Definition in file <a class="el" href="../../de/d93/result_8h_source.html">result.h</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a3f126405badf1293a8ecc9699563b1e9" name="a3f126405badf1293a8ecc9699563b1e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f126405badf1293a8ecc9699563b1e9">&#9670;&#160;</a></span>ASSIGN_OR_RETURN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSIGN_OR_RETURN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">decl, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">expr&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">auto</span> _result_##decl = (expr); \</div>
+<div class="line">    if (<a class="code hl_function" href="../../d9/d0c/namespacecommon.html#a5ac2c7aa8e3429b5264100cf96dff8dc">common::is_error</a>(_result_##decl)) { \</div>
+<div class="line">        <span class="keywordflow">return</span> <a class="code hl_function" href="../../d9/d0c/namespacecommon.html#ac7e90ce6a43c04f6e4dd047eeb8fa980">common::get_error</a>(_result_##decl); \</div>
+<div class="line">    } \</div>
+<div class="line">    decl = <a class="code hl_function" href="../../d9/d0c/namespacecommon.html#af32356cd3182ec940ccc98ef09fb669d">common::get_value</a>(std::move(_result_##decl))</div>
+<div class="ttc" id="anamespacecommon_html_a5ac2c7aa8e3429b5264100cf96dff8dc"><div class="ttname"><a href="../../d9/d0c/namespacecommon.html#a5ac2c7aa8e3429b5264100cf96dff8dc">common::is_error</a></div><div class="ttdeci">bool is_error(const Result&lt; T &gt; &amp;result)</div><div class="ttdoc">Check if result contains an error.</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00089">result.h:89</a></div></div>
+<div class="ttc" id="anamespacecommon_html_ac7e90ce6a43c04f6e4dd047eeb8fa980"><div class="ttname"><a href="../../d9/d0c/namespacecommon.html#ac7e90ce6a43c04f6e4dd047eeb8fa980">common::get_error</a></div><div class="ttdeci">const error_info &amp; get_error(const Result&lt; T &gt; &amp;result)</div><div class="ttdoc">Get error from result.</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00116">result.h:116</a></div></div>
+<div class="ttc" id="anamespacecommon_html_af32356cd3182ec940ccc98ef09fb669d"><div class="ttname"><a href="../../d9/d0c/namespacecommon.html#af32356cd3182ec940ccc98ef09fb669d">common::get_value</a></div><div class="ttdeci">const T &amp; get_value(const Result&lt; T &gt; &amp;result)</div><div class="ttdoc">Get value from result.</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00098">result.h:98</a></div></div>
+</div><!-- fragment -->
+<p>Assign value or return error. </p>
+<p>Usage: <a class="el" href="../../de/d93/result_8h.html#a3f126405badf1293a8ecc9699563b1e9" title="Assign value or return error.">ASSIGN_OR_RETURN(auto value, get_value())</a>; // Use 'value' here </p>
+
+<p class="definition">Definition at line <a class="el" href="../../de/d93/result_8h_source.html#l00306">306</a> of file <a class="el" href="../../de/d93/result_8h_source.html">result.h</a>.</p>
+
+</div>
+</div>
+<a id="add82d023fe57dd340c1c993cdf7b3392" name="add82d023fe57dd340c1c993cdf7b3392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add82d023fe57dd340c1c993cdf7b3392">&#9670;&#160;</a></span>RETURN_ERROR_IF</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RETURN_ERROR_IF</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">condition, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">code, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">module&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> { \</div>
+<div class="line">        if (condition) { \</div>
+<div class="line">            <span class="keywordflow">return</span> <a class="code hl_struct" href="../../d7/d8d/structcommon_1_1error__info.html">common::error_info</a>{code, message, <span class="keyword">module</span>}; \</div>
+<div class="line">        } \</div>
+<div class="line">    } <span class="keywordflow">while</span>(<span class="keyword">false</span>)</div>
+<div class="ttc" id="astructcommon_1_1error__info_html"><div class="ttname"><a href="../../d7/d8d/structcommon_1_1error__info.html">common::error_info</a></div><div class="ttdoc">Standard error information structure.</div><div class="ttdef"><b>Definition</b> <a href="../../de/d93/result_8h_source.html#l00031">result.h:31</a></div></div>
+</div><!-- fragment -->
+<p>Return error if condition is false. </p>
+<p>Usage: RETURN_ERROR_IF(!ptr, error_codes::INVALID_ARGUMENT, "Null pointer", "MyModule"); </p>
+
+<p class="definition">Definition at line <a class="el" href="../../de/d93/result_8h_source.html#l00319">319</a> of file <a class="el" href="../../de/d93/result_8h_source.html">result.h</a>.</p>
+
+</div>
+</div>
+<a id="a6d963dd9375f4462c610bc5b1477985f" name="a6d963dd9375f4462c610bc5b1477985f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d963dd9375f4462c610bc5b1477985f">&#9670;&#160;</a></span>RETURN_ERROR_IF_WITH_DETAILS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RETURN_ERROR_IF_WITH_DETAILS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">condition, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">code, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">message, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">module, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">details&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> { \</div>
+<div class="line">        if (condition) { \</div>
+<div class="line">            <span class="keywordflow">return</span> <a class="code hl_struct" href="../../d7/d8d/structcommon_1_1error__info.html">common::error_info</a>{code, message, module, details}; \</div>
+<div class="line">        } \</div>
+<div class="line">    } <span class="keywordflow">while</span>(<span class="keyword">false</span>)</div>
+</div><!-- fragment -->
+<p>Return error with details if condition is false. </p>
+<p>Usage: RETURN_ERROR_IF_WITH_DETAILS(!valid, -1, "Invalid", "Module", "Details"); </p>
+
+<p class="definition">Definition at line <a class="el" href="../../de/d93/result_8h_source.html#l00332">332</a> of file <a class="el" href="../../de/d93/result_8h_source.html">result.h</a>.</p>
+
+</div>
+</div>
+<a id="acdc223d8c59d5c591dc6b4e88257627b" name="acdc223d8c59d5c591dc6b4e88257627b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdc223d8c59d5c591dc6b4e88257627b">&#9670;&#160;</a></span>RETURN_IF_ERROR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RETURN_IF_ERROR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">expr</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> { \</div>
+<div class="line">        <span class="keyword">auto</span> _result_temp = (expr); \</div>
+<div class="line">        if (<a class="code hl_function" href="../../d9/d0c/namespacecommon.html#a5ac2c7aa8e3429b5264100cf96dff8dc">common::is_error</a>(_result_temp)) { \</div>
+<div class="line">            <span class="keywordflow">return</span> <a class="code hl_function" href="../../d9/d0c/namespacecommon.html#ac7e90ce6a43c04f6e4dd047eeb8fa980">common::get_error</a>(_result_temp); \</div>
+<div class="line">        } \</div>
+<div class="line">    } <span class="keywordflow">while</span>(<span class="keyword">false</span>)</div>
+</div><!-- fragment -->
+<p>Return early if expression is an error. </p>
+<p>Usage: <a class="el" href="../../de/d93/result_8h.html#acdc223d8c59d5c591dc6b4e88257627b" title="Return early if expression is an error.">RETURN_IF_ERROR(some_operation())</a>; // Continue only if successful </p>
+
+<p class="definition">Definition at line <a class="el" href="../../de/d93/result_8h_source.html#l00291">291</a> of file <a class="el" href="../../de/d93/result_8h_source.html">result.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 2 2025 13:14:35 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Thu Oct 2 2025 13:35:11 for Common System by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>
