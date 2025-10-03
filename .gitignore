@@ -87,4 +87,4 @@ install_manifest.txt
 
 # CTest
 CTestTestfile.cmake
-DartConfiguration.tcl
+DartConfiguration.tcldocs/api/
