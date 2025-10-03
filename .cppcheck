@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <root name="."/>
+    <builddir>build/cppcheck</builddir>
+    <importproject>compile_commands.json</importproject>
+    <analyze-all-vs-configs>true</analyze-all-vs-configs>
+    <check-headers>true</check-headers>
+    <check-unused-templates>true</check-unused-templates>
+    <max-ctu-depth>4</max-ctu-depth>
+    <max-template-recursion>100</max-template-recursion>
+
+    <!-- Paths to check -->
+    <paths>
+        <dir name="include/"/>
+    </paths>
+
+    <!-- Excluded paths -->
+    <exclude>
+        <path name="build/"/>
+        <path name="build-*/"/>
+        <path name="vcpkg/"/>
+        <path name="vcpkg_installed/"/>
+        <path name=".git/"/>
+    </exclude>
+
+    <!-- Suppressions for false positives -->
+    <suppressions>
+        <!-- Suppress performance warnings for header-only library -->
+        <suppression>passedByValue</suppression>
+
+        <!-- Suppress style warnings for public interfaces -->
+        <suppression>
+            <id>noExplicitConstructor</id>
+            <fileName>include/kcenon/common/patterns/result.h</fileName>
+        </suppression>
+    </suppressions>
+
+    <!-- Enabled checks -->
+    <addon>cert.py</addon>
+    <addon>misra.py</addon>
+</project>
