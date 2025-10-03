@@ -1,37 +1,21 @@
-PROJECT_NAME           = "Common System"
+# Doxyfile for common_system
+
+PROJECT_NAME           = "common_system"
 PROJECT_NUMBER         = "1.0.0"
-PROJECT_BRIEF          = "Foundational interfaces and patterns for modular C++ architecture"
-OUTPUT_DIRECTORY       = documents
-CREATE_SUBDIRS         = YES
-OUTPUT_LANGUAGE        = English
-MARKDOWN_SUPPORT       = YES
-EXTRACT_ALL            = YES
-EXTRACT_PRIVATE        = YES
-EXTRACT_STATIC         = YES
-EXTRACT_LOCAL_CLASSES  = YES
-INLINE_SOURCES         = NO
-SOURCE_BROWSER         = YES
-REFERENCES_LINK_SOURCE = YES
-GENERATE_HTML          = YES
-HTML_OUTPUT            = html
-HTML_TIMESTAMP         = YES
-WARNINGS               = YES
-WARN_IF_UNDOCUMENTED   = YES
-WARN_IF_DOC_ERROR      = YES
-INPUT                  = include \
-                         README.md \
-                         docs/mainpage.dox
-FILE_PATTERNS          = *.h \
-                         *.hpp \
-                         *.cpp \
-                         *.md \
-                         *.dox
+PROJECT_BRIEF          = "Common interfaces and patterns for system integration"
+OUTPUT_DIRECTORY       = docs/api
+INPUT                  = include/kcenon/common INTEGRATION_POLICY.md ARCHITECTURE.md INTEGRATION.md
+FILE_PATTERNS          = *.h *.hpp *.cpp *.md
 RECURSIVE              = YES
-EXCLUDE                = */build/* \
-                         */cmake-build-*/*
+EXTRACT_ALL            = YES
+GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
-GENERATE_XML           = YES
-STRIP_CODE_COMMENTS    = YES
+HTML_OUTPUT            = html
+USE_MDFILE_AS_MAINPAGE = INTEGRATION.md
+JAVADOC_AUTOBRIEF      = YES
 BUILTIN_STL_SUPPORT    = YES
-FULL_PATH_NAMES        = YES
-TAB_SIZE               = 4
+GENERATE_TREEVIEW      = YES
+SEARCHENGINE           = YES
+SOURCE_BROWSER         = YES
+PREDEFINED             = BUILD_WITH_COMMON_SYSTEM
+EXCLUDE_PATTERNS       = */build/* */test/* */.git/*
