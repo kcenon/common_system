@@ -1,7 +1,0 @@
-<map id="common::adapters::typed_adapter&lt; Interface, Implementation &gt;" name="common::adapters::typed_adapter&lt; Interface, Implementation &gt;">
-<area shape="rect" id="Node000001" title="Base adapter class with type safety and depth tracking." alt="" coords="5,93,284,133"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="10,5,90,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,38,127,91,124,95,69,42"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="114,5,367,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,42,166,95,162,91,217,38"/>
-</map>

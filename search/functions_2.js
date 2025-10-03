@@ -1,8 +1,0 @@
-var searchData=
-[
-  ['error_0',['error',['../d9/d0c/namespacecommon.html#aa5059b3ad32caeb7f2025b98bd6c9ebc',1,'common::error(int code, const std::string &amp;message, const std::string &amp;module=&quot;&quot;)'],['../d9/d0c/namespacecommon.html#a8b0e552a7e8bc8990a57ea8d686d8de7',1,'common::error(int code, const std::string &amp;message, const std::string &amp;module, const std::string &amp;details)'],['../d9/d0c/namespacecommon.html#ad92687e5ead6f8892a2fc6ebf90434ea',1,'common::error(const error_info &amp;err)']]],
-  ['error_5fevent_1',['error_event',['../d4/db4/structcommon_1_1events_1_1error__event.html#a6ce1d18f3f958f4e4c85dca1c4f9a840',1,'common::events::error_event']]],
-  ['error_5finfo_2',['error_info',['../d7/d8d/structcommon_1_1error__info.html#a3fd96d5ba74d47a9d71b4f7d9b4bf3b7',1,'common::error_info::error_info()'],['../d7/d8d/structcommon_1_1error__info.html#af19f8ded8cdc9ae19bd17b036e4f6d62',1,'common::error_info::error_info(int c, const std::string &amp;msg, const std::string &amp;mod=&quot;&quot;)'],['../d7/d8d/structcommon_1_1error__info.html#a4a5751b72662a55c4cd4e67ce7fdedf3',1,'common::error_info::error_info(int c, const std::string &amp;msg, const std::string &amp;mod, const std::string &amp;det)']]],
-  ['execute_3',['execute',['../df/d94/classcommon_1_1interfaces_1_1IJob.html#a38e241e4008979bff1292e98bc2b10c5',1,'common::interfaces::IJob::execute()'],['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#abc6f4174f70c8e0d47febd69f8d5bdfd',1,'common::interfaces::IExecutor::execute(std::unique_ptr&lt; IJob &gt; &amp;&amp;job)=0']]],
-  ['execute_5fdelayed_4',['execute_delayed',['../d5/d65/classcommon_1_1interfaces_1_1IExecutor.html#a5b09e6f4426928311437ffb4f375a766',1,'common::interfaces::IExecutor']]]
-];

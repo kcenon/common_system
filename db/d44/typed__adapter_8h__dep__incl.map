@@ -1,8 +1,0 @@
-<map id="include/kcenon/common/adapters/typed_adapter.h" name="include/kcenon/common/adapters/typed_adapter.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,197,45"/>
-<area shape="rect" id="Node000002" href="$d0/da4/adapters_8h.html" title="Common adapter utilities for type&#45;safe and zero&#45;cost adaptation." alt="" coords="11,181,192,221"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,58,63,94,59,113,63,133,73,158,88,180,83,182,69,160,57,134,54,113,57,93,75,56"/>
-<area shape="rect" id="Node000003" href="$d2/d38/smart__adapter_8h.html" title=" " alt="" coords="73,93,266,133"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,55,156,91,152,95,123,58"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="148,146,118,183,114,179,144,143"/>
-</map>
