@@ -9,6 +9,7 @@
 #include <chrono>
 #include <thread>
 
+using namespace common;
 using namespace common::interfaces;
 using namespace std::chrono_literals;
 
@@ -56,7 +57,7 @@ public:
 
     Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
         if (!job) {
-            return Error{"ExecutorError", "Null job provided"};
+            return error<std::future<void>>(1, "Null job provided", "ExecutorError");
         }
 
         auto promise = std::make_shared<std::promise<void>>();
@@ -65,12 +66,12 @@ public:
         std::thread([job = std::move(job), promise]() {
             try {
                 auto result = job->execute();
-                if (result) {
+                if (is_ok(result)) {
                     promise->set_value();
                 } else {
                     promise->set_exception(
                         std::make_exception_ptr(
-                            std::runtime_error(result.error().message)));
+                            std::runtime_error(get_error(result).message)));
                 }
             } catch (...) {
                 promise->set_exception(std::current_exception());
@@ -78,14 +79,14 @@ public:
         }).detach();
 
         submitted_count_++;
-        return future;
+        return ok(std::move(future));
     }
 
     Result<std::future<void>> execute_delayed(
         std::unique_ptr<IJob>&& job,
         std::chrono::milliseconds delay) override {
         if (!job) {
-            return Error{"ExecutorError", "Null job provided"};
+            return error<std::future<void>>(1, "Null job provided", "ExecutorError");
         }
 
         auto promise = std::make_shared<std::promise<void>>();
@@ -95,19 +96,19 @@ public:
             std::this_thread::sleep_for(delay);
             try {
                 auto result = job->execute();
-                if (result) {
+                if (is_ok(result)) {
                     promise->set_value();
                 } else {
                     promise->set_exception(
                         std::make_exception_ptr(
-                            std::runtime_error(result.error().message)));
+                            std::runtime_error(get_error(result).message)));
                 }
             } catch (...) {
                 promise->set_exception(std::current_exception());
             }
         }).detach();
 
-        return future;
+        return ok(std::move(future));
     }
 
     size_t worker_count() const override {
