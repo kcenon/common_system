@@ -54,6 +54,62 @@ public:
         return future;
     }
 
+    Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
+        if (!job) {
+            return Error{"ExecutorError", "Null job provided"};
+        }
+
+        auto promise = std::make_shared<std::promise<void>>();
+        auto future = promise->get_future();
+
+        std::thread([job = std::move(job), promise]() {
+            try {
+                auto result = job->execute();
+                if (result) {
+                    promise->set_value();
+                } else {
+                    promise->set_exception(
+                        std::make_exception_ptr(
+                            std::runtime_error(result.error().message)));
+                }
+            } catch (...) {
+                promise->set_exception(std::current_exception());
+            }
+        }).detach();
+
+        submitted_count_++;
+        return future;
+    }
+
+    Result<std::future<void>> execute_delayed(
+        std::unique_ptr<IJob>&& job,
+        std::chrono::milliseconds delay) override {
+        if (!job) {
+            return Error{"ExecutorError", "Null job provided"};
+        }
+
+        auto promise = std::make_shared<std::promise<void>>();
+        auto future = promise->get_future();
+
+        std::thread([job = std::move(job), promise, delay]() {
+            std::this_thread::sleep_for(delay);
+            try {
+                auto result = job->execute();
+                if (result) {
+                    promise->set_value();
+                } else {
+                    promise->set_exception(
+                        std::make_exception_ptr(
+                            std::runtime_error(result.error().message)));
+                }
+            } catch (...) {
+                promise->set_exception(std::current_exception());
+            }
+        }).detach();
+
+        return future;
+    }
+
     size_t worker_count() const override {
         return num_workers_;
     }
