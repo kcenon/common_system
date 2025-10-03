@@ -54,7 +54,8 @@ inline std::string to_string(metric_type type) {
  */
 inline Result<metric_type> metric_type_from_string(const std::string& str) {
     std::string upper = str;
-    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
 
     if (upper == "GAUGE") return ok(metric_type::gauge);
     if (upper == "COUNTER") return ok(metric_type::counter);
