@@ -239,7 +239,8 @@ inline std::string to_string(log_level level) {
  */
 inline log_level from_string(const std::string& str) {
     std::string upper = str;
-    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+    std::transform(upper.begin(), upper.end(), upper.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
 
     if (upper == "TRACE") return log_level::trace;
     if (upper == "DEBUG") return log_level::debug;
