@@ -1,7 +1,7 @@
-[![Ubuntu-GCC](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-gcc.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-gcc.yaml)
-[![Ubuntu-Clang](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-clang.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-ubuntu-clang.yaml)
-[![Windows-MSYS2](https://github.com/kcenon/common_system/actions/workflows/build-windows-msys2.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-windows-msys2.yaml)
-[![Windows-VisualStudio](https://github.com/kcenon/common_system/actions/workflows/build-windows-vs.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-windows-vs.yaml)
+[![CI](https://github.com/kcenon/common_system/actions/workflows/ci.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/common_system/actions/workflows/ci.yml)
+[![Code Coverage](https://github.com/kcenon/common_system/actions/workflows/coverage.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/common_system/actions/workflows/coverage.yml)
+[![Static Analysis](https://github.com/kcenon/common_system/actions/workflows/static-analysis.yml/badge.svg?branch=phase-0-foundation)](https://github.com/kcenon/common_system/actions/workflows/static-analysis.yml)
+[![Doxygen](https://github.com/kcenon/common_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-Doxygen.yaml)
 [![License](https://img.shields.io/github/license/kcenon/common_system)](https://github.com/kcenon/common_system/blob/main/LICENSE)
 
 # Common System Project
@@ -407,6 +407,47 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 - Interface design influenced by Java's ExecutorService
 - Event bus pattern from reactive programming frameworks
 - Build system patterns from modern C++ best practices
+
+## 📊 Phase 0: Foundation Status
+
+This project is undergoing systematic architecture improvements following a phased approach.
+
+### Current Phase: Phase 0 - Foundation and Tooling Setup ✅
+
+#### Completed Tasks
+- ✅ **CI/CD Pipeline Enhancement**
+  - Sanitizer builds (ThreadSanitizer, AddressSanitizer, UBSanitizer)
+  - Multi-platform testing (Ubuntu, macOS, Windows)
+  - Automated test execution
+
+- ✅ **Test Coverage Analysis**
+  - lcov-based coverage reporting
+  - Codecov integration
+  - HTML coverage reports
+
+- ✅ **Static Analysis Baseline**
+  - Clang-tidy configuration
+  - Cppcheck integration
+  - Baseline warning collection
+
+- ✅ **Documentation of Current State**
+  - [Current State Documentation](docs/CURRENT_STATE.md)
+  - [Architecture Issues Catalog](docs/ARCHITECTURE_ISSUES.md)
+
+#### Metrics Baseline
+| Metric | Current Status | Phase 5 Target |
+|--------|---------------|----------------|
+| Test Coverage | Establishing baseline | 80%+ |
+| Static Analysis | Baseline warnings collected | <10 warnings |
+| Sanitizer Issues | Baseline established | 0 warnings |
+| Documentation | 30% | 100% |
+
+#### Next Phase: Phase 1 - Thread Safety Verification
+- Thread safety review of event_bus
+- Concurrency contract documentation
+- ThreadSanitizer compliance
+
+For detailed improvement plans, see [NEED_TO_FIX.md](../../NEED_TO_FIX.md).
 
 ## Citation
 

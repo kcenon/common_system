@@ -98,3 +98,55 @@ jobs:
         path: |
           build/CMakeFiles/*.log
           build/Testing/Temporary/
+
+  # Phase 0: Sanitizer builds (warnings allowed at this phase)
+  sanitizer:
+    name: Sanitizer / ${{ matrix.sanitizer }}
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [thread, address, undefined]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build clang libgtest-dev libgmock-dev
+
+    - name: Configure CMake with ${{ matrix.sanitizer }} sanitizer
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_FLAGS="-fsanitize=${{ matrix.sanitizer }} -fno-omit-frame-pointer -g" \
+          -DCOMMON_BUILD_TESTS=ON \
+          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build with sanitizer
+      run: cmake --build build --config Debug
+
+    - name: Run tests with sanitizer
+      run: |
+        cd build
+        # Phase 0: Allow failures, just collect data
+        ASAN_OPTIONS=detect_leaks=1 \
+        UBSAN_OPTIONS=print_stacktrace=1 \
+        ctest -C Debug --output-on-failure --verbose || true
+
+    - name: Upload sanitizer results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: sanitizer-${{ matrix.sanitizer }}-results
+        path: |
+          build/Testing/Temporary/
+          build/**/*.log
