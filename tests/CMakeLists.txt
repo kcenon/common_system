@@ -31,6 +31,27 @@ set_tests_properties(common_system_tests PROPERTIES
     LABELS "unit"
 )
 
+# Thread safety tests (Phase 1 - Task 1.7)
+add_executable(common_thread_safety_test
+    thread_safety_tests.cpp
+)
+
+target_link_libraries(common_thread_safety_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_thread_safety_test PRIVATE cxx_std_17)
+
+add_test(NAME common_thread_safety_test COMMAND common_thread_safety_test)
+
+set_tests_properties(common_thread_safety_test PROPERTIES
+    TIMEOUT 120
+    LABELS "thread_safety"
+)
+
 # Enable testing
 enable_testing()
 
