@@ -93,17 +93,14 @@ int main() {
     auto value = value_or(divide(10, 0), -1);
     std::cout << "   10 / 0 with default -1 = " << value << "\n";
 
-    // Example 3: Pattern matching with visit
+    // Example 3: Pattern matching with if-else
     std::cout << "\n3. Pattern matching:\n";
     auto result3 = parse_and_compute("20/4");
-    std::visit([](auto&& arg) {
-        using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, int>) {
-            std::cout << "   Success: " << arg << "\n";
-        } else if constexpr (std::is_same_v<T, error_info>) {
-            std::cout << "   Failed: " << arg.message << "\n";
-        }
-    }, result3);
+    if (result3.is_ok()) {
+        std::cout << "   Success: " << result3.unwrap() << "\n";
+    } else {
+        std::cout << "   Failed: " << result3.error().message << "\n";
+    }
 
     // Example 4: Monadic operations
     std::cout << "\n4. Monadic operations:\n";
