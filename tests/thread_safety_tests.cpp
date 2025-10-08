@@ -14,7 +14,7 @@ All rights reserved.
 #include <atomic>
 #include <chrono>
 
-using namespace kcenon::common;
+using namespace common;
 using namespace std::chrono_literals;
 
 class CommonSystemThreadSafetyTest : public ::testing::Test {
