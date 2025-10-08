@@ -109,7 +109,7 @@ namespace common {
             // No-op - thread-safe as it performs no operations
         }
 
-        // For generic event
+        // For generic event (overload for type deduction)
         void publish(event&&, event_priority = event_priority::normal) {
             // No-op - thread-safe as it performs no operations
         }
@@ -119,8 +119,20 @@ namespace common {
             return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 
+        // Non-template overload for generic event (enables type deduction)
+        uint64_t subscribe(std::function<void(const event&)>&&) {
+            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        }
+
         template<typename EventType, typename HandlerFunc, typename FilterFunc>
         uint64_t subscribe_filtered(HandlerFunc&&, FilterFunc&&) {
+            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        }
+
+        // Non-template overload for generic event filtering
+        uint64_t subscribe_filtered(
+            std::function<void(const event&)>&&,
+            std::function<bool(const event&)>&&) {
             return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 
@@ -134,9 +146,10 @@ namespace common {
 
         /**
          * @brief Get the singleton instance (thread-safe via C++11 magic statics)
+         * @return Reference to the singleton instance
          */
-        static std::shared_ptr<null_event_bus> instance() {
-            static auto instance = std::make_shared<null_event_bus>();
+        static null_event_bus& instance() {
+            static null_event_bus instance;
             return instance;
         }
     };
@@ -148,8 +161,9 @@ namespace common {
 
     /**
      * @brief Access the (no-op) global event bus instance.
+     * @return Reference to the singleton event bus
      */
-    inline std::shared_ptr<null_event_bus> get_event_bus() {
+    inline null_event_bus& get_event_bus() {
         return null_event_bus::instance();
     }
 }
