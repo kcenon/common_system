@@ -9,6 +9,13 @@
  * Provides a `Result<T>` type similar to Rust's Result or C++23's
  * `std::expected`, enabling explicit error propagation at module boundaries
  * without using exceptions.
+ *
+ * Thread Safety:
+ * - Result<T> objects are NOT thread-safe for concurrent modification.
+ * - Multiple threads may safely read the same Result<T> if no thread modifies it.
+ * - Helper functions are thread-safe as they don't modify global state.
+ * - If sharing Result<T> across threads, users must provide synchronization.
+ * - Best practice: Use Result<T> as return values; avoid shared mutable access.
  */
 
 #pragma once
@@ -60,9 +67,12 @@ struct error_info {
  *
  * A Result<T> can contain either a value of type T or an error_info.
  * This provides a type-safe way to handle errors without exceptions.
- */
-/**
- * @brief Discriminated union holding either a value of T or an error.
+ *
+ * Thread Safety Note:
+ * - Based on std::variant, which is NOT thread-safe for concurrent access.
+ * - Safe to pass by value or const reference across threads.
+ * - Concurrent reads of the same Result are safe if guaranteed no writes.
+ * - For shared mutable access, wrap in std::mutex or similar.
  */
 template<typename T>
 using Result = std::variant<T, error_info>;

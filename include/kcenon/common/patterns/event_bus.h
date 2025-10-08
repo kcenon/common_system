@@ -73,32 +73,35 @@ namespace common {
 
     /**
      * @class null_event_bus
-     * @brief No-op event bus implementation for when monitoring is disabled
-     */
-    /**
-     * @class null_event_bus
      * @brief No-op event bus used when monitoring is disabled.
+     *
+     * Thread-safety: This class is thread-safe. All methods are no-ops
+     * that perform no state modifications. The singleton instance()
+     * uses C++11 magic statics for thread-safe initialization.
      */
     class null_event_bus {
     public:
         template<typename EventType>
         void publish(const EventType&, event_priority = event_priority::normal) {
-            // No-op
+            // No-op - thread-safe as it performs no operations
         }
 
         template<typename EventType>
         uint64_t subscribe(std::function<void(const EventType&)>) {
-            return 0; // Dummy subscription ID
+            return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 
         void unsubscribe(uint64_t) {
-            // No-op
+            // No-op - thread-safe as it performs no operations
         }
 
         void start() {}
         void stop() {}
         bool is_running() const { return false; }
 
+        /**
+         * @brief Get the singleton instance (thread-safe via C++11 magic statics)
+         */
         static std::shared_ptr<null_event_bus> instance() {
             static auto instance = std::make_shared<null_event_bus>();
             return instance;
