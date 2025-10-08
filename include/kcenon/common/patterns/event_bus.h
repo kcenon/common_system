@@ -114,13 +114,13 @@ namespace common {
             // No-op - thread-safe as it performs no operations
         }
 
-        template<typename EventType>
-        uint64_t subscribe(std::function<void(const EventType&)>) {
+        template<typename EventType, typename HandlerFunc>
+        uint64_t subscribe(HandlerFunc&&) {
             return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 
-        template<typename EventType, typename FilterFunc>
-        uint64_t subscribe_filtered(std::function<void(const EventType&)>, FilterFunc&&) {
+        template<typename EventType, typename HandlerFunc, typename FilterFunc>
+        uint64_t subscribe_filtered(HandlerFunc&&, FilterFunc&&) {
             return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 

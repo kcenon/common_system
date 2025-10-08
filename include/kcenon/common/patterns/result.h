@@ -87,7 +87,8 @@ private:
 
 public:
     // Constructors
-    Result() = delete;  // Force explicit construction
+    // Default constructor creates an error state
+    Result() : value_(error_info{error_codes::NOT_INITIALIZED, "Uninitialized result", ""}) {}
 
     Result(const T& value) : value_(value) {}
     Result(T&& value) : value_(std::move(value)) {}
