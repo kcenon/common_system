@@ -88,7 +88,7 @@ private:
 public:
     // Constructors
     // Default constructor creates an error state
-    Result() : value_(error_info{error_codes::NOT_INITIALIZED, "Uninitialized result", ""}) {}
+    Result() : value_(error_info{-6, "Uninitialized result", ""}) {}
 
     Result(const T& value) : value_(value) {}
     Result(T&& value) : value_(std::move(value)) {}
@@ -486,16 +486,24 @@ namespace error_codes {
 template<typename T, typename F>
 Result<T> try_catch(F&& func, const std::string& module = "") {
     try {
-        if constexpr (std::is_void_v<T>) {
-            func();
-            return ok();
-        } else {
-            return ok<T>(func());
-        }
+        return ok<T>(func());
     } catch (const std::exception& e) {
-        return error<T>(error_codes::INTERNAL_ERROR, e.what(), module);
+        return error<T>(-99, e.what(), module);
     } catch (...) {
-        return error<T>(error_codes::INTERNAL_ERROR, "Unknown error", module);
+        return error<T>(-99, "Unknown error", module);
+    }
+}
+
+// Specialization for void return type
+template<typename F>
+VoidResult try_catch_void(F&& func, const std::string& module = "") {
+    try {
+        func();
+        return ok();
+    } catch (const std::exception& e) {
+        return error<std::monostate>(-99, e.what(), module);
+    } catch (...) {
+        return error<std::monostate>(-99, "Unknown error", module);
     }
 }
 
