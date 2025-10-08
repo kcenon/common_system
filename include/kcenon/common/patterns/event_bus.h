@@ -72,6 +72,29 @@ namespace common {
     };
 
     /**
+     * @brief Type alias for subscription ID
+     */
+    using subscription_id = uint64_t;
+
+    /**
+     * @struct event
+     * @brief Generic event structure for the event bus
+     */
+    struct event {
+        std::string type_;
+        std::string data_;
+
+        event() = default;
+        event(const std::string& type, const std::string& data = "")
+            : type_(type), data_(data) {}
+
+        void set_type(const std::string& type) { type_ = type; }
+        void set_data(const std::string& data) { data_ = data; }
+        std::string get_type() const { return type_; }
+        std::string get_data() const { return data_; }
+    };
+
+    /**
      * @class null_event_bus
      * @brief No-op event bus used when monitoring is disabled.
      *
@@ -86,8 +109,18 @@ namespace common {
             // No-op - thread-safe as it performs no operations
         }
 
+        // For generic event
+        void publish(event&&, event_priority = event_priority::normal) {
+            // No-op - thread-safe as it performs no operations
+        }
+
         template<typename EventType>
         uint64_t subscribe(std::function<void(const EventType&)>) {
+            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        }
+
+        template<typename EventType, typename FilterFunc>
+        uint64_t subscribe_filtered(std::function<void(const EventType&)>, FilterFunc&&) {
             return 0; // Dummy subscription ID - thread-safe as it's stateless
         }
 

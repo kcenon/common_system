@@ -24,13 +24,10 @@
 #include <optional>
 #include <string>
 #include <type_traits>
+#include <stdexcept>
 
 namespace common {
 
-/**
- * @struct error_info
- * @brief Standard error information structure
- */
 /**
  * @struct error_info
  * @brief Standard error information used by Result<T>.
@@ -42,6 +39,10 @@ struct error_info {
     std::optional<std::string> details;
 
     error_info() : code(0) {}
+
+    /** @brief Construct with message only. */
+    error_info(const std::string& msg)
+        : code(-1), message(msg), module("") {}
 
     /** @brief Construct with code, message and optional module. */
     error_info(int c, const std::string& msg, const std::string& mod = "")
@@ -62,8 +63,13 @@ struct error_info {
     }
 };
 
+// Forward declarations
+template<typename T> class Result;
+template<typename T> class Optional;
+
 /**
- * @brief Result type for error handling
+ * @class Result
+ * @brief Result type for error handling with member function support
  *
  * A Result<T> can contain either a value of type T or an error_info.
  * This provides a type-safe way to handle errors without exceptions.
@@ -75,12 +81,187 @@ struct error_info {
  * - For shared mutable access, wrap in std::mutex or similar.
  */
 template<typename T>
-using Result = std::variant<T, error_info>;
+class Result {
+private:
+    std::variant<T, error_info> value_;
+
+public:
+    // Constructors
+    Result() = delete;  // Force explicit construction
+
+    Result(const T& value) : value_(value) {}
+    Result(T&& value) : value_(std::move(value)) {}
+    Result(const error_info& error) : value_(error) {}
+    Result(error_info&& error) : value_(std::move(error)) {}
+
+    // Copy and move
+    Result(const Result&) = default;
+    Result(Result&&) = default;
+    Result& operator=(const Result&) = default;
+    Result& operator=(Result&&) = default;
+
+    /**
+     * @brief Check if result contains a successful value
+     */
+    bool is_ok() const {
+        return std::holds_alternative<T>(value_);
+    }
+
+    /**
+     * @brief Check if result contains an error
+     */
+    bool is_err() const {
+        return std::holds_alternative<error_info>(value_);
+    }
+
+    /**
+     * @brief Get value from result (throws if error)
+     * @throws std::runtime_error if result contains error
+     */
+    const T& unwrap() const {
+        if (is_err()) {
+            const auto& err = std::get<error_info>(value_);
+            throw std::runtime_error("Called unwrap on error: " + err.message);
+        }
+        return std::get<T>(value_);
+    }
+
+    /**
+     * @brief Get mutable value from result (throws if error)
+     * @throws std::runtime_error if result contains error
+     */
+    T& unwrap() {
+        if (is_err()) {
+            const auto& err = std::get<error_info>(value_);
+            throw std::runtime_error("Called unwrap on error: " + err.message);
+        }
+        return std::get<T>(value_);
+    }
+
+    /**
+     * @brief Get value or return default
+     */
+    T unwrap_or(T default_value) const {
+        if (is_ok()) {
+            return std::get<T>(value_);
+        }
+        return default_value;
+    }
+
+    /**
+     * @brief Get value reference (const)
+     */
+    const T& value() const {
+        return std::get<T>(value_);
+    }
+
+    /**
+     * @brief Get value reference (mutable)
+     */
+    T& value() {
+        return std::get<T>(value_);
+    }
+
+    /**
+     * @brief Get error reference
+     */
+    const error_info& error() const {
+        return std::get<error_info>(value_);
+    }
+
+    /**
+     * @brief Map a function over a successful result
+     */
+    template<typename F>
+    auto map(F&& func) const -> Result<decltype(func(std::declval<T>()))> {
+        using ReturnType = decltype(func(std::declval<T>()));
+
+        if (is_ok()) {
+            return Result<ReturnType>(func(std::get<T>(value_)));
+        } else {
+            return Result<ReturnType>(std::get<error_info>(value_));
+        }
+    }
+
+    /**
+     * @brief Map a function that returns a Result (flatMap/bind)
+     */
+    template<typename F>
+    auto and_then(F&& func) const -> decltype(func(std::declval<T>())) {
+        using ReturnType = decltype(func(std::declval<T>()));
+
+        if (is_ok()) {
+            return func(std::get<T>(value_));
+        } else {
+            return ReturnType(std::get<error_info>(value_));
+        }
+    }
+
+    /**
+     * @brief Provide alternative value if error
+     */
+    template<typename F>
+    Result<T> or_else(F&& func) const {
+        if (is_ok()) {
+            return *this;
+        } else {
+            return func(std::get<error_info>(value_));
+        }
+    }
+
+    // For compatibility with variant-based APIs
+    const std::variant<T, error_info>& as_variant() const { return value_; }
+};
 
 /**
  * @brief Specialized Result for void operations
  */
 using VoidResult = Result<std::monostate>;
+
+/**
+ * @class Optional
+ * @brief Optional type similar to std::optional with Rust-like API
+ */
+template<typename T>
+class Optional {
+private:
+    std::optional<T> value_;
+
+public:
+    Optional() : value_(std::nullopt) {}
+    Optional(const T& value) : value_(value) {}
+    Optional(T&& value) : value_(std::move(value)) {}
+    Optional(std::nullopt_t) : value_(std::nullopt) {}
+
+    bool has_value() const { return value_.has_value(); }
+    bool is_some() const { return value_.has_value(); }
+    bool is_none() const { return !value_.has_value(); }
+
+    const T& value() const { return value_.value(); }
+    T& value() { return value_.value(); }
+
+    const T& unwrap() const {
+        if (!has_value()) {
+            throw std::runtime_error("Called unwrap on None");
+        }
+        return value_.value();
+    }
+
+    T unwrap_or(T default_value) const {
+        return value_.value_or(default_value);
+    }
+
+    template<typename F>
+    auto map(F&& func) const -> Optional<decltype(func(std::declval<T>()))> {
+        using ReturnType = decltype(func(std::declval<T>()));
+
+        if (has_value()) {
+            return Optional<ReturnType>(func(value_.value()));
+        } else {
+            return Optional<ReturnType>(std::nullopt);
+        }
+    }
+};
 
 // Helper functions for working with Results
 
@@ -89,7 +270,7 @@ using VoidResult = Result<std::monostate>;
  */
 template<typename T>
 inline bool is_ok(const Result<T>& result) {
-    return std::holds_alternative<T>(result);
+    return result.is_ok();
 }
 
 /**
@@ -97,7 +278,7 @@ inline bool is_ok(const Result<T>& result) {
  */
 template<typename T>
 inline bool is_error(const Result<T>& result) {
-    return std::holds_alternative<error_info>(result);
+    return result.is_err();
 }
 
 /**
@@ -106,7 +287,7 @@ inline bool is_error(const Result<T>& result) {
  */
 template<typename T>
 inline const T& get_value(const Result<T>& result) {
-    return std::get<T>(result);
+    return result.value();
 }
 
 /**
@@ -115,7 +296,7 @@ inline const T& get_value(const Result<T>& result) {
  */
 template<typename T>
 inline T& get_value(Result<T>& result) {
-    return std::get<T>(result);
+    return result.value();
 }
 
 /**
@@ -124,7 +305,7 @@ inline T& get_value(Result<T>& result) {
  */
 template<typename T>
 inline const error_info& get_error(const Result<T>& result) {
-    return std::get<error_info>(result);
+    return result.error();
 }
 
 /**
@@ -132,10 +313,7 @@ inline const error_info& get_error(const Result<T>& result) {
  */
 template<typename T>
 inline T value_or(const Result<T>& result, T default_value) {
-    if (is_ok(result)) {
-        return get_value(result);
-    }
-    return default_value;
+    return result.unwrap_or(default_value);
 }
 
 /**
@@ -143,7 +321,10 @@ inline T value_or(const Result<T>& result, T default_value) {
  */
 template<typename T>
 inline const T* get_if_ok(const Result<T>& result) {
-    return std::get_if<T>(&result);
+    if (result.is_ok()) {
+        return &result.value();
+    }
+    return nullptr;
 }
 
 /**
@@ -151,16 +332,27 @@ inline const T* get_if_ok(const Result<T>& result) {
  */
 template<typename T>
 inline const error_info* get_if_error(const Result<T>& result) {
-    return std::get_if<error_info>(&result);
+    if (result.is_err()) {
+        return &result.error();
+    }
+    return nullptr;
 }
 
 // Factory functions for creating Results
 
 /**
- * @brief Create a successful result
+ * @brief Create a successful result (lowercase - for compatibility)
  */
 template<typename T>
 inline Result<T> ok(T value) {
+    return Result<T>(std::move(value));
+}
+
+/**
+ * @brief Create a successful result (uppercase - Rust style)
+ */
+template<typename T>
+inline Result<T> Ok(T value) {
     return Result<T>(std::move(value));
 }
 
@@ -172,11 +364,28 @@ inline VoidResult ok() {
 }
 
 /**
- * @brief Create an error result
+ * @brief Create an error result (lowercase)
  */
 template<typename T>
 inline Result<T> error(int code, const std::string& message,
                        const std::string& module = "") {
+    return Result<T>(error_info{code, message, module});
+}
+
+/**
+ * @brief Create an error result (uppercase - Rust style)
+ */
+template<typename T>
+inline Result<T> Err(const std::string& message) {
+    return Result<T>(error_info{message});
+}
+
+/**
+ * @brief Create an error result with code
+ */
+template<typename T>
+inline Result<T> Err(int code, const std::string& message,
+                     const std::string& module = "") {
     return Result<T>(error_info{code, message, module});
 }
 
@@ -198,7 +407,25 @@ inline Result<T> error(const error_info& err) {
     return Result<T>(err);
 }
 
-// Monadic operations (similar to std::expected when available)
+// Optional factory functions
+
+/**
+ * @brief Create an Optional with value
+ */
+template<typename T>
+inline Optional<T> Some(T value) {
+    return Optional<T>(std::move(value));
+}
+
+/**
+ * @brief Create an empty Optional
+ */
+template<typename T>
+inline Optional<T> None() {
+    return Optional<T>(std::nullopt);
+}
+
+// Monadic operations (for free functions)
 
 /**
  * @brief Map a function over a successful result
@@ -206,13 +433,7 @@ inline Result<T> error(const error_info& err) {
 template<typename T, typename F>
 auto map(const Result<T>& result, F&& func)
     -> Result<decltype(func(std::declval<T>()))> {
-    using ReturnType = decltype(func(std::declval<T>()));
-
-    if (is_ok(result)) {
-        return ok<ReturnType>(func(get_value(result)));
-    } else {
-        return error<ReturnType>(get_error(result));
-    }
+    return result.map(std::forward<F>(func));
 }
 
 /**
@@ -221,13 +442,7 @@ auto map(const Result<T>& result, F&& func)
 template<typename T, typename F>
 auto and_then(const Result<T>& result, F&& func)
     -> decltype(func(std::declval<T>())) {
-    using ReturnType = decltype(func(std::declval<T>()));
-
-    if (is_ok(result)) {
-        return func(get_value(result));
-    } else {
-        return ReturnType(get_error(result));
-    }
+    return result.and_then(std::forward<F>(func));
 }
 
 /**
@@ -235,11 +450,7 @@ auto and_then(const Result<T>& result, F&& func)
  */
 template<typename T, typename F>
 Result<T> or_else(const Result<T>& result, F&& func) {
-    if (is_ok(result)) {
-        return result;
-    } else {
-        return func(get_error(result));
-    }
+    return result.or_else(std::forward<F>(func));
 }
 
 // Common error codes
