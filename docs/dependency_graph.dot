@@ -1,0 +1,24 @@
+digraph DependencyGraph {
+    rankdir=BT;  // Bottom to Top
+    node [shape=box, style=filled];
+    
+    "container_system" [fillcolor=lightgreen];
+    "database_system" [fillcolor=lightgreen];
+    "network_system" [fillcolor=lightgreen];
+    "common_system" [fillcolor=lightcoral];
+    "thread_system" [fillcolor=lightcoral];
+    "logger_system" [fillcolor=lightcoral];
+    "monitoring_system" [fillcolor=lightcoral];
+    
+    "common_system" -> "monitoring_system";
+    "container_system" -> "common_system";
+    "logger_system" -> "common_system";
+    "logger_system" -> "thread_system";
+    "monitoring_system" -> "common_system";
+    "monitoring_system" -> "logger_system";
+    "monitoring_system" -> "thread_system";
+    "network_system" -> "common_system";
+    "network_system" -> "logger_system";
+    "network_system" -> "thread_system";
+    "thread_system" -> "common_system";
+}
