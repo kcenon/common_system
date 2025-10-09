@@ -346,7 +346,9 @@ The project includes comprehensive unit tests:
 - [API Reference](docs/API.md)
 - [Architecture Guide](docs/ARCHITECTURE.md)
 - [Integration Guide](docs/INTEGRATION.md)
-- [Error Handling Guide](docs/ERRORS.md)
+- [Error Handling Guide](docs/ERROR_HANDLING.md)
+- [RAII Guidelines](docs/RAII_GUIDELINES.md)
+- [Smart Pointer Guidelines](docs/SMART_POINTER_GUIDELINES.md)
 - [Migration Guide](docs/MIGRATION.md)
 
 ## Performance Benchmarks
