@@ -1,0 +1,124 @@
+name: Integration Tests
+
+on:
+  push:
+    branches: [ main, develop, 'feat/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  integration-tests:
+    name: Integration Tests - ${{ matrix.os }} - ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        build_type: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            libgtest-dev \
+            lcov
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake ninja googletest lcov
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCOMMON_BUILD_TESTS=ON \
+            -DCOMMON_BUILD_INTEGRATION_TESTS=ON \
+            -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }}
+
+      - name: Build integration tests
+        run: cmake --build build --target integration_tests
+
+      - name: Run integration tests
+        working-directory: build
+        run: |
+          ctest --output-on-failure --tests-regex "integration_" --verbose
+
+      - name: Generate coverage report
+        if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+        working-directory: build
+        run: |
+          lcov --capture --directory . --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' '*/vcpkg/*' '*/test/*' --output-file coverage_filtered.info
+          lcov --list coverage_filtered.info
+
+      - name: Upload coverage to Codecov
+        if: matrix.build_type == 'Debug' && runner.os == 'Linux'
+        uses: codecov/codecov-action@v3
+        with:
+          files: build/coverage_filtered.info
+          flags: integration-tests
+          name: integration-tests-coverage
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.build_type }}
+          path: build/Testing/Temporary/
+
+  performance-benchmarks:
+    name: Performance Benchmarks - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake ninja-build libgtest-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake ninja googletest
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCOMMON_BUILD_TESTS=ON \
+            -DCOMMON_BUILD_INTEGRATION_TESTS=ON
+
+      - name: Build performance tests
+        run: cmake --build build --target integration_tests
+
+      - name: Run performance benchmarks
+        working-directory: build
+        run: |
+          ctest --output-on-failure --tests-regex ".*Performance.*" --verbose
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-results-${{ matrix.os }}
+          path: build/Testing/Temporary/
