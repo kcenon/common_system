@@ -75,26 +75,26 @@ namespace thread_system {
     constexpr int base = static_cast<int>(category::thread_system);
 
     // Pool errors (-100 to -119)
-    constexpr int pool_full = base + 0;
-    constexpr int pool_shutdown = base + 1;
-    constexpr int pool_not_started = base + 2;
-    constexpr int invalid_pool_size = base + 3;
+    constexpr int pool_full = base - 0;
+    constexpr int pool_shutdown = base - 1;
+    constexpr int pool_not_started = base - 2;
+    constexpr int invalid_pool_size = base - 3;
 
     // Worker errors (-120 to -139)
-    constexpr int worker_failed = base + 20;
-    constexpr int worker_not_found = base + 21;
-    constexpr int worker_busy = base + 22;
+    constexpr int worker_failed = base - 20;
+    constexpr int worker_not_found = base - 21;
+    constexpr int worker_busy = base - 22;
 
     // Job errors (-140 to -159)
-    constexpr int job_rejected = base + 40;
-    constexpr int job_timeout = base + 41;
-    constexpr int job_cancelled = base + 42;
-    constexpr int invalid_job = base + 43;
+    constexpr int job_rejected = base - 40;
+    constexpr int job_timeout = base - 41;
+    constexpr int job_cancelled = base - 42;
+    constexpr int invalid_job = base - 43;
 
     // Queue errors (-160 to -179)
-    constexpr int queue_full = base + 60;
-    constexpr int queue_empty = base + 61;
-    constexpr int queue_stopped = base + 62;
+    constexpr int queue_full = base - 60;
+    constexpr int queue_empty = base - 61;
+    constexpr int queue_stopped = base - 62;
 } // namespace thread_system
 
 // ============================================================================
@@ -104,25 +104,25 @@ namespace logger_system {
     constexpr int base = static_cast<int>(category::logger_system);
 
     // File errors (-200 to -219)
-    constexpr int file_open_failed = base + 0;
-    constexpr int file_write_failed = base + 1;
-    constexpr int file_close_failed = base + 2;
-    constexpr int file_rotation_failed = base + 3;
-    constexpr int file_permission_denied = base + 4;
+    constexpr int file_open_failed = base - 0;
+    constexpr int file_write_failed = base - 1;
+    constexpr int file_close_failed = base - 2;
+    constexpr int file_rotation_failed = base - 3;
+    constexpr int file_permission_denied = base - 4;
 
     // Writer errors (-220 to -239)
-    constexpr int writer_not_initialized = base + 20;
-    constexpr int writer_stopped = base + 21;
-    constexpr int writer_full = base + 22;
-    constexpr int async_writer_failed = base + 23;
+    constexpr int writer_not_initialized = base - 20;
+    constexpr int writer_stopped = base - 21;
+    constexpr int writer_full = base - 22;
+    constexpr int async_writer_failed = base - 23;
 
     // Format errors (-240 to -259)
-    constexpr int invalid_format = base + 40;
-    constexpr int format_error = base + 41;
+    constexpr int invalid_format = base - 40;
+    constexpr int format_error = base - 41;
 
     // Filter errors (-260 to -279)
-    constexpr int invalid_filter = base + 60;
-    constexpr int filter_rejected = base + 61;
+    constexpr int invalid_filter = base - 60;
+    constexpr int filter_rejected = base - 61;
 } // namespace logger_system
 
 // ============================================================================
@@ -132,22 +132,22 @@ namespace monitoring_system {
     constexpr int base = static_cast<int>(category::monitoring_system);
 
     // Metric errors (-300 to -319)
-    constexpr int metric_not_found = base + 0;
-    constexpr int invalid_metric_type = base + 1;
-    constexpr int metric_collection_failed = base + 2;
+    constexpr int metric_not_found = base - 0;
+    constexpr int invalid_metric_type = base - 1;
+    constexpr int metric_collection_failed = base - 2;
 
     // Storage errors (-320 to -339)
-    constexpr int storage_full = base + 20;
-    constexpr int storage_error = base + 21;
+    constexpr int storage_full = base - 20;
+    constexpr int storage_error = base - 21;
 
     // Event errors (-340 to -359)
-    constexpr int event_publish_failed = base + 40;
-    constexpr int event_subscribe_failed = base + 41;
-    constexpr int invalid_event_type = base + 42;
+    constexpr int event_publish_failed = base - 40;
+    constexpr int event_subscribe_failed = base - 41;
+    constexpr int invalid_event_type = base - 42;
 
     // Profiler errors (-360 to -379)
-    constexpr int profiler_not_enabled = base + 60;
-    constexpr int profiler_error = base + 61;
+    constexpr int profiler_not_enabled = base - 60;
+    constexpr int profiler_error = base - 61;
 } // namespace monitoring_system
 
 // ============================================================================
@@ -157,24 +157,24 @@ namespace container_system {
     constexpr int base = static_cast<int>(category::container_system);
 
     // Value errors (-400 to -419)
-    constexpr int value_type_mismatch = base + 0;
-    constexpr int invalid_value_type = base + 1;
-    constexpr int value_conversion_failed = base + 2;
+    constexpr int value_type_mismatch = base - 0;
+    constexpr int invalid_value_type = base - 1;
+    constexpr int value_conversion_failed = base - 2;
 
     // Serialization errors (-420 to -439)
-    constexpr int serialization_failed = base + 20;
-    constexpr int deserialization_failed = base + 21;
-    constexpr int invalid_format = base + 22;
+    constexpr int serialization_failed = base - 20;
+    constexpr int deserialization_failed = base - 21;
+    constexpr int invalid_format = base - 22;
 
     // Memory pool errors (-440 to -459)
-    constexpr int pool_exhausted = base + 40;
-    constexpr int allocation_failed = base + 41;
-    constexpr int invalid_allocation_size = base + 42;
+    constexpr int pool_exhausted = base - 40;
+    constexpr int allocation_failed = base - 41;
+    constexpr int invalid_allocation_size = base - 42;
 
     // Container errors (-460 to -479)
-    constexpr int key_not_found = base + 60;
-    constexpr int duplicate_key = base + 61;
-    constexpr int container_full = base + 62;
+    constexpr int key_not_found = base - 60;
+    constexpr int duplicate_key = base - 61;
+    constexpr int container_full = base - 62;
 } // namespace container_system
 
 // ============================================================================
@@ -184,25 +184,25 @@ namespace database_system {
     constexpr int base = static_cast<int>(category::database_system);
 
     // Connection errors (-500 to -519)
-    constexpr int connection_failed = base + 0;
-    constexpr int connection_lost = base + 1;
-    constexpr int connection_timeout = base + 2;
-    constexpr int invalid_connection_string = base + 3;
+    constexpr int connection_failed = base - 0;
+    constexpr int connection_lost = base - 1;
+    constexpr int connection_timeout = base - 2;
+    constexpr int invalid_connection_string = base - 3;
 
     // Pool errors (-520 to -539)
-    constexpr int pool_exhausted = base + 20;
-    constexpr int pool_shutdown = base + 21;
-    constexpr int pool_timeout = base + 22;
+    constexpr int pool_exhausted = base - 20;
+    constexpr int pool_shutdown = base - 21;
+    constexpr int pool_timeout = base - 22;
 
     // Query errors (-540 to -559)
-    constexpr int query_failed = base + 40;
-    constexpr int query_syntax_error = base + 41;
-    constexpr int query_timeout = base + 42;
+    constexpr int query_failed = base - 40;
+    constexpr int query_syntax_error = base - 41;
+    constexpr int query_timeout = base - 42;
 
     // Transaction errors (-560 to -579)
-    constexpr int transaction_failed = base + 60;
-    constexpr int transaction_rolled_back = base + 61;
-    constexpr int transaction_timeout = base + 62;
+    constexpr int transaction_failed = base - 60;
+    constexpr int transaction_rolled_back = base - 61;
+    constexpr int transaction_timeout = base - 62;
 } // namespace database_system
 
 // ============================================================================
@@ -212,25 +212,25 @@ namespace network_system {
     constexpr int base = static_cast<int>(category::network_system);
 
     // Connection errors (-600 to -619)
-    constexpr int connection_failed = base + 0;
-    constexpr int connection_refused = base + 1;
-    constexpr int connection_timeout = base + 2;
-    constexpr int connection_closed = base + 3;
+    constexpr int connection_failed = base - 0;
+    constexpr int connection_refused = base - 1;
+    constexpr int connection_timeout = base - 2;
+    constexpr int connection_closed = base - 3;
 
     // Session errors (-620 to -639)
-    constexpr int session_not_found = base + 20;
-    constexpr int session_expired = base + 21;
-    constexpr int invalid_session = base + 22;
+    constexpr int session_not_found = base - 20;
+    constexpr int session_expired = base - 21;
+    constexpr int invalid_session = base - 22;
 
     // Send/Receive errors (-640 to -659)
-    constexpr int send_failed = base + 40;
-    constexpr int receive_failed = base + 41;
-    constexpr int message_too_large = base + 42;
+    constexpr int send_failed = base - 40;
+    constexpr int receive_failed = base - 41;
+    constexpr int message_too_large = base - 42;
 
     // Server errors (-660 to -679)
-    constexpr int server_not_started = base + 60;
-    constexpr int server_already_running = base + 61;
-    constexpr int bind_failed = base + 62;
+    constexpr int server_not_started = base - 60;
+    constexpr int server_already_running = base - 61;
+    constexpr int bind_failed = base - 62;
 } // namespace network_system
 
 } // namespace codes
