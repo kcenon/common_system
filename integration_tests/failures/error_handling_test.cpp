@@ -1,11 +1,11 @@
-#include "framework/system_fixture.h"
-#include "framework/test_helpers.h"
+#include "system_fixture.h"
+#include "test_helpers.h"
 #include <kcenon/common/patterns/result.h>
 #include <stdexcept>
 #include <memory>
 
 using namespace integration_tests;
-using namespace kcenon::common;
+using namespace ::common;
 
 /**
  * Tests for error handling and failure scenarios

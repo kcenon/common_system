@@ -1,5 +1,5 @@
-#include "framework/system_fixture.h"
-#include "framework/test_helpers.h"
+#include "system_fixture.h"
+#include "test_helpers.h"
 #include <kcenon/common/patterns/event_bus.h>
 #include <string>
 #include <atomic>
@@ -7,7 +7,7 @@
 #include <thread>
 
 using namespace integration_tests;
-using namespace kcenon::common;
+using namespace ::common;
 
 /**
  * Integration tests for event bus pattern

@@ -1,5 +1,5 @@
-#include "framework/system_fixture.h"
-#include "framework/test_helpers.h"
+#include "system_fixture.h"
+#include "test_helpers.h"
 #include <kcenon/common/patterns/result.h>
 #include <kcenon/common/patterns/event_bus.h>
 #include <thread>
@@ -7,7 +7,7 @@
 #include <atomic>
 
 using namespace integration_tests;
-using namespace kcenon::common;
+using namespace ::common;
 
 /**
  * Full system integration tests covering multiple components working together
