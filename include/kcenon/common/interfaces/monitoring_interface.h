@@ -62,7 +62,7 @@ inline Result<metric_type> metric_type_from_string(const std::string& str) {
     if (upper == "HISTOGRAM") return ok(metric_type::histogram);
     if (upper == "SUMMARY") return ok(metric_type::summary);
 
-    return error<metric_type>(1, "Invalid metric type: " + str, "monitoring_interface");
+    return Result<metric_type>(error_info{1, "Invalid metric type: " + str, "monitoring_interface"});
 }
 
 /**
