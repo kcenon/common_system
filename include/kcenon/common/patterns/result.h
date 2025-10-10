@@ -201,6 +201,15 @@ public:
     }
 
     /**
+     * @brief Get value or return default (C++23 std::expected compatible)
+     *
+     * Alias for unwrap_or() that matches std::expected::value_or() API.
+     */
+    T value_or(T default_value) const {
+        return unwrap_or(std::move(default_value));
+    }
+
+    /**
      * @brief Get value reference (const)
      */
     const T& value() const {
