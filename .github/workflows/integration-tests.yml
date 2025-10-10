@@ -59,7 +59,7 @@ jobs:
         working-directory: build
         run: |
           lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch,source
-          lcov --remove coverage.info '/usr/*' '*/vcpkg/*' '*/test/*' --output-file coverage_filtered.info --ignore-errors mismatch,source
+          lcov --remove coverage.info '/usr/*' '*/test/*' --output-file coverage_filtered.info --ignore-errors mismatch,source,unused
           lcov --list coverage_filtered.info
 
       - name: Upload coverage to Codecov
