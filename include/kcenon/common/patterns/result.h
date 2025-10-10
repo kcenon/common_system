@@ -112,20 +112,15 @@ public:
     // Static factory methods (Rust-style API)
     /**
      * @brief Create a successful result with value (static factory)
-     * @param value The value to wrap in Result
+     * @param value The value to wrap in Result (forwarded)
      * @return Result<T> containing the value
+     *
+     * Uses perfect forwarding to avoid ambiguity and support both
+     * lvalues and rvalues efficiently.
      */
-    static Result<T> ok(T value) {
-        return Result<T>(std::move(value));
-    }
-
-    /**
-     * @brief Create a successful result with const value (static factory)
-     * @param value The value to wrap in Result
-     * @return Result<T> containing the value
-     */
-    static Result<T> ok(const T& value) {
-        return Result<T>(value);
+    template<typename U = T>
+    static Result<T> ok(U&& value) {
+        return Result<T>(std::forward<U>(value));
     }
 
     /**

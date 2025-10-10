@@ -1,6 +1,7 @@
 #include "system_fixture.h"
 #include "test_helpers.h"
 #include <kcenon/common/patterns/result.h>
+#include <kcenon/common/patterns/event_bus.h>
 #include <stdexcept>
 #include <memory>
 
