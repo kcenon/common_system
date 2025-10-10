@@ -58,8 +58,8 @@ jobs:
         if: matrix.build_type == 'Debug' && runner.os == 'Linux'
         working-directory: build
         run: |
-          lcov --capture --directory . --output-file coverage.info
-          lcov --remove coverage.info '/usr/*' '*/vcpkg/*' '*/test/*' --output-file coverage_filtered.info
+          lcov --capture --directory . --output-file coverage.info --ignore-errors mismatch,source
+          lcov --remove coverage.info '/usr/*' '*/vcpkg/*' '*/test/*' --output-file coverage_filtered.info --ignore-errors mismatch,source
           lcov --list coverage_filtered.info
 
       - name: Upload coverage to Codecov
