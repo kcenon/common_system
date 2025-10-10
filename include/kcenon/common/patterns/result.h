@@ -63,6 +63,14 @@ struct error_info {
     }
 };
 
+/**
+ * @brief Alias for backward compatibility
+ *
+ * Some code may use error_code instead of error_info.
+ * This alias ensures compatibility.
+ */
+using error_code = error_info;
+
 // Forward declarations
 template<typename T> class Result;
 template<typename T> class Optional;
@@ -100,6 +108,49 @@ public:
     Result(Result&&) = default;
     Result& operator=(const Result&) = default;
     Result& operator=(Result&&) = default;
+
+    // Static factory methods (Rust-style API)
+    /**
+     * @brief Create a successful result with value (static factory)
+     * @param value The value to wrap in Result (forwarded)
+     * @return Result<T> containing the value
+     *
+     * Uses perfect forwarding to avoid ambiguity and support both
+     * lvalues and rvalues efficiently.
+     */
+    template<typename U = T>
+    static Result<T> ok(U&& value) {
+        return Result<T>(std::forward<U>(value));
+    }
+
+    /**
+     * @brief Create an error result from error_info (static factory)
+     * @param error The error information
+     * @return Result<T> containing the error
+     */
+    static Result<T> err(const error_info& error) {
+        return Result<T>(error);
+    }
+
+    /**
+     * @brief Create an error result from error_info (static factory, move)
+     * @param error The error information
+     * @return Result<T> containing the error
+     */
+    static Result<T> err(error_info&& error) {
+        return Result<T>(std::move(error));
+    }
+
+    /**
+     * @brief Create an error result with code and message (static factory)
+     * @param code Error code
+     * @param message Error message
+     * @param module Optional module name
+     * @return Result<T> containing the error
+     */
+    static Result<T> err(int code, const std::string& message, const std::string& module = "") {
+        return Result<T>(error_info{code, message, module});
+    }
 
     /**
      * @brief Check if result contains a successful value
@@ -147,6 +198,15 @@ public:
             return std::get<T>(value_);
         }
         return default_value;
+    }
+
+    /**
+     * @brief Get value or return default (C++23 std::expected compatible)
+     *
+     * Alias for unwrap_or() that matches std::expected::value_or() API.
+     */
+    T value_or(T default_value) const {
+        return unwrap_or(std::move(default_value));
     }
 
     /**
