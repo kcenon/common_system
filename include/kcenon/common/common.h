@@ -15,6 +15,7 @@
 
 /// Core interfaces
 #include "interfaces/executor_interface.h"
+#include "interfaces/database_interface.h"
 
 /// Common patterns
 #include "patterns/result.h"
