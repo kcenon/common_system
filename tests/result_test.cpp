@@ -138,3 +138,104 @@ TEST_F(ResultTest, TryCatch) {
     EXPECT_TRUE(is_error(error_result));
     EXPECT_EQ(get_error(error_result).code, error_codes::INTERNAL_ERROR);
 }
+
+// Enhanced exception mapper tests
+TEST_F(ResultTest, ExceptionMapper_BadAlloc) {
+    auto result = try_catch<int>([]() -> int {
+        throw std::bad_alloc();
+    }, "memory_test");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::OUT_OF_MEMORY);
+    EXPECT_EQ(err.module, "memory_test");
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_EQ(err.details.value(), "std::bad_alloc");
+}
+
+TEST_F(ResultTest, ExceptionMapper_InvalidArgument) {
+    auto result = try_catch<int>([]() -> int {
+        throw std::invalid_argument("Invalid input value");
+    }, "parser");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::INVALID_ARGUMENT);
+    EXPECT_EQ(err.message, "Invalid input value");
+    EXPECT_EQ(err.module, "parser");
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_EQ(err.details.value(), "std::invalid_argument");
+}
+
+TEST_F(ResultTest, ExceptionMapper_OutOfRange) {
+    auto result = try_catch<int>([]() -> int {
+        throw std::out_of_range("Index out of bounds");
+    }, "container");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::INVALID_ARGUMENT);
+    EXPECT_EQ(err.message, "Index out of bounds");
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_EQ(err.details.value(), "std::out_of_range");
+}
+
+TEST_F(ResultTest, ExceptionMapper_LogicError) {
+    auto result = try_catch<int>([]() -> int {
+        throw std::logic_error("Logic failure");
+    }, "algorithm");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::INTERNAL_ERROR);
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_EQ(err.details.value(), "std::logic_error");
+}
+
+TEST_F(ResultTest, ExceptionMapper_SystemError) {
+    auto result = try_catch<int>([]() -> int {
+        throw std::system_error(std::make_error_code(std::errc::permission_denied),
+                               "Access denied");
+    }, "filesystem");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, static_cast<int>(std::errc::permission_denied));
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_TRUE(err.details.value().find("std::system_error") != std::string::npos);
+}
+
+TEST_F(ResultTest, ExceptionMapper_UnknownException) {
+    auto result = try_catch<int>([]() -> int {
+        throw 42;  // Non-standard exception
+    }, "dangerous_code");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::INTERNAL_ERROR);
+    EXPECT_EQ(err.message, "Unknown exception caught");
+    EXPECT_TRUE(err.details.has_value());
+    EXPECT_TRUE(err.details.value().find("Non-standard") != std::string::npos);
+}
+
+TEST_F(ResultTest, TryCatchVoid_WithException) {
+    auto result = try_catch_void([]() {
+        throw std::invalid_argument("Cannot process");
+    }, "processor");
+
+    ASSERT_TRUE(is_error(result));
+    const auto& err = get_error(result);
+    EXPECT_EQ(err.code, error_codes::INVALID_ARGUMENT);
+    EXPECT_EQ(err.message, "Cannot process");
+    EXPECT_EQ(err.module, "processor");
+}
+
+TEST_F(ResultTest, TryCatchVoid_Success) {
+    int counter = 0;
+    auto result = try_catch_void([&counter]() {
+        counter = 100;
+    }, "setter");
+
+    EXPECT_TRUE(is_ok(result));
+    EXPECT_EQ(counter, 100);
+}
