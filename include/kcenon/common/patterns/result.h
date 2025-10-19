@@ -25,6 +25,8 @@
 #include <string>
 #include <type_traits>
 #include <stdexcept>
+#include <typeinfo>
+#include <system_error>
 
 namespace common {
 
@@ -539,31 +541,118 @@ namespace error_codes {
 }
 
 /**
- * @brief Convert exception to Result
+ * @class exception_mapper
+ * @brief Maps standard exception types to appropriate error codes
  *
- * Helper to wrap exception-throwing code into Result
+ * Provides automatic error code assignment based on exception type,
+ * enabling more precise error handling without manual code specification.
+ */
+class exception_mapper {
+public:
+    /**
+     * @brief Get error code for exception type
+     * @param e Exception object
+     * @param module Module name for context
+     * @return error_info with appropriate code
+     */
+    static error_info map_exception(const std::exception& e, const std::string& module = "") {
+        // IMPORTANT: Check derived classes BEFORE base classes
+        // (system_error inherits from runtime_error, so check it first)
+
+        // Memory allocation failure
+        if (dynamic_cast<const std::bad_alloc*>(&e)) {
+            return error_info{error_codes::OUT_OF_MEMORY, e.what(), module, "std::bad_alloc"};
+        }
+
+        // System errors (must be before runtime_error)
+        if (dynamic_cast<const std::system_error*>(&e)) {
+            const auto& sys_err = static_cast<const std::system_error&>(e);
+            return error_info{sys_err.code().value(), e.what(), module,
+                            std::string("std::system_error: ") + sys_err.code().category().name()};
+        }
+
+        // Logic errors (invalid_argument and out_of_range inherit from logic_error)
+        if (dynamic_cast<const std::invalid_argument*>(&e)) {
+            return error_info{error_codes::INVALID_ARGUMENT, e.what(), module, "std::invalid_argument"};
+        }
+        if (dynamic_cast<const std::out_of_range*>(&e)) {
+            return error_info{error_codes::INVALID_ARGUMENT, e.what(), module, "std::out_of_range"};
+        }
+        if (dynamic_cast<const std::logic_error*>(&e)) {
+            return error_info{error_codes::INTERNAL_ERROR, e.what(), module, "std::logic_error"};
+        }
+
+        // Runtime errors (base class, check last among runtime errors)
+        if (dynamic_cast<const std::runtime_error*>(&e)) {
+            return error_info{error_codes::INTERNAL_ERROR, e.what(), module, "std::runtime_error"};
+        }
+
+        // Generic std::exception
+        return error_info{error_codes::INTERNAL_ERROR, e.what(), module,
+                         std::string("std::exception: ") + typeid(e).name()};
+    }
+
+    /**
+     * @brief Map unknown exception (catch-all)
+     * @param module Module name
+     * @return error_info for unknown exception
+     */
+    static error_info map_unknown_exception(const std::string& module = "") {
+        return error_info{error_codes::INTERNAL_ERROR, "Unknown exception caught", module,
+                         "Non-standard exception (not derived from std::exception)"};
+    }
+};
+
+/**
+ * @brief Convert exception to Result with automatic error code mapping
+ *
+ * Enhanced version that automatically assigns appropriate error codes
+ * based on exception type, providing better error diagnostics.
+ *
+ * @tparam T Return type
+ * @tparam F Callable type
+ * @param func Callable to execute
+ * @param module Module name for error context
+ * @return Result<T> with value or mapped error
+ *
+ * Example:
+ * @code
+ * auto result = try_catch<int>([]() {
+ *     return parse_integer("invalid");  // throws std::invalid_argument
+ * }, "parser");
+ * // result contains error with code INVALID_ARGUMENT
+ * @endcode
  */
 template<typename T, typename F>
 Result<T> try_catch(F&& func, const std::string& module = "") {
     try {
         return ok<T>(func());
     } catch (const std::exception& e) {
-        return error<T>(-99, e.what(), module);
+        return Result<T>(exception_mapper::map_exception(e, module));
     } catch (...) {
-        return error<T>(-99, "Unknown error", module);
+        return Result<T>(exception_mapper::map_unknown_exception(module));
     }
 }
 
-// Specialization for void return type
+/**
+ * @brief Convert exception to VoidResult with automatic error code mapping
+ *
+ * Specialization for void return type.
+ *
+ * @tparam F Callable type
+ * @param func Callable to execute (returns void)
+ * @param module Module name for error context
+ * @return VoidResult with success or mapped error
+ */
 template<typename F>
 VoidResult try_catch_void(F&& func, const std::string& module = "") {
     try {
         func();
         return ok();
     } catch (const std::exception& e) {
-        return error<std::monostate>(-99, e.what(), module);
+        return VoidResult(exception_mapper::map_exception(e, module));
     } catch (...) {
-        return error<std::monostate>(-99, "Unknown error", module);
+        return VoidResult(exception_mapper::map_unknown_exception(module));
     }
 }
 
