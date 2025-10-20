@@ -96,3 +96,7 @@ COMMON_HEADER_ONLY=ON      # Use as header-only library
 ---
 
 **Status**: Phase 0 - Baseline established
+
+---
+
+*Last Updated: 2025-10-20*

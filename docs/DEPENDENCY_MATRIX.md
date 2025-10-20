@@ -3,6 +3,48 @@
 > **Language:** **English** | [한국어](DEPENDENCY_MATRIX_KO.md)
 
 
+## Table of Contents
+
+- [Executive Summary](#executive-summary)
+  - [Current Dependency Status](#current-dependency-status)
+- [Cycle 1: common_system ↔ monitoring_system](#cycle-1-common_system-monitoring_system)
+  - [Dependency Chain](#dependency-chain)
+  - [Detailed Analysis](#detailed-analysis)
+    - [common_system → monitoring_system](#common_system-monitoring_system)
+    - [monitoring_system → common_system](#monitoring_system-common_system)
+  - [Resolution Strategy for Cycle 1](#resolution-strategy-for-cycle-1)
+- [Cycle 2: Resolved by Cycle 1](#cycle-2-resolved-by-cycle-1)
+  - [Analysis](#analysis)
+- [Cycle 3: thread_system ↔ container_system ↔ network_system](#cycle-3-thread_system-container_system-network_system)
+  - [Dependency Chain](#dependency-chain)
+  - [Detailed Analysis](#detailed-analysis)
+    - [thread_system → container_system](#thread_system-container_system)
+    - [container_system → network_system](#container_system-network_system)
+    - [network_system → thread_system](#network_system-thread_system)
+  - [Resolution Strategy for Cycle 3](#resolution-strategy-for-cycle-3)
+- [Dependency by System](#dependency-by-system)
+  - [common_system (Foundation - Level 0)](#common_system-foundation-level-0)
+  - [thread_system (Level 1)](#thread_system-level-1)
+  - [logger_system (Level 1)](#logger_system-level-1)
+  - [monitoring_system (Level 2)](#monitoring_system-level-2)
+  - [container_system (Level 1)](#container_system-level-1)
+  - [database_system (Level 2)](#database_system-level-2)
+  - [network_system (Level 2)](#network_system-level-2)
+- [Must-Have vs. Nice-to-Have Dependencies](#must-have-vs-nice-to-have-dependencies)
+  - [Must-Have (Essential)](#must-have-essential)
+  - [Nice-to-Have (Convenience)](#nice-to-have-convenience)
+- [Action Items](#action-items)
+  - [Immediate Actions](#immediate-actions)
+  - [Short-term Actions (Week 1)](#short-term-actions-week-1)
+  - [Long-term Actions (Week 2-4)](#long-term-actions-week-2-4)
+- [Success Metrics](#success-metrics)
+  - [Phase 4 Goals](#phase-4-goals)
+  - [Current Score: 75% ✅](#current-score-75-)
+- [Conclusion](#conclusion)
+  - [Key Findings](#key-findings)
+  - [Recommended Next Steps](#recommended-next-steps)
+  - [Estimated Effort Adjustment](#estimated-effort-adjustment)
+
 **Date**: 2025-10-10
 **Phase**: Phase 4 - Dependency Refactoring
 **Analysis Type**: Detailed Include and CMake Dependency Mapping
@@ -477,3 +519,7 @@ include/network_system/integration/thread_integration.h
 **Document Status**: Complete
 **Next Update**: After service_container investigation
 **Maintainer**: kcenon
+
+---
+
+*Last Updated: 2025-10-20*

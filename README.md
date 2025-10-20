@@ -8,7 +8,7 @@
 
 > **Language:** **English** | [한국어](README_KO.md)
 
-## Project Overview
+## Overview
 
 The Common System Project is a foundational C++17 header-only library providing essential interfaces and design patterns for building modular, loosely-coupled system architectures. Designed as the cornerstone of the ecosystem, it enables seamless integration between system modules while maintaining zero runtime overhead through template-based abstractions and interface-driven design.
 

@@ -2,6 +2,29 @@
 
 > **Language:** [English](ERRORS.md) | **한국어**
 
+## 목차
+
+- [개요](#개요)
+- [권장 패턴: Result<T>](#권장-패턴-resultt)
+  - [기본 Result 타입 정의](#기본-result-타입-정의)
+- [사용 예제](#사용-예제)
+  - [Result를 반환하는 함수](#result를-반환하는-함수)
+  - [Result 처리](#result-처리)
+- [마이그레이션 전략](#마이그레이션-전략)
+  - [Phase 1: 가이드라인 (현재)](#phase-1-가이드라인-현재)
+  - [Phase 2: 점진적 채택](#phase-2-점진적-채택)
+  - [Phase 3: 표준화](#phase-3-표준화)
+- [모듈별 적응](#모듈별-적응)
+  - [thread_system](#thread_system)
+  - [logger_system](#logger_system)
+  - [network_system](#network_system)
+  - [database_system](#database_system)
+- [오류 코드 범위](#오류-코드-범위)
+- [공통 오류 코드](#공통-오류-코드)
+- [모범 사례](#모범-사례)
+- [성능 고려사항](#성능-고려사항)
+- [향후 개선 사항](#향후-개선-사항)
+
 ## 개요
 
 이 문서는 일관성과 유지보수성을 보장하기 위해 모든 시스템 모듈에 대한 표준화된 오류 처리 패턴을 정의합니다.
@@ -262,3 +285,7 @@ auto result = read_config("app.conf")
     .and_then(parse_config)
     .or_else(load_default_config);
 ```
+
+---
+
+*Last Updated: 2025-10-20*

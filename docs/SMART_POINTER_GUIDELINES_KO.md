@@ -3,6 +3,48 @@
 > **Language:** [English](SMART_POINTER_GUIDELINES.md) | **한국어**
 
 
+## 목차
+
+- [의사결정 트리: 어떤 스마트 포인터를 사용할 것인가?](#의사결정-트리-어떤-스마트-포인터를-사용할-것인가)
+- [std::unique_ptr<T> - 배타적 소유권](#stdunique_ptrt---배타적-소유권)
+  - [사용 시점 (When to Use)](#사용-시점-when-to-use)
+  - [기본 사용법 (Basic Usage)](#기본-사용법-basic-usage)
+  - [함수 파라미터 (Function Parameters)](#함수-파라미터-function-parameters)
+  - [반환 값 (Return Values)](#반환-값-return-values)
+  - [커스텀 삭제자 (Custom Deleters)](#커스텀-삭제자-custom-deleters)
+  - [일반적인 패턴 (Common Patterns)](#일반적인-패턴-common-patterns)
+- [std::shared_ptr<T> - 공유 소유권](#stdshared_ptrt---공유-소유권)
+  - [사용 시점 (When to Use)](#사용-시점-when-to-use)
+  - [기본 사용법 (Basic Usage)](#기본-사용법-basic-usage)
+  - [std::enable_shared_from_this](#stdenable_shared_from_this)
+  - [참조 카운팅 (Reference Counting)](#참조-카운팅-reference-counting)
+  - [순환 참조 (위험!) (Circular References - Danger!)](#순환-참조-위험-circular-references---danger)
+  - [스레드 안전성 (Thread Safety)](#스레드-안전성-thread-safety)
+- [std::weak_ptr<T> - 비소유 참조](#stdweak_ptrt---비소유-참조)
+  - [사용 시점 (When to Use)](#사용-시점-when-to-use)
+  - [기본 사용법 (Basic Usage)](#기본-사용법-basic-usage)
+  - [옵저버 패턴 (Observer Pattern)](#옵저버-패턴-observer-pattern)
+  - [캐시 패턴 (Cache Pattern)](#캐시-패턴-cache-pattern)
+- [원시 포인터 - 비소유 접근 (Raw Pointers - Non-Owning Access)](#원시-포인터---비소유-접근-raw-pointers---non-owning-access)
+  - [원시 포인터 사용 시점 (When to Use Raw Pointers)](#원시-포인터-사용-시점-when-to-use-raw-pointers)
+  - [예시 (Examples)](#예시-examples)
+- [소유권 문서화 (Ownership Documentation)](#소유권-문서화-ownership-documentation)
+- [성능 고려사항 (Performance Considerations)](#성능-고려사항-performance-considerations)
+  - [unique_ptr 성능](#unique_ptr-성능)
+  - [shared_ptr 성능](#shared_ptr-성능)
+  - [최적화 팁 (Optimization Tips)](#최적화-팁-optimization-tips)
+- [마이그레이션 체크리스트 (Migration Checklist)](#마이그레이션-체크리스트-migration-checklist)
+  - [Phase 1: 식별](#phase-1-식별)
+  - [Phase 2: 변환](#phase-2-변환)
+  - [Phase 3: 검증](#phase-3-검증)
+  - [Phase 4: 문서화](#phase-4-문서화)
+- [시스템별 예시 (Examples by System)](#시스템별-예시-examples-by-system)
+  - [logger_system](#logger_system)
+  - [network_system](#network_system)
+  - [database_system](#database_system)
+- [빠른 참조 (Quick Reference)](#빠른-참조-quick-reference)
+- [참고 자료 (References)](#참고-자료-references)
+
 **문서 버전**: 1.0
 **생성일**: 2025-10-08
 **관련 문서**: [RAII_GUIDELINES.md](./RAII_GUIDELINES.md)
@@ -715,3 +757,7 @@ class connection_pool {
 **문서 상태**: Phase 2 기준선
 **다음 검토**: Phase 2 완료 후
 **유지관리자**: 아키텍처 팀
+
+---
+
+*Last Updated: 2025-10-20*
