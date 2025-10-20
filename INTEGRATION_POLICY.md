@@ -1,5 +1,7 @@
 # common_system Integration Policy
 
+> **Language:** **English** | [한국어](INTEGRATION_POLICY_KO.md)
+
 ## Overview
 
 This document defines the official integration policy for common_system across all systems in the project. The policy ensures consistency, predictability, and proper documentation of system dependencies.

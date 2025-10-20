@@ -1,5 +1,8 @@
 # Smart Pointer Usage Guidelines
 
+> **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES_KO.md)
+
+
 **Document Version**: 1.0
 **Created**: 2025-10-08
 **Related**: [RAII_GUIDELINES.md](./RAII_GUIDELINES.md)

@@ -1,5 +1,8 @@
 # Dependency Matrix - Detailed Analysis
 
+> **Language:** **English** | [한국어](DEPENDENCY_MATRIX_KO.md)
+
+
 **Date**: 2025-10-10
 **Phase**: Phase 4 - Dependency Refactoring
 **Analysis Type**: Detailed Include and CMake Dependency Mapping

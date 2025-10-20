@@ -1,5 +1,8 @@
 # Error Handling Guidelines
 
+> **Language:** **English** | [한국어](ERRORS_KO.md)
+
+
 ## Overview
 
 This document defines standardized error handling patterns for all system modules to ensure consistency and maintainability.

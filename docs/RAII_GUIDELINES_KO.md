@@ -1,49 +1,49 @@
-# RAII Pattern Guidelines for Common System
+# Common System을 위한 RAII 패턴 가이드라인
 
-> **Language:** **English** | [한국어](RAII_GUIDELINES_KO.md)
+> **Language:** [English](RAII_GUIDELINES.md) | **한국어**
 
 
-**Document Version**: 1.0
-**Created**: 2025-10-08
-**Target**: All systems using common_system
-**Phase**: Phase 2 - Resource Management Standardization
-
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [RAII Principles](#raii-principles)
-3. [Resource Categories](#resource-categories)
-4. [Smart Pointer Guidelines](#smart-pointer-guidelines)
-5. [Implementation Patterns](#implementation-patterns)
-6. [Common Pitfalls](#common-pitfalls)
-7. [Integration with Result<T>](#integration-with-resultt)
-8. [Examples](#examples)
-9. [Checklist](#checklist)
+**문서 버전**: 1.0
+**생성일**: 2025-10-08
+**대상**: common_system을 사용하는 모든 시스템
+**단계**: Phase 2 - 리소스 관리 표준화
 
 ---
 
-## Overview
+## 목차
 
-Resource Acquisition Is Initialization (RAII) is the fundamental C++ idiom for managing resource lifetimes. This document establishes guidelines for consistent RAII usage across all systems.
-
-### Core RAII Principle
-
-> **Resources are acquired in constructors and released in destructors automatically.**
-
-**Benefits**:
-- ✅ Exception safety guaranteed
-- ✅ No manual cleanup required
-- ✅ Clear ownership semantics
-- ✅ Deterministic resource release
-- ✅ Thread-safe resource management
+1. [개요](#개요)
+2. [RAII 원칙](#raii-원칙)
+3. [리소스 카테고리](#리소스-카테고리)
+4. [스마트 포인터 가이드라인](#스마트-포인터-가이드라인)
+5. [구현 패턴](#구현-패턴)
+6. [일반적인 함정](#일반적인-함정)
+7. [Result<T>와의 통합](#resultt와의-통합)
+8. [예제](#예제)
+9. [체크리스트](#체크리스트)
 
 ---
 
-## RAII Principles
+## 개요
 
-### Principle 1: Acquire Resources in Constructors
+RAII(Resource Acquisition Is Initialization)는 리소스 생명주기 관리를 위한 기본적인 C++ 관용구입니다. 이 문서는 모든 시스템에 걸친 일관된 RAII 사용을 위한 가이드라인을 제시합니다.
+
+### 핵심 RAII 원칙
+
+> **리소스는 생성자에서 획득되고 소멸자에서 자동으로 해제됩니다.**
+
+**이점**:
+- ✅ 예외 안전성 보장
+- ✅ 수동 정리 불필요
+- ✅ 명확한 소유권 시맨틱
+- ✅ 결정적 리소스 해제
+- ✅ 스레드 안전 리소스 관리
+
+---
+
+## RAII 원칙
+
+### 원칙 1: 생성자에서 리소스 획득
 
 ```cpp
 class file_writer {
@@ -62,7 +62,7 @@ public:
         }
     }
 
-    // Delete copy, enable move
+    // 복사 삭제, 이동 활성화
     file_writer(const file_writer&) = delete;
     file_writer& operator=(const file_writer&) = delete;
     file_writer(file_writer&& other) noexcept
@@ -77,64 +77,64 @@ public:
 };
 ```
 
-### Principle 2: Release Resources in Destructors
+### 원칙 2: 소멸자에서 리소스 해제
 
-**Destructors must**:
-- Never throw exceptions (`noexcept` by default in C++11+)
-- Be idempotent (safe to call multiple times)
-- Handle all cleanup paths
+**소멸자는 반드시**:
+- 예외를 throw하지 않음 (C++11+에서 기본적으로 `noexcept`)
+- 멱등성 보장 (여러 번 호출해도 안전)
+- 모든 정리 경로 처리
 
 ```cpp
 ~resource_guard() noexcept {
-    // Safe cleanup - never throws
+    // 안전한 정리 - 절대 throw하지 않음
     if (resource_) {
         try {
             cleanup(resource_);
         } catch (...) {
-            // Log error but don't propagate
-            // Destructors must not throw
+            // 에러를 로깅하되 전파하지 않음
+            // 소멸자는 throw하면 안 됨
         }
     }
 }
 ```
 
-### Principle 3: Delete Copy, Enable Move
+### 원칙 3: 복사 삭제, 이동 활성화
 
 **Rule of Five/Zero**:
-- Define **all five** special member functions, or
-- Define **none** (use `= default` or `= delete`)
+- **다섯 가지** 특수 멤버 함수를 모두 정의하거나,
+- **아무것도** 정의하지 않음 (`= default` 또는 `= delete` 사용)
 
 ```cpp
 class resource_wrapper {
 public:
-    // Explicitly delete copy operations
+    // 명시적으로 복사 연산 삭제
     resource_wrapper(const resource_wrapper&) = delete;
     resource_wrapper& operator=(const resource_wrapper&) = delete;
 
-    // Explicitly define move operations
+    // 명시적으로 이동 연산 정의
     resource_wrapper(resource_wrapper&&) noexcept = default;
     resource_wrapper& operator=(resource_wrapper&&) noexcept = default;
 
-    // Destructor
+    // 소멸자
     ~resource_wrapper() = default;
 };
 ```
 
 ---
 
-## Resource Categories
+## 리소스 카테고리
 
-### Category 1: System Resources
+### 카테고리 1: 시스템 리소스
 
-**Examples**: Files, sockets, mutexes, threads, timers
+**예시**: 파일, 소켓, mutex, 스레드, 타이머
 
-**Guidelines**:
-- Always use RAII wrappers
-- Never use naked handles
-- Provide timeout for acquisition
+**가이드라인**:
+- 항상 RAII 래퍼 사용
+- 네이키드 핸들 사용 금지
+- 획득 시 타임아웃 제공
 
 ```cpp
-// File handles
+// 파일 핸들
 class file_handle {
     FILE* handle_ = nullptr;
 public:
@@ -143,7 +143,7 @@ public:
     FILE* get() const { return handle_; }
 };
 
-// Socket handles
+// 소켓 핸들
 class socket_handle {
     int fd_ = -1;
 public:
@@ -152,43 +152,43 @@ public:
     int get() const { return fd_; }
 };
 
-// Mutex locks
-// Use std::lock_guard, std::unique_lock, std::scoped_lock
+// Mutex 락
+// std::lock_guard, std::unique_lock, std::scoped_lock 사용
 ```
 
-### Category 2: Memory Resources
+### 카테고리 2: 메모리 리소스
 
-**Examples**: Heap allocations, memory pools, buffers
+**예시**: 힙 할당, 메모리 풀, 버퍼
 
-**Guidelines**:
-- Prefer `std::unique_ptr` and `std::shared_ptr`
-- Use custom deleters when needed
-- Avoid naked `new`/`delete`
+**가이드라인**:
+- `std::unique_ptr` 및 `std::shared_ptr` 선호
+- 필요 시 커스텀 deleter 사용
+- 네이키드 `new`/`delete` 피하기
 
 ```cpp
-// Unique ownership
+// 독점 소유권
 auto buffer = std::make_unique<char[]>(size);
 
-// Shared ownership
+// 공유 소유권
 auto shared_buffer = std::make_shared<buffer_type>(args);
 
-// Custom deleter
+// 커스텀 deleter
 auto resource = std::unique_ptr<Resource, void(*)(Resource*)>(
     acquire_resource(),
     [](Resource* r) { release_resource(r); }
 );
 ```
 
-### Category 3: Logical Resources
+### 카테고리 3: 논리적 리소스
 
-**Examples**: Locks, transactions, scopes
+**예시**: 락, 트랜잭션, 스코프
 
-**Guidelines**:
-- Use scope guards for cleanup actions
-- Implement RAII wrappers for logical resources
+**가이드라인**:
+- 정리 작업에 스코프 가드 사용
+- 논리적 리소스를 위한 RAII 래퍼 구현
 
 ```cpp
-// Transaction guard
+// 트랜잭션 가드
 class transaction_guard {
     database& db_;
     bool committed_ = false;
@@ -212,11 +212,11 @@ public:
 
 ---
 
-## Smart Pointer Guidelines
+## 스마트 포인터 가이드라인
 
 ### std::unique_ptr<T>
 
-**Use when**: Exclusive ownership
+**사용 시기**: 독점 소유권
 
 ```cpp
 class logger {
@@ -226,41 +226,41 @@ public:
         : writer_(std::move(w)) {}
 };
 
-// Creation
+// 생성
 auto logger = std::make_unique<file_logger>("app.log");
 ```
 
-**Rules**:
-- ✅ Use `std::make_unique` for construction
-- ✅ Pass by `std::unique_ptr<T>` to transfer ownership
-- ✅ Pass by `T*` or `T&` for non-owning access
-- ❌ Never use `new` directly
+**규칙**:
+- ✅ 생성 시 `std::make_unique` 사용
+- ✅ 소유권 이전을 위해 `std::unique_ptr<T>`로 전달
+- ✅ 비소유 접근을 위해 `T*` 또는 `T&`로 전달
+- ❌ `new`를 직접 사용 금지
 
 ### std::shared_ptr<T>
 
-**Use when**: Shared ownership needed
+**사용 시기**: 공유 소유권이 필요할 때
 
 ```cpp
 class session : public std::enable_shared_from_this<session> {
     void start_async_operation() {
         auto self = shared_from_this();
         async_op([self, this]() {
-            // 'self' keeps session alive during callback
+            // 'self'가 콜백 중 session을 유지
             process();
         });
     }
 };
 ```
 
-**Rules**:
-- ✅ Use `std::make_shared` for construction
-- ✅ Use `std::weak_ptr` to break cycles
-- ✅ Inherit from `std::enable_shared_from_this` when needed
-- ⚠️ Be cautious of circular references
+**규칙**:
+- ✅ 생성 시 `std::make_shared` 사용
+- ✅ 순환 참조를 끊기 위해 `std::weak_ptr` 사용
+- ✅ 필요 시 `std::enable_shared_from_this` 상속
+- ⚠️ 순환 참조 주의
 
 ### std::weak_ptr<T>
 
-**Use when**: Non-owning reference to shared resource
+**사용 시기**: 공유 리소스에 대한 비소유 참조
 
 ```cpp
 class connection_manager {
@@ -276,34 +276,34 @@ class connection_manager {
 };
 ```
 
-### Raw Pointers
+### Raw 포인터
 
-**Use when**: Non-owning, guaranteed valid references
+**사용 시기**: 비소유, 유효성이 보장된 참조
 
 ```cpp
-// ✅ Non-owning parameter
+// ✅ 비소유 파라미터
 void process(const logger* logger) {
-    // logger guaranteed valid during function scope
+    // logger가 함수 스코프 동안 유효함 보장
 }
 
-// ✅ Optional non-owning parameter
+// ✅ 선택적 비소유 파라미터
 void log_if_available(logger* logger) {
     if (logger) {
         logger->info("message");
     }
 }
 
-// ❌ Never for ownership
+// ❌ 소유권에는 절대 사용 금지
 void bad_example(Thing* thing) {
-    delete thing;  // Who owns this? Unclear!
+    delete thing;  // 누가 소유하는가? 불명확!
 }
 ```
 
 ---
 
-## Implementation Patterns
+## 구현 패턴
 
-### Pattern 1: Basic RAII Wrapper
+### 패턴 1: 기본 RAII 래퍼
 
 ```cpp
 template<typename Resource, typename Deleter>
@@ -322,11 +322,11 @@ public:
         }
     }
 
-    // Delete copy
+    // 복사 삭제
     resource_guard(const resource_guard&) = delete;
     resource_guard& operator=(const resource_guard&) = delete;
 
-    // Enable move
+    // 이동 활성화
     resource_guard(resource_guard&& other) noexcept
         : resource_(std::exchange(other.resource_, Resource{}))
         , deleter_(std::move(other.deleter_))
@@ -337,7 +337,7 @@ public:
 };
 ```
 
-### Pattern 2: Scope Guard
+### 패턴 2: 스코프 가드
 
 ```cpp
 template<typename Func>
@@ -360,24 +360,24 @@ public:
     scope_exit& operator=(const scope_exit&) = delete;
 };
 
-// Helper
+// 헬퍼
 template<typename F>
 auto make_scope_exit(F&& f) {
     return scope_exit<std::decay_t<F>>(std::forward<F>(f));
 }
 
-// Usage
+// 사용법
 void example() {
     auto guard = make_scope_exit([&] {
         cleanup_resources();
     });
 
-    // Do work
-    // Cleanup happens automatically
+    // 작업 수행
+    // 정리가 자동으로 발생
 }
 ```
 
-### Pattern 3: Connection Guard (from NEED_TO_FIX.md)
+### 패턴 3: 연결 가드 (NEED_TO_FIX.md에서)
 
 ```cpp
 class connection_guard {
@@ -408,19 +408,19 @@ public:
 
 ---
 
-## Common Pitfalls
+## 일반적인 함정
 
-### Pitfall 1: Forgetting to Delete Copy Constructors
+### 함정 1: 복사 생성자 삭제를 잊음
 
 ```cpp
-// ❌ Bad - allows copying which could double-delete
+// ❌ 나쁨 - 복사를 허용하여 이중 삭제 가능
 class resource {
     void* handle_;
 public:
     ~resource() { free(handle_); }
 };
 
-// ✅ Good - explicitly delete copy
+// ✅ 좋음 - 명시적으로 복사 삭제
 class resource {
     void* handle_;
 public:
@@ -430,61 +430,61 @@ public:
 };
 ```
 
-### Pitfall 2: Throwing in Destructors
+### 함정 2: 소멸자에서 throw
 
 ```cpp
-// ❌ Bad - destructor can throw
+// ❌ 나쁨 - 소멸자가 throw 가능
 ~bad_resource() {
-    cleanup();  // May throw!
+    cleanup();  // throw 가능!
 }
 
-// ✅ Good - destructor never throws
+// ✅ 좋음 - 소멸자는 절대 throw하지 않음
 ~good_resource() noexcept {
     try {
         cleanup();
     } catch (...) {
-        // Log but don't propagate
+        // 로깅하되 전파하지 않음
     }
 }
 ```
 
-### Pitfall 3: Circular shared_ptr References
+### 함정 3: 순환 shared_ptr 참조
 
 ```cpp
-// ❌ Bad - circular reference causes leak
+// ❌ 나쁨 - 순환 참조로 인한 누수
 class Node {
-    std::shared_ptr<Node> parent_;  // Circular!
+    std::shared_ptr<Node> parent_;  // 순환!
     std::shared_ptr<Node> child_;
 };
 
-// ✅ Good - use weak_ptr to break cycle
+// ✅ 좋음 - weak_ptr로 순환 끊기
 class Node {
-    std::weak_ptr<Node> parent_;     // Non-owning
-    std::shared_ptr<Node> child_;    // Owning
+    std::weak_ptr<Node> parent_;     // 비소유
+    std::shared_ptr<Node> child_;    // 소유
 };
 ```
 
-### Pitfall 4: Naked new/delete
+### 함정 4: 네이키드 new/delete
 
 ```cpp
-// ❌ Bad - manual memory management
+// ❌ 나쁨 - 수동 메모리 관리
 Widget* w = new Widget();
-// ... use w ...
-delete w;  // Easy to forget!
+// ... w 사용 ...
+delete w;  // 잊기 쉬움!
 
-// ✅ Good - automatic cleanup
+// ✅ 좋음 - 자동 정리
 auto w = std::make_unique<Widget>();
-// ... use w ...
-// Automatic cleanup
+// ... w 사용 ...
+// 자동 정리
 ```
 
 ---
 
-## Integration with Result<T>
+## Result<T>와의 통합
 
-RAII works seamlessly with `common::Result<T>` for exception-free error handling.
+RAII는 예외 없는 에러 처리를 위해 `common::Result<T>`와 완벽하게 작동합니다.
 
-### Pattern: RAII Factory Functions
+### 패턴: RAII 팩토리 함수
 
 ```cpp
 Result<std::unique_ptr<file_writer>> create_file_writer(const std::string& path) {
@@ -493,25 +493,25 @@ Result<std::unique_ptr<file_writer>> create_file_writer(const std::string& path)
         return error_info{errno, std::strerror(errno), "file_writer"};
     }
 
-    return std::make_unique<file_writer>(handle);  // RAII wrapper
+    return std::make_unique<file_writer>(handle);  // RAII 래퍼
 }
 
-// Usage
+// 사용법
 auto result = create_file_writer("output.txt");
 if (is_error(result)) {
-    // Handle error
+    // 에러 처리
     return;
 }
 
 auto writer = std::move(std::get<std::unique_ptr<file_writer>>(result));
-// Use writer - automatic cleanup on scope exit
+// writer 사용 - 스코프 종료 시 자동 정리
 ```
 
-### Pattern: RAII with Error Propagation
+### 패턴: 에러 전파가 있는 RAII
 
 ```cpp
 Result<void> process_file(const std::string& path) {
-    // Acquire resource with RAII
+    // RAII로 리소스 획득
     auto file_result = create_file_writer(path);
     if (is_error(file_result)) {
         return std::get<error_info>(file_result);
@@ -519,22 +519,22 @@ Result<void> process_file(const std::string& path) {
 
     auto writer = std::move(std::get<std::unique_ptr<file_writer>>(file_result));
 
-    // Use resource
+    // 리소스 사용
     auto write_result = writer->write("data");
     if (is_error(write_result)) {
         return std::get<error_info>(write_result);
     }
 
     return std::monostate{};
-    // writer automatically cleaned up here
+    // writer는 여기서 자동으로 정리됨
 }
 ```
 
 ---
 
-## Examples
+## 예제
 
-### Example 1: File Writer with RAII
+### 예제 1: RAII가 있는 파일 writer
 
 ```cpp
 class file_writer {
@@ -572,7 +572,7 @@ private:
 };
 ```
 
-### Example 2: Connection Pool with RAII
+### 예제 2: RAII가 있는 연결 풀
 
 ```cpp
 class connection_pool {
@@ -628,43 +628,43 @@ private:
 
 ---
 
-## Checklist
+## 체크리스트
 
-Use this checklist when implementing RAII:
+RAII 구현 시 이 체크리스트를 사용하세요:
 
-### Design Phase
-- [ ] Identify all resources that need management
-- [ ] Determine ownership model (unique vs shared)
-- [ ] Design exception-safe constructors
-- [ ] Plan error handling strategy
+### 설계 단계
+- [ ] 관리가 필요한 모든 리소스 식별
+- [ ] 소유권 모델 결정 (unique vs shared)
+- [ ] 예외 안전한 생성자 설계
+- [ ] 에러 처리 전략 계획
 
-### Implementation Phase
-- [ ] Resources acquired in constructor
-- [ ] Resources released in destructor
-- [ ] Destructor is `noexcept`
-- [ ] Copy constructor deleted (if not copyable)
-- [ ] Copy assignment deleted (if not copyable)
-- [ ] Move constructor implemented (if movable)
-- [ ] Move assignment implemented (if movable)
-- [ ] Smart pointers used for heap allocations
-- [ ] No naked `new` or `delete`
+### 구현 단계
+- [ ] 생성자에서 리소스 획득
+- [ ] 소멸자에서 리소스 해제
+- [ ] 소멸자가 `noexcept`
+- [ ] 복사 생성자 삭제 (복사 불가능한 경우)
+- [ ] 복사 할당 삭제 (복사 불가능한 경우)
+- [ ] 이동 생성자 구현 (이동 가능한 경우)
+- [ ] 이동 할당 구현 (이동 가능한 경우)
+- [ ] 힙 할당에 스마트 포인터 사용
+- [ ] 네이키드 `new` 또는 `delete` 없음
 
-### Integration Phase
-- [ ] Factory functions return `Result<std::unique_ptr<T>>`
-- [ ] Error paths properly handled
-- [ ] Resource ownership documented
-- [ ] Thread safety documented
+### 통합 단계
+- [ ] 팩토리 함수가 `Result<std::unique_ptr<T>>` 반환
+- [ ] 에러 경로 적절히 처리됨
+- [ ] 리소스 소유권 문서화됨
+- [ ] 스레드 안전성 문서화됨
 
-### Testing Phase
-- [ ] Exception safety tested
-- [ ] Resource leak tested (AddressSanitizer)
-- [ ] Double-delete prevented
-- [ ] Move semantics tested
-- [ ] Concurrent access tested (if applicable)
+### 테스팅 단계
+- [ ] 예외 안전성 테스트됨
+- [ ] 리소스 누수 테스트됨 (AddressSanitizer)
+- [ ] 이중 삭제 방지됨
+- [ ] 이동 시맨틱 테스트됨
+- [ ] 동시 접근 테스트됨 (해당되는 경우)
 
 ---
 
-## References
+## 참고 자료
 
 - [C++ Core Guidelines: Resource Management](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management)
 - [NEED_TO_FIX.md Phase 2: Resource Management](../../NEED_TO_FIX.md)
@@ -672,6 +672,6 @@ Use this checklist when implementing RAII:
 
 ---
 
-**Document Status**: Phase 2 Baseline
-**Next Review**: After Phase 2 completion
-**Maintainer**: Architecture Team
+**문서 상태**: Phase 2 기준선
+**다음 검토**: Phase 2 완료 후
+**담당자**: Architecture Team
