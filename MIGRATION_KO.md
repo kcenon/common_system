@@ -1,27 +1,27 @@
-> **Language:** **English** | [한국어](MIGRATION_KO.md)
+> **Language:** [English](MIGRATION.md) | **한국어**
 
-# Migration Guide
+# 마이그레이션 가이드
 
-## Table of Contents
+## 목차
 
-- [Overview](#overview)
-- [Migrating to common_system Integration](#migrating-to-common_system-integration)
-- [Migrating to Result<T> Pattern](#migrating-to-resultt-pattern)
-- [Migrating to Standard Interfaces](#migrating-to-standard-interfaces)
-- [Version Migration Guides](#version-migration-guides)
-- [Troubleshooting](#troubleshooting)
+- [개요](#개요)
+- [common_system 통합으로 마이그레이션](#common_system-통합으로-마이그레이션)
+- [Result<T> 패턴으로 마이그레이션](#resultt-패턴으로-마이그레이션)
+- [표준 인터페이스로 마이그레이션](#표준-인터페이스로-마이그레이션)
+- [버전 마이그레이션 가이드](#버전-마이그레이션-가이드)
+- [문제 해결](#문제-해결)
 
-## Overview
+## 개요
 
-This guide helps you migrate existing code to use the integrated system suite with common_system. Each section provides step-by-step instructions with before/after examples.
+이 가이드는 기존 코드를 common_system과 통합된 시스템 스위트로 마이그레이션하는 방법을 설명합니다. 각 섹션은 전/후 예제와 함께 단계별 지침을 제공합니다.
 
-## Migrating to common_system Integration
+## common_system 통합으로 마이그레이션
 
-### Step 1: Update CMakeLists.txt
+### 단계 1: CMakeLists.txt 업데이트
 
-Add common_system dependency to your project:
+프로젝트에 common_system 의존성 추가:
 
-**Before** (standalone):
+**이전** (독립형):
 ```cmake
 cmake_minimum_required(VERSION 3.20)
 project(MyProject)
@@ -29,7 +29,7 @@ project(MyProject)
 add_executable(MyApp main.cpp)
 ```
 
-**After** (integrated):
+**이후** (통합):
 ```cmake
 cmake_minimum_required(VERSION 3.20)
 project(MyProject)
@@ -46,15 +46,15 @@ endif()
 add_executable(MyApp main.cpp)
 ```
 
-### Step 2: Update Build Process
+### 단계 2: 빌드 프로세스 업데이트
 
-**Before**:
+**이전**:
 ```bash
 cmake -B build -S .
 cmake --build build
 ```
 
-**After**:
+**이후**:
 ```bash
 # With common_system integration (default)
 cmake -B build -S .
@@ -65,9 +65,9 @@ cmake -B build -S . -DBUILD_WITH_COMMON_SYSTEM=OFF
 cmake --build build
 ```
 
-### Step 3: Update Source Code
+### 단계 3: 소스 코드 업데이트
 
-Use conditional compilation for backward compatibility:
+하위 호환성을 위한 조건부 컴파일 사용:
 
 ```cpp
 #ifdef BUILD_WITH_COMMON_SYSTEM
@@ -96,21 +96,21 @@ private:
 };
 ```
 
-## Migrating to Result<T> Pattern
+## Result<T> 패턴으로 마이그레이션
 
-### From bool Return Values
+### bool 반환 값에서 마이그레이션
 
-**Before**:
+**이전**:
 ```cpp
 bool process_data(const std::string& data) {
     if (data.empty()) {
         return false;  // Why did it fail?
     }
-    
+
     if (!validate(data)) {
         return false;  // What's wrong with the data?
     }
-    
+
     return do_processing(data);
 }
 
@@ -120,22 +120,22 @@ if (!process_data(input)) {
 }
 ```
 
-**After**:
+**이후**:
 ```cpp
 #include <kcenon/common/patterns/result.h>
 using namespace common;
 
 VoidResult process_data(const std::string& data) {
     if (data.empty()) {
-        return make_error(error_code::invalid_argument, 
+        return make_error(error_code::invalid_argument,
                          "Data cannot be empty");
     }
-    
+
     if (!validate(data)) {
         return make_error(error_code::validation_failed,
                          std::format("Invalid data format: {}", data));
     }
-    
+
     return do_processing(data);
 }
 
@@ -143,9 +143,9 @@ VoidResult process_data(const std::string& data) {
 auto result = process_data(input);
 if (is_error(result)) {
     auto err = get_error(result);
-    std::cerr << "Processing failed: " << err.message 
+    std::cerr << "Processing failed: " << err.message
               << " (code: " << static_cast<int>(err.code) << ")" << std::endl;
-    
+
     // Can handle different error types
     if (err.code == error_code::invalid_argument) {
         // Handle invalid input
@@ -153,21 +153,21 @@ if (is_error(result)) {
 }
 ```
 
-### From Exceptions
+### 예외에서 마이그레이션
 
-**Before**:
+**이전**:
 ```cpp
 User load_user(const std::string& id) {
     auto conn = database->connect();
     if (!conn) {
         throw std::runtime_error("Database connection failed");
     }
-    
+
     auto user = conn->query("SELECT * FROM users WHERE id = ?", id);
     if (!user) {
         throw std::runtime_error("User not found");
     }
-    
+
     return *user;
 }
 
@@ -180,7 +180,7 @@ try {
 }
 ```
 
-**After**:
+**이후**:
 ```cpp
 #include <kcenon/common/patterns/result.h>
 using namespace common;
@@ -190,15 +190,15 @@ Result<User> load_user(const std::string& id) {
     if (is_error(conn_result)) {
         return get_error(conn_result);  // Propagate error
     }
-    
+
     auto conn = get_value(conn_result);
     auto user_result = conn->query("SELECT * FROM users WHERE id = ?", id);
-    
+
     if (is_error(user_result)) {
         return make_error(error_code::not_found,
                          std::format("User {} not found", id));
     }
-    
+
     return get_value(user_result);
 }
 
@@ -210,7 +210,7 @@ if (is_ok(result)) {
 } else {
     auto err = get_error(result);
     std::cerr << "Error: " << err.message << std::endl;
-    
+
     // Type-safe error handling
     switch (err.code) {
         case error_code::connection_failed:
@@ -225,21 +225,21 @@ if (is_ok(result)) {
 }
 ```
 
-### From Optional<T>
+### Optional<T>에서 마이그레이션
 
-**Before**:
+**이전**:
 ```cpp
 std::optional<Config> load_config(const std::string& path) {
     std::ifstream file(path);
     if (!file) {
         return std::nullopt;  // Why did it fail?
     }
-    
+
     Config config;
     if (!parse(file, config)) {
         return std::nullopt;  // Parse error? File error?
     }
-    
+
     return config;
 }
 
@@ -250,7 +250,7 @@ if (!config) {
 }
 ```
 
-**After**:
+**이후**:
 ```cpp
 Result<Config> load_config(const std::string& path) {
     std::ifstream file(path);
@@ -258,13 +258,13 @@ Result<Config> load_config(const std::string& path) {
         return make_error(error_code::file_not_found,
                          std::format("Config file not found: {}", path));
     }
-    
+
     Config config;
     if (!parse(file, config)) {
         return make_error(error_code::parse_error,
                          std::format("Failed to parse config file: {}", path));
     }
-    
+
     return ok(std::move(config));
 }
 
@@ -276,7 +276,7 @@ if (is_ok(result)) {
 } else {
     auto err = get_error(result);
     std::cerr << "Config error: " << err.message << std::endl;
-    
+
     // Can provide fallback based on error type
     if (err.code == error_code::file_not_found) {
         use_default_config();
@@ -287,23 +287,23 @@ if (is_ok(result)) {
 }
 ```
 
-## Migrating to Standard Interfaces
+## 표준 인터페이스로 마이그레이션
 
-### Migrating to ILogger Interface
+### ILogger 인터페이스로 마이그레이션
 
-**Before** (direct dependency):
+**이전** (직접 의존성):
 ```cpp
 #include <spdlog/spdlog.h>
 
 class MyService {
 private:
     std::shared_ptr<spdlog::logger> logger_;
-    
+
 public:
     MyService() {
         logger_ = spdlog::stdout_color_mt("service");
     }
-    
+
     void process() {
         logger_->info("Processing started");
         // ... processing
@@ -312,18 +312,18 @@ public:
 };
 ```
 
-**After** (interface abstraction):
+**이후** (인터페이스 추상화):
 ```cpp
 #include <kcenon/common/interfaces/logger_interface.h>
 
 class MyService {
 private:
     std::shared_ptr<common::interfaces::ILogger> logger_;
-    
+
 public:
     MyService(std::shared_ptr<common::interfaces::ILogger> logger)
         : logger_(std::move(logger)) {}
-    
+
     void process() {
         logger_->log(log_level::info, "Processing started");
         // ... processing
@@ -339,15 +339,15 @@ MyService service(logger);
 service.process();
 ```
 
-**Benefits**:
-- No direct dependency on specific logger implementation
-- Easy to swap logger implementations
-- Easier testing (can use mock logger)
-- Consistent logging interface across all systems
+**장점**:
+- 특정 logger 구현에 직접 의존하지 않음
+- Logger 구현을 쉽게 교체 가능
+- 테스트가 더 쉬움 (mock logger 사용 가능)
+- 모든 시스템에서 일관된 로깅 인터페이스
 
-### Migrating to IExecutor Interface
+### IExecutor 인터페이스로 마이그레이션
 
-**Before** (direct thread management):
+**이전** (직접 thread 관리):
 ```cpp
 #include <thread>
 #include <queue>
@@ -357,7 +357,7 @@ private:
     std::vector<std::thread> workers_;
     std::queue<std::function<void()>> tasks_;
     std::mutex mutex_;
-    
+
 public:
     TaskProcessor(size_t num_threads) {
         for (size_t i = 0; i < num_threads; ++i) {
@@ -366,12 +366,12 @@ public:
             });
         }
     }
-    
+
     void submit(std::function<void()> task) {
         std::lock_guard lock(mutex_);
         tasks_.push(std::move(task));
     }
-    
+
 private:
     void worker_loop() {
         // Complex worker implementation
@@ -379,18 +379,18 @@ private:
 };
 ```
 
-**After** (interface abstraction):
+**이후** (인터페이스 추상화):
 ```cpp
 #include <kcenon/common/interfaces/executor_interface.h>
 
 class TaskProcessor {
 private:
     std::shared_ptr<common::interfaces::IExecutor> executor_;
-    
+
 public:
     TaskProcessor(std::shared_ptr<common::interfaces::IExecutor> executor)
         : executor_(std::move(executor)) {}
-    
+
     void submit(std::function<void()> task) {
         executor_->submit(std::move(task));
     }
@@ -406,21 +406,21 @@ processor.submit([]() {
 });
 ```
 
-### Migrating to IMonitor Interface
+### IMonitor 인터페이스로 마이그레이션
 
-**Before** (custom metrics):
+**이전** (커스텀 metrics):
 ```cpp
 class ServiceMetrics {
 private:
     std::atomic<int64_t> request_count_{0};
     std::atomic<int64_t> error_count_{0};
     std::atomic<double> avg_latency_{0.0};
-    
+
 public:
     void record_request() { ++request_count_; }
     void record_error() { ++error_count_; }
     void record_latency(double ms) { avg_latency_ = ms; }
-    
+
     void print_stats() {
         std::cout << "Requests: " << request_count_ << std::endl;
         std::cout << "Errors: " << error_count_ << std::endl;
@@ -429,35 +429,35 @@ public:
 };
 ```
 
-**After** (standard interface):
+**이후** (표준 인터페이스):
 ```cpp
 #include <kcenon/common/interfaces/monitoring_interface.h>
 
 class Service {
 private:
     std::shared_ptr<common::interfaces::IMonitor> monitor_;
-    
+
 public:
     Service(std::shared_ptr<common::interfaces::IMonitor> monitor)
         : monitor_(std::move(monitor)) {}
-    
+
     void handle_request() {
         auto start = std::chrono::steady_clock::now();
-        
+
         monitor_->record_metric("requests_total", 1);
-        
+
         try {
             // Process request
         } catch (...) {
             monitor_->record_metric("errors_total", 1);
             throw;
         }
-        
+
         auto duration = std::chrono::steady_clock::now() - start;
         auto ms = std::chrono::duration<double, std::milli>(duration).count();
         monitor_->record_metric("latency_ms", ms);
     }
-    
+
     void print_stats() {
         auto metrics = monitor_->collect_metrics();
         for (const auto& [name, metric] : metrics) {
@@ -473,97 +473,97 @@ auto monitor = kcenon::monitoring::create_performance_monitor();
 Service service(monitor);
 ```
 
-## Version Migration Guides
+## 버전 마이그레이션 가이드
 
-### Migrating from 0.x to 1.0
+### 0.x에서 1.0으로 마이그레이션
 
-#### Breaking Changes
+#### 호환성 깨는 변경사항
 
-1. **Result<T> API Changes**
+1. **Result<T> API 변경**
    ```cpp
    // Old (0.x)
    if (result.is_ok()) {
        auto value = result.value();
    }
-   
+
    // New (1.0)
    if (is_ok(result)) {
        auto value = get_value(result);
    }
    ```
 
-2. **Logger Interface Changes**
+2. **Logger 인터페이스 변경**
    ```cpp
    // Old (0.x)
    logger->log(LogLevel::INFO, "message");
-   
+
    // New (1.0)
    logger->log(log_level::info, "message");
    ```
 
-3. **Namespace Changes**
+3. **네임스페이스 변경**
    ```cpp
    // Old (0.x)
    using namespace kcenon::common;
-   
+
    // New (1.0)
    using namespace common;
    using namespace common::interfaces;
    ```
 
-#### Migration Steps
+#### 마이그레이션 단계
 
-1. **Update Dependencies**
+1. **의존성 업데이트**
    ```cmake
    # Update version requirement
    find_package(common_system 1.0 REQUIRED)
    ```
 
-2. **Update Code**
-   - Replace `result.is_ok()` with `is_ok(result)`
-   - Replace `result.value()` with `get_value(result)`
-   - Replace `result.error()` with `get_error(result)`
-   - Update enum names to lowercase (e.g., `LogLevel::INFO` → `log_level::info`)
+2. **코드 업데이트**
+   - `result.is_ok()`를 `is_ok(result)`로 교체
+   - `result.value()`를 `get_value(result)`로 교체
+   - `result.error()`를 `get_error(result)`로 교체
+   - enum 이름을 소문자로 업데이트 (예: `LogLevel::INFO` → `log_level::info`)
 
-3. **Test Thoroughly**
+3. **철저한 테스트**
    ```bash
    # Run all tests
    ctest --output-on-failure
    ```
 
-### Migrating Between Minor Versions
+### 마이너 버전 간 마이그레이션
 
-Minor version updates are backward compatible. No code changes required, but review:
+마이너 버전 업데이트는 하위 호환됩니다. 코드 변경이 필요 없지만 다음을 검토하세요:
 
-- New features in release notes
-- Deprecated APIs (warnings during compilation)
-- Performance improvements
+- 릴리스 노트의 새로운 기능
+- 사용 중단된(deprecated) API (컴파일 시 경고)
+- 성능 개선 사항
 
-## Troubleshooting
+## 문제 해결
 
-### Common Migration Issues
+### 일반적인 마이그레이션 문제
 
-#### Issue 1: Linker Errors After Migration
+#### 문제 1: 마이그레이션 후 링커 오류
 
-**Problem**:
+**문제**:
 ```
 undefined reference to `common::make_error(...)`
 ```
 
-**Solution**:
+**해결책**:
 ```cmake
 # Ensure common_system is linked
 target_link_libraries(MyApp PRIVATE kcenon::common_system)
 ```
 
-#### Issue 2: Ambiguous Function Calls
+#### 문제 2: 함수 호출이 모호함
 
-**Problem**:
+**문제**:
 ```cpp
 error: call to 'ok' is ambiguous
 ```
 
-**Solution**:
+**해결책**:
 ```cpp
 // Explicitly use namespace
 auto result = common::ok(value);
@@ -573,11 +573,11 @@ using namespace common;
 auto result = ok(value);
 ```
 
-#### Issue 3: Performance Regression
+#### 문제 3: 성능 저하
 
-**Problem**: Code runs slower after migration to Result<T>
+**문제**: Result<T>로 마이그레이션 후 코드가 느려짐
 
-**Solution**:
+**해결책**:
 ```cpp
 // Enable optimizations
 cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
@@ -589,14 +589,14 @@ return ok(std::move(large_object));
 auto result = process();  // Don't: auto result = Result(process());
 ```
 
-#### Issue 4: Cannot Find common_system
+#### 문제 4: common_system을 찾을 수 없음
 
-**Problem**:
+**문제**:
 ```
 CMake Error: Could not find a package configuration file provided by "common_system"
 ```
 
-**Solution**:
+**해결책**:
 ```bash
 # Option 1: Install common_system
 cd common_system
@@ -613,56 +613,56 @@ cmake -B build -S . -DCMAKE_PREFIX_PATH=/path/to/systems
 └── my_project/
 ```
 
-### Migration Checklist
+### 마이그레이션 체크리스트
 
-Before starting migration:
+마이그레이션 시작 전:
 
-- [ ] Backup existing code
-- [ ] Review ARCHITECTURE.md
-- [ ] Read INTEGRATION_POLICY.md
-- [ ] Check system compatibility (C++20 required)
-- [ ] Plan migration in phases (don't migrate everything at once)
+- [ ] 기존 코드 백업
+- [ ] ARCHITECTURE.md 검토
+- [ ] INTEGRATION_POLICY.md 읽기
+- [ ] 시스템 호환성 확인 (C++20 필요)
+- [ ] 단계별 마이그레이션 계획 (모든 것을 한 번에 마이그레이션하지 않기)
 
-During migration:
+마이그레이션 중:
 
-- [ ] Update CMakeLists.txt
-- [ ] Add conditional compilation for backward compatibility
-- [ ] Migrate one module at a time
-- [ ] Test after each module migration
-- [ ] Update documentation
+- [ ] CMakeLists.txt 업데이트
+- [ ] 하위 호환성을 위한 조건부 컴파일 추가
+- [ ] 한 번에 하나의 모듈만 마이그레이션
+- [ ] 각 모듈 마이그레이션 후 테스트
+- [ ] 문서 업데이트
 
-After migration:
+마이그레이션 후:
 
-- [ ] Run full test suite
-- [ ] Performance testing
-- [ ] Code review
-- [ ] Update project documentation
-- [ ] Update CI/CD pipelines
+- [ ] 전체 테스트 스위트 실행
+- [ ] 성능 테스트
+- [ ] 코드 리뷰
+- [ ] 프로젝트 문서 업데이트
+- [ ] CI/CD 파이프라인 업데이트
 
-### Getting Help
+### 도움 받기
 
-If you encounter issues:
+문제가 발생하면:
 
-1. Check [INTEGRATION.md](./INTEGRATION.md) for examples
-2. Review [ARCHITECTURE.md](./ARCHITECTURE.md) for system design
-3. Check existing Issues on GitHub
-4. Create a new Issue with:
-   - System versions
-   - Error messages
-   - Minimal reproduction example
+1. [INTEGRATION.md](./INTEGRATION.md)에서 예제 확인
+2. [ARCHITECTURE.md](./ARCHITECTURE.md)에서 시스템 디자인 검토
+3. GitHub에서 기존 이슈 확인
+4. 다음 정보와 함께 새 이슈 생성:
+   - 시스템 버전
+   - 에러 메시지
+   - 최소 재현 예제
 
-## Best Practices
+## 모범 사례
 
-### Gradual Migration
+### 점진적 마이그레이션
 
-Don't migrate everything at once:
+모든 것을 한 번에 마이그레이션하지 마세요:
 
 ```cpp
 // Phase 1: Add integration support
 #ifdef BUILD_WITH_COMMON_SYSTEM
     Result<Data> new_load_data() { /* ... */ }
 #endif
-    
+
     bool legacy_load_data() { /* keep existing */ }
 
 // Phase 2: Migrate callers gradually
@@ -679,9 +679,9 @@ void process() {
 Result<Data> load_data() { /* ... */ }
 ```
 
-### Maintain Backward Compatibility
+### 하위 호환성 유지
 
-Use feature flags:
+기능 플래그 사용:
 
 ```cpp
 namespace my_app {
@@ -695,9 +695,9 @@ namespace my_app {
 }
 ```
 
-### Document Changes
+### 변경사항 문서화
 
-Update your README:
+README 업데이트:
 
 ```markdown
 ## Dependencies
@@ -725,9 +725,9 @@ cmake --build build
 \`\`\`
 ```
 
-## References
+## 참고 자료
 
-- [INTEGRATION.md](./INTEGRATION.md) - Integration guide with examples
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration tiers and policy
-- [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Project improvement tracking
+- [INTEGRATION.md](./INTEGRATION.md) - 예제를 포함한 통합 가이드
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - 시스템 아키텍처
+- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 tier 및 정책
+- [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 프로젝트 개선 추적

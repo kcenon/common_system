@@ -1,24 +1,24 @@
-> **Language:** **English** | [한국어](INTEGRATION_KO.md)
+> **Language:** [English](INTEGRATION.md) | **한국어**
 
-# System Integration Guide
+# 시스템 통합 가이드
 
-## Table of Contents
+## 목차
 
-- [Overview](#overview)
-- [Quick Start](#quick-start)
-- [Integration Patterns](#integration-patterns)
-- [Complete Examples](#complete-examples)
-- [Troubleshooting](#troubleshooting)
+- [개요](#개요)
+- [빠른 시작](#빠른-시작)
+- [통합 패턴](#통합-패턴)
+- [완전한 예제](#완전한-예제)
+- [문제 해결](#문제-해결)
 
-## Overview
+## 개요
 
-This guide demonstrates how to integrate the 7 core systems in your applications. Each section provides practical examples with explanations.
+이 가이드는 애플리케이션에서 7개의 핵심 시스템을 통합하는 방법을 설명합니다. 각 섹션은 설명과 함께 실용적인 예제를 제공합니다.
 
-## Quick Start
+## 빠른 시작
 
-### Minimal Integration
+### 최소 통합
 
-The simplest way to use the systems:
+시스템을 사용하는 가장 간단한 방법:
 
 ```cpp
 #include <kcenon/logger/core/logger.h>
@@ -52,11 +52,11 @@ target_link_libraries(minimal_example PRIVATE
 )
 ```
 
-## Integration Patterns
+## 통합 패턴
 
-### Pattern 1: Logger + Monitoring
+### 패턴 1: Logger + Monitoring
 
-Monitor your application's logging activity:
+애플리케이션의 로깅 활동 모니터링:
 
 ```cpp
 #include <kcenon/logger/core/logger.h>
@@ -85,14 +85,14 @@ int main() {
 }
 ```
 
-**Key Points**:
-- Monitoring is automatic once `set_monitor()` is called
-- Metrics include: `log_count`, `error_count`, `warning_count`
-- Zero performance overhead when monitoring is disabled
+**핵심 포인트**:
+- `set_monitor()` 호출 이후 자동으로 모니터링됩니다
+- Metrics에는 `log_count`, `error_count`, `warning_count`가 포함됩니다
+- 모니터링이 비활성화되면 성능 오버헤드가 없습니다
 
-### Pattern 2: Network + Thread + Logger
+### 패턴 2: Network + Thread + Logger
 
-Build a concurrent network server:
+동시성을 지원하는 네트워크 서버 구축:
 
 ```cpp
 #include <network_system/core/messaging_server.h>
@@ -130,14 +130,14 @@ int main() {
 }
 ```
 
-**Key Points**:
-- Server uses thread pool for concurrent message handling
-- Logger records all server events
-- Container provides type-safe message parsing
+**핵심 포인트**:
+- Server는 동시 메시지 처리를 위해 thread pool을 사용합니다
+- Logger는 모든 서버 이벤트를 기록합니다
+- Container는 타입 안전 메시지 파싱을 제공합니다
 
-### Pattern 3: Database + Container + Result<T>
+### 패턴 3: Database + Container + Result<T>
 
-Type-safe database operations:
+타입 안전 데이터베이스 작업:
 
 ```cpp
 #include <kcenon/database/core/database_manager.h>
@@ -188,14 +188,14 @@ int main() {
 }
 ```
 
-**Key Points**:
-- `Result<T>` provides type-safe error handling
-- No exceptions needed
-- Errors include detailed error codes and messages
+**핵심 포인트**:
+- `Result<T>`는 타입 안전 에러 처리를 제공합니다
+- 예외가 필요 없습니다
+- 에러에는 상세한 에러 코드와 메시지가 포함됩니다
 
-### Pattern 4: Full Stack Integration
+### 패턴 4: 풀스택 통합
 
-Combine all systems for a complete application:
+완전한 애플리케이션을 위한 모든 시스템 결합:
 
 ```cpp
 #include <network_system/core/messaging_server.h>
@@ -310,11 +310,11 @@ int main() {
 }
 ```
 
-## Complete Examples
+## 완전한 예제
 
-### Example 1: Asynchronous Message Queue
+### 예제 1: 비동기 메시지 큐
 
-Build a high-performance message queue with monitoring:
+모니터링을 사용한 고성능 메시지 큐 구축:
 
 ```cpp
 #include <kcenon/thread/core/thread_pool.h>
@@ -390,9 +390,9 @@ int main() {
 }
 ```
 
-### Example 2: Microservice with REST API
+### 예제 2: REST API를 사용한 마이크로서비스
 
-Combine network_system with other systems:
+다른 시스템과 network_system 결합:
 
 ```cpp
 #include <network_system/core/messaging_server.h>
@@ -490,13 +490,13 @@ int main() {
 }
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### CMake Cannot Find System
+### CMake가 시스템을 찾을 수 없음
 
-**Problem**: `find_package(xxx_system CONFIG REQUIRED)` fails
+**문제**: `find_package(xxx_system CONFIG REQUIRED)` 실패
 
-**Solution**:
+**해결책**:
 ```bash
 # Option 1: Install system to standard location
 cd xxx_system
@@ -508,11 +508,11 @@ sudo cmake --install build
 cmake -B build -S . -DCMAKE_PREFIX_PATH=/path/to/systems
 ```
 
-### Build Fails with "common_system not found"
+### "common_system not found"로 빌드 실패
 
-**Problem**: System requires common_system but cannot find it
+**문제**: 시스템에 common_system이 필요하지만 찾을 수 없음
 
-**Solution**:
+**해결책**:
 ```bash
 # Build with common_system integration disabled (Tier 2 only)
 cmake -B build -S . -DBUILD_WITH_COMMON_SYSTEM=OFF
@@ -524,11 +524,11 @@ cmake -B build -S . -DBUILD_WITH_COMMON_SYSTEM=OFF
 └── your_project/
 ```
 
-### Linker Errors: Undefined References
+### 링커 오류: 정의되지 않은 참조
 
-**Problem**: Linking fails with undefined symbol errors
+**문제**: 정의되지 않은 심볼 오류로 링크 실패
 
-**Solution**:
+**해결책**:
 ```cmake
 # Ensure proper link order (dependencies first)
 target_link_libraries(MyApp PRIVATE
@@ -540,11 +540,11 @@ target_link_libraries(MyApp PRIVATE
 )
 ```
 
-### Runtime: Logger Not Outputting
+### 런타임: Logger 출력이 안 됨
 
-**Problem**: Logger created but no output visible
+**문제**: Logger가 생성되었지만 출력이 보이지 않음
 
-**Solution**:
+**해결책**:
 ```cpp
 // Ensure logger is properly configured
 auto logger = kcenon::logger::create_console_logger();
@@ -556,20 +556,20 @@ logger->set_level(log_level::debug);  // Show all logs
 logger->flush();
 ```
 
-### Performance: High CPU Usage
+### 성능: 높은 CPU 사용량
 
-**Problem**: Application uses excessive CPU
+**문제**: 애플리케이션이 과도한 CPU를 사용함
 
-**Solutions**:
-1. **Reduce thread pool size**: `create_thread_pool(4)` instead of `create_thread_pool(100)`
-2. **Use batch logging**: Logger automatically batches, but ensure `flush()` isn't called too often
-3. **Disable monitoring in production**: Set `BUILD_WITH_MONITORING=OFF` if not needed
+**해결책**:
+1. **Thread pool 크기 줄이기**: `create_thread_pool(100)` 대신 `create_thread_pool(4)` 사용
+2. **배치 로깅 사용**: Logger는 자동으로 배치 처리하지만, `flush()`를 너무 자주 호출하지 않도록 합니다
+3. **프로덕션에서 모니터링 비활성화**: 필요 없으면 `BUILD_WITH_MONITORING=OFF` 설정
 
-## Best Practices
+## 모범 사례
 
-### 1. Resource Management
+### 1. 리소스 관리
 
-Use RAII and smart pointers:
+RAII와 스마트 포인터 사용:
 
 ```cpp
 // Good: Automatic cleanup
@@ -583,9 +583,9 @@ Use RAII and smart pointers:
 logger* log = new logger();  // Don't do this
 ```
 
-### 2. Error Handling
+### 2. 에러 처리
 
-Always check `Result<T>`:
+항상 `Result<T>` 확인:
 
 ```cpp
 // Good: Check result
@@ -600,9 +600,9 @@ process(get_value(result));
 db->execute(query);  // What if it fails?
 ```
 
-### 3. Logging Levels
+### 3. 로깅 레벨
 
-Use appropriate log levels:
+적절한 로그 레벨 사용:
 
 ```cpp
 logger->log(log_level::debug, "Detailed debugging info");    // Development
@@ -612,9 +612,9 @@ logger->log(log_level::error, "Failed to connect");          // Errors
 logger->log(log_level::fatal, "Out of memory");              // Critical errors
 ```
 
-### 4. Thread Pool Sizing
+### 4. Thread Pool 크기 조정
 
-Choose appropriate worker count:
+적절한 워커 수 선택:
 
 ```cpp
 // CPU-bound tasks: Use CPU core count
@@ -627,8 +627,8 @@ auto pool = create_thread_pool(std::thread::hardware_concurrency() * 2);
 auto pool = create_thread_pool(4);
 ```
 
-## References
+## 참고 자료
 
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture overview
-- Individual system READMEs for detailed API documentation
+- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - 아키텍처 개요
+- 개별 시스템 README - 상세 API 문서
