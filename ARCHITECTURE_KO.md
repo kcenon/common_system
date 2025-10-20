@@ -1,12 +1,12 @@
-> **Language:** **English** | [한국어](ARCHITECTURE_KO.md)
+> **Language:** [English](ARCHITECTURE.md) | **한국어**
 
-# System Architecture
+# 시스템 아키텍처
 
-## Overview
+## 개요
 
-This document describes the architecture of the 7 core systems and how they integrate with each other.
+이 문서는 7개의 핵심 시스템 아키텍처와 시스템 간 통합 방법을 설명합니다.
 
-## Layer Architecture
+## 레이어 아키텍처
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -53,9 +53,9 @@ This document describes the architecture of the 7 core systems and how they inte
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## System Dependencies
+## 시스템 의존성
 
-### Dependency Graph
+### 의존성 그래프
 
 ```mermaid
 graph TD
@@ -101,139 +101,139 @@ graph TD
     style messaging fill:#fce4ec
 ```
 
-### Dependency Table
+### 의존성 테이블
 
-| System | Required Dependencies | Optional Dependencies |
-|--------|----------------------|----------------------|
+| 시스템 | 필수 의존성 | 선택적 의존성 |
+|--------|------------|--------------|
 | common_system | None | None |
 | thread_system | common_system (opt) | fmt library |
 | container_system | common_system (opt) | None |
 | logger_system | common_system, thread_system | fmt library |
 | monitoring_system | common_system | logger_system |
 | database_system | common_system (opt), container_system | PostgreSQL, MySQL, MongoDB |
-| network_system | ASIO, container_system, thread_system, logger_system | common_system (ON by default) |
+| network_system | ASIO, container_system, thread_system, logger_system | common_system (기본값 ON) |
 
-## Component Architecture
+## 컴포넌트 아키텍처
 
-### common_system (Foundation)
+### common_system (기반)
 
 ```
 common_system/
 ├── interfaces/
-│   ├── logger_interface.h      # ILogger standard interface
-│   ├── monitoring_interface.h  # IMonitor standard interface
-│   └── executor_interface.h    # IExecutor standard interface
+│   ├── logger_interface.h      # ILogger 표준 인터페이스
+│   ├── monitoring_interface.h  # IMonitor 표준 인터페이스
+│   └── executor_interface.h    # IExecutor 표준 인터페이스
 ├── patterns/
-│   ├── result.h                # Result<T> pattern
-│   ├── error.h                 # Error types
-│   └── factory.h               # Factory patterns
+│   ├── result.h                # Result<T> 패턴
+│   ├── error.h                 # Error 타입
+│   └── factory.h               # Factory 패턴
 └── utilities/
-    ├── type_traits.h           # Type utilities
+    ├── type_traits.h           # Type 유틸리티
     └── concepts.h              # C++20 concepts
 ```
 
-**Responsibilities**:
-- Define standard interfaces for cross-system communication
-- Provide type-safe error handling with Result<T>
-- Establish common patterns (factory, DI)
+**책임**:
+- 시스템 간 통신을 위한 표준 인터페이스 정의
+- Result<T>를 사용한 타입 안전 에러 처리 제공
+- 공통 패턴(factory, DI) 설정
 
-### thread_system (Execution)
+### thread_system (실행)
 
 ```
 thread_system/
 ├── core/
-│   ├── thread_pool.h           # Thread pool implementation
-│   ├── thread_worker.h         # Worker thread management
-│   ├── job.h                   # Job abstraction
+│   ├── thread_pool.h           # Thread pool 구현
+│   ├── thread_worker.h         # Worker thread 관리
+│   ├── job.h                   # Job 추상화
 │   └── job_queue.h             # Lock-free job queue
 ├── interfaces/
-│   ├── executor_interface.h    # IExecutor implementation
-│   └── logger_interface.h      # ILogger adapter
+│   ├── executor_interface.h    # IExecutor 구현
+│   └── logger_interface.h      # ILogger 어댑터
 └── utils/
-    └── thread_utils.h          # Thread utilities
+    └── thread_utils.h          # Thread 유틸리티
 ```
 
-**Responsibilities**:
-- Provide thread pool for concurrent execution
-- Implement IExecutor interface for task submission
-- Manage job queues and worker threads
+**책임**:
+- 동시 실행을 위한 thread pool 제공
+- 작업 제출을 위한 IExecutor 인터페이스 구현
+- Job queue와 worker thread 관리
 
-### container_system (Data Storage)
+### container_system (데이터 저장)
 
 ```
 container_system/
 ├── core/
 │   ├── container.h             # Generic key-value container
 │   ├── value.h                 # Type-safe value wrapper
-│   └── serializer.h            # Serialization support
+│   └── serializer.h            # Serialization 지원
 └── utilities/
-    └── type_converter.h        # Type conversion utilities
+    └── type_converter.h        # Type 변환 유틸리티
 ```
 
-**Responsibilities**:
-- Provide generic data container
-- Support serialization/deserialization
-- Enable type-safe data storage
+**책임**:
+- Generic 데이터 container 제공
+- Serialization/deserialization 지원
+- 타입 안전 데이터 저장 활성화
 
-### logger_system (Logging)
+### logger_system (로깅)
 
 ```
 logger_system/
 ├── core/
-│   ├── logger.h                # Main logger class
-│   ├── log_entry.h             # Log entry structure
-│   └── log_level.h             # Log level definitions
+│   ├── logger.h                # Main logger 클래스
+│   ├── log_entry.h             # Log entry 구조
+│   └── log_level.h             # Log level 정의
 ├── writers/
-│   ├── console_writer.h        # Console output
-│   ├── file_writer.h           # File output
-│   └── rotating_file_writer.h  # Rotating file support
+│   ├── console_writer.h        # Console 출력
+│   ├── file_writer.h           # File 출력
+│   └── rotating_file_writer.h  # Rotating file 지원
 └── impl/
     └── async/
-        └── batch_processor.h   # Asynchronous batch processing
+        └── batch_processor.h   # 비동기 배치 처리
 ```
 
-**Responsibilities**:
-- Implement ILogger interface
-- Provide asynchronous logging with batching
-- Support multiple output targets
+**책임**:
+- ILogger 인터페이스 구현
+- 배치를 사용한 비동기 로깅 제공
+- 다중 출력 대상 지원
 
-### monitoring_system (Metrics)
+### monitoring_system (메트릭)
 
 ```
 monitoring_system/
 ├── core/
-│   ├── performance_monitor.h   # Performance monitoring
-│   ├── metrics_collector.h     # Metrics collection
-│   └── health_monitor.h        # Health checking
+│   ├── performance_monitor.h   # Performance 모니터링
+│   ├── metrics_collector.h     # Metrics 수집
+│   └── health_monitor.h        # Health 체크
 └── interfaces/
-    └── monitoring_interface.h  # IMonitor implementation
+    └── monitoring_interface.h  # IMonitor 구현
 ```
 
-**Responsibilities**:
-- Implement IMonitor interface
-- Collect and aggregate metrics
-- Provide health status monitoring
+**책임**:
+- IMonitor 인터페이스 구현
+- Metrics 수집 및 집계
+- Health 상태 모니터링 제공
 
-### database_system (Persistence)
+### database_system (영속성)
 
 ```
 database_system/
 ├── core/
-│   ├── database_manager.h      # Database connection management
+│   ├── database_manager.h      # Database 연결 관리
 │   ├── query_builder.h         # SQL query builder
-│   └── transaction.h           # Transaction support
+│   └── transaction.h           # Transaction 지원
 └── adapters/
-    ├── postgresql_adapter.h    # PostgreSQL support
-    ├── mysql_adapter.h         # MySQL support
-    └── mongodb_adapter.h       # MongoDB support
+    ├── postgresql_adapter.h    # PostgreSQL 지원
+    ├── mysql_adapter.h         # MySQL 지원
+    └── mongodb_adapter.h       # MongoDB 지원
 ```
 
-**Responsibilities**:
-- Provide database abstraction layer
-- Support multiple database backends
-- Enable transaction management
+**책임**:
+- Database 추상화 레이어 제공
+- 다중 database 백엔드 지원
+- Transaction 관리 활성화
 
-### network_system (Communication)
+### network_system (통신)
 
 ```
 network_system/
@@ -242,22 +242,22 @@ network_system/
 │   ├── messaging_client.h      # TCP client
 │   └── messaging_session.h     # Connection session
 ├── integration/
-│   ├── logger_integration.h    # Logger integration
-│   ├── thread_integration.h    # Thread pool integration
-│   └── container_integration.h # Container integration
+│   ├── logger_integration.h    # Logger 통합
+│   ├── thread_integration.h    # Thread pool 통합
+│   └── container_integration.h # Container 통합
 └── internal/
-    ├── tcp_socket.h            # Socket abstraction
+    ├── tcp_socket.h            # Socket 추상화
     └── pipeline.h              # Data pipeline
 ```
 
-**Responsibilities**:
-- Provide asynchronous TCP/IP communication
-- Integrate with thread_system for concurrent connections
-- Use logger_system for diagnostics
+**책임**:
+- 비동기 TCP/IP 통신 제공
+- 동시 연결을 위한 thread_system 통합
+- 진단을 위한 logger_system 사용
 
-## Data Flow Examples
+## 데이터 흐름 예제
 
-### Example 1: Network Message Processing
+### 예제 1: 네트워크 메시지 처리
 
 ```
 Client Request
@@ -283,7 +283,7 @@ network_system::messaging_server
      └─► monitoring_system::record_metric("messages_processed", 1)
 ```
 
-### Example 2: Logging with Monitoring
+### 예제 2: 모니터링을 포함한 로깅
 
 ```
 Application Code
@@ -305,9 +305,9 @@ logger_system::logger::log()
      └─► Result<void>
 ```
 
-## Integration Patterns
+## 통합 패턴
 
-### Pattern 1: Dependency Injection
+### 패턴 1: Dependency Injection
 
 ```cpp
 // Create infrastructure
@@ -322,7 +322,7 @@ server->set_executor(thread_pool.get());
 server->set_monitor(monitor.get());
 ```
 
-### Pattern 2: Result<T> Error Handling
+### 패턴 2: Result<T> 에러 처리
 
 ```cpp
 // Database operation with Result<T>
@@ -340,7 +340,7 @@ if (common::is_ok(result)) {
 }
 ```
 
-### Pattern 3: Interface Abstraction
+### 패턴 3: 인터페이스 추상화
 
 ```cpp
 // Use ILogger interface for flexibility
@@ -350,9 +350,9 @@ void process_request(common::interfaces::ILogger* logger) {
 }
 ```
 
-## Build Configuration
+## 빌드 구성
 
-### CMake Integration
+### CMake 통합
 
 ```cmake
 # Find systems
@@ -373,51 +373,51 @@ target_link_libraries(MyApp PRIVATE
 )
 ```
 
-### Build Modes
+### 빌드 모드
 
-All systems support multiple build configurations:
+모든 시스템은 다중 빌드 구성을 지원합니다:
 
-| Mode | Description | CMake Flag |
-|------|-------------|------------|
-| **Integrated** | Full integration with common_system | `BUILD_WITH_COMMON_SYSTEM=ON` |
-| **Standalone** | Independent operation (Tier 2 only) | `BUILD_WITH_COMMON_SYSTEM=OFF` |
-| **Debug** | Debug symbols, no optimization | `CMAKE_BUILD_TYPE=Debug` |
-| **Release** | Optimized, no debug symbols | `CMAKE_BUILD_TYPE=Release` |
+| 모드 | 설명 | CMake 플래그 |
+|------|------|-------------|
+| **Integrated** | common_system과 완전 통합 | `BUILD_WITH_COMMON_SYSTEM=ON` |
+| **Standalone** | 독립 실행 (Tier 2만 해당) | `BUILD_WITH_COMMON_SYSTEM=OFF` |
+| **Debug** | 디버그 심볼, 최적화 없음 | `CMAKE_BUILD_TYPE=Debug` |
+| **Release** | 최적화, 디버그 심볼 없음 | `CMAKE_BUILD_TYPE=Release` |
 
-## Performance Characteristics
+## 성능 특성
 
-### Thread Safety
+### Thread 안전성
 
-| System | Thread-Safe | Lock Strategy |
-|--------|-------------|---------------|
-| common_system | N/A | Interfaces only |
-| thread_system | ✅ Yes | Lock-free queues |
-| container_system | ⚠️ Partial | User responsibility |
+| 시스템 | Thread-Safe | Lock 전략 |
+|--------|------------|----------|
+| common_system | N/A | 인터페이스만 해당 |
+| thread_system | ✅ Yes | Lock-free queue |
+| container_system | ⚠️ Partial | 사용자 책임 |
 | logger_system | ✅ Yes | Lock-free batching |
-| monitoring_system | ✅ Yes | Atomic operations |
+| monitoring_system | ✅ Yes | Atomic 연산 |
 | database_system | ✅ Yes | Connection pooling |
 | network_system | ✅ Yes | Per-session locking |
 
-### Scalability
+### 확장성
 
-- **thread_system**: Scales to hundreds of concurrent jobs
-- **logger_system**: Handles 1M+ logs/sec with batching
-- **network_system**: Supports thousands of concurrent connections
-- **database_system**: Connection pooling for high throughput
-- **monitoring_system**: Low overhead (< 1% CPU)
+- **thread_system**: 수백 개의 동시 작업까지 확장
+- **logger_system**: 배치로 초당 100만 개 이상의 로그 처리
+- **network_system**: 수천 개의 동시 연결 지원
+- **database_system**: 높은 처리량을 위한 Connection pooling
+- **monitoring_system**: 낮은 오버헤드 (< 1% CPU)
 
-## Version Compatibility
+## 버전 호환성
 
-All systems follow Semantic Versioning (SemVer):
+모든 시스템은 Semantic Versioning (SemVer)을 따릅니다:
 
-- **Major**: Breaking API changes
-- **Minor**: New features, backward compatible
-- **Patch**: Bug fixes
+- **Major**: Breaking API 변경사항
+- **Minor**: 새로운 기능, 이전 버전 호환
+- **Patch**: 버그 수정
 
-Current versions aligned to **v1.0.0** baseline (2025-10-03).
+현재 버전은 **v1.0.0** 기준선에 맞춰져 있습니다 (2025-10-03).
 
-## References
+## 참고 자료
 
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
-- [INTEGRATION.md](./INTEGRATION.md) - Integration examples
-- [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Improvement tracking
+- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
+- [INTEGRATION.md](./INTEGRATION.md) - 통합 예제
+- [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 개선 추적
