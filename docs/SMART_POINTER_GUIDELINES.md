@@ -3,6 +3,48 @@
 > **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES_KO.md)
 
 
+## Table of Contents
+
+- [Decision Tree: Which Smart Pointer to Use?](#decision-tree-which-smart-pointer-to-use)
+- [std::unique_ptr<T> - Exclusive Ownership](#stdunique_ptrt-exclusive-ownership)
+  - [When to Use](#when-to-use)
+  - [Basic Usage](#basic-usage)
+  - [Function Parameters](#function-parameters)
+  - [Return Values](#return-values)
+  - [Custom Deleters](#custom-deleters)
+  - [Common Patterns](#common-patterns)
+- [std::shared_ptr<T> - Shared Ownership](#stdshared_ptrt-shared-ownership)
+  - [When to Use](#when-to-use)
+  - [Basic Usage](#basic-usage)
+  - [std::enable_shared_from_this](#stdenable_shared_from_this)
+  - [Reference Counting](#reference-counting)
+  - [Circular References (Danger!)](#circular-references-danger)
+  - [Thread Safety](#thread-safety)
+- [std::weak_ptr<T> - Non-Owning Reference](#stdweak_ptrt-non-owning-reference)
+  - [When to Use](#when-to-use)
+  - [Basic Usage](#basic-usage)
+  - [Observer Pattern](#observer-pattern)
+  - [Cache Pattern](#cache-pattern)
+- [Raw Pointers - Non-Owning Access](#raw-pointers-non-owning-access)
+  - [When to Use Raw Pointers](#when-to-use-raw-pointers)
+  - [Examples](#examples)
+- [Ownership Documentation](#ownership-documentation)
+- [Performance Considerations](#performance-considerations)
+  - [unique_ptr Performance](#unique_ptr-performance)
+  - [shared_ptr Performance](#shared_ptr-performance)
+  - [Optimization Tips](#optimization-tips)
+- [Migration Checklist](#migration-checklist)
+  - [Phase 1: Identify](#phase-1-identify)
+  - [Phase 2: Convert](#phase-2-convert)
+  - [Phase 3: Verify](#phase-3-verify)
+  - [Phase 4: Document](#phase-4-document)
+- [Examples by System](#examples-by-system)
+  - [logger_system](#logger_system)
+  - [network_system](#network_system)
+  - [database_system](#database_system)
+- [Quick Reference](#quick-reference)
+- [References](#references)
+
 **Document Version**: 1.0
 **Created**: 2025-10-08
 **Related**: [RAII_GUIDELINES.md](./RAII_GUIDELINES.md)
@@ -715,3 +757,7 @@ class connection_pool {
 **Document Status**: Phase 2 Baseline
 **Next Review**: After Phase 2 completion
 **Maintainer**: Architecture Team
+
+---
+
+*Last Updated: 2025-10-20*

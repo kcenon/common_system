@@ -3,6 +3,56 @@
 > **Language:** **English** | [한국어](ERROR_HANDLING_KO.md)
 
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Principles](#principles)
+  - [1. Exception-Free Error Handling](#1-exception-free-error-handling)
+  - [2. Centralized Error Codes](#2-centralized-error-codes)
+  - [3. Type-Safe Error Propagation](#3-type-safe-error-propagation)
+- [Using Result<T>](#using-resultt)
+  - [Basic Usage](#basic-usage)
+  - [Factory Functions](#factory-functions)
+  - [Checking Results](#checking-results)
+  - [Unwrapping Results](#unwrapping-results)
+- [Monadic Operations](#monadic-operations)
+  - [map - Transform Success Value](#map-transform-success-value)
+  - [and_then - Chain Operations](#and_then-chain-operations)
+  - [or_else - Handle Errors](#or_else-handle-errors)
+- [Error Propagation Patterns](#error-propagation-patterns)
+  - [Pattern 1: Early Return](#pattern-1-early-return)
+  - [Pattern 2: RETURN_IF_ERROR Macro](#pattern-2-return_if_error-macro)
+  - [Pattern 3: ASSIGN_OR_RETURN Macro](#pattern-3-assign_or_return-macro)
+  - [Pattern 4: Monadic Chaining](#pattern-4-monadic-chaining)
+- [Error Code Usage](#error-code-usage)
+  - [Defining Error Codes](#defining-error-codes)
+  - [Using Error Codes](#using-error-codes)
+  - [Getting Error Messages](#getting-error-messages)
+- [Best Practices](#best-practices)
+  - [1. Use Result<T> at Module Boundaries](#1-use-resultt-at-module-boundaries)
+  - [2. Provide Context in Errors](#2-provide-context-in-errors)
+  - [3. Use Appropriate Error Codes](#3-use-appropriate-error-codes)
+  - [4. Document Error Conditions](#4-document-error-conditions)
+  - [5. Handle Errors Appropriately](#5-handle-errors-appropriately)
+- [Exception Conversion](#exception-conversion)
+- [Migration Guide](#migration-guide)
+  - [Step 1: Add Error Codes](#step-1-add-error-codes)
+  - [Step 2: Update Function Signatures](#step-2-update-function-signatures)
+  - [Step 3: Replace Exceptions](#step-3-replace-exceptions)
+  - [Step 4: Update Callers](#step-4-update-callers)
+- [Testing](#testing)
+  - [Testing Success Cases](#testing-success-cases)
+  - [Testing Error Cases](#testing-error-cases)
+  - [Testing Error Propagation](#testing-error-propagation)
+- [Performance Considerations](#performance-considerations)
+  - [Result<T> Performance](#resultt-performance)
+  - [Optimization Tips](#optimization-tips)
+- [Common Patterns](#common-patterns)
+  - [Pattern: Resource Acquisition](#pattern-resource-acquisition)
+  - [Pattern: Validation Chain](#pattern-validation-chain)
+  - [Pattern: Error Recovery](#pattern-error-recovery)
+- [References](#references)
+
 **Version**: 1.0
 **Date**: 2025-10-09
 **Phase**: Phase 3 - Error Handling Unification
@@ -664,3 +714,7 @@ Result<Config> load_config() {
 **Document Status**: Phase 3 Complete
 **Maintainer**: Architecture Team
 **Review Date**: 2025-10-09
+
+---
+
+*Last Updated: 2025-10-20*

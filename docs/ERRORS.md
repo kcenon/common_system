@@ -3,6 +3,29 @@
 > **Language:** **English** | [한국어](ERRORS_KO.md)
 
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Recommended Pattern: Result<T>](#recommended-pattern-resultt)
+  - [Basic Result Type Definition](#basic-result-type-definition)
+- [Usage Examples](#usage-examples)
+  - [Function Returning Result](#function-returning-result)
+  - [Handling Results](#handling-results)
+- [Migration Strategy](#migration-strategy)
+  - [Phase 1: Guidelines (Current)](#phase-1-guidelines-current)
+  - [Phase 2: Gradual Adoption](#phase-2-gradual-adoption)
+  - [Phase 3: Standardization](#phase-3-standardization)
+- [Module-Specific Adaptations](#module-specific-adaptations)
+  - [thread_system](#thread_system)
+  - [logger_system](#logger_system)
+  - [network_system](#network_system)
+  - [database_system](#database_system)
+- [Error Code Ranges](#error-code-ranges)
+- [Common Error Codes](#common-error-codes)
+- [Best Practices](#best-practices)
+- [Performance Considerations](#performance-considerations)
+- [Future Enhancements](#future-enhancements)
+
 ## Overview
 
 This document defines standardized error handling patterns for all system modules to ensure consistency and maintainability.
@@ -263,3 +286,6 @@ auto result = read_config("app.conf")
     .and_then(parse_config)
     .or_else(load_default_config);
 ```
+---
+
+*Last Updated: 2025-10-20*

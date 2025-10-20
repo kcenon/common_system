@@ -3,6 +3,48 @@
 > **Language:** [English](DEPENDENCY_MATRIX.md) | **한국어**
 
 
+## 목차
+
+- [요약](#요약)
+  - [현재 의존성 상태](#현재-의존성-상태)
+- [Cycle 1: common_system ↔ monitoring_system](#cycle-1-common_system--monitoring_system)
+  - [의존성 체인](#의존성-체인)
+  - [상세 분석](#상세-분석)
+    - [common_system → monitoring_system](#common_system--monitoring_system)
+    - [monitoring_system → common_system](#monitoring_system--common_system)
+  - [Cycle 1 해결 전략](#cycle-1-해결-전략)
+- [Cycle 2: Cycle 1에 의해 해결됨](#cycle-2-cycle-1에-의해-해결됨)
+  - [분석](#분석)
+- [Cycle 3: thread_system ↔ container_system ↔ network_system](#cycle-3-thread_system--container_system--network_system)
+  - [의존성 체인](#의존성-체인)
+  - [상세 분석](#상세-분석)
+    - [thread_system → container_system](#thread_system--container_system)
+    - [container_system → network_system](#container_system--network_system)
+    - [network_system → thread_system](#network_system--thread_system)
+  - [Cycle 3 해결 전략](#cycle-3-해결-전략)
+- [시스템별 의존성](#시스템별-의존성)
+  - [common_system (기반 - Level 0)](#common_system-기반---level-0)
+  - [thread_system (Level 1)](#thread_system-level-1)
+  - [logger_system (Level 1)](#logger_system-level-1)
+  - [monitoring_system (Level 2)](#monitoring_system-level-2)
+  - [container_system (Level 1)](#container_system-level-1)
+  - [database_system (Level 2)](#database_system-level-2)
+  - [network_system (Level 2)](#network_system-level-2)
+- [필수 vs. 편의 의존성](#필수-vs-편의-의존성)
+  - [필수 (Essential)](#필수-essential)
+  - [편의 (Convenience)](#편의-convenience)
+- [액션 아이템](#액션-아이템)
+  - [즉시 조치](#즉시-조치)
+  - [단기 조치 (1주차)](#단기-조치-1주차)
+  - [장기 조치 (2-4주차)](#장기-조치-2-4주차)
+- [성공 지표](#성공-지표)
+  - [Phase 4 목표](#phase-4-목표)
+  - [현재 점수: 75% ✅](#현재-점수-75-)
+- [결론](#결론)
+  - [주요 발견 사항](#주요-발견-사항)
+  - [권장 다음 단계](#권장-다음-단계)
+  - [예상 작업량 조정](#예상-작업량-조정)
+
 **날짜**: 2025-10-10
 **단계**: Phase 4 - 의존성 리팩토링
 **분석 유형**: 상세한 Include 및 CMake 의존성 매핑
@@ -477,3 +519,7 @@ include/network_system/integration/thread_integration.h
 **문서 상태**: 완료
 **다음 업데이트**: service_container 조사 후
 **담당자**: kcenon
+
+---
+
+*Last Updated: 2025-10-20*
