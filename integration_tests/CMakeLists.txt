@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.16)
 project(CommonSystemIntegrationTests)
 
 # Find GTest
-find_package(GTest REQUIRED)
+# Note: If not found, parent CMakeLists.txt may provide it via FetchContent
+find_package(GTest QUIET)
 
 # Integration test framework library (shared utilities)
 add_library(integration_test_framework INTERFACE)
