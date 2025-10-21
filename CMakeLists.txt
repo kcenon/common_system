@@ -17,6 +17,16 @@ option(COMMON_BUILD_DOCS "Generate documentation" OFF)
 option(COMMON_HEADER_ONLY "Use as header-only library" ON)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
+# Respect global BUILD_INTEGRATION_TESTS flag if set
+if(DEFINED BUILD_INTEGRATION_TESTS)
+    if(BUILD_INTEGRATION_TESTS)
+        set(_COMMON_BUILD_IT_VALUE ON)
+    else()
+        set(_COMMON_BUILD_IT_VALUE OFF)
+    endif()
+    set(COMMON_BUILD_INTEGRATION_TESTS ${_COMMON_BUILD_IT_VALUE} CACHE BOOL "Build integration tests for common_system" FORCE)
+endif()
+
 # Create interface library (header-only by default)
 add_library(common_system INTERFACE)
 add_library(kcenon::common ALIAS common_system)
