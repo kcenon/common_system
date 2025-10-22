@@ -13,7 +13,7 @@ using namespace common;
 // Example function that can fail
 Result<int> divide(int a, int b) {
     if (b == 0) {
-        return error<int>(
+        return make_error<int>(
             error_codes::INVALID_ARGUMENT,
             "Division by zero",
             "math_module"
@@ -25,7 +25,7 @@ Result<int> divide(int a, int b) {
 // Example function that reads a file
 Result<std::string> read_file(const std::string& path) {
     if (path.empty()) {
-        return error<std::string>(
+        return make_error<std::string>(
             error_codes::INVALID_ARGUMENT,
             "Path cannot be empty",
             "file_module"
@@ -34,7 +34,7 @@ Result<std::string> read_file(const std::string& path) {
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        return error<std::string>(
+        return make_error<std::string>(
             error_codes::NOT_FOUND,
             "File not found: " + path,
             "file_module"
@@ -51,7 +51,7 @@ Result<int> parse_and_compute(const std::string& expr) {
     // Simple parser for "a/b" format
     auto pos = expr.find('/');
     if (pos == std::string::npos) {
-        return error<int>(
+        return make_error<int>(
             error_codes::INVALID_ARGUMENT,
             "Invalid expression format",
             "parser"
@@ -63,7 +63,7 @@ Result<int> parse_and_compute(const std::string& expr) {
         int b = std::stoi(expr.substr(pos + 1));
         return divide(a, b);
     } catch (const std::exception& e) {
-        return error<int>(
+        return make_error<int>(
             error_codes::INVALID_ARGUMENT,
             std::string("Parse error: ") + e.what(),
             "parser"
