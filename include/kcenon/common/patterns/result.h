@@ -465,17 +465,14 @@ inline Result<T> error(int code, const std::string& message,
 /**
  * @brief Create an error result from existing error_info
  * @note Renamed from error() to make_error() to avoid conflict with error:: namespace
+ *
+ * BREAKING CHANGE: The old error() function has been removed completely due to
+ * C++ not allowing the same identifier for both a function and a namespace.
+ * All code must be updated to use make_error() instead of error().
  */
 template<typename T>
 inline Result<T> make_error(const error_info& err) {
     return Result<T>(err);
-}
-
-// Deprecated: kept for backward compatibility, will be removed in future version
-template<typename T>
-[[deprecated("Use make_error() instead to avoid namespace conflict")]]
-inline Result<T> error(const error_info& err) {
-    return make_error<T>(err);
 }
 
 // Optional factory functions
