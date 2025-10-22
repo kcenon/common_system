@@ -427,16 +427,8 @@ inline VoidResult ok() {
 }
 
 /**
- * @brief Create an error result (lowercase)
- */
-template<typename T>
-inline Result<T> error(int code, const std::string& message,
-                       const std::string& module = "") {
-    return Result<T>(error_info{code, message, module});
-}
-
-/**
- * @brief Create an error result (uppercase - Rust style)
+ * @brief Create an error result (Rust style)
+ * @note Safe to keep as "Err" doesn't conflict with error:: namespace
  */
 template<typename T>
 inline Result<T> Err(const std::string& message) {
@@ -444,7 +436,7 @@ inline Result<T> Err(const std::string& message) {
 }
 
 /**
- * @brief Create an error result with code
+ * @brief Create an error result with code (Rust style)
  */
 template<typename T>
 inline Result<T> Err(int code, const std::string& message,
@@ -453,12 +445,23 @@ inline Result<T> Err(int code, const std::string& message,
 }
 
 /**
- * @brief Create an error result with details
+ * @brief Create an error result with all parameters
+ * @note Renamed from error() to make_error() to avoid conflict with error:: namespace
  */
 template<typename T>
-inline Result<T> error(int code, const std::string& message,
-                       const std::string& module,
-                       const std::string& details) {
+inline Result<T> make_error(int code, const std::string& message,
+                            const std::string& module = "") {
+    return Result<T>(error_info{code, message, module});
+}
+
+/**
+ * @brief Create an error result with details
+ * @note Renamed from error() to make_error() to avoid conflict with error:: namespace
+ */
+template<typename T>
+inline Result<T> make_error(int code, const std::string& message,
+                            const std::string& module,
+                            const std::string& details) {
     return Result<T>(error_info{code, message, module, details});
 }
 
