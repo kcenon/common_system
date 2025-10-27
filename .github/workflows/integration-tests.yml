@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.build_type }}
           path: build/Testing/Temporary/
@@ -118,7 +118,7 @@ jobs:
           ctest --output-on-failure --tests-regex ".*Performance.*" --verbose
 
       - name: Upload benchmark results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: benchmark-results-${{ matrix.os }}
           path: build/Testing/Temporary/
