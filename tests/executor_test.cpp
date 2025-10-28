@@ -57,7 +57,7 @@ public:
 
     Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
         if (!job) {
-            return error<std::future<void>>(1, "Null job provided", "ExecutorError");
+            return make_error<std::future<void>>(1, "Null job provided", "ExecutorError");
         }
 
         auto promise = std::make_shared<std::promise<void>>();
@@ -86,7 +86,7 @@ public:
         std::unique_ptr<IJob>&& job,
         std::chrono::milliseconds delay) override {
         if (!job) {
-            return error<std::future<void>>(1, "Null job provided", "ExecutorError");
+            return make_error<std::future<void>>(1, "Null job provided", "ExecutorError");
         }
 
         auto promise = std::make_shared<std::promise<void>>();
