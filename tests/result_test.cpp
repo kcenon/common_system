@@ -22,7 +22,7 @@ TEST_F(ResultTest, CreateSuccessResult) {
 }
 
 TEST_F(ResultTest, CreateErrorResult) {
-    auto result = error<int>(-1, "Test error", "test_module");
+    auto result = make_error<int>(-1, "Test error", "test_module");
     EXPECT_FALSE(is_ok(result));
     EXPECT_TRUE(is_error(result));
 
@@ -34,7 +34,7 @@ TEST_F(ResultTest, CreateErrorResult) {
 
 TEST_F(ResultTest, ValueOr) {
     auto success = ok(10);
-    auto failure = error<int>(-1, "Error");
+    auto failure = make_error<int>(-1, "Error");
 
     EXPECT_EQ(value_or(success, 0), 10);
     EXPECT_EQ(value_or(failure, 0), 0);
@@ -46,12 +46,12 @@ TEST_F(ResultTest, GetIfOk) {
     ASSERT_NE(value, nullptr);
     EXPECT_EQ(*value, 100);
 
-    auto error_result = error<int>(-1, "Error");
+    auto error_result = make_error<int>(-1, "Error");
     EXPECT_EQ(get_if_ok(error_result), nullptr);
 }
 
 TEST_F(ResultTest, GetIfError) {
-    auto result = error<int>(-1, "Test error");
+    auto result = make_error<int>(-1, "Test error");
     auto* err = get_if_error(result);
     ASSERT_NE(err, nullptr);
     EXPECT_EQ(err->code, -1);
@@ -67,7 +67,7 @@ TEST_F(ResultTest, MapFunction) {
     EXPECT_TRUE(is_ok(mapped));
     EXPECT_EQ(get_value(mapped), 20);
 
-    auto error_result = error<int>(-1, "Error");
+    auto error_result = make_error<int>(-1, "Error");
     auto mapped_error = map(error_result, [](int x) { return x * 2; });
 
     EXPECT_TRUE(is_error(mapped_error));
@@ -77,7 +77,7 @@ TEST_F(ResultTest, MapFunction) {
 TEST_F(ResultTest, AndThen) {
     auto divide = [](int x, int y) -> Result<int> {
         if (y == 0) {
-            return error<int>(-1, "Division by zero");
+            return make_error<int>(-1, "Division by zero");
         }
         return ok(x / y);
     };
@@ -98,7 +98,7 @@ TEST_F(ResultTest, AndThen) {
 }
 
 TEST_F(ResultTest, OrElse) {
-    auto error_result = error<int>(-1, "Error");
+    auto error_result = make_error<int>(-1, "Error");
     auto recovered = or_else(error_result, [](const error_info&) {
         return ok(42);
     });
@@ -119,7 +119,7 @@ TEST_F(ResultTest, VoidResult) {
     auto void_ok = ok();
     EXPECT_TRUE(is_ok(void_ok));
 
-    auto void_error = error<std::monostate>(-1, "Void error");
+    auto void_error = make_error<std::monostate>(-1, "Void error");
     EXPECT_TRUE(is_error(void_error));
 }
 

@@ -87,10 +87,15 @@ namespace common {
 
 #else // Monitoring integration disabled
 
-// Provide a stub implementation when monitoring is disabled
+// Provide a simple implementation when monitoring is disabled
 #include <functional>
 #include <memory>
 #include <any>
+#include <mutex>
+#include <atomic>
+#include <unordered_map>
+#include <typeindex>
+#include <algorithm>
 
 namespace common {
 
@@ -124,76 +129,144 @@ namespace common {
     };
 
     /**
-     * @class null_event_bus
-     * @brief No-op event bus used when monitoring is disabled.
+     * @class simple_event_bus
+     * @brief Simple synchronous event bus for testing when monitoring is disabled.
      *
-     * Thread-safety: This class is thread-safe. All methods are no-ops
-     * that perform no state modifications. The singleton instance()
-     * uses C++11 magic statics for thread-safe initialization.
+     * Thread-safety: This class is thread-safe using a mutex to protect
+     * subscription management and event dispatch.
      */
-    class null_event_bus {
+    class simple_event_bus {
     public:
         template<typename EventType>
-        void publish(const EventType&, event_priority = event_priority::normal) {
-            // No-op - thread-safe as it performs no operations
+        void publish(const EventType& evt, event_priority = event_priority::normal) {
+            std::lock_guard<std::mutex> lock(mutex_);
+
+            // Get type identifier
+            auto type_id = std::type_index(typeid(EventType));
+
+            // Find and call all handlers for this event type
+            auto range = handlers_.equal_range(type_id);
+            for (auto it = range.first; it != range.second; ++it) {
+                try {
+                    // Cast and invoke the handler
+                    auto handler = std::any_cast<std::function<void(const EventType&)>>(it->second.handler);
+                    handler(evt);
+                } catch (...) {
+                    // Ignore handler errors
+                }
+            }
         }
 
         // For generic event (overload for type deduction)
-        void publish(event&&, event_priority = event_priority::normal) {
-            // No-op - thread-safe as it performs no operations
+        void publish(event&& evt, event_priority = event_priority::normal) {
+            std::lock_guard<std::mutex> lock(mutex_);
+
+            auto type_id = std::type_index(typeid(event));
+            auto range = handlers_.equal_range(type_id);
+            for (auto it = range.first; it != range.second; ++it) {
+                try {
+                    auto handler = std::any_cast<std::function<void(const event&)>>(it->second.handler);
+                    handler(evt);
+                } catch (...) {
+                    // Ignore handler errors
+                }
+            }
         }
 
         template<typename EventType, typename HandlerFunc>
-        uint64_t subscribe(HandlerFunc&&) {
-            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        uint64_t subscribe(HandlerFunc&& func) {
+            std::lock_guard<std::mutex> lock(mutex_);
+
+            auto id = next_id_++;
+            auto type_id = std::type_index(typeid(EventType));
+
+            subscription_info info;
+            info.id = id;
+            info.handler = std::function<void(const EventType&)>(std::forward<HandlerFunc>(func));
+
+            handlers_.emplace(type_id, std::move(info));
+
+            return id;
         }
 
-        // Non-template overload for generic event (enables type deduction)
-        uint64_t subscribe(std::function<void(const event&)>&&) {
-            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        // Non-template overload for generic event
+        uint64_t subscribe(std::function<void(const event&)>&& func) {
+            std::lock_guard<std::mutex> lock(mutex_);
+
+            auto id = next_id_++;
+            auto type_id = std::type_index(typeid(event));
+
+            subscription_info info;
+            info.id = id;
+            info.handler = std::move(func);
+
+            handlers_.emplace(type_id, std::move(info));
+
+            return id;
         }
 
         template<typename EventType, typename HandlerFunc, typename FilterFunc>
-        uint64_t subscribe_filtered(HandlerFunc&&, FilterFunc&&) {
-            return 0; // Dummy subscription ID - thread-safe as it's stateless
+        uint64_t subscribe_filtered(HandlerFunc&& func, FilterFunc&& filter) {
+            // For simplicity, ignore filtering in this lightweight implementation
+            return subscribe<EventType>(std::forward<HandlerFunc>(func));
         }
 
         // Non-template overload for generic event filtering
         uint64_t subscribe_filtered(
-            std::function<void(const event&)>&&,
+            std::function<void(const event&)>&& func,
             std::function<bool(const event&)>&&) {
-            return 0; // Dummy subscription ID - thread-safe as it's stateless
+            return subscribe(std::move(func));
         }
 
-        void unsubscribe(uint64_t) {
-            // No-op - thread-safe as it performs no operations
+        void unsubscribe(uint64_t id) {
+            std::lock_guard<std::mutex> lock(mutex_);
+
+            // Find and remove the handler with this ID
+            for (auto it = handlers_.begin(); it != handlers_.end(); ) {
+                if (it->second.id == id) {
+                    it = handlers_.erase(it);
+                } else {
+                    ++it;
+                }
+            }
         }
 
-        void start() {}
-        void stop() {}
-        bool is_running() const { return false; }
+        void start() { running_ = true; }
+        void stop() { running_ = false; }
+        bool is_running() const { return running_; }
 
         /**
          * @brief Get the singleton instance (thread-safe via C++11 magic statics)
          * @return Reference to the singleton instance
          */
-        static null_event_bus& instance() {
-            static null_event_bus instance;
+        static simple_event_bus& instance() {
+            static simple_event_bus instance;
             return instance;
         }
+
+    private:
+        struct subscription_info {
+            uint64_t id;
+            std::any handler;
+        };
+
+        mutable std::mutex mutex_;
+        std::unordered_multimap<std::type_index, subscription_info> handlers_;
+        std::atomic<uint64_t> next_id_{1};
+        std::atomic<bool> running_{true};
     };
 
-    using event_bus = null_event_bus;
+    using event_bus = simple_event_bus;
 
     template<typename T>
     using event_handler = std::function<void(const T&)>;
 
     /**
-     * @brief Access the (no-op) global event bus instance.
+     * @brief Access the global event bus instance.
      * @return Reference to the singleton event bus
      */
-    inline null_event_bus& get_event_bus() {
-        return null_event_bus::instance();
+    inline simple_event_bus& get_event_bus() {
+        return simple_event_bus::instance();
     }
 }
 
