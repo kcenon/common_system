@@ -11,8 +11,7 @@
  * without creating hard dependencies between modules.
  */
 
-#ifndef COMMON_INTERFACES_EXECUTOR_INTERFACE_H
-#define COMMON_INTERFACES_EXECUTOR_INTERFACE_H
+#pragma once
 
 #include <chrono>
 #include <functional>
@@ -174,5 +173,3 @@ public:
 
 } // namespace interfaces
 } // namespace common
-
-#endif // COMMON_INTERFACES_EXECUTOR_INTERFACE_H
