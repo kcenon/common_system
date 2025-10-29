@@ -245,8 +245,8 @@ TEST_F(ResultPerformanceTest, MoveVsCopyPerformance) {
     move_latencies.reserve(iterations);
 
     for (int i = 0; i < iterations; ++i) {
+        LargeData source;
         auto latency = measure_execution_time([&]() {
-            LargeData source;
             auto result = Result<LargeData>::ok(std::move(source));
             (void)result;
         });
