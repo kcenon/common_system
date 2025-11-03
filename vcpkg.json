@@ -14,10 +14,6 @@
     {
       "name": "benchmark",
       "$comment": "Google Benchmark for performance testing"
-    },
-    {
-      "name": "fmt",
-      "$comment": "Modern formatting library"
     }
   ],
   "features": {
@@ -38,5 +34,7 @@
       "dependencies": []
     }
   },
-  "default-features": ["tests"]
+  "default-features": ["tests"],
+  "builtin-baseline": "C++20 standard library (std::format)",
+  "$comment": "This project requires C++20 or later for std::format support"
 }
