@@ -28,7 +28,7 @@
 #include <typeinfo>
 #include <system_error>
 #include <source_location>
-#include <format>
+#include <sstream>
 
 namespace common {
 
@@ -180,24 +180,16 @@ public:
     ) const {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
-            std::string msg = std::format(
-                "Called unwrap on error: {}\n"
-                "  Error code: {}\n"
-                "  Module: {}\n"
-                "  Location: {}:{}:{}\n"
-                "  Function: {}",
-                err.message,
-                err.code,
-                err.module.empty() ? "unknown" : err.module,
-                loc.file_name(),
-                loc.line(),
-                loc.column(),
-                loc.function_name()
-            );
+            std::ostringstream oss;
+            oss << "Called unwrap on error: " << err.message << "\n"
+                << "  Error code: " << err.code << "\n"
+                << "  Module: " << (err.module.empty() ? "unknown" : err.module) << "\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
             if (err.details.has_value()) {
-                msg += std::format("\n  Details: {}", err.details.value());
+                oss << "\n  Details: " << err.details.value();
             }
-            throw std::runtime_error(msg);
+            throw std::runtime_error(oss.str());
         }
         return std::get<T>(value_);
     }
@@ -212,24 +204,16 @@ public:
     ) {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
-            std::string msg = std::format(
-                "Called unwrap on error: {}\n"
-                "  Error code: {}\n"
-                "  Module: {}\n"
-                "  Location: {}:{}:{}\n"
-                "  Function: {}",
-                err.message,
-                err.code,
-                err.module.empty() ? "unknown" : err.module,
-                loc.file_name(),
-                loc.line(),
-                loc.column(),
-                loc.function_name()
-            );
+            std::ostringstream oss;
+            oss << "Called unwrap on error: " << err.message << "\n"
+                << "  Error code: " << err.code << "\n"
+                << "  Module: " << (err.module.empty() ? "unknown" : err.module) << "\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
             if (err.details.has_value()) {
-                msg += std::format("\n  Details: {}", err.details.value());
+                oss << "\n  Details: " << err.details.value();
             }
-            throw std::runtime_error(msg);
+            throw std::runtime_error(oss.str());
         }
         return std::get<T>(value_);
     }
@@ -354,16 +338,11 @@ public:
         std::source_location loc = std::source_location::current()
     ) const {
         if (!has_value()) {
-            std::string msg = std::format(
-                "Called unwrap on None\n"
-                "  Location: {}:{}:{}\n"
-                "  Function: {}",
-                loc.file_name(),
-                loc.line(),
-                loc.column(),
-                loc.function_name()
-            );
-            throw std::runtime_error(msg);
+            std::ostringstream oss;
+            oss << "Called unwrap on None\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            throw std::runtime_error(oss.str());
         }
         return value_.value();
     }
