@@ -90,12 +90,11 @@ namespace common {
 // Provide a simple implementation when monitoring is disabled
 #include <functional>
 #include <memory>
-#include <any>
 #include <mutex>
 #include <atomic>
 #include <unordered_map>
-#include <typeindex>
 #include <algorithm>
+#include <vector>
 
 namespace common {
 
@@ -129,11 +128,32 @@ namespace common {
     };
 
     /**
+     * @brief Global counter for generating unique type IDs
+     */
+    inline std::atomic<size_t>& get_type_id_counter() {
+        static std::atomic<size_t> counter{0};
+        return counter;
+    }
+
+    /**
+     * @brief Generate unique type ID for each event type without RTTI
+     */
+    template<typename T>
+    struct event_type_id {
+        static size_t id() {
+            static const size_t type_id = ++get_type_id_counter();
+            return type_id;
+        }
+    };
+
+    /**
      * @class simple_event_bus
      * @brief Simple synchronous event bus for testing when monitoring is disabled.
      *
      * Thread-safety: This class is thread-safe using a mutex to protect
      * subscription management and event dispatch.
+     *
+     * Note: This implementation avoids RTTI by using template-based type IDs.
      */
     class simple_event_bus {
     public:
@@ -141,16 +161,18 @@ namespace common {
         void publish(const EventType& evt, event_priority = event_priority::normal) {
             std::lock_guard<std::mutex> lock(mutex_);
 
-            // Get type identifier
-            auto type_id = std::type_index(typeid(EventType));
+            // Get type identifier without RTTI
+            auto type_id = event_type_id<EventType>::id();
 
             // Find and call all handlers for this event type
             auto range = handlers_.equal_range(type_id);
             for (auto it = range.first; it != range.second; ++it) {
                 try {
-                    // Cast and invoke the handler
-                    auto handler = std::any_cast<std::function<void(const EventType&)>>(it->second.handler);
-                    handler(evt);
+                    // Invoke the handler
+                    auto& handler_wrapper = it->second.handler;
+                    if (handler_wrapper) {
+                        handler_wrapper(static_cast<const void*>(&evt));
+                    }
                 } catch (...) {
                     // Ignore handler errors
                 }
@@ -161,12 +183,14 @@ namespace common {
         void publish(event&& evt, event_priority = event_priority::normal) {
             std::lock_guard<std::mutex> lock(mutex_);
 
-            auto type_id = std::type_index(typeid(event));
+            auto type_id = event_type_id<event>::id();
             auto range = handlers_.equal_range(type_id);
             for (auto it = range.first; it != range.second; ++it) {
                 try {
-                    auto handler = std::any_cast<std::function<void(const event&)>>(it->second.handler);
-                    handler(evt);
+                    auto& handler_wrapper = it->second.handler;
+                    if (handler_wrapper) {
+                        handler_wrapper(static_cast<const void*>(&evt));
+                    }
                 } catch (...) {
                     // Ignore handler errors
                 }
@@ -178,11 +202,15 @@ namespace common {
             std::lock_guard<std::mutex> lock(mutex_);
 
             auto id = next_id_++;
-            auto type_id = std::type_index(typeid(EventType));
+            auto type_id = event_type_id<EventType>::id();
 
             subscription_info info;
             info.id = id;
-            info.handler = std::function<void(const EventType&)>(std::forward<HandlerFunc>(func));
+            // Wrap the handler in a type-erased function
+            info.handler = [f = std::function<void(const EventType&)>(std::forward<HandlerFunc>(func))]
+                          (const void* evt_ptr) {
+                f(*static_cast<const EventType*>(evt_ptr));
+            };
 
             handlers_.emplace(type_id, std::move(info));
 
@@ -194,11 +222,13 @@ namespace common {
             std::lock_guard<std::mutex> lock(mutex_);
 
             auto id = next_id_++;
-            auto type_id = std::type_index(typeid(event));
+            auto type_id = event_type_id<event>::id();
 
             subscription_info info;
             info.id = id;
-            info.handler = std::move(func);
+            info.handler = [f = std::move(func)](const void* evt_ptr) {
+                f(*static_cast<const event*>(evt_ptr));
+            };
 
             handlers_.emplace(type_id, std::move(info));
 
@@ -247,11 +277,11 @@ namespace common {
     private:
         struct subscription_info {
             uint64_t id;
-            std::any handler;
+            std::function<void(const void*)> handler;
         };
 
         mutable std::mutex mutex_;
-        std::unordered_multimap<std::type_index, subscription_info> handlers_;
+        std::unordered_multimap<size_t, subscription_info> handlers_;
         std::atomic<uint64_t> next_id_{1};
         std::atomic<bool> running_{true};
     };

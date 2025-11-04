@@ -7,16 +7,42 @@
 
 #include <memory>
 #include <stdexcept>
-#include <typeinfo>
 #include <string>
+#include <atomic>
 
 namespace common::adapters {
+
+/**
+ * @brief Base class for adapter interface to eliminate RTTI dependency
+ */
+class adapter_base {
+public:
+    virtual ~adapter_base() = default;
+
+    /**
+     * @brief Get the wrapper depth for this adapter
+     * @return Number of adapter layers (0 for direct implementation)
+     */
+    virtual size_t get_adapter_depth() const = 0;
+
+    /**
+     * @brief Check if this is an adapter (always true for adapter_base)
+     * @return true
+     */
+    virtual bool is_adapter() const { return true; }
+
+    /**
+     * @brief Get unique type ID for this adapter type
+     * @return Type ID
+     */
+    virtual size_t get_type_id() const = 0;
+};
 
 /**
  * @brief Base adapter class with type safety and depth tracking
  *
  * This template provides:
- * - Type identification via RTTI
+ * - Type identification via type ID system (no RTTI)
  * - Wrapper depth tracking to prevent infinite chains
  * - Unwrap functionality to access underlying implementation
  * - Maximum depth limit (default: 2) to prevent performance issues
@@ -25,7 +51,7 @@ namespace common::adapters {
  * @tparam Implementation The concrete implementation being wrapped
  */
 template<typename Interface, typename Implementation>
-class typed_adapter : public Interface {
+class typed_adapter : public Interface, public adapter_base {
 public:
     /**
      * @brief Construct adapter with existing implementation
@@ -68,11 +94,19 @@ public:
     }
 
     /**
+     * @brief Get the adapter depth (implements adapter_base)
+     * @return Wrapper depth
+     */
+    size_t get_adapter_depth() const override {
+        return wrapper_depth_;
+    }
+
+    /**
      * @brief Get type name for debugging
      * @return Type name string
      */
     static std::string adapter_type_name() {
-        return typeid(typed_adapter<Interface, Implementation>).name();
+        return "typed_adapter<Interface, Implementation>";
     }
 
     /**
@@ -83,12 +117,38 @@ public:
         return max_wrapper_depth_;
     }
 
+    /**
+     * @brief Get unique type ID for this adapter type
+     * @return Type ID
+     */
+    size_t get_type_id() const override {
+        return get_static_type_id();
+    }
+
+    /**
+     * @brief Get static type ID for this adapter type
+     * @return Type ID
+     */
+    static size_t get_static_type_id() {
+        static const size_t id = generate_type_id();
+        return id;
+    }
+
 protected:
     std::shared_ptr<Implementation> impl_;
 
 private:
     size_t wrapper_depth_;
     static constexpr size_t max_wrapper_depth_ = 2;
+
+    /**
+     * @brief Generate a unique type ID
+     * @return Unique ID
+     */
+    static size_t generate_type_id() {
+        static std::atomic<size_t> counter{0};
+        return ++counter;
+    }
 
     /**
      * @brief Calculate the depth of adapter wrapping
@@ -100,10 +160,9 @@ private:
             return 0;
         }
 
-        // Try to cast to typed_adapter to detect wrapping
-        // This works if Implementation itself is a typed_adapter
-        if (auto* adapter = dynamic_cast<typed_adapter*>(impl.get())) {
-            return 1 + adapter->wrapper_depth_;
+        // Check if implementation inherits from adapter_base
+        if (auto* base_adapter = dynamic_cast<adapter_base*>(impl.get())) {
+            return 1 + base_adapter->get_adapter_depth();
         }
 
         return 0;
@@ -123,8 +182,9 @@ std::shared_ptr<T> safe_unwrap(std::shared_ptr<Interface> ptr) {
         return nullptr;
     }
 
-    // Try to cast to typed_adapter
-    if (auto* adapter = dynamic_cast<typed_adapter<Interface, T>*>(ptr.get())) {
+    // Check if ptr is a typed_adapter by checking type ID
+    auto* adapter = dynamic_cast<typed_adapter<Interface, T>*>(ptr.get());
+    if (adapter) {
         return adapter->unwrap();
     }
 
@@ -144,9 +204,9 @@ bool is_adapter(std::shared_ptr<Interface> ptr) {
         return false;
     }
 
-    // Check if it can be cast to any typed_adapter
-    return dynamic_cast<void*>(ptr.get()) != nullptr &&
-           std::string(typeid(*ptr).name()).find("typed_adapter") != std::string::npos;
+    // Check if it inherits from adapter_base
+    auto* base = dynamic_cast<adapter_base*>(ptr.get());
+    return base != nullptr && base->is_adapter();
 }
 
 } // namespace common::adapters
