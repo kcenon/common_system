@@ -27,6 +27,21 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <system_error>
+#include <sstream>
+
+// Check for source_location support
+#if defined(__has_include)
+#  if __has_include(<source_location>)
+#    include <source_location>
+#    if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907L
+#      define COMMON_HAS_SOURCE_LOCATION 1
+#    endif
+#  endif
+#endif
+
+#ifndef COMMON_HAS_SOURCE_LOCATION
+#  define COMMON_HAS_SOURCE_LOCATION 0
+#endif
 
 namespace common {
 
@@ -170,8 +185,29 @@ public:
 
     /**
      * @brief Get value from result (throws if error)
-     * @throws std::runtime_error if result contains error
+     * @param loc Source location of the unwrap() call (automatically captured, if supported)
+     * @throws std::runtime_error if result contains error with detailed location info
      */
+#if COMMON_HAS_SOURCE_LOCATION
+    const T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) const {
+        if (is_err()) {
+            const auto& err = std::get<error_info>(value_);
+            std::ostringstream oss;
+            oss << "Called unwrap on error: " << err.message << "\n"
+                << "  Error code: " << err.code << "\n"
+                << "  Module: " << (err.module.empty() ? "unknown" : err.module) << "\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            if (err.details.has_value()) {
+                oss << "\n  Details: " << err.details.value();
+            }
+            throw std::runtime_error(oss.str());
+        }
+        return std::get<T>(value_);
+    }
+#else
     const T& unwrap() const {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
@@ -179,11 +215,33 @@ public:
         }
         return std::get<T>(value_);
     }
+#endif
 
     /**
      * @brief Get mutable value from result (throws if error)
-     * @throws std::runtime_error if result contains error
+     * @param loc Source location of the unwrap() call (automatically captured, if supported)
+     * @throws std::runtime_error if result contains error with detailed location info
      */
+#if COMMON_HAS_SOURCE_LOCATION
+    T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) {
+        if (is_err()) {
+            const auto& err = std::get<error_info>(value_);
+            std::ostringstream oss;
+            oss << "Called unwrap on error: " << err.message << "\n"
+                << "  Error code: " << err.code << "\n"
+                << "  Module: " << (err.module.empty() ? "unknown" : err.module) << "\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            if (err.details.has_value()) {
+                oss << "\n  Details: " << err.details.value();
+            }
+            throw std::runtime_error(oss.str());
+        }
+        return std::get<T>(value_);
+    }
+#else
     T& unwrap() {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
@@ -191,6 +249,7 @@ public:
         }
         return std::get<T>(value_);
     }
+#endif
 
     /**
      * @brief Get value or return default
@@ -303,12 +362,32 @@ public:
     const T& value() const { return value_.value(); }
     T& value() { return value_.value(); }
 
+    /**
+     * @brief Get value from optional (throws if None)
+     * @param loc Source location of the unwrap() call (automatically captured, if supported)
+     * @throws std::runtime_error if optional is None with detailed location info
+     */
+#if COMMON_HAS_SOURCE_LOCATION
+    const T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) const {
+        if (!has_value()) {
+            std::ostringstream oss;
+            oss << "Called unwrap on None\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            throw std::runtime_error(oss.str());
+        }
+        return value_.value();
+    }
+#else
     const T& unwrap() const {
         if (!has_value()) {
             throw std::runtime_error("Called unwrap on None");
         }
         return value_.value();
     }
+#endif
 
     T unwrap_or(T default_value) const {
         return value_.value_or(default_value);
