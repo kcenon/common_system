@@ -27,6 +27,8 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <system_error>
+#include <source_location>
+#include <format>
 
 namespace common {
 
@@ -170,24 +172,64 @@ public:
 
     /**
      * @brief Get value from result (throws if error)
-     * @throws std::runtime_error if result contains error
+     * @param loc Source location of the unwrap() call (automatically captured)
+     * @throws std::runtime_error if result contains error with detailed location info
      */
-    const T& unwrap() const {
+    const T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) const {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
-            throw std::runtime_error("Called unwrap on error: " + err.message);
+            std::string msg = std::format(
+                "Called unwrap on error: {}\n"
+                "  Error code: {}\n"
+                "  Module: {}\n"
+                "  Location: {}:{}:{}\n"
+                "  Function: {}",
+                err.message,
+                err.code,
+                err.module.empty() ? "unknown" : err.module,
+                loc.file_name(),
+                loc.line(),
+                loc.column(),
+                loc.function_name()
+            );
+            if (err.details.has_value()) {
+                msg += std::format("\n  Details: {}", err.details.value());
+            }
+            throw std::runtime_error(msg);
         }
         return std::get<T>(value_);
     }
 
     /**
      * @brief Get mutable value from result (throws if error)
-     * @throws std::runtime_error if result contains error
+     * @param loc Source location of the unwrap() call (automatically captured)
+     * @throws std::runtime_error if result contains error with detailed location info
      */
-    T& unwrap() {
+    T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) {
         if (is_err()) {
             const auto& err = std::get<error_info>(value_);
-            throw std::runtime_error("Called unwrap on error: " + err.message);
+            std::string msg = std::format(
+                "Called unwrap on error: {}\n"
+                "  Error code: {}\n"
+                "  Module: {}\n"
+                "  Location: {}:{}:{}\n"
+                "  Function: {}",
+                err.message,
+                err.code,
+                err.module.empty() ? "unknown" : err.module,
+                loc.file_name(),
+                loc.line(),
+                loc.column(),
+                loc.function_name()
+            );
+            if (err.details.has_value()) {
+                msg += std::format("\n  Details: {}", err.details.value());
+            }
+            throw std::runtime_error(msg);
         }
         return std::get<T>(value_);
     }
@@ -303,9 +345,25 @@ public:
     const T& value() const { return value_.value(); }
     T& value() { return value_.value(); }
 
-    const T& unwrap() const {
+    /**
+     * @brief Get value from optional (throws if None)
+     * @param loc Source location of the unwrap() call (automatically captured)
+     * @throws std::runtime_error if optional is None with detailed location info
+     */
+    const T& unwrap(
+        std::source_location loc = std::source_location::current()
+    ) const {
         if (!has_value()) {
-            throw std::runtime_error("Called unwrap on None");
+            std::string msg = std::format(
+                "Called unwrap on None\n"
+                "  Location: {}:{}:{}\n"
+                "  Function: {}",
+                loc.file_name(),
+                loc.line(),
+                loc.column(),
+                loc.function_name()
+            );
+            throw std::runtime_error(msg);
         }
         return value_.value();
     }
