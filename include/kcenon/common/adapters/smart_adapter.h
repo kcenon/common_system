@@ -75,7 +75,7 @@ public:
      * @brief Try to unwrap an interface to get underlying implementation
      *
      * If the interface is a typed_adapter, unwraps it.
-     * Otherwise, tries to dynamic_cast to the requested type.
+     * Otherwise, returns nullptr (strict type safety without RTTI).
      *
      * @tparam T The expected underlying type
      * @tparam Interface The interface type
@@ -88,13 +88,14 @@ public:
             return nullptr;
         }
 
-        // First, try safe_unwrap (for typed_adapter)
+        // Try safe_unwrap (for typed_adapter)
         if (auto unwrapped = safe_unwrap<T>(ptr)) {
             return unwrapped;
         }
 
-        // If not an adapter, try dynamic_cast
-        return std::dynamic_pointer_cast<T>(ptr);
+        // Not an adapter - return nullptr for strict type safety
+        // (removed dynamic_pointer_cast to eliminate RTTI dependency)
+        return nullptr;
     }
 
     /**
