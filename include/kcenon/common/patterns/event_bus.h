@@ -168,6 +168,12 @@ namespace common {
             auto range = handlers_.equal_range(type_id);
             for (auto it = range.first; it != range.second; ++it) {
                 try {
+                    // Type safety check: verify expected type matches
+                    if (it->second.expected_type_id != type_id) {
+                        // Skip handler with mismatched type
+                        continue;
+                    }
+
                     // Invoke the handler
                     auto& handler_wrapper = it->second.handler;
                     if (handler_wrapper) {
@@ -187,6 +193,12 @@ namespace common {
             auto range = handlers_.equal_range(type_id);
             for (auto it = range.first; it != range.second; ++it) {
                 try {
+                    // Type safety check: verify expected type matches
+                    if (it->second.expected_type_id != type_id) {
+                        // Skip handler with mismatched type
+                        continue;
+                    }
+
                     auto& handler_wrapper = it->second.handler;
                     if (handler_wrapper) {
                         handler_wrapper(static_cast<const void*>(&evt));
@@ -206,6 +218,7 @@ namespace common {
 
             subscription_info info;
             info.id = id;
+            info.expected_type_id = type_id;  // Store expected type ID for validation
             // Wrap the handler in a type-erased function
             info.handler = [f = std::function<void(const EventType&)>(std::forward<HandlerFunc>(func))]
                           (const void* evt_ptr) {
@@ -226,6 +239,7 @@ namespace common {
 
             subscription_info info;
             info.id = id;
+            info.expected_type_id = type_id;  // Store expected type ID for validation
             info.handler = [f = std::move(func)](const void* evt_ptr) {
                 f(*static_cast<const event*>(evt_ptr));
             };
@@ -277,6 +291,7 @@ namespace common {
     private:
         struct subscription_info {
             uint64_t id;
+            size_t expected_type_id;  // Type safety: store expected type ID
             std::function<void(const void*)> handler;
         };
 
