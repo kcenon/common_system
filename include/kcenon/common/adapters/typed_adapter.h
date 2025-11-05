@@ -160,8 +160,10 @@ private:
             return 0;
         }
 
-        // Check if implementation inherits from adapter_base
-        if (auto* base_adapter = dynamic_cast<adapter_base*>(impl.get())) {
+        // Check if implementation inherits from adapter_base using compile-time check
+        if constexpr (std::is_base_of_v<adapter_base, Implementation>) {
+            // Safe static_cast (no RTTI needed)
+            auto* base_adapter = static_cast<adapter_base*>(impl.get());
             return 1 + base_adapter->get_adapter_depth();
         }
 
@@ -182,10 +184,17 @@ std::shared_ptr<T> safe_unwrap(std::shared_ptr<Interface> ptr) {
         return nullptr;
     }
 
-    // Check if ptr is a typed_adapter by checking type ID
-    auto* adapter = dynamic_cast<typed_adapter<Interface, T>*>(ptr.get());
-    if (adapter) {
-        return adapter->unwrap();
+    // Check if Interface is derived from adapter_base using compile-time check
+    if constexpr (std::is_base_of_v<adapter_base, Interface>) {
+        // Safe static_cast to adapter_base
+        auto* base = static_cast<adapter_base*>(ptr.get());
+
+        // Check if this is the correct adapter type by comparing type IDs
+        if (base->get_type_id() == typed_adapter<Interface, T>::get_static_type_id()) {
+            // Safe static_cast to typed_adapter
+            auto* adapter = static_cast<typed_adapter<Interface, T>*>(ptr.get());
+            return adapter->unwrap();
+        }
     }
 
     // Not an adapter or wrong type
@@ -204,9 +213,15 @@ bool is_adapter(std::shared_ptr<Interface> ptr) {
         return false;
     }
 
-    // Check if it inherits from adapter_base
-    auto* base = dynamic_cast<adapter_base*>(ptr.get());
-    return base != nullptr && base->is_adapter();
+    // Compile-time check if Interface inherits from adapter_base
+    if constexpr (std::is_base_of_v<adapter_base, Interface>) {
+        // Safe static_cast (no RTTI needed)
+        auto* base = static_cast<adapter_base*>(ptr.get());
+        return base->is_adapter();
+    }
+
+    // Not derived from adapter_base, so not an adapter
+    return false;
 }
 
 } // namespace common::adapters
