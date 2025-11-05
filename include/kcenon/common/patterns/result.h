@@ -780,10 +780,10 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  * @brief Return early if expression is an error
  *
  * Usage:
- *   RETURN_IF_ERROR(some_operation());
+ *   COMMON_RETURN_IF_ERROR(some_operation());
  *   // Continue only if successful
  */
-#define RETURN_IF_ERROR(expr) \
+#define COMMON_RETURN_IF_ERROR(expr) \
     do { \
         auto _result_temp = (expr); \
         if (common::is_error(_result_temp)) { \
@@ -795,10 +795,10 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  * @brief Assign value or return error
  *
  * Usage:
- *   ASSIGN_OR_RETURN(auto value, get_value());
+ *   COMMON_ASSIGN_OR_RETURN(auto value, get_value());
  *   // Use 'value' here
  */
-#define ASSIGN_OR_RETURN(decl, expr) \
+#define COMMON_ASSIGN_OR_RETURN(decl, expr) \
     auto _result_##decl = (expr); \
     if (common::is_error(_result_##decl)) { \
         return common::get_error(_result_##decl); \
@@ -809,9 +809,9 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  * @brief Return error if condition is false
  *
  * Usage:
- *   RETURN_ERROR_IF(!ptr, error_codes::INVALID_ARGUMENT, "Null pointer", "MyModule");
+ *   COMMON_RETURN_ERROR_IF(!ptr, error_codes::INVALID_ARGUMENT, "Null pointer", "MyModule");
  */
-#define RETURN_ERROR_IF(condition, code, message, module) \
+#define COMMON_RETURN_ERROR_IF(condition, code, message, module) \
     do { \
         if (condition) { \
             return common::error_info{code, message, module}; \
@@ -822,11 +822,19 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  * @brief Return error with details if condition is false
  *
  * Usage:
- *   RETURN_ERROR_IF_WITH_DETAILS(!valid, -1, "Invalid", "Module", "Details");
+ *   COMMON_RETURN_ERROR_IF_WITH_DETAILS(!valid, -1, "Invalid", "Module", "Details");
  */
-#define RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) \
+#define COMMON_RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) \
     do { \
         if (condition) { \
             return common::error_info{code, message, module, details}; \
         } \
     } while(false)
+
+// Backward compatibility - deprecated, will be removed in future versions
+#ifndef COMMON_DISABLE_LEGACY_MACROS
+#define RETURN_IF_ERROR(expr) COMMON_RETURN_IF_ERROR(expr)
+#define ASSIGN_OR_RETURN(decl, expr) COMMON_ASSIGN_OR_RETURN(decl, expr)
+#define RETURN_ERROR_IF(condition, code, message, module) COMMON_RETURN_ERROR_IF(condition, code, message, module)
+#define RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) COMMON_RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details)
+#endif // COMMON_DISABLE_LEGACY_MACROS
