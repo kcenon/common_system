@@ -92,11 +92,29 @@ template<typename T> class Result;
 template<typename T> class Optional;
 
 /**
+ * @brief Result state enum for tracking initialization
+ */
+enum class result_state {
+    uninitialized,  // Result has not been initialized with a value or error
+    ok,             // Result contains a valid value
+    error           // Result contains an error
+};
+
+/**
  * @class Result
  * @brief Result type for error handling with member function support
  *
- * A Result<T> can contain either a value of type T or an error_info.
+ * A Result<T> can be in one of three states:
+ * 1. Uninitialized - Default constructed, no value or error yet
+ * 2. Ok - Contains a valid value of type T
+ * 3. Error - Contains an error_info describing the failure
+ *
  * This provides a type-safe way to handle errors without exceptions.
+ *
+ * IMPORTANT: Default-constructed Results are in an uninitialized state.
+ * Accessing value() or error() on an uninitialized Result will throw.
+ * Always check is_ok() or is_err() before accessing, or use factory methods
+ * like Result<T>::ok() and Result<T>::err() to construct Results explicitly.
  *
  * Thread Safety Note:
  * - Based on std::variant, which is NOT thread-safe for concurrent access.
@@ -107,17 +125,20 @@ template<typename T> class Optional;
 template<typename T>
 class Result {
 private:
-    std::variant<T, error_info> value_;
+    // Use std::optional<T> for value, which naturally supports uninitialized state
+    // Store error separately to avoid variant issues
+    std::optional<T> value_;
+    std::optional<error_info> error_;
 
 public:
     // Constructors
-    // Default constructor creates an error state
-    Result() : value_(error_info{-6, "Uninitialized result", ""}) {}
+    // Default constructor creates an uninitialized state
+    Result() : value_(std::nullopt), error_(std::nullopt) {}
 
-    Result(const T& value) : value_(value) {}
-    Result(T&& value) : value_(std::move(value)) {}
-    Result(const error_info& error) : value_(error) {}
-    Result(error_info&& error) : value_(std::move(error)) {}
+    Result(const T& value) : value_(value), error_(std::nullopt) {}
+    Result(T&& value) : value_(std::move(value)), error_(std::nullopt) {}
+    Result(const error_info& error) : value_(std::nullopt), error_(error) {}
+    Result(error_info&& error) : value_(std::nullopt), error_(std::move(error)) {}
 
     // Copy and move
     Result(const Result&) = default;
@@ -169,30 +190,44 @@ public:
     }
 
     /**
+     * @brief Check if result is in uninitialized state
+     */
+    bool is_uninitialized() const {
+        return !value_.has_value() && !error_.has_value();
+    }
+
+    /**
      * @brief Check if result contains a successful value
      */
     bool is_ok() const {
-        return std::holds_alternative<T>(value_);
+        return value_.has_value();
     }
 
     /**
      * @brief Check if result contains an error
      */
     bool is_err() const {
-        return std::holds_alternative<error_info>(value_);
+        return error_.has_value();
     }
 
     /**
-     * @brief Get value from result (throws if error)
+     * @brief Get value from result (throws if error or uninitialized)
      * @param loc Source location of the unwrap() call (automatically captured, if supported)
-     * @throws std::runtime_error if result contains error with detailed location info
+     * @throws std::runtime_error if result contains error or is uninitialized
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(
         std::source_location loc = std::source_location::current()
     ) const {
+        if (is_uninitialized()) {
+            std::ostringstream oss;
+            oss << "Called unwrap on uninitialized Result\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            throw std::runtime_error(oss.str());
+        }
         if (is_err()) {
-            const auto& err = std::get<error_info>(value_);
+            const auto& err = error_.value();
             std::ostringstream oss;
             oss << "Called unwrap on error: " << err.message << "\n"
                 << "  Error code: " << err.code << "\n"
@@ -204,29 +239,39 @@ public:
             }
             throw std::runtime_error(oss.str());
         }
-        return std::get<T>(value_);
+        return value_.value();
     }
 #else
     const T& unwrap() const {
+        if (is_uninitialized()) {
+            throw std::runtime_error("Called unwrap on uninitialized Result");
+        }
         if (is_err()) {
-            const auto& err = std::get<error_info>(value_);
+            const auto& err = error_.value();
             throw std::runtime_error("Called unwrap on error: " + err.message);
         }
-        return std::get<T>(value_);
+        return value_.value();
     }
 #endif
 
     /**
-     * @brief Get mutable value from result (throws if error)
+     * @brief Get mutable value from result (throws if error or uninitialized)
      * @param loc Source location of the unwrap() call (automatically captured, if supported)
-     * @throws std::runtime_error if result contains error with detailed location info
+     * @throws std::runtime_error if result contains error or is uninitialized
      */
 #if COMMON_HAS_SOURCE_LOCATION
     T& unwrap(
         std::source_location loc = std::source_location::current()
     ) {
+        if (is_uninitialized()) {
+            std::ostringstream oss;
+            oss << "Called unwrap on uninitialized Result\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            throw std::runtime_error(oss.str());
+        }
         if (is_err()) {
-            const auto& err = std::get<error_info>(value_);
+            const auto& err = error_.value();
             std::ostringstream oss;
             oss << "Called unwrap on error: " << err.message << "\n"
                 << "  Error code: " << err.code << "\n"
@@ -238,15 +283,18 @@ public:
             }
             throw std::runtime_error(oss.str());
         }
-        return std::get<T>(value_);
+        return value_.value();
     }
 #else
     T& unwrap() {
+        if (is_uninitialized()) {
+            throw std::runtime_error("Called unwrap on uninitialized Result");
+        }
         if (is_err()) {
-            const auto& err = std::get<error_info>(value_);
+            const auto& err = error_.value();
             throw std::runtime_error("Called unwrap on error: " + err.message);
         }
-        return std::get<T>(value_);
+        return value_.value();
     }
 #endif
 
@@ -255,7 +303,7 @@ public:
      */
     T unwrap_or(T default_value) const {
         if (is_ok()) {
-            return std::get<T>(value_);
+            return value_.value();
         }
         return default_value;
     }
@@ -273,21 +321,21 @@ public:
      * @brief Get value reference (const)
      */
     const T& value() const {
-        return std::get<T>(value_);
+        return value_.value();
     }
 
     /**
      * @brief Get value reference (mutable)
      */
     T& value() {
-        return std::get<T>(value_);
+        return value_.value();
     }
 
     /**
      * @brief Get error reference
      */
     const error_info& error() const {
-        return std::get<error_info>(value_);
+        return error_.value();
     }
 
     /**
@@ -298,9 +346,12 @@ public:
         using ReturnType = decltype(func(std::declval<T>()));
 
         if (is_ok()) {
-            return Result<ReturnType>(func(std::get<T>(value_)));
+            return Result<ReturnType>(func(value_.value()));
+        } else if (is_err()) {
+            return Result<ReturnType>(error_.value());
         } else {
-            return Result<ReturnType>(std::get<error_info>(value_));
+            // Uninitialized state
+            return Result<ReturnType>();
         }
     }
 
@@ -312,9 +363,12 @@ public:
         using ReturnType = decltype(func(std::declval<T>()));
 
         if (is_ok()) {
-            return func(std::get<T>(value_));
+            return func(value_.value());
+        } else if (is_err()) {
+            return ReturnType(error_.value());
         } else {
-            return ReturnType(std::get<error_info>(value_));
+            // Uninitialized state
+            return ReturnType();
         }
     }
 
@@ -325,13 +379,13 @@ public:
     Result<T> or_else(F&& func) const {
         if (is_ok()) {
             return *this;
+        } else if (is_err()) {
+            return func(error_.value());
         } else {
-            return func(std::get<error_info>(value_));
+            // Uninitialized state
+            return *this;
         }
     }
-
-    // For compatibility with variant-based APIs
-    const std::variant<T, error_info>& as_variant() const { return value_; }
 };
 
 /**

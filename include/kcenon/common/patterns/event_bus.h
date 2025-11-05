@@ -61,6 +61,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <kcenon/monitoring/core/event_bus.h>
 #include <kcenon/monitoring/interfaces/event_bus_interface.h>
 
+// ABI version checking for conditional compilation
+namespace common {
+namespace detail {
+    // Version identifier for ABI compatibility checking
+    // This ensures that object files compiled with different macro definitions
+    // cannot be linked together, preventing subtle runtime errors.
+    constexpr int event_bus_abi_version = 2;  // Monitoring integration enabled
+} // namespace detail
+} // namespace common
+
 // Convenience namespace alias
 namespace common {
     using event_bus = monitoring_system::event_bus;
@@ -97,6 +107,12 @@ namespace common {
 #include <vector>
 
 namespace common {
+namespace detail {
+    // Version identifier for ABI compatibility checking
+    // This ensures that object files compiled with different macro definitions
+    // cannot be linked together, preventing subtle runtime errors.
+    constexpr int event_bus_abi_version = 1;  // Monitoring integration disabled
+} // namespace detail
 
     enum class event_priority {
         low = 0,
@@ -137,6 +153,29 @@ namespace common {
 
     /**
      * @brief Generate unique type ID for each event type without RTTI
+     *
+     * WARNING: Type ID Consistency Limitation
+     * ========================================
+     * This implementation generates type IDs using a static counter that increments
+     * on first access for each template instantiation. This can lead to inconsistent
+     * type IDs across different translation units if the order of template instantiation
+     * differs between them.
+     *
+     * POTENTIAL ISSUE:
+     * - If EventTypeA is instantiated before EventTypeB in file1.cpp, but after EventTypeB
+     *   in file2.cpp, they will receive different type IDs in each translation unit.
+     * - This can cause events published in one translation unit to fail matching handlers
+     *   subscribed in another translation unit.
+     *
+     * MITIGATION:
+     * - Use explicit type registration at program startup in a deterministic order
+     * - Keep event type definitions in a single translation unit when possible
+     * - Consider using a hash-based type ID system (e.g., hash of type name string) as an
+     *   alternative for better consistency across translation units
+     *
+     * RECOMMENDATION:
+     * For production use, prefer enabling ENABLE_MONITORING_INTEGRATION which uses the
+     * full monitoring_system implementation with more robust type identification.
      */
     template<typename T>
     struct event_type_id {
@@ -157,6 +196,19 @@ namespace common {
      */
     class simple_event_bus {
     public:
+        /**
+         * @brief Type for error callback function
+         *
+         * This callback is invoked when an exception occurs in an event handler
+         * or when a type mismatch is detected. The callback receives:
+         * - error_message: Description of what went wrong
+         * - event_type_id: The type ID of the event being processed
+         * - handler_id: The subscription ID of the failing handler
+         */
+        using error_callback_t = std::function<void(const std::string& error_message,
+                                                     size_t event_type_id,
+                                                     uint64_t handler_id)>;
+
         template<typename EventType>
         void publish(const EventType& evt, event_priority = event_priority::normal) {
             std::lock_guard<std::mutex> lock(mutex_);
@@ -170,7 +222,11 @@ namespace common {
                 try {
                     // Type safety check: verify expected type matches
                     if (it->second.expected_type_id != type_id) {
-                        // Skip handler with mismatched type
+                        // Log type mismatch error
+                        if (error_callback_) {
+                            error_callback_("Type ID mismatch detected in event handler",
+                                          type_id, it->second.id);
+                        }
                         continue;
                     }
 
@@ -179,8 +235,21 @@ namespace common {
                     if (handler_wrapper) {
                         handler_wrapper(static_cast<const void*>(&evt));
                     }
+                } catch (const std::exception& e) {
+                    // Log the error and continue processing other handlers
+                    if (error_callback_) {
+                        std::string error_msg = "Exception in event handler: ";
+                        error_msg += e.what();
+                        error_callback_(error_msg, type_id, it->second.id);
+                    }
+                    // Continue processing other handlers
                 } catch (...) {
-                    // Ignore handler errors
+                    // Log unknown exception and continue processing other handlers
+                    if (error_callback_) {
+                        error_callback_("Unknown exception in event handler",
+                                      type_id, it->second.id);
+                    }
+                    // Continue processing other handlers
                 }
             }
         }
@@ -195,7 +264,11 @@ namespace common {
                 try {
                     // Type safety check: verify expected type matches
                     if (it->second.expected_type_id != type_id) {
-                        // Skip handler with mismatched type
+                        // Log type mismatch error
+                        if (error_callback_) {
+                            error_callback_("Type ID mismatch detected in event handler",
+                                          type_id, it->second.id);
+                        }
                         continue;
                     }
 
@@ -203,8 +276,21 @@ namespace common {
                     if (handler_wrapper) {
                         handler_wrapper(static_cast<const void*>(&evt));
                     }
+                } catch (const std::exception& e) {
+                    // Log the error and continue processing other handlers
+                    if (error_callback_) {
+                        std::string error_msg = "Exception in event handler: ";
+                        error_msg += e.what();
+                        error_callback_(error_msg, type_id, it->second.id);
+                    }
+                    // Continue processing other handlers
                 } catch (...) {
-                    // Ignore handler errors
+                    // Log unknown exception and continue processing other handlers
+                    if (error_callback_) {
+                        error_callback_("Unknown exception in event handler",
+                                      type_id, it->second.id);
+                    }
+                    // Continue processing other handlers
                 }
             }
         }
@@ -280,6 +366,40 @@ namespace common {
         bool is_running() const { return running_; }
 
         /**
+         * @brief Set the error callback for handler exceptions and type mismatches
+         *
+         * This callback will be invoked whenever:
+         * - An exception is thrown by an event handler
+         * - A type ID mismatch is detected (should never happen in correct usage)
+         *
+         * The error callback is useful for logging and debugging handler issues
+         * without stopping the processing of other handlers.
+         *
+         * @param callback The callback function to invoke on errors
+         *
+         * Example usage:
+         * @code
+         * auto& bus = simple_event_bus::instance();
+         * bus.set_error_callback([](const std::string& msg, size_t type_id, uint64_t handler_id) {
+         *     std::cerr << "Event bus error [type=" << type_id
+         *               << ", handler=" << handler_id << "]: " << msg << std::endl;
+         * });
+         * @endcode
+         */
+        void set_error_callback(error_callback_t callback) {
+            std::lock_guard<std::mutex> lock(mutex_);
+            error_callback_ = std::move(callback);
+        }
+
+        /**
+         * @brief Clear the error callback
+         */
+        void clear_error_callback() {
+            std::lock_guard<std::mutex> lock(mutex_);
+            error_callback_ = nullptr;
+        }
+
+        /**
          * @brief Get the singleton instance (thread-safe via C++11 magic statics)
          * @return Reference to the singleton instance
          */
@@ -299,6 +419,7 @@ namespace common {
         std::unordered_multimap<size_t, subscription_info> handlers_;
         std::atomic<uint64_t> next_id_{1};
         std::atomic<bool> running_{true};
+        error_callback_t error_callback_;  // Optional error callback for exception handling
     };
 
     using event_bus = simple_event_bus;
@@ -316,6 +437,48 @@ namespace common {
 }
 
 #endif // ENABLE_MONITORING_INTEGRATION
+
+// ABI compatibility check function (available in both modes)
+namespace common {
+namespace detail {
+    /**
+     * @brief Get the ABI version of the event_bus implementation
+     *
+     * This function is used to detect ABI incompatibilities at link time.
+     * If two translation units are compiled with different ENABLE_MONITORING_INTEGRATION
+     * settings, they will have different ABI versions, which should be caught by
+     * the linker or at runtime.
+     *
+     * @return The ABI version number (1 = no monitoring, 2 = with monitoring)
+     */
+    inline constexpr int get_event_bus_abi_version() {
+        return event_bus_abi_version;
+    }
+} // namespace detail
+
+    /**
+     * @brief Verify ABI compatibility between modules
+     *
+     * Call this function during initialization to verify that all linked modules
+     * were compiled with the same event_bus configuration. This helps catch
+     * subtle bugs caused by mixing object files compiled with different settings.
+     *
+     * @param expected_version The ABI version your module expects
+     * @return true if compatible, false otherwise
+     *
+     * Example usage:
+     * @code
+     * // In your module initialization:
+     * if (!common::verify_event_bus_abi(common::detail::event_bus_abi_version)) {
+     *     // Handle ABI mismatch error
+     *     throw std::runtime_error("Event bus ABI mismatch detected!");
+     * }
+     * @endcode
+     */
+    inline bool verify_event_bus_abi(int expected_version) {
+        return detail::get_event_bus_abi_version() == expected_version;
+    }
+} // namespace common
 
 // Common event types that can be used across modules
 namespace common {
