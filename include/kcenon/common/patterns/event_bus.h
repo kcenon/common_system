@@ -105,6 +105,8 @@ namespace common {
 #include <unordered_map>
 #include <algorithm>
 #include <vector>
+#include <typeinfo>
+#include <typeindex>
 
 namespace common {
 namespace detail {
@@ -144,43 +146,40 @@ namespace detail {
     };
 
     /**
-     * @brief Global counter for generating unique type IDs
-     */
-    inline std::atomic<size_t>& get_type_id_counter() {
-        static std::atomic<size_t> counter{0};
-        return counter;
-    }
-
-    /**
-     * @brief Generate unique type ID for each event type without RTTI
+     * @brief Generate unique type ID for each event type using std::type_index
      *
-     * WARNING: Type ID Consistency Limitation
-     * ========================================
-     * This implementation generates type IDs using a static counter that increments
-     * on first access for each template instantiation. This can lead to inconsistent
-     * type IDs across different translation units if the order of template instantiation
-     * differs between them.
+     * IMPLEMENTATION:
+     * ===============
+     * This implementation uses std::type_index and std::hash to generate consistent
+     * type IDs across all translation units. Unlike counter-based approaches, this
+     * ensures that the same event type always receives the same ID regardless of
+     * instantiation order.
      *
-     * POTENTIAL ISSUE:
-     * - If EventTypeA is instantiated before EventTypeB in file1.cpp, but after EventTypeB
-     *   in file2.cpp, they will receive different type IDs in each translation unit.
-     * - This can cause events published in one translation unit to fail matching handlers
-     *   subscribed in another translation unit.
+     * BENEFITS:
+     * - Consistent IDs across translation units (TUs)
+     * - No initialization order dependencies
+     * - Type-safe without relying on manual registration
+     * - Events published in one TU will correctly match handlers in another TU
      *
-     * MITIGATION:
-     * - Use explicit type registration at program startup in a deterministic order
-     * - Keep event type definitions in a single translation unit when possible
-     * - Consider using a hash-based type ID system (e.g., hash of type name string) as an
-     *   alternative for better consistency across translation units
+     * THREAD SAFETY:
+     * - The hash is computed once per type and cached in a static variable
+     * - C++11 guarantees thread-safe static local initialization
+     * - No race conditions or synchronization needed
      *
-     * RECOMMENDATION:
-     * For production use, prefer enabling ENABLE_MONITORING_INTEGRATION which uses the
-     * full monitoring_system implementation with more robust type identification.
+     * COMPATIBILITY:
+     * - Requires RTTI (typeid support)
+     * - Hash collision risk is negligible (std::hash quality)
+     * - IDs are stable across program runs on the same platform/compiler
+     *
+     * NOTE:
+     * For RTTI-free environments, consider enabling ENABLE_MONITORING_INTEGRATION
+     * which provides alternative type identification mechanisms.
      */
     template<typename T>
     struct event_type_id {
         static size_t id() {
-            static const size_t type_id = ++get_type_id_counter();
+            // Use std::type_index hash for deterministic, consistent IDs
+            static const size_t type_id = std::hash<std::type_index>{}(std::type_index(typeid(T)));
             return type_id;
         }
     };
