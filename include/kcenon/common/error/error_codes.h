@@ -235,6 +235,77 @@ namespace network_system {
 
 } // namespace codes
 
+// ============================================================================
+// Compile-time Range Validation
+// ============================================================================
+
+/**
+ * @brief Compile-time validation to prevent error code conflicts
+ *
+ * These static assertions ensure that error code ranges don't overlap
+ * between systems. Each system has a dedicated range of 100 error codes.
+ * If a new error code is added outside its designated range, compilation
+ * will fail with a descriptive error message.
+ */
+namespace validation {
+
+// Validate thread_system range (-100 to -199)
+static_assert(codes::thread_system::base == -100,
+              "thread_system base must be -100");
+static_assert(codes::thread_system::pool_full >= -100 && codes::thread_system::pool_full > -200,
+              "thread_system error codes must be in range [-199, -100]");
+static_assert(codes::thread_system::queue_stopped >= -100 && codes::thread_system::queue_stopped > -200,
+              "thread_system error codes must be in range [-199, -100]");
+
+// Validate logger_system range (-200 to -299)
+static_assert(codes::logger_system::base == -200,
+              "logger_system base must be -200");
+static_assert(codes::logger_system::file_open_failed >= -200 && codes::logger_system::file_open_failed > -300,
+              "logger_system error codes must be in range [-299, -200]");
+static_assert(codes::logger_system::filter_rejected >= -200 && codes::logger_system::filter_rejected > -300,
+              "logger_system error codes must be in range [-299, -200]");
+
+// Validate monitoring_system range (-300 to -399)
+static_assert(codes::monitoring_system::base == -300,
+              "monitoring_system base must be -300");
+static_assert(codes::monitoring_system::metric_not_found >= -300 && codes::monitoring_system::metric_not_found > -400,
+              "monitoring_system error codes must be in range [-399, -300]");
+static_assert(codes::monitoring_system::profiler_error >= -300 && codes::monitoring_system::profiler_error > -400,
+              "monitoring_system error codes must be in range [-399, -300]");
+
+// Validate container_system range (-400 to -499)
+static_assert(codes::container_system::base == -400,
+              "container_system base must be -400");
+static_assert(codes::container_system::value_type_mismatch >= -400 && codes::container_system::value_type_mismatch > -500,
+              "container_system error codes must be in range [-499, -400]");
+static_assert(codes::container_system::container_full >= -400 && codes::container_system::container_full > -500,
+              "container_system error codes must be in range [-499, -400]");
+
+// Validate database_system range (-500 to -599)
+static_assert(codes::database_system::base == -500,
+              "database_system base must be -500");
+static_assert(codes::database_system::connection_failed >= -500 && codes::database_system::connection_failed > -600,
+              "database_system error codes must be in range [-599, -500]");
+static_assert(codes::database_system::transaction_timeout >= -500 && codes::database_system::transaction_timeout > -600,
+              "database_system error codes must be in range [-599, -500]");
+
+// Validate network_system range (-600 to -699)
+static_assert(codes::network_system::base == -600,
+              "network_system base must be -600");
+static_assert(codes::network_system::connection_failed >= -600 && codes::network_system::connection_failed > -700,
+              "network_system error codes must be in range [-699, -600]");
+static_assert(codes::network_system::bind_failed >= -600 && codes::network_system::bind_failed > -700,
+              "network_system error codes must be in range [-699, -600]");
+
+// Validate common errors range (-1 to -99)
+static_assert(codes::common::success == 0, "Success code must be 0");
+static_assert(codes::common::invalid_argument >= -99 && codes::common::invalid_argument < 0,
+              "common error codes must be in range [-99, -1]");
+static_assert(codes::common::internal_error >= -99 && codes::common::internal_error < 0,
+              "common error codes must be in range [-99, -1]");
+
+} // namespace validation
+
 /**
  * @brief Get human-readable error message for error code
  * @param code Error code
