@@ -104,20 +104,21 @@ enum class result_state {
  * @class Result
  * @brief Result type for error handling with member function support
  *
- * A Result<T> can be in one of three states:
- * 1. Uninitialized - Default constructed, no value or error yet
- * 2. Ok - Contains a valid value of type T
- * 3. Error - Contains an error_info describing the failure
+ * A Result<T> can be in one of two states:
+ * 1. Ok - Contains a valid value of type T
+ * 2. Error - Contains an error_info describing the failure
  *
  * This provides a type-safe way to handle errors without exceptions.
  *
- * IMPORTANT: Default-constructed Results are in an uninitialized state.
- * Accessing value() or error() on an uninitialized Result will throw.
- * Always check is_ok() or is_err() before accessing, or use factory methods
- * like Result<T>::ok() and Result<T>::err() to construct Results explicitly.
+ * IMPORTANT: Default-constructed Results are initialized to error state
+ * with not_initialized code (-6). For explicit construction, use factory
+ * methods Result<T>::ok() and Result<T>::err().
+ *
+ * BREAKING CHANGE (from v1.x): Previously, default construction created
+ * an uninitialized state. Now it creates an error state for safety.
  *
  * Thread Safety Note:
- * - Based on std::variant, which is NOT thread-safe for concurrent access.
+ * - Based on std::optional, which is NOT thread-safe for concurrent access.
  * - Safe to pass by value or const reference across threads.
  * - Concurrent reads of the same Result are safe if guaranteed no writes.
  * - For shared mutable access, wrap in std::mutex or similar.
@@ -132,8 +133,18 @@ private:
 
 public:
     // Constructors
-    // Default constructor creates an uninitialized state
-    Result() : value_(std::nullopt), error_(std::nullopt) {}
+    /**
+     * @brief Default constructor - initializes to error state
+     *
+     * BREAKING CHANGE: Previously created uninitialized state, now creates
+     * error state with not_initialized code to prevent accidental access.
+     * This makes Result exception-safe by default.
+     *
+     * Migration: Code relying on default construction should explicitly use
+     * Result<T>::ok() or Result<T>::err() factory methods instead.
+     */
+    Result() : value_(std::nullopt),
+               error_(error_info{-6, "Result not initialized", "common::Result"}) {}
 
     Result(const T& value) : value_(value), error_(std::nullopt) {}
     Result(T&& value) : value_(std::move(value)), error_(std::nullopt) {}
@@ -191,7 +202,11 @@ public:
 
     /**
      * @brief Check if result is in uninitialized state
+     * @deprecated Since default constructor now initializes to error state,
+     *             this method always returns false. Kept for backward compatibility.
+     * @return Always false (Results are always initialized now)
      */
+    [[deprecated("Result is always initialized now; check is_err() instead")]]
     bool is_uninitialized() const {
         return !value_.has_value() && !error_.has_value();
     }

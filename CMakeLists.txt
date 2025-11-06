@@ -17,6 +17,20 @@ option(COMMON_BUILD_DOCS "Generate documentation" OFF)
 option(COMMON_HEADER_ONLY "Use as header-only library" ON)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
+# Event Bus ABI Configuration
+# IMPORTANT: This must be consistently set across all compilation units
+# to prevent ABI incompatibility issues
+option(WITH_MONITORING_SYSTEM "Enable monitoring system integration in event bus" OFF)
+
+# Set ABI version based on monitoring system integration
+if(WITH_MONITORING_SYSTEM)
+    set(EVENT_BUS_ABI_VERSION 2 CACHE STRING "Event bus ABI version (2=with monitoring)")
+else()
+    set(EVENT_BUS_ABI_VERSION 1 CACHE STRING "Event bus ABI version (1=standalone)")
+endif()
+
+message(STATUS "Event Bus ABI Version: ${EVENT_BUS_ABI_VERSION} (WITH_MONITORING_SYSTEM=${WITH_MONITORING_SYSTEM})")
+
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)
     if(BUILD_INTEGRATION_TESTS)
@@ -39,6 +53,16 @@ target_include_directories(common_system INTERFACE
 
 # C++ feature requirements
 target_compile_features(common_system INTERFACE cxx_std_20)
+
+# Define ABI version for event bus
+target_compile_definitions(common_system INTERFACE
+    EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
+)
+
+# Define WITH_MONITORING_SYSTEM if enabled
+if(WITH_MONITORING_SYSTEM)
+    target_compile_definitions(common_system INTERFACE WITH_MONITORING_SYSTEM)
+endif()
 
 # Optional: If not header-only, add source files
 if(NOT COMMON_HEADER_ONLY)
