@@ -454,3 +454,166 @@ TEST_F(CommonSystemThreadSafetyTest, MemorySafetyTest) {
 
     EXPECT_EQ(total_errors.load(), 0);
 }
+
+// Test 11: Event bus subscription modification during handler execution
+TEST_F(CommonSystemThreadSafetyTest, EventBusSubscriptionDuringExecution) {
+    event_bus bus;
+
+    const int num_iterations = 100;
+    std::atomic<int> handler_executions{0};
+    std::atomic<int> errors{0};
+    std::atomic<bool> handler_running{false};
+
+    std::vector<subscription_id> subscriptions;
+
+    // Create initial subscription
+    auto initial_id = bus.subscribe([&](const event& e) {
+        handler_running.store(true);
+        ++handler_executions;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        handler_running.store(false);
+    });
+    subscriptions.push_back(initial_id);
+
+    // Thread 1: Publish events
+    std::thread publisher([&]() {
+        for (int i = 0; i < num_iterations; ++i) {
+            try {
+                event e;
+                e.set_type("modification_test");
+                bus.publish(std::move(e));
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            } catch (...) {
+                ++errors;
+            }
+        }
+    });
+
+    // Thread 2: Modify subscriptions while handlers execute
+    std::thread modifier([&]() {
+        for (int i = 0; i < num_iterations / 2; ++i) {
+            try {
+                // Add new subscription
+                auto id = bus.subscribe([&](const event& e) {
+                    ++handler_executions;
+                });
+                subscriptions.push_back(id);
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(15));
+
+                // Remove a subscription
+                if (!subscriptions.empty()) {
+                    bus.unsubscribe(subscriptions.back());
+                    subscriptions.pop_back();
+                }
+            } catch (...) {
+                ++errors;
+            }
+        }
+    });
+
+    publisher.join();
+    modifier.join();
+
+    // Cleanup remaining subscriptions
+    for (auto id : subscriptions) {
+        bus.unsubscribe(id);
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+    EXPECT_GT(handler_executions.load(), 0);
+}
+
+// Test 12: Event bus error callback thread safety
+TEST_F(CommonSystemThreadSafetyTest, EventBusErrorCallbackSafety) {
+    event_bus bus;
+
+    const int num_threads = 10;
+    const int events_per_thread = 50;
+    std::atomic<int> error_callback_invocations{0};
+    std::atomic<int> errors{0};
+
+    // Set error callback that will be invoked from multiple threads
+    bus.set_error_callback([&](const std::string& msg, size_t type_id, uint64_t handler_id) {
+        ++error_callback_invocations;
+    });
+
+    // Subscribe with a handler that throws exceptions
+    auto id = bus.subscribe([](const event& e) {
+        throw std::runtime_error("Intentional error for testing");
+    });
+
+    std::vector<std::thread> threads;
+
+    // Publish events from multiple threads - all will trigger error callback
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&]() {
+            for (int j = 0; j < events_per_thread; ++j) {
+                try {
+                    event e;
+                    e.set_type("error_test");
+                    bus.publish(std::move(e));
+                } catch (...) {
+                    ++errors;
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    bus.unsubscribe(id);
+    bus.clear_error_callback();
+
+    // Error callback should have been invoked for each event
+    EXPECT_EQ(error_callback_invocations.load(), num_threads * events_per_thread);
+    EXPECT_EQ(errors.load(), 0); // Exceptions in handlers shouldn't propagate
+}
+
+// Test 13: Concurrent Result construction and destruction
+TEST_F(CommonSystemThreadSafetyTest, ResultLifecycleStressTest) {
+    const int num_threads = 20;
+    const int cycles_per_thread = 1000;
+    std::atomic<int> errors{0};
+
+    std::vector<std::thread> threads;
+
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back([&, thread_id = i]() {
+            for (int j = 0; j < cycles_per_thread; ++j) {
+                try {
+                    // Test various Result lifecycle scenarios
+                    {
+                        Result<std::vector<int>> result = Ok(std::vector<int>{1, 2, 3, 4, 5});
+                        auto mapped = result.map([](const std::vector<int>& v) {
+                            return v.size();
+                        });
+                    }
+
+                    {
+                        Result<std::string> result = Err<std::string>("error");
+                        auto recovered = result.or_else([](const error_info& e) {
+                            return Ok(std::string("recovered"));
+                        });
+                    }
+
+                    {
+                        auto result = Ok(thread_id)
+                            .and_then([](int x) { return Ok(x * 2); })
+                            .map([](int x) { return std::to_string(x); });
+                    }
+                } catch (...) {
+                    ++errors;
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    EXPECT_EQ(errors.load(), 0);
+}
