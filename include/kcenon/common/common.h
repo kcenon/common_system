@@ -43,6 +43,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /// Core interfaces
 #include "interfaces/executor_interface.h"
+#include "interfaces/thread_pool_interface.h"
 #include "interfaces/database_interface.h"
 
 /// Common patterns
