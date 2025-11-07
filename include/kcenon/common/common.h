@@ -71,3 +71,19 @@ struct version_info {
 
 } // namespace common
 } // namespace kcenon
+
+/**
+ * @brief Namespace alias for backward compatibility
+ *
+ * IMPORTANT: The canonical namespace is kcenon::common
+ *
+ * For historical reasons, some headers use 'namespace common' directly.
+ * This alias ensures that code using ::common can still work, but new
+ * code should use kcenon::common for clarity and consistency.
+ *
+ * The include path is kcenon/common/*, so the namespace should match.
+ * This alias bridges the gap during the transition period.
+ *
+ * @deprecated Use kcenon::common instead of ::common
+ */
+namespace common = kcenon::common;
