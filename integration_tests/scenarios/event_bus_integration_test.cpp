@@ -7,7 +7,7 @@
 #include <thread>
 
 using namespace integration_tests;
-using namespace ::common;
+using namespace kcenon::common;
 
 /**
  * Integration tests for event bus pattern

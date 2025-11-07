@@ -7,7 +7,7 @@
 #include <atomic>
 
 using namespace integration_tests;
-using namespace ::common;
+using namespace kcenon::common;
 
 /**
  * Full system integration tests covering multiple components working together
