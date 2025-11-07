@@ -22,7 +22,7 @@
 #include <vector>
 #include "../patterns/result.h"
 
-namespace common {
+namespace kcenon::common {
 namespace interfaces {
 
 /**
@@ -349,4 +349,4 @@ inline std::string to_string(health_status status) {
 }
 
 } // namespace interfaces
-} // namespace common
+} // namespace kcenon::common

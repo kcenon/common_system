@@ -13,7 +13,8 @@
 #include <mutex>
 #include <condition_variable>
 
-using namespace common::interfaces;
+using namespace kcenon::common;
+using namespace kcenon::common::interfaces;
 using namespace std::chrono_literals;
 
 /**
@@ -62,9 +63,9 @@ public:
     }
 
     // Phase 2: Job-based execution support
-    common::Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
+    Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
         if (!job) {
-            return common::error_info(1, "Job is null", "mock_executor");
+            return error_info(1, "Job is null", "mock_executor");
         }
 
         // Use shared_ptr to make lambda copy-constructible
@@ -72,9 +73,9 @@ public:
 
         auto task = [shared_job]() {
             auto result = shared_job->execute();
-            if (common::is_error(result)) {
+            if (is_error(result)) {
                 // Log error but don't throw - already handled by Result
-                auto& err = common::get_error(result);
+                auto& err = get_error(result);
                 std::cerr << "Job execution failed: " << err.message << std::endl;
             }
         };
@@ -82,11 +83,11 @@ public:
         return submit(std::move(task));
     }
 
-    common::Result<std::future<void>> execute_delayed(
+    Result<std::future<void>> execute_delayed(
         std::unique_ptr<IJob>&& job,
         std::chrono::milliseconds delay) override {
         if (!job) {
-            return common::error_info(1, "Job is null", "mock_executor");
+            return error_info(1, "Job is null", "mock_executor");
         }
 
         // Use shared_ptr to make lambda copy-constructible
@@ -94,8 +95,8 @@ public:
 
         auto task = [shared_job]() {
             auto result = shared_job->execute();
-            if (common::is_error(result)) {
-                auto& err = common::get_error(result);
+            if (is_error(result)) {
+                auto& err = get_error(result);
                 std::cerr << "Job execution failed: " << err.message << std::endl;
             }
         };
@@ -179,15 +180,15 @@ public:
     calculation_job(int value, std::atomic<int>& result)
         : value_(value), result_(result) {}
 
-    common::VoidResult execute() override {
+    VoidResult execute() override {
         try {
             // Simulate some work
             std::this_thread::sleep_for(10ms);
             result_ += value_ * value_;
-            return common::VoidResult(std::monostate{});
+            return VoidResult(std::monostate{});
         } catch (const std::exception& e) {
-            return common::VoidResult(
-                common::error_info(1, e.what(), "calculation_job"));
+            return VoidResult(
+                error_info(1, e.what(), "calculation_job"));
         }
     }
 
@@ -330,10 +331,10 @@ int main() {
             auto job = std::make_unique<calculation_job>(i, job_sum);
             auto result = job_executor.execute(std::move(job));
 
-            if (common::is_ok(result)) {
-                job_futures.push_back(std::move(common::get_value(result)));
+            if (is_ok(result)) {
+                job_futures.push_back(std::move(get_value(result)));
             } else {
-                auto& err = common::get_error(result);
+                auto& err = get_error(result);
                 std::cout << "   Failed to submit job: "
                          << err.message << "\n";
             }

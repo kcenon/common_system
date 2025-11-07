@@ -19,7 +19,7 @@
 #include <string>
 #include "../patterns/result.h"
 
-namespace common {
+namespace kcenon::common {
 namespace interfaces {
 
 /**
@@ -253,4 +253,4 @@ inline log_level from_string(const std::string& str) {
 }
 
 } // namespace interfaces
-} // namespace common
+} // namespace kcenon::common

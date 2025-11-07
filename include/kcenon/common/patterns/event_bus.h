@@ -62,17 +62,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <kcenon/monitoring/interfaces/event_bus_interface.h>
 
 // ABI version checking for conditional compilation
-namespace common {
+namespace kcenon::common {
 namespace detail {
     // Version identifier for ABI compatibility checking
     // This ensures that object files compiled with different macro definitions
     // cannot be linked together, preventing subtle runtime errors.
     constexpr int event_bus_abi_version = 2;  // Monitoring integration enabled
 } // namespace detail
-} // namespace common
+} // namespace kcenon::common
 
 // Convenience namespace alias
-namespace common {
+namespace kcenon::common {
     using event_bus = monitoring_system::event_bus;
     using event_priority = monitoring_system::event_priority;
     using event_subscription = monitoring_system::event_subscription;
@@ -108,7 +108,7 @@ namespace common {
 #include <typeinfo>
 #include <typeindex>
 
-namespace common {
+namespace kcenon::common {
 namespace detail {
     // Version identifier for ABI compatibility checking
     // This ensures that object files compiled with different macro definitions
@@ -438,7 +438,7 @@ namespace detail {
 #endif // ENABLE_MONITORING_INTEGRATION
 
 // ABI compatibility check function (available in both modes)
-namespace common {
+namespace kcenon::common {
 namespace detail {
     /**
      * @brief Get the ABI version of the event_bus implementation
@@ -477,10 +477,10 @@ namespace detail {
     inline bool verify_event_bus_abi(int expected_version) {
         return detail::get_event_bus_abi_version() == expected_version;
     }
-} // namespace common
+} // namespace kcenon::common
 
 // Common event types that can be used across modules
-namespace common {
+namespace kcenon::common {
 namespace events {
 
 /**
@@ -540,4 +540,4 @@ struct metric_event {
 };
 
 } // namespace events
-} // namespace common
+} // namespace kcenon::common
