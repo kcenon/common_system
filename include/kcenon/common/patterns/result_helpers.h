@@ -24,7 +24,7 @@
 #include <utility>
 #include <type_traits>
 
-namespace common {
+namespace kcenon::common {
 namespace helpers {
 
 /**
@@ -251,4 +251,4 @@ template<typename... Results>
 }
 
 } // namespace helpers
-} // namespace common
+} // namespace kcenon::common

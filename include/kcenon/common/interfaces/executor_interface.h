@@ -20,7 +20,7 @@
 #include <string>
 #include "../patterns/result.h"
 
-namespace common {
+namespace kcenon::common {
 namespace interfaces {
 
 /**
@@ -172,4 +172,4 @@ public:
 };
 
 } // namespace interfaces
-} // namespace common
+} // namespace kcenon::common

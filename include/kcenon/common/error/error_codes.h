@@ -26,7 +26,7 @@
 #include <string>
 #include <string_view>
 
-namespace common {
+namespace kcenon::common {
 namespace error {
 
 /**
@@ -53,7 +53,7 @@ namespace codes {
 // ============================================================================
 // Common Error Codes (-1 to -99)
 // ============================================================================
-namespace common {
+namespace kcenon::common {
     constexpr int success = 0;
     constexpr int invalid_argument = -1;
     constexpr int not_found = -2;
@@ -66,7 +66,7 @@ namespace common {
     constexpr int io_error = -9;
     constexpr int network_error = -10;
     constexpr int internal_error = -99;
-} // namespace common
+} // namespace kcenon::common
 
 // ============================================================================
 // thread_system Error Codes (-100 to -199)
@@ -378,4 +378,4 @@ inline std::string_view get_category_name(int code) {
 }
 
 } // namespace error
-} // namespace common
+} // namespace kcenon::common
