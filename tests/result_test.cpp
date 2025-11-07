@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 #include <kcenon/common/patterns/result.h>
 
-using namespace common;
+using namespace kcenon::common;
 
 class ResultTest : public ::testing::Test {
 protected:

@@ -5,7 +5,7 @@
 #include <vector>
 
 using namespace integration_tests;
-using namespace ::common;
+using namespace kcenon::common;
 
 /**
  * Integration tests for Result<T> pattern across multiple use cases

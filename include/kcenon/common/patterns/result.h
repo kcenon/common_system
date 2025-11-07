@@ -42,7 +42,7 @@
 #  define COMMON_HAS_SOURCE_LOCATION 0
 #endif
 
-namespace common {
+namespace kcenon::common {
 
 /**
  * @struct error_info
@@ -841,7 +841,7 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
     }
 }
 
-} // namespace common
+} // namespace kcenon::common
 
 // Convenience macros for Result<T> pattern usage
 
@@ -855,8 +855,8 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
 #define COMMON_RETURN_IF_ERROR(expr) \
     do { \
         auto _result_temp = (expr); \
-        if (common::is_error(_result_temp)) { \
-            return common::get_error(_result_temp); \
+        if (kcenon::common::is_error(_result_temp)) { \
+            return kcenon::common::get_error(_result_temp); \
         } \
     } while(false)
 
@@ -869,10 +869,10 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  */
 #define COMMON_ASSIGN_OR_RETURN(decl, expr) \
     auto _result_##decl = (expr); \
-    if (common::is_error(_result_##decl)) { \
-        return common::get_error(_result_##decl); \
+    if (kcenon::common::is_error(_result_##decl)) { \
+        return kcenon::common::get_error(_result_##decl); \
     } \
-    decl = common::get_value(std::move(_result_##decl))
+    decl = kcenon::common::get_value(std::move(_result_##decl))
 
 /**
  * @brief Return error if condition is false
@@ -883,7 +883,7 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
 #define COMMON_RETURN_ERROR_IF(condition, code, message, module) \
     do { \
         if (condition) { \
-            return common::error_info{code, message, module}; \
+            return kcenon::common::error_info{code, message, module}; \
         } \
     } while(false)
 
@@ -896,7 +896,7 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
 #define COMMON_RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) \
     do { \
         if (condition) { \
-            return common::error_info{code, message, module, details}; \
+            return kcenon::common::error_info{code, message, module, details}; \
         } \
     } while(false)
 

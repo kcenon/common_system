@@ -6,7 +6,7 @@
 #include <numeric>
 
 using namespace integration_tests;
-using namespace ::common;
+using namespace kcenon::common;
 
 /**
  * Performance tests for Result<T> pattern

@@ -10,7 +10,7 @@
 #include <string>
 #include <atomic>
 
-namespace common::adapters {
+namespace kcenon::common::adapters {
 
 /**
  * @brief Base class for adapter interface to eliminate RTTI dependency

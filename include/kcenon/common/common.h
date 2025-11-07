@@ -52,8 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Note: Build-time configuration is handled by CMake. No CMake includes here.
 
-namespace kcenon {
-namespace common {
+namespace kcenon::common {
 
 /**
  * @brief Version information for Common System.
@@ -69,8 +68,7 @@ struct version_info {
     static constexpr const char* string = "1.0.0";
 };
 
-} // namespace common
-} // namespace kcenon
+} // namespace kcenon::common
 
 /**
  * @brief Namespace alias for backward compatibility

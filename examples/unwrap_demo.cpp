@@ -11,7 +11,7 @@
 #include <iostream>
 #include <string>
 
-using namespace common;
+using namespace kcenon::common;
 
 // Helper function that returns an error
 Result<int> divide(int numerator, int denominator) {

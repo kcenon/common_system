@@ -17,7 +17,7 @@
 #include "../patterns/result.h"
 #include <cstddef>
 
-namespace common {
+namespace kcenon::common {
 namespace interfaces {
 
 /**
@@ -188,4 +188,4 @@ public:
 };
 
 } // namespace interfaces
-} // namespace common
+} // namespace kcenon::common

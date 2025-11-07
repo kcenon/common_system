@@ -11,7 +11,7 @@
 
 #include "typed_adapter.h"
 
-namespace common::adapters {
+namespace kcenon::common::adapters {
 
 /**
  * @brief Concept to check if a type implements an interface

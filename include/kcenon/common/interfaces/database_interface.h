@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "../patterns/result.h"
 
-namespace common {
+namespace kcenon::common {
 
 /**
  * @struct database_null
@@ -156,4 +156,4 @@ public:
 };
 
 } // namespace interfaces
-} // namespace common
+} // namespace kcenon::common
