@@ -6,7 +6,7 @@
 #include <memory>
 
 using namespace integration_tests;
-using namespace ::common;
+using namespace kcenon::common;
 
 /**
  * Tests for error handling and failure scenarios

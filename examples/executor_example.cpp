@@ -13,7 +13,8 @@
 #include <mutex>
 #include <condition_variable>
 
-using namespace common::interfaces;
+using namespace kcenon::common;
+using namespace kcenon::common::interfaces;
 using namespace std::chrono_literals;
 
 /**

@@ -8,7 +8,7 @@
 #include <fstream>
 #include <string>
 
-using namespace common;
+using namespace kcenon::common;
 
 // Example function that can fail
 Result<int> divide(int a, int b) {
