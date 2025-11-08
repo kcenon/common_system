@@ -333,7 +333,11 @@ auto r = kcenon::common::Result<int>::ok(42);
 ---
 
 ### Sprint 2: ABI & Error Handling (Week 3-4)
-- [ ] Task 2.1: Remove error code duplication
+- [x] Task 2.1: Remove error code duplication ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Refactored result.h to import from error_codes.h
+  - **Changes**: Eliminated duplicate definitions, added backward compatibility aliases
+  - **Tests**: All 46 integration tests pass
+  - **Commit**: d9d4727 "Refactor error code definitions to eliminate duplication"
 - [ ] Task 2.2: Generate ABI version header
 - [ ] Task 2.3: Implement link-time ABI check
 - [ ] Task 2.4: Integration tests (cross-ABI version)
