@@ -36,7 +36,14 @@ configure_file(
     @ONLY
 )
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/config/abi_version.cpp.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/config/abi_version.cpp"
+    @ONLY
+)
+
 message(STATUS "Generated ABI version header: ${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h")
+message(STATUS "Generated ABI version source: ${CMAKE_CURRENT_BINARY_DIR}/src/config/abi_version.cpp")
 
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)
@@ -71,7 +78,7 @@ target_compile_definitions(common_system INTERFACE
 if(NOT COMMON_HEADER_ONLY)
     # Convert to static library
     add_library(common_system_static STATIC
-        src/config/abi_version.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/src/config/abi_version.cpp
     )
 
     target_include_directories(common_system_static PUBLIC
