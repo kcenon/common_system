@@ -34,15 +34,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @file event_bus.h
  * @brief Event bus abstraction and common events.
  *
- * This header defines a uniform way to publish/subscribe events across
- * modules. When monitoring integration is enabled, it forwards to the
- * monitoring_system implementation; otherwise it provides a no-op stub
- * that keeps client code consistent.
+ * This header provides a standalone event bus implementation that can be used
+ * across modules without external dependencies. The simple_event_bus provides
+ * a thread-safe, synchronous publish/subscribe mechanism for inter-module
+ * communication.
+ *
+ * Other systems (like monitoring_system) can extend or wrap this implementation
+ * if they need additional features like async processing or advanced filtering.
  *
  * Example:
  * @code
- * auto bus = common::get_event_bus();
- * bus->publish(common::events::module_started_event{"network_system"});
+ * auto& bus = common::get_event_bus();
+ * bus.publish(common::events::module_started_event{"network_system"});
  * @endcode
  */
 
@@ -51,53 +54,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include <chrono>
 #include <cstdint>
-#include <functional>
-
-// Check if monitoring system integration is enabled
-#if defined(ENABLE_MONITORING_INTEGRATION) || defined(WITH_MONITORING_SYSTEM) || defined(USE_MONITORING_SYSTEM)
-
-// Forward to the actual event bus implementation
-// Note: Projects using this must have monitoring_system in their include path
-#include <kcenon/monitoring/core/event_bus.h>
-#include <kcenon/monitoring/interfaces/event_bus_interface.h>
-
-// ABI version checking for conditional compilation
-namespace kcenon::common {
-namespace detail {
-    // Version identifier for ABI compatibility checking
-    // This ensures that object files compiled with different macro definitions
-    // cannot be linked together, preventing subtle runtime errors.
-    constexpr int event_bus_abi_version = 2;  // Monitoring integration enabled
-} // namespace detail
-} // namespace kcenon::common
-
-// Convenience namespace alias
-namespace kcenon::common {
-    using event_bus = monitoring_system::event_bus;
-    using event_priority = monitoring_system::event_priority;
-    using event_subscription = monitoring_system::event_subscription;
-
-    // Type aliases for common usage
-    template<typename T>
-    using event_handler = std::function<void(const T&)>;
-
-    /**
-     * @brief Get the global event bus instance
-     *
-     * This provides a convenient way to access the event bus
-     * without direct dependency on monitoring_system namespace.
-     */
-    /**
-     * @brief Access the global event bus instance.
-     */
-    inline std::shared_ptr<monitoring_system::event_bus_interface> get_event_bus() {
-        return monitoring_system::event_bus::instance();
-    }
-}
-
-#else // Monitoring integration disabled
-
-// Provide a simple implementation when monitoring is disabled
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -108,12 +64,15 @@ namespace kcenon::common {
 #include <typeinfo>
 #include <typeindex>
 
+// Provide a simple standalone implementation
+// Note: monitoring_system can extend or wrap this if needed
+
 namespace kcenon::common {
 namespace detail {
     // Version identifier for ABI compatibility checking
     // This ensures that object files compiled with different macro definitions
     // cannot be linked together, preventing subtle runtime errors.
-    constexpr int event_bus_abi_version = 1;  // Monitoring integration disabled
+    constexpr int event_bus_abi_version = 1;  // Standalone implementation
 } // namespace detail
 
     enum class event_priority {
@@ -435,20 +394,17 @@ namespace detail {
     }
 }
 
-#endif // ENABLE_MONITORING_INTEGRATION
-
-// ABI compatibility check function (available in both modes)
+// ABI compatibility check functions
 namespace kcenon::common {
 namespace detail {
     /**
      * @brief Get the ABI version of the event_bus implementation
      *
      * This function is used to detect ABI incompatibilities at link time.
-     * If two translation units are compiled with different ENABLE_MONITORING_INTEGRATION
-     * settings, they will have different ABI versions, which should be caught by
-     * the linker or at runtime.
+     * The ABI version ensures that all linked modules use the same event_bus
+     * implementation, preventing subtle runtime errors.
      *
-     * @return The ABI version number (1 = no monitoring, 2 = with monitoring)
+     * @return The ABI version number (currently 1 for standalone implementation)
      */
     inline constexpr int get_event_bus_abi_version() {
         return event_bus_abi_version;
