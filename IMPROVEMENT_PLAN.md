@@ -380,13 +380,28 @@ auto r = kcenon::common::Result<int>::ok(42);
 ---
 
 ### Sprint 3-4: API Cleanup (Week 5-8)
-- [ ] Task 3.1: Mark IExecutor deprecation
-- [ ] Task 3.2: Implement adapter classes
-- [ ] Task 3.3: Write migration guide
-- [ ] Task 3.4: Macro → template conversion guide
+- [x] Task 3.1: Mark IExecutor deprecation ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Function-based API deprecated with [[deprecated]] attribute
+  - **Files**:
+    - include/kcenon/common/interfaces/executor_interface.h (submit, submit_delayed)
+    - docs/IEXECUTOR_MIGRATION_GUIDE.md (Comprehensive migration guide)
+  - **Changes**:
+    - Added [[deprecated]] to submit() and submit_delayed()
+    - Documented timeline (minimum 6-month deprecation period)
+    - Removal planned for version 2.0.0
+  - **Migration Guide Includes**:
+    - Step-by-step conversion from function to job-based API
+    - Advanced patterns (priority, parameters, lambda wrapper)
+    - Error handling examples
+    - Testing patterns
+    - FAQ and troubleshooting
+- [ ] Task 3.2: Implement adapter classes (Optional - helpers exist)
+- [x] Task 3.3: Write migration guide ✅ **COMPLETED** (2025-11-09)
+- [ ] Task 3.4: Macro → template conversion guide (Future work)
 
 **Resources**: 1 developer (Mid-level)
 **Risk Level**: Low
+**Status**: ✅ **SPRINT 3 CORE TASKS COMPLETED** (2025-11-09)
 
 ---
 
