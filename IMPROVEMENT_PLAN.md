@@ -350,11 +350,32 @@ auto r = kcenon::common::Result<int>::ok(42);
   - **Files**: abi_version.h.in, abi_version.cpp, CMakeLists.txt updates
   - **Example**: abi_version_example.cpp demonstrates all features
   - **Commit**: 766c037 "Add ABI version management system"
-- [ ] Task 2.3: Implement link-time ABI check
-- [ ] Task 2.4: Integration tests (cross-ABI version)
+- [x] Task 2.3: Implement link-time ABI check ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Implemented version-specific link-time enforcer symbols
+  - **Changes**:
+    - Converted abi_version.cpp to template (.in) for CMake generation
+    - Added automatic ABI signature generation with version components
+    - Implemented link-time enforcer symbol with unique version-specific names
+    - Added static initialization to ensure ABI check on library load
+    - Updated CMake to configure both header and source files
+  - **Mechanism**: Unique symbol per version causes linker errors on mismatch
+  - **Files**: abi_version.cpp.in (renamed from .cpp), CMakeLists.txt
+  - **Commit**: 64b67ed "Add link-time ABI version checking and comprehensive tests"
+- [x] Task 2.4: Integration tests (cross-ABI version) ✅ **COMPLETED** (2025-11-09)
+  - **Status**: Created comprehensive ABI version test suite
+  - **Coverage**: 27 tests across all ABI version aspects
+    - Version information validation
+    - Compile-time and runtime checks
+    - Compatibility verification (major/minor/patch rules)
+    - Link-time symbol tests
+    - Edge case coverage (overflow, max/min values)
+  - **Results**: All 49 tests pass (100% success rate)
+  - **Files**: tests/abi_version_test.cpp, tests/CMakeLists.txt
+  - **Commit**: 64b67ed "Add link-time ABI version checking and comprehensive tests"
 
 **Resources**: 1 developer (Senior)
 **Risk Level**: Low
+**Status**: ✅ **SPRINT 2 COMPLETED**
 
 ---
 
