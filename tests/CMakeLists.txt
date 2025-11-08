@@ -52,6 +52,30 @@ set_tests_properties(common_thread_safety_test PROPERTIES
     LABELS "thread_safety"
 )
 
+# ABI version tests (Sprint 2 - Task 2.4)
+# Note: These tests require the static library build to test link-time checks
+if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
+    add_executable(common_abi_version_test
+        abi_version_test.cpp
+    )
+
+    target_link_libraries(common_abi_version_test PRIVATE
+        common_system_static
+        GTest::gtest
+        GTest::gtest_main
+        Threads::Threads
+    )
+
+    target_compile_features(common_abi_version_test PRIVATE cxx_std_20)
+
+    add_test(NAME common_abi_version_test COMMAND common_abi_version_test)
+
+    set_tests_properties(common_abi_version_test PROPERTIES
+        TIMEOUT 60
+        LABELS "abi;integration"
+    )
+endif()
+
 # Enable testing
 enable_testing()
 
