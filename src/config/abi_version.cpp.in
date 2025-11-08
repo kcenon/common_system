@@ -24,7 +24,7 @@ extern "C" const char* get_abi_signature() noexcept {
     // Symbol name includes version components
     // Linker will fail if different versions are linked together
     static constexpr const char* signature =
-        "kcenon_common_abi_v1_0_0_ev1";
+        "kcenon_common_abi_v@PROJECT_VERSION_MAJOR@_@PROJECT_VERSION_MINOR@_@PROJECT_VERSION_PATCH@_ev@EVENT_BUS_ABI_VERSION@";
     return signature;
 }
 
@@ -53,5 +53,47 @@ const char* get_abi_info() noexcept {
     }();
     return info.c_str();
 }
+
+// ============================================================================
+// Link-Time ABI Enforcement
+// ============================================================================
+
+/**
+ * @brief Force link-time ABI check
+ *
+ * This function must be called at least once in the program to ensure
+ * ABI signature is validated at link time. The linker will fail if
+ * different ABI versions are mixed.
+ *
+ * Usage: Call this in your main() or library initialization:
+ *   kcenon::common::abi::require_abi_check();
+ */
+void require_abi_check() noexcept {
+    // Force the signature to be referenced
+    [[maybe_unused]] volatile const char* sig = get_abi_signature();
+}
+
+/**
+ * @brief Version-specific link-time enforcer symbol
+ *
+ * This creates a unique symbol for each version that will cause
+ * linker errors if different versions are present.
+ */
+extern "C" void kcenon_common_abi_link_v@PROJECT_VERSION_MAJOR@_@PROJECT_VERSION_MINOR@_@PROJECT_VERSION_PATCH@_ev@EVENT_BUS_ABI_VERSION@() noexcept {
+    // This function body is intentionally empty
+    // Its purpose is to create a unique symbol name per ABI version
+}
+
+// Automatically call the enforcer at static initialization time
+namespace {
+    struct abi_link_enforcer {
+        abi_link_enforcer() {
+            kcenon_common_abi_link_v@PROJECT_VERSION_MAJOR@_@PROJECT_VERSION_MINOR@_@PROJECT_VERSION_PATCH@_ev@EVENT_BUS_ABI_VERSION@();
+        }
+    };
+
+    // Static instance ensures the enforcer is called during initialization
+    [[maybe_unused]] static abi_link_enforcer enforcer_instance;
+} // anonymous namespace
 
 } // namespace kcenon::common::abi

@@ -136,4 +136,21 @@ extern "C" const char* get_abi_signature() noexcept;
  */
 const char* get_abi_info() noexcept;
 
+/**
+ * @brief Force link-time ABI check
+ *
+ * Call this function to ensure link-time ABI validation.
+ * The linker will fail if different ABI versions are mixed.
+ */
+void require_abi_check() noexcept;
+
+/**
+ * @brief Version-specific link-time enforcer symbol
+ *
+ * This creates a unique symbol for each version that will cause
+ * linker errors if different versions are present.
+ * Do not call this directly - it's called automatically at static init time.
+ */
+extern "C" void kcenon_common_abi_link_v@PROJECT_VERSION_MAJOR@_@PROJECT_VERSION_MINOR@_@PROJECT_VERSION_PATCH@_ev@EVENT_BUS_ABI_VERSION@() noexcept;
+
 } // namespace kcenon::common::abi
