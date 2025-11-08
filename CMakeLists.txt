@@ -24,6 +24,20 @@ set(EVENT_BUS_ABI_VERSION 1 CACHE STRING "Event bus ABI version (1=standalone)")
 
 message(STATUS "Event Bus ABI Version: ${EVENT_BUS_ABI_VERSION} (standalone implementation)")
 
+# Generate ABI version header
+string(TIMESTAMP CMAKE_CONFIGURE_TIMESTAMP "%Y-%m-%d %H:%M:%S UTC" UTC)
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/common/config/abi_version.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h"
+    @ONLY
+)
+
+message(STATUS "Generated ABI version header: ${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h")
+
 # Respect global BUILD_INTEGRATION_TESTS flag if set
 if(DEFINED BUILD_INTEGRATION_TESTS)
     if(BUILD_INTEGRATION_TESTS)
@@ -41,6 +55,7 @@ add_library(kcenon::common ALIAS common_system)
 # Set include directories
 target_include_directories(common_system INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -56,15 +71,20 @@ target_compile_definitions(common_system INTERFACE
 if(NOT COMMON_HEADER_ONLY)
     # Convert to static library
     add_library(common_system_static STATIC
-        src/placeholder.cpp  # Add actual source files here
+        src/config/abi_version.cpp
     )
 
     target_include_directories(common_system_static PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
     )
 
     target_compile_features(common_system_static PUBLIC cxx_std_20)
+
+    target_compile_definitions(common_system_static PUBLIC
+        EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
+    )
 endif()
 
 # Installation rules
