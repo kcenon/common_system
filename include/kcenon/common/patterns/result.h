@@ -28,6 +28,9 @@
 #include <system_error>
 #include <sstream>
 
+// Import error codes from centralized location
+#include <kcenon/common/error/error_codes.h>
+
 // Check for source_location support
 #if defined(__has_include)
 #  if __has_include(<source_location>)
@@ -671,28 +674,32 @@ Result<T> or_else(const Result<T>& result, F&& func) {
     return result.or_else(std::forward<F>(func));
 }
 
-// Common error codes
+// Import common error codes from centralized error_codes.h
+// Provide backward compatibility aliases for existing code
 namespace error_codes {
-    constexpr int SUCCESS = 0;
-    constexpr int INVALID_ARGUMENT = -1;
-    constexpr int NOT_FOUND = -2;
-    constexpr int PERMISSION_DENIED = -3;
-    constexpr int TIMEOUT = -4;
-    constexpr int CANCELLED = -5;
-    constexpr int NOT_INITIALIZED = -6;
-    constexpr int ALREADY_EXISTS = -7;
-    constexpr int OUT_OF_MEMORY = -8;
-    constexpr int IO_ERROR = -9;
-    constexpr int NETWORK_ERROR = -10;
-    constexpr int INTERNAL_ERROR = -99;
+    using namespace error::codes::common_errors;
 
-    // Module-specific ranges
-    constexpr int THREAD_ERROR_BASE = -100;
-    constexpr int LOGGER_ERROR_BASE = -200;
-    constexpr int MONITORING_ERROR_BASE = -300;
-    constexpr int CONTAINER_ERROR_BASE = -400;
-    constexpr int DATABASE_ERROR_BASE = -500;
-    constexpr int NETWORK_ERROR_BASE = -600;
+    // Uppercase aliases for backward compatibility
+    constexpr int SUCCESS = error::codes::common_errors::success;
+    constexpr int INVALID_ARGUMENT = error::codes::common_errors::invalid_argument;
+    constexpr int NOT_FOUND = error::codes::common_errors::not_found;
+    constexpr int PERMISSION_DENIED = error::codes::common_errors::permission_denied;
+    constexpr int TIMEOUT = error::codes::common_errors::timeout;
+    constexpr int CANCELLED = error::codes::common_errors::cancelled;
+    constexpr int NOT_INITIALIZED = error::codes::common_errors::not_initialized;
+    constexpr int ALREADY_EXISTS = error::codes::common_errors::already_exists;
+    constexpr int OUT_OF_MEMORY = error::codes::common_errors::out_of_memory;
+    constexpr int IO_ERROR = error::codes::common_errors::io_error;
+    constexpr int NETWORK_ERROR = error::codes::common_errors::network_error;
+    constexpr int INTERNAL_ERROR = error::codes::common_errors::internal_error;
+
+    // Module-specific base ranges
+    constexpr int THREAD_ERROR_BASE = static_cast<int>(error::category::thread_system);
+    constexpr int LOGGER_ERROR_BASE = static_cast<int>(error::category::logger_system);
+    constexpr int MONITORING_ERROR_BASE = static_cast<int>(error::category::monitoring_system);
+    constexpr int CONTAINER_ERROR_BASE = static_cast<int>(error::category::container_system);
+    constexpr int DATABASE_ERROR_BASE = static_cast<int>(error::category::database_system);
+    constexpr int NETWORK_ERROR_BASE = static_cast<int>(error::category::network_system);
 }
 
 /**
