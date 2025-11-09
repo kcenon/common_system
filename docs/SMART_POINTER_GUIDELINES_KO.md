@@ -48,7 +48,6 @@
 **문서 버전**: 1.0
 **생성일**: 2025-10-08
 **관련 문서**: [RAII_GUIDELINES.md](./RAII_GUIDELINES.md)
-**단계**: Phase 2 - 리소스 관리 표준화
 
 ---
 
@@ -750,13 +749,6 @@ class connection_pool {
 
 - [C++ Core Guidelines: Smart Pointers](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-smartpointer)
 - [RAII Guidelines](./RAII_GUIDELINES.md)
-- [NEED_TO_FIX.md Phase 2](../../NEED_TO_FIX.md)
-
----
-
-**문서 상태**: Phase 2 기준선
-**다음 검토**: Phase 2 완료 후
-**유지관리자**: 아키텍처 팀
 
 ---
 
