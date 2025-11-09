@@ -76,7 +76,9 @@ public:
      * @brief Submit a task for immediate execution
      * @param task The function to execute
      * @return Future representing the task result
+     * @deprecated Use execute() with IJob instead. This function-based API will be removed in the next major version.
      */
+    [[deprecated("Use execute() with IJob instead. Will be removed in next major version")]]
     virtual std::future<void> submit(std::function<void()> task) = 0;
 
     /**
@@ -84,7 +86,9 @@ public:
      * @param task The function to execute
      * @param delay The delay before execution
      * @return Future representing the task result
+     * @deprecated Use execute_delayed() with IJob instead. This function-based API will be removed in the next major version.
      */
+    [[deprecated("Use execute_delayed() with IJob instead. Will be removed in next major version")]]
     virtual std::future<void> submit_delayed(
         std::function<void()> task,
         std::chrono::milliseconds delay) = 0;
