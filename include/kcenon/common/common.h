@@ -55,14 +55,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace kcenon::common {
 
 /**
- * @brief Version information for Common System.
+ * @brief Version information for Common System
+ *
+ * This structure provides compile-time version information for the common_system
+ * library. It follows Semantic Versioning (SemVer) 2.0.0 principles.
+ *
+ * Version number format: MAJOR.MINOR.PATCH
+ * - MAJOR: Incremented for incompatible API changes
+ * - MINOR: Incremented for backward-compatible functionality additions
+ * - PATCH: Incremented for backward-compatible bug fixes
+ *
+ * Usage:
+ * @code
+ * // Check version at compile time
+ * static_assert(kcenon::common::version_info::major >= 1,
+ *               "Requires common_system v1.0.0 or later");
+ *
+ * // Print version at runtime
+ * std::cout << "common_system version: "
+ *           << kcenon::common::version_info::string << std::endl;
+ *
+ * // Version-specific code
+ * #if (kcenon::common::version_info::major >= 2)
+ *     // Use v2.x API
+ * #else
+ *     // Fallback to v1.x API
+ * #endif
+ * @endcode
+ *
+ * @see https://semver.org/ for Semantic Versioning specification
  */
 struct version_info {
-    /// Major version
+    /// Major version - incremented for breaking changes
     static constexpr int major = 1;
-    /// Minor version
+    /// Minor version - incremented for new features
     static constexpr int minor = 0;
-    /// Patch version
+    /// Patch version - incremented for bug fixes
     static constexpr int patch = 0;
     /// Version as human-readable string
     static constexpr const char* string = "1.0.0";
@@ -83,5 +111,23 @@ struct version_info {
  * This alias bridges the gap during the transition period.
  *
  * @deprecated Use kcenon::common instead of ::common
+ *             This alias will be removed in the next major version (v2.0.0).
+ *             Please update your code to use the fully qualified namespace:
+ *             kcenon::common
+ *
+ * Migration timeline:
+ * - Current version: Alias available with deprecation warning
+ * - Next minor versions: Alias will remain for at least 6 months
+ * - v2.0.0: Alias will be removed
+ *
+ * Example migration:
+ * @code
+ * // Before (deprecated):
+ * common::Result<int> result = ...;
+ *
+ * // After (recommended):
+ * kcenon::common::Result<int> result = ...;
+ * @endcode
  */
+[[deprecated("Use kcenon::common instead. This alias will be removed in v2.0.0")]]
 namespace common = kcenon::common;
