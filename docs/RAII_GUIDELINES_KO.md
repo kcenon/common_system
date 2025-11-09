@@ -6,7 +6,6 @@
 **문서 버전**: 1.0
 **생성일**: 2025-10-08
 **대상**: common_system을 사용하는 모든 시스템
-**단계**: Phase 2 - 리소스 관리 표준화
 
 ---
 
@@ -667,14 +666,7 @@ RAII 구현 시 이 체크리스트를 사용하세요:
 ## 참고 자료
 
 - [C++ Core Guidelines: Resource Management](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management)
-- [NEED_TO_FIX.md Phase 2: Resource Management](../../NEED_TO_FIX.md)
 - [common_system Result<T> Documentation](./ERRORS.md)
-
----
-
-**문서 상태**: Phase 2 기준선
-**다음 검토**: Phase 2 완료 후
-**담당자**: Architecture Team
 
 ---
 
