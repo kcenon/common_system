@@ -345,13 +345,18 @@ The project includes comprehensive unit tests:
 
 ## Documentation
 
-- [API Reference](docs/API.md)
-- [Architecture Guide](docs/ARCHITECTURE.md)
-- [Integration Guide](docs/INTEGRATION.md)
-- [Error Handling Guide](docs/ERROR_HANDLING.md)
-- [RAII Guidelines](docs/RAII_GUIDELINES.md)
-- [Smart Pointer Guidelines](docs/SMART_POINTER_GUIDELINES.md)
-- [Migration Guide](docs/MIGRATION.md)
+📖 **[Complete Documentation Index](docs/)** - Browse all available documentation
+
+### Quick Links
+
+- [Architecture Guide](docs/ARCHITECTURE.md) - System architecture and design
+- [Integration Guide](docs/INTEGRATION.md) - Integration examples and patterns
+- [Error Handling Guide](docs/ERROR_HANDLING.md) - Result<T> pattern and best practices
+- [Migration Guide](docs/MIGRATION.md) - Migrating to common_system
+- [Error Code Guidelines](docs/ERROR_CODE_GUIDELINES.md) - Error code management
+- [RAII Guidelines](docs/RAII_GUIDELINES.md) - Resource management patterns
+- [Smart Pointer Guidelines](docs/SMART_POINTER_GUIDELINES.md) - Smart pointer usage
+- [IExecutor Migration Guide](docs/IEXECUTOR_MIGRATION_GUIDE.md) - Executor API migration
 
 ## Performance Benchmarks
 
