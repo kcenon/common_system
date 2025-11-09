@@ -73,36 +73,6 @@ namespace detail {
     // This ensures that object files compiled with different macro definitions
     // cannot be linked together, preventing subtle runtime errors.
     constexpr int event_bus_abi_version = 1;  // Standalone implementation
-} // namespace detail
-
-    enum class event_priority {
-        low = 0,
-        normal = 1,
-        high = 2
-    };
-
-    /**
-     * @brief Type alias for subscription ID
-     */
-    using subscription_id = uint64_t;
-
-    /**
-     * @struct event
-     * @brief Generic event structure for the event bus
-     */
-    struct event {
-        std::string type_;
-        std::string data_;
-
-        event() = default;
-        event(const std::string& type, const std::string& data = "")
-            : type_(type), data_(data) {}
-
-        void set_type(const std::string& type) { type_ = type; }
-        void set_data(const std::string& data) { data_ = data; }
-        std::string get_type() const { return type_; }
-        std::string get_data() const { return data_; }
-    };
 
     /**
      * @brief Generate unique type ID for each event type using std::type_index
@@ -141,6 +111,39 @@ namespace detail {
             static const size_t type_id = std::hash<std::type_index>{}(std::type_index(typeid(T)));
             return type_id;
         }
+    };
+} // namespace detail
+
+    // Public API - expose detail::event_type_id for backward compatibility
+    using detail::event_type_id;
+
+    enum class event_priority {
+        low = 0,
+        normal = 1,
+        high = 2
+    };
+
+    /**
+     * @brief Type alias for subscription ID
+     */
+    using subscription_id = uint64_t;
+
+    /**
+     * @struct event
+     * @brief Generic event structure for the event bus
+     */
+    struct event {
+        std::string type_;
+        std::string data_;
+
+        event() = default;
+        event(const std::string& type, const std::string& data = "")
+            : type_(type), data_(data) {}
+
+        void set_type(const std::string& type) { type_ = type; }
+        void set_data(const std::string& data) { data_ = data; }
+        std::string get_type() const { return type_; }
+        std::string get_data() const { return data_; }
     };
 
     /**
