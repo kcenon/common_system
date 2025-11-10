@@ -35,6 +35,6 @@
     }
   },
   "default-features": ["tests"],
-  "builtin-baseline": "C++20 standard library (std::format)",
-  "$comment": "This project requires C++20 or later for std::format support"
+  "builtin-baseline": "C++17 standard library",
+  "$comment": "This project requires C++17 or later, with optional C++20 features (std::source_location) when available"
 }
