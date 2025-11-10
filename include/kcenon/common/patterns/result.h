@@ -31,19 +31,8 @@
 // Import error codes from centralized location
 #include <kcenon/common/error/error_codes.h>
 
-// Check for source_location support
-#if defined(__has_include)
-#  if __has_include(<source_location>)
-#    include <source_location>
-#    if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907L
-#      define COMMON_HAS_SOURCE_LOCATION 1
-#    endif
-#  endif
-#endif
-
-#ifndef COMMON_HAS_SOURCE_LOCATION
-#  define COMMON_HAS_SOURCE_LOCATION 0
-#endif
+// Import C++17-compatible source_location
+#include <kcenon/common/utils/source_location.h>
 
 namespace kcenon::common {
 
@@ -235,7 +224,7 @@ public:
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(
-        std::source_location loc = std::source_location::current()
+        source_location loc = source_location::current()
     ) const {
         if (is_uninitialized()) {
             std::ostringstream oss;
@@ -279,7 +268,7 @@ public:
      */
 #if COMMON_HAS_SOURCE_LOCATION
     T& unwrap(
-        std::source_location loc = std::source_location::current()
+        source_location loc = source_location::current()
     ) {
         if (is_uninitialized()) {
             std::ostringstream oss;
@@ -440,7 +429,7 @@ public:
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(
-        std::source_location loc = std::source_location::current()
+        source_location loc = source_location::current()
     ) const {
         if (!has_value()) {
             std::ostringstream oss;
