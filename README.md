@@ -10,7 +10,7 @@
 
 ## Overview
 
-The Common System Project is a foundational C++20 header-only library providing essential interfaces and design patterns for building modular, loosely-coupled system architectures. Designed as the cornerstone of the ecosystem, it enables seamless integration between system modules while maintaining zero runtime overhead through template-based abstractions and interface-driven design.
+The Common System Project is a foundational C++17 header-only library providing essential interfaces and design patterns for building modular, loosely-coupled system architectures. Designed as the cornerstone of the ecosystem, it enables seamless integration between system modules while maintaining zero runtime overhead through template-based abstractions and interface-driven design. Supports optional C++20 features when available.
 
 > **🏗️ Modular Architecture**: Pure header-only design with zero dependencies, providing universal interfaces for executor patterns, error handling, and event-driven communication.
 
@@ -120,7 +120,8 @@ This project addresses the fundamental challenge in large-scale C++ development:
 - **IDE-friendly**: Full IntelliSense and autocomplete support
 
 ### 🌐 **Universal Compatibility**
-- **C++20 standard**: Leverages modern C++ features including std::format
+- **C++17 standard**: Backward-compatible with wider compiler support (GCC 7+, Clang 5+, MSVC 2017+)
+- **C++20 features**: Optional support for std::source_location when available
 - **Cross-platform**: Windows, Linux, macOS without modification
 - **Build system agnostic**: CMake, Bazel, Make - all supported
 - **Package manager ready**: vcpkg, Conan integration available
@@ -135,7 +136,7 @@ This project addresses the fundamental challenge in large-scale C++ development:
 
 ### System Requirements
 
-- **Compiler**: C++20 compatible (GCC 10+, Clang 10+, MSVC 2019 16.11+)
+- **Compiler**: C++17 compatible (GCC 7+, Clang 5+, MSVC 2017+) - C++20 recommended for enhanced features
 - **Build System**: CMake 3.16 or higher
 - **Optional**: vcpkg or Conan for dependency management
 - **Platform**: Windows, Linux, macOS (all architectures)
@@ -398,7 +399,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] Unified `kcenon::common` namespace
 - [x] Task-based IExecutor interface
 - [x] Comprehensive documentation reorganization
-- [ ] C++20 concepts for interface constraints
+- [x] C++17 compatibility with optional C++20 features
 - [ ] Coroutine support for async patterns
 - [ ] std::expected migration (C++23)
 - [ ] Additional design patterns (Observer, Command)

@@ -7,20 +7,19 @@
 
 #include <memory>
 #include <type_traits>
-#include <concepts>
 
 #include "typed_adapter.h"
 
 namespace kcenon::common::adapters {
 
 /**
- * @brief Concept to check if a type implements an interface
+ * @brief Type trait to check if a type implements an interface (C++17 compatible)
  * @tparam T The type to check
  * @tparam Interface The interface to check against
  */
 template<typename T, typename Interface>
-concept implements_interface = std::is_base_of_v<Interface, T> ||
-                               std::is_convertible_v<T*, Interface*>;
+inline constexpr bool implements_interface_v = std::is_base_of_v<Interface, T> ||
+                                                std::is_convertible_v<T*, Interface*>;
 
 /**
  * @brief Smart adapter factory that avoids unnecessary wrapping
@@ -46,7 +45,7 @@ public:
      */
     template<typename Interface, typename Impl>
     static std::shared_ptr<Interface> make_adapter(std::shared_ptr<Impl> impl) {
-        if constexpr (implements_interface<Impl, Interface>) {
+        if constexpr (implements_interface_v<Impl, Interface>) {
             // Zero-cost: Direct cast, no wrapper needed
             return std::static_pointer_cast<Interface>(impl);
         } else {
@@ -106,7 +105,7 @@ public:
      */
     template<typename Interface, typename Impl>
     static constexpr bool is_zero_cost() {
-        return implements_interface<Impl, Interface>;
+        return implements_interface_v<Impl, Interface>;
     }
 };
 
