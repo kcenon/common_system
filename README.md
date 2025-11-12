@@ -173,7 +173,7 @@ target_link_libraries(your_target PRIVATE kcenon::common)
 ```bash
 git clone https://github.com/kcenon/common_system.git
 cd common_system
-./build.sh --release --install-prefix=/usr/local
+./scripts/build.sh --release --install-prefix=/usr/local
 sudo cmake --build build --target install
 ```
 
@@ -185,26 +185,26 @@ git clone https://github.com/kcenon/common_system.git
 cd common_system
 
 # Build with tests and examples
-./build.sh --release --tests --examples
+./scripts/build.sh --release --tests --examples
 
 # Run tests
-./test.sh
+./scripts/test.sh
 
 # Clean build artifacts
-./clean.sh
+./scripts/clean.sh
 ```
 
 ### Windows Build
 
 ```batch
 REM Using Visual Studio 2022
-build.bat --vs2022 --release
+scripts\build.bat --vs2022 --release
 
 REM Run tests
-test.bat --release
+scripts\test.bat --release
 
 REM Clean artifacts
-clean.bat
+scripts\clean.bat
 ```
 
 ## Core Components
@@ -240,7 +240,7 @@ Type-safe error handling without exceptions:
 
 common::Result<Config> load_config(const std::string& path) {
     if (!std::filesystem::exists(path)) {
-        return common::error<Config>(
+        return common::make_error<Config>(
             common::error_codes::NOT_FOUND,
             "Configuration file not found",
             "config_loader"
@@ -251,7 +251,7 @@ common::Result<Config> load_config(const std::string& path) {
         auto config = parse_json_file(path);
         return common::ok(config);
     } catch (const std::exception& e) {
-        return common::error<Config>(
+        return common::make_error<Config>(
             common::error_codes::INVALID_ARGUMENT,
             e.what(),
             "config_loader"
@@ -332,16 +332,16 @@ The project includes comprehensive unit tests:
 
 ```bash
 # Run all tests
-./test.sh
+./scripts/test.sh
 
 # Run with coverage
-./test.sh --coverage
+./scripts/test.sh --coverage
 
 # Run specific tests
-./test.sh --filter "Result*"
+./scripts/test.sh --filter "Result*"
 
 # Benchmark tests
-./test.sh --benchmark
+./scripts/test.sh --benchmark
 ```
 
 ## Documentation
