@@ -242,7 +242,8 @@ TEST_F(ExecutorTest, ExceptionHandling) {
     auto result = executor_->execute(std::move(job));
     ASSERT_TRUE(is_ok(result));
 
-    EXPECT_THROW(get_value(std::move(result)).get(), std::runtime_error);
+    auto future = std::move(get_value(result));
+    EXPECT_THROW(future.get(), std::runtime_error);
 }
 
 TEST_F(ExecutorTest, ExecutorProvider) {
