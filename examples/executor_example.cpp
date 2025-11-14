@@ -282,7 +282,7 @@ void process_data_batch(IExecutor& executor, const std::vector<int>& data) {
 
         auto result = executor.execute(std::move(job));
         if (is_ok(result)) {
-            futures.push_back(get_value(std::move(result)));
+            futures.push_back(std::move(get_value(result)));
         }
     }
 
@@ -405,7 +405,7 @@ int main() {
             auto result = job_executor.execute(std::move(job));
 
             if (is_ok(result)) {
-                job_futures.push_back(get_value(std::move(result)));
+                job_futures.push_back(std::move(get_value(result)));
             } else {
                 auto& err = get_error(result);
                 std::cout << "   Failed to execute job: "

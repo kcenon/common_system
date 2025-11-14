@@ -55,7 +55,7 @@ public:
             func_();
             return ok();
         } catch (const std::exception& e) {
-            return make_error(1, e.what(), "JobExecutionError");
+            return VoidResult(error_info(1, e.what(), "JobExecutionError"));
         }
     }
 
@@ -179,8 +179,7 @@ TEST_F(ExecutorTest, ExecuteTask) {
     auto result = executor_->execute(std::move(job));
     ASSERT_TRUE(is_ok(result));
 
-    auto future = get_value(std::move(result));
-    future.wait();
+    get_value(std::move(result)).wait();
     EXPECT_TRUE(executed);
 }
 
@@ -196,7 +195,7 @@ TEST_F(ExecutorTest, ExecuteMultipleTasks) {
 
         auto result = executor_->execute(std::move(job));
         ASSERT_TRUE(is_ok(result));
-        futures.push_back(get_value(std::move(result)));
+        futures.push_back(std::move(get_value(result)));
     }
 
     for (auto& future : futures) {
@@ -217,8 +216,7 @@ TEST_F(ExecutorTest, ExecuteDelayed) {
     auto result = executor_->execute_delayed(std::move(job), 100ms);
     ASSERT_TRUE(is_ok(result));
 
-    auto future = get_value(std::move(result));
-    future.wait();
+    get_value(std::move(result)).wait();
     auto elapsed = std::chrono::steady_clock::now() - start;
 
     EXPECT_TRUE(executed);
@@ -244,8 +242,7 @@ TEST_F(ExecutorTest, ExceptionHandling) {
     auto result = executor_->execute(std::move(job));
     ASSERT_TRUE(is_ok(result));
 
-    auto future = get_value(std::move(result));
-    EXPECT_THROW(future.get(), std::runtime_error);
+    EXPECT_THROW(get_value(std::move(result)).get(), std::runtime_error);
 }
 
 TEST_F(ExecutorTest, ExecutorProvider) {
