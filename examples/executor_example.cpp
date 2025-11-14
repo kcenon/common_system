@@ -63,16 +63,31 @@ public:
         shutdown(true);
     }
 
-    std::future<void> submit(std::function<void()> task) override {
+    // Job-based execution support
+    Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
+        if (!job) {
+            return error_info(1, "Job is null", "mock_executor");
+        }
+
         auto promise = std::make_shared<std::promise<void>>();
         auto future = promise->get_future();
 
+        // Use shared_ptr to make lambda copy-constructible
+        auto shared_job = std::shared_ptr<IJob>(std::move(job));
+
         {
             std::lock_guard<std::mutex> lock(queue_mutex_);
-            tasks_.emplace([task = std::move(task), promise]() {
+            tasks_.emplace([shared_job, promise]() {
                 try {
-                    task();
-                    promise->set_value();
+                    auto result = shared_job->execute();
+                    if (is_error(result)) {
+                        auto& err = get_error(result);
+                        promise->set_exception(
+                            std::make_exception_ptr(
+                                std::runtime_error(err.message)));
+                    } else {
+                        promise->set_value();
+                    }
                 } catch (...) {
                     promise->set_exception(std::current_exception());
                 }
@@ -81,35 +96,7 @@ public:
         }
         queue_cv_.notify_one();
 
-        return future;
-    }
-
-    std::future<void> submit_delayed(std::function<void()> task,
-                                    std::chrono::milliseconds delay) override {
-        // Simple implementation: sleep then submit
-        std::this_thread::sleep_for(delay);
-        return submit(std::move(task));
-    }
-
-    // Phase 2: Job-based execution support
-    Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
-        if (!job) {
-            return error_info(1, "Job is null", "mock_executor");
-        }
-
-        // Use shared_ptr to make lambda copy-constructible
-        auto shared_job = std::shared_ptr<IJob>(std::move(job));
-
-        auto task = [shared_job]() {
-            auto result = shared_job->execute();
-            if (is_error(result)) {
-                // Log error but don't throw - already handled by Result
-                auto& err = get_error(result);
-                std::cerr << "Job execution failed: " << err.message << std::endl;
-            }
-        };
-
-        return submit(std::move(task));
+        return ok(std::move(future));
     }
 
     Result<std::future<void>> execute_delayed(
@@ -119,18 +106,35 @@ public:
             return error_info(1, "Job is null", "mock_executor");
         }
 
+        auto promise = std::make_shared<std::promise<void>>();
+        auto future = promise->get_future();
+
         // Use shared_ptr to make lambda copy-constructible
         auto shared_job = std::shared_ptr<IJob>(std::move(job));
 
-        auto task = [shared_job]() {
-            auto result = shared_job->execute();
-            if (is_error(result)) {
-                auto& err = get_error(result);
-                std::cerr << "Job execution failed: " << err.message << std::endl;
-            }
-        };
+        {
+            std::lock_guard<std::mutex> lock(queue_mutex_);
+            tasks_.emplace([shared_job, promise, delay]() {
+                std::this_thread::sleep_for(delay);
+                try {
+                    auto result = shared_job->execute();
+                    if (is_error(result)) {
+                        auto& err = get_error(result);
+                        promise->set_exception(
+                            std::make_exception_ptr(
+                                std::runtime_error(err.message)));
+                    } else {
+                        promise->set_value();
+                    }
+                } catch (...) {
+                    promise->set_exception(std::current_exception());
+                }
+            });
+            pending_count_++;
+        }
+        queue_cv_.notify_one();
 
-        return submit_delayed(std::move(task), delay);
+        return ok(std::move(future));
     }
 
     size_t worker_count() const override {
@@ -202,6 +206,30 @@ private:
 };
 
 /**
+ * Simple function job wrapper
+ */
+class function_job : public IJob {
+public:
+    explicit function_job(std::function<void()> func, std::string name = "function_job")
+        : func_(std::move(func)), name_(std::move(name)) {}
+
+    VoidResult execute() override {
+        try {
+            func_();
+            return VoidResult(std::monostate{});
+        } catch (const std::exception& e) {
+            return VoidResult(error_info(1, e.what(), "function_job"));
+        }
+    }
+
+    std::string get_name() const override { return name_; }
+
+private:
+    std::function<void()> func_;
+    std::string name_;
+};
+
+/**
  * Example job implementation
  */
 class calculation_job : public IJob {
@@ -244,14 +272,18 @@ void process_data_batch(IExecutor& executor, const std::vector<int>& data) {
     std::cout << "Processing " << data.size() << " items using "
               << executor.worker_count() << " workers\n";
 
-    // Submit tasks
+    // Submit tasks using job-based API
     for (int value : data) {
-        auto future = executor.submit([&sum, value] {
+        auto job = std::make_unique<function_job>([&sum, value] {
             // Simulate some work
             std::this_thread::sleep_for(10ms);
             sum += value * value;
         });
-        futures.push_back(std::move(future));
+
+        auto result = executor.execute(std::move(job));
+        if (is_ok(result)) {
+            futures.push_back(get_value(std::move(result)));
+        }
     }
 
     // Wait for completion
@@ -286,19 +318,24 @@ int main() {
     std::cout << "=== IExecutor Interface Examples ===\n\n";
 
     // Example 1: Basic usage
-    std::cout << "1. Basic task submission:\n";
+    std::cout << "1. Basic task execution:\n";
     mock_executor executor(2);
 
-    auto future1 = executor.submit([] {
+    auto job1 = std::make_unique<function_job>([] {
         std::cout << "   Task 1 executed\n";
     });
+    auto result1 = executor.execute(std::move(job1));
+    if (is_ok(result1)) {
+        get_value(std::move(result1)).wait();
+    }
 
-    auto future2 = executor.submit([] {
+    auto job2 = std::make_unique<function_job>([] {
         std::cout << "   Task 2 executed\n";
     });
-
-    future1.wait();
-    future2.wait();
+    auto result2 = executor.execute(std::move(job2));
+    if (is_ok(result2)) {
+        get_value(std::move(result2)).wait();
+    }
 
     // Example 2: Check executor status
     std::cout << "\n2. Executor status:\n";
@@ -316,55 +353,62 @@ int main() {
     example_executor_provider provider;
     auto shared_executor = provider.get_executor();
 
-    shared_executor->submit([] {
+    auto provider_job = std::make_unique<function_job>([] {
         std::cout << "   Task from shared executor\n";
-    }).wait();
+    });
+    auto provider_result = shared_executor->execute(std::move(provider_job));
+    if (is_ok(provider_result)) {
+        get_value(std::move(provider_result)).wait();
+    }
 
     // Example 5: Delayed execution
     std::cout << "\n5. Delayed execution:\n";
     std::cout << "   Scheduling delayed task...\n";
     auto start = std::chrono::steady_clock::now();
 
-    auto delayed_future = executor.submit_delayed(
-        [start] {
-            auto elapsed = std::chrono::steady_clock::now() - start;
-            auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
-            std::cout << "   Delayed task executed after " << ms.count() << "ms\n";
-        },
-        500ms
-    );
+    auto delayed_job = std::make_unique<function_job>([start] {
+        auto elapsed = std::chrono::steady_clock::now() - start;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
+        std::cout << "   Delayed task executed after " << ms.count() << "ms\n";
+    });
 
-    delayed_future.wait();
+    auto delayed_result = executor.execute_delayed(std::move(delayed_job), 500ms);
+    if (is_ok(delayed_result)) {
+        get_value(std::move(delayed_result)).wait();
+    }
 
     // Example 6: Error handling
     std::cout << "\n6. Error handling:\n";
-    auto error_future = executor.submit([] {
+    auto error_job = std::make_unique<function_job>([] {
         throw std::runtime_error("Task failed!");
     });
 
-    try {
-        error_future.get();
-    } catch (const std::exception& e) {
-        std::cout << "   Caught exception: " << e.what() << "\n";
+    auto error_result = executor.execute(std::move(error_job));
+    if (is_ok(error_result)) {
+        try {
+            get_value(std::move(error_result)).get();
+        } catch (const std::exception& e) {
+            std::cout << "   Caught exception: " << e.what() << "\n";
+        }
     }
 
-    // Example 7: Job-based execution (Phase 2)
-    std::cout << "\n7. Job-based execution (Phase 2):\n";
+    // Example 7: Custom job execution
+    std::cout << "\n7. Custom job execution:\n";
     {
         mock_executor job_executor(2);
         std::atomic<int> job_sum{0};
         std::vector<std::future<void>> job_futures;
 
-        std::cout << "   Submitting calculation jobs...\n";
+        std::cout << "   Executing calculation jobs...\n";
         for (int i = 1; i <= 5; ++i) {
             auto job = std::make_unique<calculation_job>(i, job_sum);
             auto result = job_executor.execute(std::move(job));
 
             if (is_ok(result)) {
-                job_futures.push_back(std::move(get_value(result)));
+                job_futures.push_back(get_value(std::move(result)));
             } else {
                 auto& err = get_error(result);
-                std::cout << "   Failed to submit job: "
+                std::cout << "   Failed to execute job: "
                          << err.message << "\n";
             }
         }
@@ -374,18 +418,19 @@ int main() {
             future.wait();
         }
 
-        std::cout << "   Job-based sum of squares: " << job_sum << "\n";
+        std::cout << "   Custom job sum of squares: " << job_sum << "\n";
     }
 
     // Example 8: Graceful shutdown
     std::cout << "\n8. Graceful shutdown:\n";
 
-    // Submit some tasks
+    // Execute some tasks
     for (int i = 0; i < 5; ++i) {
-        executor.submit([i] {
+        auto final_job = std::make_unique<function_job>([i] {
             std::this_thread::sleep_for(50ms);
             std::cout << "   Final task " << i << " completed\n";
         });
+        executor.execute(std::move(final_job));
     }
 
     std::cout << "   Pending tasks before shutdown: "
