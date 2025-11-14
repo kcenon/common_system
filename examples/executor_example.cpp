@@ -386,7 +386,8 @@ int main() {
     auto error_result = executor.execute(std::move(error_job));
     if (is_ok(error_result)) {
         try {
-            get_value(std::move(error_result)).get();
+            auto error_future = std::move(get_value(error_result));
+            error_future.get();
         } catch (const std::exception& e) {
             std::cout << "   Caught exception: " << e.what() << "\n";
         }
