@@ -43,46 +43,35 @@ using namespace kcenon::common::interfaces;
 using namespace std::chrono_literals;
 
 /**
+ * Simple job wrapper for testing
+ */
+class FunctionJob : public IJob {
+public:
+    explicit FunctionJob(std::function<void()> func, std::string name = "test_job")
+        : func_(std::move(func)), name_(std::move(name)) {}
+
+    VoidResult execute() override {
+        try {
+            func_();
+            return ok();
+        } catch (const std::exception& e) {
+            return VoidResult(error_info(1, e.what(), "JobExecutionError"));
+        }
+    }
+
+    std::string get_name() const override { return name_; }
+
+private:
+    std::function<void()> func_;
+    std::string name_;
+};
+
+/**
  * Mock executor for testing
  */
 class MockExecutor : public IExecutor {
 public:
     MockExecutor(size_t num_workers = 1) : num_workers_(num_workers) {}
-
-    std::future<void> submit(std::function<void()> task) override {
-        auto promise = std::make_shared<std::promise<void>>();
-        auto future = promise->get_future();
-
-        std::thread([task = std::move(task), promise]() {
-            try {
-                task();
-                promise->set_value();
-            } catch (...) {
-                promise->set_exception(std::current_exception());
-            }
-        }).detach();
-
-        submitted_count_++;
-        return future;
-    }
-
-    std::future<void> submit_delayed(std::function<void()> task,
-                                    std::chrono::milliseconds delay) override {
-        auto promise = std::make_shared<std::promise<void>>();
-        auto future = promise->get_future();
-
-        std::thread([task = std::move(task), promise, delay]() {
-            std::this_thread::sleep_for(delay);
-            try {
-                task();
-                promise->set_value();
-            } catch (...) {
-                promise->set_exception(std::current_exception());
-            }
-        }).detach();
-
-        return future;
-    }
 
     Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) override {
         if (!job) {
@@ -180,26 +169,33 @@ protected:
     std::unique_ptr<MockExecutor> executor_;
 };
 
-TEST_F(ExecutorTest, SubmitTask) {
+TEST_F(ExecutorTest, ExecuteTask) {
     std::atomic<bool> executed{false};
 
-    auto future = executor_->submit([&executed]() {
+    auto job = std::make_unique<FunctionJob>([&executed]() {
         executed = true;
     });
 
-    future.wait();
+    auto result = executor_->execute(std::move(job));
+    ASSERT_TRUE(is_ok(result));
+
+    get_value(std::move(result)).wait();
     EXPECT_TRUE(executed);
 }
 
-TEST_F(ExecutorTest, SubmitMultipleTasks) {
+TEST_F(ExecutorTest, ExecuteMultipleTasks) {
     const size_t task_count = 10;
     std::atomic<size_t> counter{0};
     std::vector<std::future<void>> futures;
 
     for (size_t i = 0; i < task_count; ++i) {
-        futures.push_back(executor_->submit([&counter]() {
+        auto job = std::make_unique<FunctionJob>([&counter]() {
             counter++;
-        }));
+        });
+
+        auto result = executor_->execute(std::move(job));
+        ASSERT_TRUE(is_ok(result));
+        futures.push_back(std::move(get_value(result)));
     }
 
     for (auto& future : futures) {
@@ -209,15 +205,18 @@ TEST_F(ExecutorTest, SubmitMultipleTasks) {
     EXPECT_EQ(counter, task_count);
 }
 
-TEST_F(ExecutorTest, SubmitDelayed) {
+TEST_F(ExecutorTest, ExecuteDelayed) {
     std::atomic<bool> executed{false};
     auto start = std::chrono::steady_clock::now();
 
-    auto future = executor_->submit_delayed([&executed]() {
+    auto job = std::make_unique<FunctionJob>([&executed]() {
         executed = true;
-    }, 100ms);
+    });
 
-    future.wait();
+    auto result = executor_->execute_delayed(std::move(job), 100ms);
+    ASSERT_TRUE(is_ok(result));
+
+    get_value(std::move(result)).wait();
     auto elapsed = std::chrono::steady_clock::now() - start;
 
     EXPECT_TRUE(executed);
@@ -236,10 +235,14 @@ TEST_F(ExecutorTest, IsRunning) {
 }
 
 TEST_F(ExecutorTest, ExceptionHandling) {
-    auto future = executor_->submit([]() {
+    auto job = std::make_unique<FunctionJob>([]() {
         throw std::runtime_error("Test exception");
     });
 
+    auto result = executor_->execute(std::move(job));
+    ASSERT_TRUE(is_ok(result));
+
+    auto future = std::move(get_value(result));
     EXPECT_THROW(future.get(), std::runtime_error);
 }
 
@@ -278,9 +281,11 @@ TEST_F(ExecutorTest, SubmittedCount) {
     const size_t task_count = 5;
 
     for (size_t i = 0; i < task_count; ++i) {
-        executor_->submit([]() {
+        auto job = std::make_unique<FunctionJob>([]() {
             std::this_thread::sleep_for(1ms);
         });
+        auto result = executor_->execute(std::move(job));
+        ASSERT_TRUE(is_ok(result));
     }
 
     EXPECT_EQ(executor_->get_submitted_count(), task_count);

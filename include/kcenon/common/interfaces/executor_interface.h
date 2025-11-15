@@ -70,37 +70,14 @@ class IExecutor {
 public:
     virtual ~IExecutor() = default;
 
-    // ===== Function-based execution (legacy, kept for compatibility) =====
-
-    /**
-     * @brief Submit a task for immediate execution
-     * @param task The function to execute
-     * @return Future representing the task result
-     * @deprecated Use execute() with IJob instead. This function-based API will be removed in the next major version.
-     */
-    [[deprecated("Use execute() with IJob instead. Will be removed in next major version")]]
-    virtual std::future<void> submit(std::function<void()> task) = 0;
-
-    /**
-     * @brief Submit a task for delayed execution
-     * @param task The function to execute
-     * @param delay The delay before execution
-     * @return Future representing the task result
-     * @deprecated Use execute_delayed() with IJob instead. This function-based API will be removed in the next major version.
-     */
-    [[deprecated("Use execute_delayed() with IJob instead. Will be removed in next major version")]]
-    virtual std::future<void> submit_delayed(
-        std::function<void()> task,
-        std::chrono::milliseconds delay) = 0;
-
-    // ===== Job-based execution (Phase 2: new, preferred) =====
+    // ===== Job-based execution =====
 
     /**
      * @brief Execute a job with Result-based error handling
      * @param job The job to execute
      * @return Result containing future or error
      *
-     * Phase 2: Job-based execution provides better control and testability
+     * Job-based execution provides better control and testability
      */
     virtual Result<std::future<void>> execute(std::unique_ptr<IJob>&& job) = 0;
 
