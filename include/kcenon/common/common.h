@@ -97,37 +97,3 @@ struct version_info {
 };
 
 } // namespace kcenon::common
-
-/**
- * @brief Namespace alias for backward compatibility
- *
- * IMPORTANT: The canonical namespace is kcenon::common
- *
- * For historical reasons, some headers use 'namespace common' directly.
- * This alias ensures that code using ::common can still work, but new
- * code should use kcenon::common for clarity and consistency.
- *
- * The include path is kcenon/common/*, so the namespace should match.
- * This alias bridges the gap during the transition period.
- *
- * @deprecated Use kcenon::common instead of ::common
- *             This alias will be removed in the next major version (v2.0.0).
- *             Please update your code to use the fully qualified namespace:
- *             kcenon::common
- *
- * Migration timeline:
- * - Current version: Alias available with deprecation warning
- * - Next minor versions: Alias will remain for at least 6 months
- * - v2.0.0: Alias will be removed
- *
- * Example migration:
- * @code
- * // Before (deprecated):
- * common::Result<int> result = ...;
- *
- * // After (recommended):
- * kcenon::common::Result<int> result = ...;
- * @endcode
- */
-[[deprecated("Use kcenon::common instead. This alias will be removed in v2.0.0")]]
-namespace common = kcenon::common;
