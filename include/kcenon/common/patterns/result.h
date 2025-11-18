@@ -218,21 +218,14 @@ public:
     }
 
     /**
-     * @brief Get value from result (throws if error or uninitialized)
+     * @brief Get value from result (throws if error)
      * @param loc Source location of the unwrap() call (automatically captured, if supported)
-     * @throws std::runtime_error if result contains error or is uninitialized
+     * @throws std::runtime_error if result contains error
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(
         source_location loc = source_location::current()
     ) const {
-        if (is_uninitialized()) {
-            std::ostringstream oss;
-            oss << "Called unwrap on uninitialized Result\n"
-                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
-                << "  Function: " << loc.function_name();
-            throw std::runtime_error(oss.str());
-        }
         if (is_err()) {
             const auto& err = error_.value();
             std::ostringstream oss;
@@ -250,9 +243,6 @@ public:
     }
 #else
     const T& unwrap() const {
-        if (is_uninitialized()) {
-            throw std::runtime_error("Called unwrap on uninitialized Result");
-        }
         if (is_err()) {
             const auto& err = error_.value();
             throw std::runtime_error("Called unwrap on error: " + err.message);
@@ -262,21 +252,14 @@ public:
 #endif
 
     /**
-     * @brief Get mutable value from result (throws if error or uninitialized)
+     * @brief Get mutable value from result (throws if error)
      * @param loc Source location of the unwrap() call (automatically captured, if supported)
-     * @throws std::runtime_error if result contains error or is uninitialized
+     * @throws std::runtime_error if result contains error
      */
 #if COMMON_HAS_SOURCE_LOCATION
     T& unwrap(
         source_location loc = source_location::current()
     ) {
-        if (is_uninitialized()) {
-            std::ostringstream oss;
-            oss << "Called unwrap on uninitialized Result\n"
-                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
-                << "  Function: " << loc.function_name();
-            throw std::runtime_error(oss.str());
-        }
         if (is_err()) {
             const auto& err = error_.value();
             std::ostringstream oss;
@@ -294,9 +277,6 @@ public:
     }
 #else
     T& unwrap() {
-        if (is_uninitialized()) {
-            throw std::runtime_error("Called unwrap on uninitialized Result");
-        }
         if (is_err()) {
             const auto& err = error_.value();
             throw std::runtime_error("Called unwrap on error: " + err.message);
