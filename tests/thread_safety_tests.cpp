@@ -38,13 +38,9 @@ TEST_F(CommonSystemThreadSafetyTest, ResultConcurrentAccess) {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
                     // Create Result in this thread
-                    Result<int> result;
-
-                    if (j % 3 == 0) {
-                        result = Ok(thread_id * 1000 + j);
-                    } else {
-                        result = Err<int>("Error in thread " + std::to_string(thread_id));
-                    }
+                    Result<int> result = (j % 3 == 0)
+                        ? Ok(thread_id * 1000 + j)
+                        : Err<int>("Error in thread " + std::to_string(thread_id));
 
                     // Pass to another lambda
                     auto process = [&](Result<int> r) {
@@ -291,13 +287,9 @@ TEST_F(CommonSystemThreadSafetyTest, ResultUnwrapSafety) {
     for (int i = 0; i < num_threads; ++i) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread; ++j) {
-                Result<int> result;
-
-                if (j % 4 == 0) {
-                    result = Err<int>("Test error");
-                } else {
-                    result = Ok(thread_id * 1000 + j);
-                }
+                Result<int> result = (j % 4 == 0)
+                    ? Err<int>("Test error")
+                    : Ok(thread_id * 1000 + j);
 
                 if (result.is_ok()) {
                     int value = result.unwrap();

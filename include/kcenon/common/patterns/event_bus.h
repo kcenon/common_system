@@ -296,17 +296,50 @@ namespace detail {
             return id;
         }
 
+        /**
+         * @brief Subscribe to events with a filter function
+         * @tparam EventType The type of event to subscribe to
+         * @tparam HandlerFunc The handler function type
+         * @tparam FilterFunc The filter function type
+         * @param func The handler function to call when the event passes the filter
+         * @param filter The filter function to determine if the handler should be called
+         * @return Subscription ID for later unsubscription
+         *
+         * @note The filter function is called before the handler. If it returns false,
+         *       the handler is not invoked. This allows for efficient event filtering
+         *       without creating multiple event types.
+         */
         template<typename EventType, typename HandlerFunc, typename FilterFunc>
         uint64_t subscribe_filtered(HandlerFunc&& func, FilterFunc&& filter) {
-            // For simplicity, ignore filtering in this lightweight implementation
-            return subscribe<EventType>(std::forward<HandlerFunc>(func));
+            // Create a wrapped handler that includes the filtering logic
+            auto wrapped_handler = [f = std::forward<HandlerFunc>(func),
+                                   flt = std::forward<FilterFunc>(filter)]
+                                  (const EventType& evt) {
+                // Only call the handler if the filter passes
+                if (flt(evt)) {
+                    f(evt);
+                }
+            };
+
+            // Subscribe with the wrapped handler
+            return subscribe<EventType>(std::move(wrapped_handler));
         }
 
         // Non-template overload for generic event filtering
         uint64_t subscribe_filtered(
             std::function<void(const event&)>&& func,
-            std::function<bool(const event&)>&&) {
-            return subscribe(std::move(func));
+            std::function<bool(const event&)>&& filter) {
+            // Create a wrapped handler that includes the filtering logic
+            auto wrapped_handler = [f = std::move(func),
+                                   flt = std::move(filter)]
+                                  (const event& evt) {
+                // Only call the handler if the filter passes
+                if (flt(evt)) {
+                    f(evt);
+                }
+            };
+
+            return subscribe(std::move(wrapped_handler));
         }
 
         void unsubscribe(uint64_t id) {

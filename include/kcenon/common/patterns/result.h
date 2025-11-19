@@ -124,24 +124,23 @@ private:
     std::optional<error_info> error_;
 
 public:
-    // Constructors
-    /**
-     * @brief Default constructor - initializes to error state
-     *
-     * BREAKING CHANGE: Previously created uninitialized state, now creates
-     * error state with not_initialized code to prevent accidental access.
-     * This makes Result exception-safe by default.
-     *
-     * Migration: Code relying on default construction should explicitly use
-     * Result<T>::ok() or Result<T>::err() factory methods instead.
-     */
-    Result() : value_(std::nullopt),
-               error_(error_info{-6, "Result not initialized", "common::Result"}) {}
-
+    // Constructors - public but encourage use of factory methods
     Result(const T& value) : value_(value), error_(std::nullopt) {}
     Result(T&& value) : value_(std::move(value)), error_(std::nullopt) {}
     Result(const error_info& error) : value_(std::nullopt), error_(error) {}
     Result(error_info&& error) : value_(std::nullopt), error_(std::move(error)) {}
+    /**
+     * @brief Default constructor is deleted to enforce explicit initialization
+     *
+     * BREAKING CHANGE: Default construction is now prohibited to prevent
+     * unintentional creation of uninitialized or error-state Results.
+     * This forces developers to explicitly use factory methods.
+     *
+     * Migration: Use Result<T>::ok() for successful results or
+     * Result<T>::err() for error results. For cases requiring a
+     * default error state, use Result<T>::uninitialized() factory method.
+     */
+    Result() = delete;
 
     // Copy and move
     Result(const Result&) = default;
@@ -190,6 +189,18 @@ public:
      */
     static Result<T> err(int code, const std::string& message, const std::string& module = "") {
         return Result<T>(error_info{code, message, module});
+    }
+
+    /**
+     * @brief Create an explicitly uninitialized result (use with caution)
+     * @return Result<T> containing an error state indicating uninitialized
+     *
+     * This factory method is provided for cases where an uninitialized state
+     * is explicitly required (e.g., delayed initialization, placeholder values).
+     * Use sparingly and prefer explicit initialization with ok() or err().
+     */
+    static Result<T> uninitialized() {
+        return Result<T>(error_info{-6, "Result not initialized", "common::Result"});
     }
 
     /**
@@ -337,8 +348,8 @@ public:
         } else if (is_err()) {
             return Result<ReturnType>(error_.value());
         } else {
-            // Uninitialized state
-            return Result<ReturnType>();
+            // Uninitialized state - use uninitialized factory
+            return Result<ReturnType>::uninitialized();
         }
     }
 
@@ -354,8 +365,8 @@ public:
         } else if (is_err()) {
             return ReturnType(error_.value());
         } else {
-            // Uninitialized state
-            return ReturnType();
+            // Uninitialized state - use uninitialized factory
+            return ReturnType::uninitialized();
         }
     }
 

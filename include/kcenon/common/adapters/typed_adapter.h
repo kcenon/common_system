@@ -154,6 +154,10 @@ private:
      * @brief Calculate the depth of adapter wrapping
      * @param impl The implementation to check
      * @return Depth level (0 for direct implementation, 1+ for wrapped)
+     *
+     * @note max_wrapper_depth_ = 2 is enforced to prevent performance degradation
+     *       from excessive adapter layering. Deep nesting can cause cache misses
+     *       and vtable indirection overhead.
      */
     static size_t calculate_depth(std::shared_ptr<Implementation> impl) {
         if (!impl) {
@@ -162,9 +166,22 @@ private:
 
         // Check if implementation inherits from adapter_base using compile-time check
         if constexpr (std::is_base_of_v<adapter_base, Implementation>) {
-            // Safe static_cast (no RTTI needed)
+            // Use dynamic_cast for runtime safety when RTTI is available
+            #ifdef __cpp_rtti
+            if (auto* base_adapter = dynamic_cast<adapter_base*>(impl.get())) {
+                return 1 + base_adapter->get_adapter_depth();
+            }
+            // If dynamic_cast fails, fall back to 0
+            return 0;
+            #else
+            // When RTTI is disabled, use static_cast with additional validation
             auto* base_adapter = static_cast<adapter_base*>(impl.get());
-            return 1 + base_adapter->get_adapter_depth();
+            // Validate the cast by checking the type ID
+            if (base_adapter && base_adapter->get_type_id() != 0) {
+                return 1 + base_adapter->get_adapter_depth();
+            }
+            return 0;
+            #endif
         }
 
         return 0;
@@ -186,15 +203,22 @@ std::shared_ptr<T> safe_unwrap(std::shared_ptr<Interface> ptr) {
 
     // Check if Interface is derived from adapter_base using compile-time check
     if constexpr (std::is_base_of_v<adapter_base, Interface>) {
-        // Safe static_cast to adapter_base
+        #ifdef __cpp_rtti
+        // Use dynamic_cast for runtime safety when RTTI is available
+        if (auto* adapter = dynamic_cast<typed_adapter<Interface, T>*>(ptr.get())) {
+            return adapter->unwrap();
+        }
+        #else
+        // When RTTI is disabled, use static_cast with type ID validation
         auto* base = static_cast<adapter_base*>(ptr.get());
 
         // Check if this is the correct adapter type by comparing type IDs
-        if (base->get_type_id() == typed_adapter<Interface, T>::get_static_type_id()) {
-            // Safe static_cast to typed_adapter
+        if (base && base->get_type_id() == typed_adapter<Interface, T>::get_static_type_id()) {
+            // Safe static_cast to typed_adapter after validation
             auto* adapter = static_cast<typed_adapter<Interface, T>*>(ptr.get());
             return adapter->unwrap();
         }
+        #endif
     }
 
     // Not an adapter or wrong type
