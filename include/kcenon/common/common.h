@@ -50,6 +50,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "patterns/result.h"
 #include "patterns/event_bus.h"
 
+/// Common utilities
+#include "utils/object_pool.h"
+#include "utils/circular_buffer.h"
+
 // Note: Build-time configuration is handled by CMake. No CMake includes here.
 
 namespace kcenon::common {

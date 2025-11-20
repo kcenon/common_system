@@ -27,6 +27,7 @@
 #include <stdexcept>
 #include <system_error>
 #include <sstream>
+#include <utility>
 
 // Import error codes from centralized location
 #include <kcenon/common/error/error_codes.h>
@@ -60,6 +61,21 @@ struct error_info {
     error_info(int c, const std::string& msg, const std::string& mod,
                const std::string& det)
         : code(c), message(msg), module(mod), details(det) {}
+
+    /**
+     * @brief Construct from strongly-typed enum error codes.
+     *
+     * Enables database_system/network_system enums to be passed directly
+     * without manual static_cast noise.
+     */
+    template<typename Enum,
+             typename std::enable_if_t<std::is_enum_v<Enum>, int> = 0>
+    error_info(Enum c, std::string msg, std::string mod = "",
+               std::optional<std::string> det = std::nullopt)
+        : code(static_cast<int>(c)),
+          message(std::move(msg)),
+          module(std::move(mod)),
+          details(std::move(det)) {}
 
     bool operator==(const error_info& other) const {
         return code == other.code && message == other.message &&
