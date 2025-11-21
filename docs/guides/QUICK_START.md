@@ -141,6 +141,17 @@ int main() {
 }
 ```
 
+### Result API Checklist
+
+Before copying Result snippets into other repositories, verify the following:
+
+1. **Factory usage** – Prefer `Result<T>::ok(...)` / `Result<T>::err(...)` (or helpers `ok(...)`, `make_error(...)`) instead of invoking constructors directly.
+2. **Error access** – Use `result.error()` or `common::get_error(result)`; avoid obsolete `.get_error()` member calls.
+3. **Void specialization** – For `Result<void>` return paths, call `Result<void>::err(error_info)` rather than `result_void::error(...)`.
+4. **Migration reference** – If an integrating module wraps the Result API (e.g., `thread::result`), consult that module’s header to confirm supported helpers.
+
+Including this quick check in your workflow keeps downstream documentation synchronized with the latest Result semantics.
+
 ## RAII Example
 
 Using IExecutor interface with automatic resource management:
