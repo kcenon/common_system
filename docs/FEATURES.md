@@ -439,7 +439,7 @@ Network operations using common executor abstraction:
 
 void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
     // Adapt common executor to network system's thread pool interface
-    auto network_pool = network_system::integration::make_thread_pool_adapter(executor);
+    auto network_pool = kcenon::network::integration::make_thread_pool_adapter(executor);
 
     // Create server with adapted executor
     network_system::server server(network_pool);

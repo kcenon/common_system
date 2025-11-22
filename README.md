@@ -256,7 +256,7 @@ process_with_executor(executor);
 
 // Use common executor with network system
 void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
-    auto adapted_pool = network_system::integration::make_thread_pool_adapter(executor);
+    auto adapted_pool = kcenon::network::integration::make_thread_pool_adapter(executor);
 
     network_system::server server(adapted_pool);
     // Network operations now use the common executor
