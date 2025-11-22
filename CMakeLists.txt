@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(common_system VERSION 1.0.0 LANGUAGES CXX)
 
-# C++17 as required standard with optional C++20 features
-set(CMAKE_CXX_STANDARD 17)
+# C++20 as required standard
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -67,7 +67,7 @@ target_include_directories(common_system INTERFACE
 )
 
 # C++ feature requirements
-target_compile_features(common_system INTERFACE cxx_std_17)
+target_compile_features(common_system INTERFACE cxx_std_20)
 
 # Define ABI version for event bus
 target_compile_definitions(common_system INTERFACE
@@ -87,7 +87,7 @@ if(NOT COMMON_HEADER_ONLY)
         $<INSTALL_INTERFACE:include>
     )
 
-    target_compile_features(common_system_static PUBLIC cxx_std_17)
+    target_compile_features(common_system_static PUBLIC cxx_std_20)
 
     target_compile_definitions(common_system_static PUBLIC
         EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
