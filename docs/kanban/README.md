@@ -30,7 +30,7 @@ This folder contains tickets for tracking improvement work on the Common System.
 | [COM-001](COM-001-deprecated-removal.md) | Deprecated API 제거 (`is_uninitialized`) | REFACTOR | 2-3h | - | TODO |
 | [COM-002](COM-002-event-bus-retry-test.md) | Event Bus Retry Logic 테스트 | TEST | 4-5h | - | TODO |
 | [COM-003](COM-003-memory-pressure-test.md) | Memory Pressure 시나리오 테스트 | TEST | 5-6h | - | DONE |
-| [COM-004](COM-004-stress-test.md) | 대규모 동시성 스트레스 테스트 | TEST | 6-8h | - | TODO |
+| [COM-004](COM-004-stress-test.md) | 대규모 동시성 스트레스 테스트 | TEST | 6-8h | - | DONE |
 | [COM-005](COM-005-error-code-registry.md) | Error Code Registry 문서화 | DOC | 4-5h | - | TODO |
 
 ### MEDIUM Priority
