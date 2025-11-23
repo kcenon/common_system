@@ -27,17 +27,17 @@ This folder contains tickets for tracking improvement work on the Common System.
 
 | ID | Title | Category | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [COM-001](COM-001-deprecated-removal.md) | Deprecated API 제거 (`is_uninitialized`) | REFACTOR | 2-3h | - | TODO |
-| [COM-002](COM-002-event-bus-retry-test.md) | Event Bus Retry Logic 테스트 | TEST | 4-5h | - | TODO |
+| [COM-001](COM-001-deprecated-removal.md) | Deprecated API 제거 (`is_uninitialized`) | REFACTOR | 2-3h | - | DONE |
+| [COM-002](COM-002-event-bus-retry-test.md) | Event Bus Retry Logic 테스트 | TEST | 4-5h | - | DONE |
 | [COM-003](COM-003-memory-pressure-test.md) | Memory Pressure 시나리오 테스트 | TEST | 5-6h | - | DONE |
 | [COM-004](COM-004-stress-test.md) | 대규모 동시성 스트레스 테스트 | TEST | 6-8h | - | DONE |
-| [COM-005](COM-005-error-code-registry.md) | Error Code Registry 문서화 | DOC | 4-5h | - | TODO |
+| [COM-005](COM-005-error-code-registry.md) | Error Code Registry 문서화 | DOC | 4-5h | - | DONE |
 
 ### MEDIUM Priority
 
 | ID | Title | Category | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [COM-006](COM-006-api-reference-completion.md) | API Reference 완성 | DOC | 6-8h | - | TODO |
+| [COM-006](COM-006-api-reference-completion.md) | API Reference 완성 | DOC | 6-8h | - | DONE |
 | [COM-007](COM-007-conan-support.md) | Conan 패키지 매니저 지원 | BUILD | 4-5h | - | TODO |
 | [COM-008](COM-008-benchmark-automation.md) | Benchmark 자동화 및 회귀 감지 | PERF | 5-6h | - | TODO |
 | [COM-009](COM-009-clang-tidy-enhancement.md) | clang-tidy 규칙 강화 | REFACTOR | 4-5h | - | TODO |
