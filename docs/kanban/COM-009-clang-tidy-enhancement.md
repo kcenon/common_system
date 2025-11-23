@@ -1,6 +1,6 @@
 # COM-009: clang-tidy 규칙 강화
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: MEDIUM
 **Category**: REFACTOR
 **Estimated Duration**: 4-5h

@@ -39,14 +39,14 @@ This folder contains tickets for tracking improvement work on the Common System.
 |----|-------|----------|---------------|--------------|--------|
 | [COM-006](COM-006-api-reference-completion.md) | API Reference 완성 | DOC | 6-8h | - | DONE |
 | [COM-007](COM-007-conan-support.md) | Conan 패키지 매니저 지원 | BUILD | 4-5h | - | DONE |
-| [COM-008](COM-008-benchmark-automation.md) | Benchmark 자동화 및 회귀 감지 | PERF | 5-6h | - | TODO |
-| [COM-009](COM-009-clang-tidy-enhancement.md) | clang-tidy 규칙 강화 | REFACTOR | 4-5h | - | TODO |
+| [COM-008](COM-008-benchmark-automation.md) | Benchmark 자동화 및 회귀 감지 | PERF | 5-6h | - | DONE |
+| [COM-009](COM-009-clang-tidy-enhancement.md) | clang-tidy 규칙 강화 | REFACTOR | 4-5h | - | DONE |
 
 ### LOW Priority
 
 | ID | Title | Category | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [COM-010](COM-010-result-creation-unify.md) | Result<T> 생성 메서드 통일 | REFACTOR | 3-4h | COM-001 | TODO |
+| [COM-010](COM-010-result-creation-unify.md) | Result<T> 생성 메서드 통일 | REFACTOR | 3-4h | COM-001 | DONE |
 
 ---
 

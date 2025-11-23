@@ -34,13 +34,22 @@ jobs:
           -DCOMMON_HEADER_ONLY=ON
 
     - name: Run clang-tidy
-      continue-on-error: true  # Phase 0: Allow failures, collect baseline
+      id: clang-tidy
+      continue-on-error: true
       run: |
-        # Find all C++ source and header files
+        # Run clang-tidy with settings from .clang-tidy file
+        # WarningsAsErrors is configured in .clang-tidy for specific critical checks
         find include -name "*.h" -o -name "*.hpp" | while read file; do
           echo "Analyzing: $file"
-          clang-tidy "$file" -p=build -- -std=c++20 || true
+          clang-tidy "$file" -p=build -- -std=c++20 2>&1 || true
         done > clang-tidy-results.txt 2>&1
+
+        # Check for errors (from WarningsAsErrors in .clang-tidy)
+        if grep -q "error:" clang-tidy-results.txt; then
+          echo "clang_tidy_failed=true" >> $GITHUB_OUTPUT
+        else
+          echo "clang_tidy_failed=false" >> $GITHUB_OUTPUT
+        fi
 
     - name: Count warnings by category
       if: always()
@@ -83,6 +92,14 @@ jobs:
         if [ -f clang-tidy-summary.md ]; then
           cat clang-tidy-summary.md >> $GITHUB_STEP_SUMMARY
         fi
+
+    # Note: PR failure is disabled until existing warnings are resolved
+    # Enable this step after fixing all WarningsAsErrors violations
+    # - name: Fail on clang-tidy errors (PR only)
+    #   if: github.event_name == 'pull_request' && steps.clang-tidy.outputs.clang_tidy_failed == 'true'
+    #   run: |
+    #     echo "::error::clang-tidy found errors. Please fix them before merging."
+    #     exit 1
 
   cppcheck:
     name: Cppcheck Analysis
