@@ -537,9 +537,20 @@ inline const error_info* get_if_error(const Result<T>& result) {
 }
 
 // Factory functions for creating Results
+// See docs/BEST_PRACTICES.md for detailed usage patterns
 
 /**
- * @brief Create a successful result (lowercase - for compatibility)
+ * @brief Create a successful result
+ * @param value The value to wrap
+ * @return Result<T> containing the value
+ *
+ * @note RECOMMENDED: This is the preferred way to create successful results.
+ *
+ * Example:
+ * @code
+ * auto result = ok(42);
+ * auto str_result = ok(std::string("hello"));
+ * @endcode
  */
 template<typename T>
 inline Result<T> ok(T value) {
@@ -548,14 +559,26 @@ inline Result<T> ok(T value) {
 
 /**
  * @brief Create a successful result (uppercase - Rust style)
+ * @deprecated Use lowercase ok() instead for consistency.
  */
 template<typename T>
+[[deprecated("Use ok() instead")]]
 inline Result<T> Ok(T value) {
     return Result<T>(std::move(value));
 }
 
 /**
  * @brief Create a successful void result
+ *
+ * @note RECOMMENDED: Use for functions that don't return a value.
+ *
+ * Example:
+ * @code
+ * VoidResult save_data() {
+ *     // ... save logic ...
+ *     return ok();
+ * }
+ * @endcode
  */
 inline VoidResult ok() {
     return VoidResult(std::monostate{});
@@ -563,25 +586,39 @@ inline VoidResult ok() {
 
 /**
  * @brief Create an error result (Rust style)
- * @note Safe to keep as "Err" doesn't conflict with error:: namespace
+ * @deprecated Use make_error<T>() instead for consistency.
  */
 template<typename T>
+[[deprecated("Use make_error<T>() instead")]]
 inline Result<T> Err(const std::string& message) {
     return Result<T>(error_info{message});
 }
 
 /**
  * @brief Create an error result with code (Rust style)
+ * @deprecated Use make_error<T>() instead for consistency.
  */
 template<typename T>
+[[deprecated("Use make_error<T>() instead")]]
 inline Result<T> Err(int code, const std::string& message,
                      const std::string& module = "") {
     return Result<T>(error_info{code, message, module});
 }
 
 /**
- * @brief Create an error result with all parameters
- * @note Renamed from error() to make_error() to avoid conflict with error:: namespace
+ * @brief Create an error result with code and message
+ * @param code Error code
+ * @param message Error message
+ * @param module Optional module name
+ * @return Result<T> containing the error
+ *
+ * @note RECOMMENDED: This is the preferred way to create error results.
+ *
+ * Example:
+ * @code
+ * return make_error<int>(error_codes::INVALID_ARGUMENT, "Value must be positive");
+ * return make_error<int>(error_codes::NOT_FOUND, "Resource not found", "database");
+ * @endcode
  */
 template<typename T>
 inline Result<T> make_error(int code, const std::string& message,

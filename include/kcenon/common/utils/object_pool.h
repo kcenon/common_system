@@ -73,7 +73,7 @@ public:
 
     template<typename... Args>
     std::unique_ptr<T, std::function<void(T*)>> acquire(Args&&... args) {
-        return acquire(nullptr, std::forward<Args>(args)...);
+        return acquire(static_cast<bool*>(nullptr), std::forward<Args>(args)...);
     }
 
     /**
