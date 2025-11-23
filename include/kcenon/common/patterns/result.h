@@ -220,17 +220,6 @@ public:
     }
 
     /**
-     * @brief Check if result is in uninitialized state
-     * @deprecated Since default constructor now initializes to error state,
-     *             this method always returns false. Kept for backward compatibility.
-     * @return Always false (Results are always initialized now)
-     */
-    [[deprecated("Result is always initialized now; check is_err() instead")]]
-    bool is_uninitialized() const {
-        return !value_.has_value() && !error_.has_value();
-    }
-
-    /**
      * @brief Check if result contains a successful value
      */
     bool is_ok() const {
