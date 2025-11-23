@@ -1,6 +1,6 @@
 # COM-006: API Reference 완성
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: MEDIUM
 **Category**: DOC
 **Estimated Duration**: 6-8h

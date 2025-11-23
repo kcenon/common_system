@@ -1,6 +1,6 @@
 # COM-007: Conan 패키지 매니저 지원
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: MEDIUM
 **Category**: BUILD
 **Estimated Duration**: 4-5h

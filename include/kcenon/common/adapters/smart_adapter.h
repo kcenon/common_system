@@ -117,10 +117,11 @@ public:
  * @param impl Shared pointer to implementation
  * @return Shared pointer to Interface
  *
- * @example
+ * @code
  * auto executor = make_smart_adapter<IExecutor>(thread_pool);
  * // If thread_pool implements IExecutor: zero-cost cast
  * // Otherwise: creates typed_adapter<IExecutor, thread_pool>
+ * @endcode
  */
 template<typename Interface, typename Impl>
 std::shared_ptr<Interface> make_smart_adapter(std::shared_ptr<Impl> impl) {
@@ -135,8 +136,9 @@ std::shared_ptr<Interface> make_smart_adapter(std::shared_ptr<Impl> impl) {
  * @param ptr Shared pointer to interface
  * @return Shared pointer to underlying implementation
  *
- * @example
+ * @code
  * auto thread_pool = unwrap_adapter<thread_pool_type>(executor);
+ * @endcode
  */
 template<typename T, typename Interface>
 std::shared_ptr<T> unwrap_adapter(std::shared_ptr<Interface> ptr) {

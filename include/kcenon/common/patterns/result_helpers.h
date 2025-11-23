@@ -51,16 +51,18 @@ template<typename T>
 
 /**
  * @brief Try to unwrap a Result, returning early if error
- * @param result The Result to unwrap
+ * @param expr The Result expression to unwrap
  * @return Reference to the value if successful
  *
  * Usage:
+ * @code
  *   Result<int> get_value();
  *
  *   Result<std::string> process() {
  *       auto value = TRY_UNWRAP(get_value());
  *       return ok(std::to_string(value));
  *   }
+ * @endcode
  */
 #define TRY_UNWRAP(expr) \
     ({ \

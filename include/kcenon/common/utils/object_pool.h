@@ -42,6 +42,8 @@ public:
     /**
      * @brief Acquire an object constructed with the provided arguments.
      * @param reused Optional pointer that receives whether an existing block was reused.
+     * @param args Arguments forwarded to the object's constructor.
+     * @return A unique_ptr to the acquired object with a custom deleter that returns it to the pool.
      */
     template<typename... Args>
     std::unique_ptr<T, std::function<void(T*)>> acquire(bool* reused, Args&&... args) {
