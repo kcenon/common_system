@@ -1,6 +1,6 @@
 # COM-003: Memory Pressure 시나리오 테스트
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: HIGH
 **Category**: TEST
 **Estimated Duration**: 5-6h
