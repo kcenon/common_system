@@ -1,0 +1,137 @@
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  benchmark:
+    name: Run Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ libgtest-dev libgmock-dev libbenchmark-dev
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCOMMON_BUILD_TESTS=OFF \
+          -DCOMMON_BUILD_EXAMPLES=OFF \
+          -DCOMMON_BUILD_BENCHMARKS=ON \
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build benchmarks
+      run: cmake --build build --config Release
+
+    - name: Run benchmarks
+      run: |
+        ./build/benchmarks/common_benchmarks \
+          --benchmark_format=json \
+          --benchmark_out=benchmark_results.json \
+          --benchmark_repetitions=3 \
+          --benchmark_report_aggregates_only=true
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results
+        path: benchmark_results.json
+
+    - name: Download baseline (if exists)
+      if: github.event_name == 'pull_request'
+      uses: dawidd6/action-download-artifact@v3
+      with:
+        workflow: benchmark.yml
+        branch: main
+        name: benchmark-results
+        path: baseline
+      continue-on-error: true
+
+    - name: Compare with baseline
+      if: github.event_name == 'pull_request'
+      run: |
+        if [ -f baseline/benchmark_results.json ]; then
+          echo "## Performance Comparison" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          python3 << 'EOF'
+        import json
+        import sys
+
+        try:
+            with open('baseline/benchmark_results.json', 'r') as f:
+                baseline = json.load(f)
+            with open('benchmark_results.json', 'r') as f:
+                current = json.load(f)
+
+            baseline_benchmarks = {b['name']: b for b in baseline.get('benchmarks', [])}
+            current_benchmarks = {b['name']: b for b in current.get('benchmarks', [])}
+
+            regressions = []
+            improvements = []
+            unchanged = []
+
+            for name, current_b in current_benchmarks.items():
+                if name in baseline_benchmarks:
+                    baseline_b = baseline_benchmarks[name]
+                    baseline_time = baseline_b.get('real_time', 0)
+                    current_time = current_b.get('real_time', 0)
+
+                    if baseline_time > 0:
+                        change_pct = ((current_time - baseline_time) / baseline_time) * 100
+
+                        if change_pct > 10:
+                            regressions.append((name, baseline_time, current_time, change_pct))
+                        elif change_pct < -10:
+                            improvements.append((name, baseline_time, current_time, change_pct))
+                        else:
+                            unchanged.append((name, baseline_time, current_time, change_pct))
+
+            print("| Benchmark | Baseline (ns) | Current (ns) | Change |")
+            print("|-----------|---------------|--------------|--------|")
+
+            for name, baseline_time, current_time, change_pct in sorted(regressions, key=lambda x: -x[3]):
+                print(f"| {name} | {baseline_time:.2f} | {current_time:.2f} | :red_circle: +{change_pct:.1f}% |")
+
+            for name, baseline_time, current_time, change_pct in sorted(improvements, key=lambda x: x[3]):
+                print(f"| {name} | {baseline_time:.2f} | {current_time:.2f} | :green_circle: {change_pct:.1f}% |")
+
+            for name, baseline_time, current_time, change_pct in unchanged[:10]:
+                print(f"| {name} | {baseline_time:.2f} | {current_time:.2f} | {change_pct:+.1f}% |")
+
+            if regressions:
+                print(f"\n:warning: **{len(regressions)} benchmark(s) regressed by more than 10%**")
+                sys.exit(1)
+
+        except FileNotFoundError:
+            print("Baseline not found, skipping comparison")
+        except json.JSONDecodeError as e:
+            print(f"Error parsing JSON: {e}")
+        EOF
+        else
+          echo "No baseline found, skipping comparison" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Store baseline for main branch
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-baseline
+        path: benchmark_results.json
+        retention-days: 90

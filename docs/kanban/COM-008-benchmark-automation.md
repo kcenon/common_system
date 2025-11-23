@@ -1,6 +1,6 @@
 # COM-008: Benchmark 자동화 및 회귀 감지
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: MEDIUM
 **Category**: PERF
 **Estimated Duration**: 5-6h
