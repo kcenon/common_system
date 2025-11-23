@@ -1,6 +1,6 @@
 # COM-001: Deprecated API 제거
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: HIGH
 **Category**: REFACTOR
 **Estimated Duration**: 2-3h

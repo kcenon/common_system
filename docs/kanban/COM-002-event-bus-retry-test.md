@@ -1,6 +1,6 @@
 # COM-002: Event Bus Retry Logic 테스트 추가
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: HIGH
 **Category**: TEST
 **Estimated Duration**: 4-5h

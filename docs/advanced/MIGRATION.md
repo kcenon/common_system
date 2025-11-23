@@ -5,6 +5,8 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Breaking Changes](#breaking-changes)
+  - [Migrating from is_uninitialized](#migrating-from-is_uninitialized)
 - [Migrating to common_system Integration](#migrating-to-common_system-integration)
 - [Migrating to Result<T> Pattern](#migrating-to-resultt-pattern)
 - [Migrating to Standard Interfaces](#migrating-to-standard-interfaces)
@@ -14,6 +16,39 @@
 ## Overview
 
 This guide helps you migrate existing code to use the integrated system suite with common_system. Each section provides step-by-step instructions with before/after examples.
+
+## Breaking Changes
+
+### Migrating from is_uninitialized
+
+The `Result<T>::is_uninitialized()` method has been removed. This method was deprecated because the default constructor now initializes Result to an error state, making the "uninitialized" concept obsolete.
+
+**Before** (deprecated):
+```cpp
+Result<int> result;
+if (result.is_uninitialized()) {  // Always returned false
+    // This branch was never executed
+}
+```
+
+**After** (recommended):
+```cpp
+Result<int> result;
+if (result.is_err()) {  // Check for error state
+    // Handle error - default constructed Result is in error state
+}
+
+// Or explicitly create an uninitialized-like state if needed:
+auto result = Result<int>::uninitialized();
+if (result.is_err()) {
+    // The uninitialized() factory returns an error Result
+}
+```
+
+**Migration Steps:**
+1. Search for `is_uninitialized()` calls in your codebase
+2. Replace with `is_err()` for error state checking
+3. Review logic - default Result is now in error state, not "uninitialized"
 
 ## Migrating to common_system Integration
 

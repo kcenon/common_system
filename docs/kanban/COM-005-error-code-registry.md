@@ -1,6 +1,6 @@
 # COM-005: Error Code Registry 문서화
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: HIGH
 **Category**: DOC
 **Estimated Duration**: 4-5h
