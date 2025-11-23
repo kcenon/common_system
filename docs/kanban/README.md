@@ -12,124 +12,114 @@ This folder contains tickets for tracking improvement work on the Common System.
 
 | Category | Total | Done | In Progress | Pending |
 |----------|-------|------|-------------|---------|
-| TEST | 5 | 0 | 0 | 5 |
-| DOC | 5 | 0 | 0 | 5 |
-| REFACTOR | 4 | 0 | 0 | 4 |
-| BUILD | 3 | 0 | 0 | 3 |
-| PERF | 3 | 0 | 0 | 3 |
-| **Total** | **20** | **0** | **0** | **20** |
+| REFACTOR | 3 | 0 | 0 | 3 |
+| TEST | 3 | 0 | 0 | 3 |
+| DOC | 2 | 0 | 0 | 2 |
+| BUILD | 1 | 0 | 0 | 1 |
+| PERF | 1 | 0 | 0 | 1 |
+| **Total** | **10** | **0** | **0** | **10** |
 
 ---
 
 ## Ticket List
 
-### TEST: Expand Test Coverage
+### HIGH Priority
 
-Improve test coverage from 82% to 85%.
-
-| ID | Title | Priority | Est. Duration | Dependencies | Status |
+| ID | Title | Category | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [COM-001](COM-001-event-bus-retry.md) | Event Bus Retry Logic Tests | HIGH | 4-6h | - | TODO |
-| [COM-002](COM-002-stress-test.md) | Large-scale Concurrency Stress Tests | HIGH | 6-8h | - | TODO |
-| [COM-003](COM-003-memory-pressure.md) | Memory Pressure Scenario Tests | HIGH | 5-7h | - | TODO |
-| [COM-004](COM-004-cross-module.md) | Cross-module Type Safety Tests | HIGH | 7-10h | - | TODO |
-| [COM-005](COM-005-coverage-85.md) | Achieve 85% Coverage | HIGH | 8-10h | COM-001~004 | TODO |
+| [COM-001](COM-001-deprecated-removal.md) | Deprecated API 제거 (`is_uninitialized`) | REFACTOR | 2-3h | - | TODO |
+| [COM-002](COM-002-event-bus-retry-test.md) | Event Bus Retry Logic 테스트 | TEST | 4-5h | - | TODO |
+| [COM-003](COM-003-memory-pressure-test.md) | Memory Pressure 시나리오 테스트 | TEST | 5-6h | - | TODO |
+| [COM-004](COM-004-stress-test.md) | 대규모 동시성 스트레스 테스트 | TEST | 6-8h | - | TODO |
+| [COM-005](COM-005-error-code-registry.md) | Error Code Registry 문서화 | DOC | 4-5h | - | TODO |
 
-**Recommended Execution Order**: COM-001 → COM-002 → COM-003 → COM-004 → COM-005
+### MEDIUM Priority
+
+| ID | Title | Category | Est. Duration | Dependencies | Status |
+|----|-------|----------|---------------|--------------|--------|
+| [COM-006](COM-006-api-reference-completion.md) | API Reference 완성 | DOC | 6-8h | - | TODO |
+| [COM-007](COM-007-conan-support.md) | Conan 패키지 매니저 지원 | BUILD | 4-5h | - | TODO |
+| [COM-008](COM-008-benchmark-automation.md) | Benchmark 자동화 및 회귀 감지 | PERF | 5-6h | - | TODO |
+| [COM-009](COM-009-clang-tidy-enhancement.md) | clang-tidy 규칙 강화 | REFACTOR | 4-5h | - | TODO |
+
+### LOW Priority
+
+| ID | Title | Category | Est. Duration | Dependencies | Status |
+|----|-------|----------|---------------|--------------|--------|
+| [COM-010](COM-010-result-creation-unify.md) | Result<T> 생성 메서드 통일 | REFACTOR | 3-4h | COM-001 | TODO |
 
 ---
 
-### DOC: Documentation Improvement
+## Recommended Execution Order
 
-Complete API documentation and write guides.
+### Phase 1: Critical Fixes (즉시 시작 가능)
 
-| ID | Title | Priority | Est. Duration | Dependencies | Status |
-|----|-------|----------|---------------|--------------|--------|
-| [COM-101](COM-101-api-reference.md) | Complete API Reference | HIGH | 8-12h | - | TODO |
-| [COM-102](COM-102-error-registry.md) | Error Code Registry Documentation | HIGH | 6-8h | - | TODO |
-| [COM-103](COM-103-perf-guide.md) | Write Performance Tuning Guide | MEDIUM | 6-8h | - | TODO |
-| [COM-104](COM-104-diagrams.md) | Add Architecture Diagrams | MEDIUM | 4-6h | - | TODO |
-| [COM-105](COM-105-doc-cleanup.md) | Optimize Doc Structure & Remove Duplicates | MEDIUM | 6-8h | - | TODO |
+```
+COM-001 ─────────────────────────────────────────────────→ COM-010
+(Deprecated API 제거)                                      (Result 통일)
 
-**Recommended Execution Order**: COM-101 → COM-102 → COM-103 → COM-104 → COM-105
+COM-002, COM-003, COM-004 (병렬 실행 가능)
+(테스트 추가)
 
----
+COM-005
+(에러 코드 문서화)
+```
 
-### REFACTOR: Code Quality Improvement
+**권장**: COM-001, COM-002, COM-005를 동시 시작
 
-Remove deprecated APIs and improve code quality.
+### Phase 2: Quality Enhancement
 
-| ID | Title | Priority | Est. Duration | Dependencies | Status |
-|----|-------|----------|---------------|--------------|--------|
-| [COM-201](COM-201-deprecated-removal.md) | Deprecated API Removal & Migration | MEDIUM | 4-6h | - | TODO |
-| [COM-202](COM-202-result-unify.md) | Unify Result<T> Creation Methods | MEDIUM | 6-8h | - | TODO |
-| [COM-203](COM-203-error-naming.md) | Standardize Error Handling Naming | LOW | 3-5h | - | TODO |
-| [COM-204](COM-204-clang-tidy.md) | Apply clang-tidy Phase 1 Rules | MEDIUM | 5-7h | - | TODO |
+```
+COM-006 (API Reference)
+COM-009 (clang-tidy)
+COM-008 (Benchmark)
+```
 
-**Recommended Execution Order**: COM-201 → COM-202 → COM-204 → COM-203
+### Phase 3: Build & Distribution
 
----
-
-### BUILD: Build & Deployment
-
-Improve package manager support and automation.
-
-| ID | Title | Priority | Est. Duration | Dependencies | Status |
-|----|-------|----------|---------------|--------------|--------|
-| [COM-301](COM-301-conan.md) | Add Conan Package Manager Support | MEDIUM | 4-6h | - | TODO |
-| [COM-302](COM-302-auto-release.md) | Automated Release & Deploy Pipeline | LOW | 6-8h | - | TODO |
-| [COM-303](COM-303-bazel.md) | Bazel Build Support | LOW | 8-10h | - | TODO |
-
-**Recommended Execution Order**: COM-301 → COM-302 → COM-303
+```
+COM-007 (Conan Support)
+```
 
 ---
 
-### PERF: Performance Optimization
+## Quick Start
 
-Automate benchmarks and improve performance.
+즉시 시작 가능한 티켓 (의존성 없음):
 
-| ID | Title | Priority | Est. Duration | Dependencies | Status |
-|----|-------|----------|---------------|--------------|--------|
-| [COM-401](COM-401-benchmark-auto.md) | Benchmark Automation & Regression Detection | MEDIUM | 6-8h | - | TODO |
-| [COM-402](COM-402-lockfree-bus.md) | Event Bus Lock-Free Improvement | LOW | 10-14h | - | TODO |
-| [COM-403](COM-403-result-memory.md) | Result<T> Memory Optimization | LOW | 6-8h | - | TODO |
-
-**Recommended Execution Order**: COM-401 → COM-402 → COM-403
+1. **COM-001** - Deprecated API 제거 (2-3h) ⭐ 권장
+2. **COM-002** - Event Bus 테스트 추가 (4-5h) ⭐ 권장
+3. **COM-005** - Error Code 문서화 (4-5h) ⭐ 권장
+4. **COM-003** - Memory Pressure 테스트 (5-6h)
+5. **COM-004** - 스트레스 테스트 (6-8h)
 
 ---
 
-## Execution Plan
+## Timeline Estimate
 
-### Phase 1: Test Enhancement (Week 1)
-1. COM-001: Event Bus Retry Tests
-2. COM-002: Concurrency Stress Tests
-3. COM-101: Complete API Reference
-
-### Phase 2: Documentation (Week 2)
-1. COM-102: Error Code Registry Documentation
-2. COM-103: Performance Guide
-3. COM-005: Achieve 85% Coverage
-
-### Phase 3: Code Quality (Week 3)
-1. COM-201: Deprecated API Removal
-2. COM-204: clang-tidy Application
-3. COM-401: Benchmark Automation
-
-### Phase 4: Additional Improvements (Week 4+)
-1. COM-301: Conan Support
-2. COM-402: Lock-Free Improvement
-3. COM-302, COM-303: Build Improvements
+| Phase | Tasks | Est. Duration |
+|-------|-------|---------------|
+| Phase 1 | COM-001~005 | 21-27h |
+| Phase 2 | COM-006~009 | 19-24h |
+| Phase 3 | COM-007, COM-010 | 7-9h |
+| **Total** | **10 tickets** | **47-60h** |
 
 ---
 
 ## Status Definitions
 
-- **TODO**: Not yet started
-- **IN_PROGRESS**: Work in progress
-- **REVIEW**: Awaiting code review
-- **DONE**: Completed
+- **TODO**: 미시작
+- **IN_PROGRESS**: 작업 중
+- **REVIEW**: 코드 리뷰 대기
+- **DONE**: 완료
 
 ---
+
+## Notes
+
+- 이 티켓들은 실제 코드베이스 분석 결과를 기반으로 작성됨
+- 각 티켓에는 구체적인 작업 항목과 수락 기준 포함
+- 병렬 실행 가능한 작업은 동시 진행 권장
 
 **Maintainer**: TBD
 **Contact**: Use issue tracker
