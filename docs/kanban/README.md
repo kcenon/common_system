@@ -46,7 +46,7 @@ This folder contains tickets for tracking improvement work on the Common System.
 
 | ID | Title | Category | Est. Duration | Dependencies | Status |
 |----|-------|----------|---------------|--------------|--------|
-| [COM-010](COM-010-result-creation-unify.md) | Result<T> 생성 메서드 통일 | REFACTOR | 3-4h | COM-001 | TODO |
+| [COM-010](COM-010-result-creation-unify.md) | Result<T> 생성 메서드 통일 | REFACTOR | 3-4h | COM-001 | DONE |
 
 ---
 
