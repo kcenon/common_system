@@ -25,7 +25,9 @@ target_compile_features(common_benchmarks PRIVATE cxx_std_20)
 
 # Platform-specific settings
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(common_benchmarks PRIVATE -O3 -DNDEBUG)
+    # Disable LTO to avoid version mismatch with system libbenchmark
+    target_compile_options(common_benchmarks PRIVATE -O3 -DNDEBUG -fno-lto)
+    target_link_options(common_benchmarks PRIVATE -fno-lto)
 elseif(MSVC)
     target_compile_options(common_benchmarks PRIVATE /O2 /DNDEBUG)
 endif()
