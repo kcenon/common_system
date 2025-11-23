@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation unification across ecosystem
 - Standardized CHANGELOG format following Keep a Changelog
 
+### Removed
+- **BREAKING**: `Result<T>::is_uninitialized()` method removed
+  - This method was deprecated and always returned `false`
+  - Use `is_err()` instead to check for error state
+  - See [Migration Guide](advanced/MIGRATION.md#migrating-from-is_uninitialized) for details
+
 ---
 
 ## [1.0.0] - 2025-10-09
