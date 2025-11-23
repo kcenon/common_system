@@ -1,6 +1,6 @@
 # COM-004: 대규모 동시성 스트레스 테스트
 
-**Status**: TODO
+**Status**: DONE
 **Priority**: HIGH
 **Category**: TEST
 **Estimated Duration**: 6-8h

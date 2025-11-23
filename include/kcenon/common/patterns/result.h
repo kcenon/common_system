@@ -235,8 +235,8 @@ public:
 
     /**
      * @brief Get value from result (throws if error)
-     * @param loc Source location of the unwrap() call (automatically captured, if supported)
      * @throws std::runtime_error if result contains error
+     * @note When source_location is available, error messages include file/line info
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(
@@ -269,8 +269,8 @@ public:
 
     /**
      * @brief Get mutable value from result (throws if error)
-     * @param loc Source location of the unwrap() call (automatically captured, if supported)
      * @throws std::runtime_error if result contains error
+     * @note When source_location is available, error messages include file/line info
      */
 #if COMMON_HAS_SOURCE_LOCATION
     T& unwrap(
@@ -420,8 +420,8 @@ public:
 
     /**
      * @brief Get value from optional (throws if None)
-     * @param loc Source location of the unwrap() call (automatically captured, if supported)
      * @throws std::runtime_error if optional is None with detailed location info
+     * @note When source_location is available, error messages include file/line info
      */
 #if COMMON_HAS_SOURCE_LOCATION
     const T& unwrap(

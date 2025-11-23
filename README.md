@@ -108,7 +108,21 @@ FetchContent_MakeAvailable(common_system)
 target_link_libraries(your_target PRIVATE kcenon::common)
 ```
 
-#### Option 3: System-wide Installation
+#### Option 3: Conan Package Manager
+
+```bash
+# Add the package from source
+conan create . --build=missing
+
+# Or add to your conanfile.txt
+[requires]
+common_system/1.0.0
+
+# Then install
+conan install . --build=missing
+```
+
+#### Option 4: System-wide Installation
 
 ```bash
 git clone https://github.com/kcenon/common_system.git
@@ -406,7 +420,8 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [ ] Coroutine support for async patterns
 - [ ] std::expected migration (C++23)
 - [ ] Additional design patterns (Observer, Command)
-- [ ] Package manager official support (vcpkg, Conan)
+- [x] Package manager support (Conan)
+- [ ] Package manager official registry (vcpkg, Conan Center)
 
 ## Support
 

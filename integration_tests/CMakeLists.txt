@@ -20,12 +20,14 @@ target_link_libraries(integration_test_framework INTERFACE
 file(GLOB SCENARIO_TESTS scenarios/*.cpp)
 file(GLOB FAILURE_TESTS failures/*.cpp)
 file(GLOB PERFORMANCE_TESTS performance/*.cpp)
+file(GLOB STRESS_TESTS stress/*.cpp)
 
 # Add integration test executable
 add_executable(integration_tests
     ${SCENARIO_TESTS}
     ${FAILURE_TESTS}
     ${PERFORMANCE_TESTS}
+    ${STRESS_TESTS}
 )
 
 target_link_libraries(integration_tests PRIVATE
