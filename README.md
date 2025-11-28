@@ -455,14 +455,6 @@ If you use this project in your research or commercial projects, please cite:
 
 ---
 
-## Acknowledgments
-
-- Inspired by modern interface-driven architecture patterns and best practices
-- Built with C++17/C++20 features for maximum flexibility and safety
-- Maintained by kcenon@naver.com
-
----
-
 <p align="center">
   Made with ❤️ by 🍀☀🌕🌥 🌊
 </p>
