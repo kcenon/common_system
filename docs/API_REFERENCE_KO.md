@@ -1,50 +1,50 @@
-# common_system API Reference
+# common_system API 레퍼런스
 
-> **Version**: 2.0
-> **Last Updated**: 2025-11-21
-> **Status**: Production Ready (Tier 0)
+> **버전**: 2.0
+> **최종 업데이트**: 2025-11-21
+> **상태**: 프로덕션 레디 (Tier 0)
 
-## Table of Contents
+## 목차
 
-1. [Namespace](#namespace)
-2. [Result<T> Pattern (Recommended)](#resultt-pattern-recommended)
-3. [Interfaces](#interfaces)
-4. [Utilities](#utilities)
+1. [네임스페이스](#네임스페이스)
+2. [Result<T> 패턴 (권장)](#resultt-패턴-권장)
+3. [인터페이스](#인터페이스)
+4. [유틸리티](#유틸리티)
 
 ---
 
-## Namespace
+## 네임스페이스
 
 ### `kcenon::common`
 
-All public APIs of common_system are contained in this namespace
+common_system의 모든 공개 API는 이 네임스페이스에 포함됩니다.
 
-**Included Items**:
-- `result<T>` - Result type
-- `result_void` - Result for void
-- All interfaces (`IExecutor`, `ILogger`, `IMonitor`, `IDatabase`)
+**포함 항목**:
+- `result<T>` - 결과 타입
+- `result_void` - void용 결과
+- 모든 인터페이스 (`IExecutor`, `ILogger`, `IMonitor`, `IDatabase`)
 
 ---
 
-## Result<T> Pattern (Recommended)
+## Result<T> 패턴 (권장)
 
 ### `result<T>`
 
-**Header**: `#include <kcenon/common/patterns/result.h>`
+**헤더**: `#include <kcenon/common/patterns/result.h>`
 
-**Description**: Type-safe container for representing either a success value or an error
+**설명**: 성공 값 또는 에러를 나타내는 타입 안전 컨테이너
 
-#### Constructors
+#### 생성자
 
 ```cpp
-// Create with success value
+// 성공 값으로 생성
 static auto ok(T value) -> result<T>;
 
-// Create with error
+// 에러로 생성
 static auto err(error_info error) -> result<T>;
 ```
 
-#### Core Methods
+#### 핵심 메서드
 
 ##### `is_ok()` / `is_error()`
 
@@ -53,13 +53,13 @@ auto is_ok() const -> bool;
 auto is_error() const -> bool;
 ```
 
-**Description**: Check Result state
+**설명**: Result 상태 확인
 
-**Example**:
+**예시**:
 ```cpp
 result<int> res = result<int>::ok(42);
 if (res.is_ok()) {
-    // Success handling
+    // 성공 처리
 }
 ```
 
@@ -70,12 +70,12 @@ auto value() const -> const T&;
 auto value() -> T&;
 ```
 
-**Description**: Access success value (throws if error)
+**설명**: 성공 값 접근 (에러 상태에서 호출 시 예외 발생)
 
-**Exceptions**:
-- `std::runtime_error`: Thrown when called on error state
+**예외**:
+- `std::runtime_error`: 에러 상태에서 호출 시 발생
 
-**Example**:
+**예시**:
 ```cpp
 auto res = result<int>::ok(42);
 int val = res.value();  // 42
@@ -87,11 +87,11 @@ int val = res.value();  // 42
 auto error() const -> const error_info&;
 ```
 
-**Description**: Access error information
+**설명**: 에러 정보 접근
 
-**Example**:
+**예시**:
 ```cpp
-auto res = result<int>::err(error_info{1, "Failed"});
+auto res = result<int>::err(error_info{1, "실패"});
 auto err = res.error();
 std::cout << err.message << std::endl;
 ```
@@ -100,55 +100,55 @@ std::cout << err.message << std::endl;
 
 ### `result_void`
 
-**Header**: `#include <kcenon/common/patterns/result.h>`
+**헤더**: `#include <kcenon/common/patterns/result.h>`
 
-**Description**: Result for void return (represents success/failure only)
+**설명**: void 반환용 결과 (성공/실패만 표현)
 
-#### Usage Example
+#### 사용 예시
 
 ```cpp
 auto process() -> result_void {
-    if (/* success condition */) {
+    if (/* 성공 조건 */) {
         return result_void::ok();
     }
-    return result_void::err(error_info{1, "Process failed"});
+    return result_void::err(error_info{1, "처리 실패"});
 }
 
 auto res = process();
 if (res.is_ok()) {
-    // Success handling
+    // 성공 처리
 }
 ```
 
 ---
 
-## Interfaces
+## 인터페이스
 
 ### `IExecutor`
 
-**Header**: `#include <kcenon/common/interfaces/i_executor.h>`
+**헤더**: `#include <kcenon/common/interfaces/i_executor.h>`
 
-**Description**: Task executor interface
+**설명**: 태스크 실행자 인터페이스
 
-#### Pure Virtual Functions
+#### 순수 가상 함수
 
 ```cpp
 virtual auto execute(std::function<void()> task) -> result_void = 0;
 virtual auto shutdown() -> result_void = 0;
 ```
 
-**Implementation Example**:
+**구현 예시**:
 ```cpp
 class MyExecutor : public kcenon::common::IExecutor {
 public:
     auto execute(std::function<void()> task) -> result_void override {
-        // Execute task implementation
+        // 태스크 실행 구현
         task();
         return result_void::ok();
     }
 
     auto shutdown() -> result_void override {
-        // Shutdown handling
+        // 종료 처리
         return result_void::ok();
     }
 };
@@ -158,18 +158,18 @@ public:
 
 ### `ILogger`
 
-**Header**: `#include <kcenon/common/interfaces/i_logger.h>`
+**헤더**: `#include <kcenon/common/interfaces/i_logger.h>`
 
-**Description**: Logger interface
+**설명**: 로거 인터페이스
 
-#### Pure Virtual Functions
+#### 순수 가상 함수
 
 ```cpp
 virtual auto log(log_level level, const std::string& message) -> result_void = 0;
 virtual auto flush() -> result_void = 0;
 ```
 
-**Log Levels**:
+**로그 레벨**:
 ```cpp
 enum class log_level {
     trace,
@@ -185,11 +185,11 @@ enum class log_level {
 
 ### `IMonitor`
 
-**Header**: `#include <kcenon/common/interfaces/i_monitor.h>`
+**헤더**: `#include <kcenon/common/interfaces/i_monitor.h>`
 
-**Description**: Monitoring interface
+**설명**: 모니터링 인터페이스
 
-#### Pure Virtual Functions
+#### 순수 가상 함수
 
 ```cpp
 virtual auto record_metric(const std::string& name, double value) -> result_void = 0;
@@ -201,11 +201,11 @@ virtual auto stop_timer(const std::string& name) -> result_void = 0;
 
 ### `IDatabase`
 
-**Header**: `#include <kcenon/common/interfaces/i_database.h>`
+**헤더**: `#include <kcenon/common/interfaces/i_database.h>`
 
-**Description**: Database interface
+**설명**: 데이터베이스 인터페이스
 
-#### Pure Virtual Functions
+#### 순수 가상 함수
 
 ```cpp
 virtual auto connect(const connection_info& info) -> result_void = 0;
@@ -215,11 +215,11 @@ virtual auto disconnect() -> result_void = 0;
 
 ---
 
-## Utilities
+## 유틸리티
 
 ### error_info
 
-**Structure**:
+**구조체**:
 ```cpp
 struct error_info {
     int code;
@@ -228,20 +228,20 @@ struct error_info {
 };
 ```
 
-**Usage Example**:
+**사용 예시**:
 ```cpp
 return result<int>::err(error_info{
     .code = 404,
-    .message = "Not found",
-    .details = "Resource does not exist"
+    .message = "찾을 수 없음",
+    .details = "리소스가 존재하지 않습니다"
 });
 ```
 
 ---
 
-## Usage Examples
+## 사용 예시
 
-### Basic Usage
+### 기본 사용
 
 ```cpp
 #include <kcenon/common/patterns/result.h>
@@ -250,7 +250,7 @@ using namespace kcenon::common;
 
 auto divide(int a, int b) -> result<int> {
     if (b == 0) {
-        return result<int>::err(error_info{1, "Division by zero"});
+        return result<int>::err(error_info{1, "0으로 나눌 수 없습니다"});
     }
     return result<int>::ok(a / b);
 }
@@ -259,16 +259,16 @@ int main() {
     auto res = divide(10, 2);
 
     if (res.is_ok()) {
-        std::cout << "Result: " << res.value() << std::endl;  // 5
+        std::cout << "결과: " << res.value() << std::endl;  // 5
     } else {
-        std::cout << "Error: " << res.error().message << std::endl;
+        std::cout << "에러: " << res.error().message << std::endl;
     }
 
     return 0;
 }
 ```
 
-### Interface Usage
+### 인터페이스 사용
 
 ```cpp
 #include <kcenon/common/interfaces/i_logger.h>
@@ -288,7 +288,7 @@ public:
 
 int main() {
     ConsoleLogger logger;
-    logger.log(log_level::info, "Application started");
+    logger.log(log_level::info, "애플리케이션 시작");
 
     return 0;
 }
@@ -296,18 +296,18 @@ int main() {
 
 ---
 
-## Migration Guide
+## 마이그레이션 가이드
 
-### From v1.x to v2.0
+### v1.x에서 v2.0으로
 
-**Changes**:
-- `Result<T>` → `result<T>` (lowercase)
+**변경사항**:
+- `Result<T>` → `result<T>` (소문자)
 - `result::success()` → `result<T>::ok()`
 - `result::failure()` → `result<T>::err()`
 - `get_value()` → `value()`
 - `get_error()` → `error()`
 
-**Migration Example**:
+**마이그레이션 예시**:
 ```cpp
 // v1.x
 auto res = Result<int>::success(42);
@@ -320,6 +320,6 @@ int val = res.value();
 
 ---
 
-**Created**: 2025-11-21
-**Version**: 2.0
-**Author**: kcenon@naver.com
+**작성일**: 2025-11-21
+**버전**: 2.0
+**관리자**: kcenon@naver.com
