@@ -150,6 +150,7 @@ TEST(ConfigWatcherTest, Destructor_StopsWatcher) {
 // Manual Reload Tests
 // ============================================================================
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, Reload_WhenFileUnchanged_Succeeds) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -168,7 +169,6 @@ TEST(ConfigWatcherTest, Reload_IncrementsVersion) {
     EXPECT_EQ(watcher.version(), initial_version + 1);
 }
 
-#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, Reload_WithInvalidYaml_ReturnsError) {
     TempConfigFile file("valid: config");
     config_watcher watcher(file.path_string());
@@ -179,12 +179,21 @@ TEST(ConfigWatcherTest, Reload_WithInvalidYaml_ReturnsError) {
     auto result = watcher.reload();
     EXPECT_TRUE(result.is_err());
 }
+#else
+TEST(ConfigWatcherTest, Reload_WhenFileUnchanged_Succeeds) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, Reload_IncrementsVersion) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
 #endif
 
 // ============================================================================
 // Callback Tests
 // ============================================================================
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, OnChange_CallbackInvokedOnReload) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -236,6 +245,19 @@ TEST(ConfigWatcherTest, OnChange_ReceivesOldAndNewConfig) {
 
     EXPECT_TRUE(configs_received);
 }
+#else
+TEST(ConfigWatcherTest, OnChange_CallbackInvokedOnReload) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, OnChange_MultipleCallbacks_AllInvoked) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, OnChange_ReceivesOldAndNewConfig) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 TEST(ConfigWatcherTest, OnError_CallbackInvokedOnFailure) {
     TempConfigFile file;
@@ -272,6 +294,7 @@ TEST(ConfigWatcherTest, History_InitiallyContainsOneSnapshot) {
     EXPECT_EQ(hist[0].version, 0);
 }
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, History_GrowsWithReloads) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -322,11 +345,29 @@ TEST(ConfigWatcherTest, History_LimitedCount_ReturnsRequestedAmount) {
     auto hist = watcher.history(2);
     EXPECT_EQ(hist.size(), 2);
 }
+#else
+TEST(ConfigWatcherTest, History_GrowsWithReloads) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, History_ReturnsNewestFirst) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, History_RespectsMaxHistory) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, History_LimitedCount_ReturnsRequestedAmount) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 // ============================================================================
 // Rollback Tests
 // ============================================================================
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, Rollback_ToExistingVersion_Succeeds) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -338,6 +379,11 @@ TEST(ConfigWatcherTest, Rollback_ToExistingVersion_Succeeds) {
     auto result = watcher.rollback(initial_version);
     EXPECT_TRUE(result.is_ok());
 }
+#else
+TEST(ConfigWatcherTest, Rollback_ToExistingVersion_Succeeds) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 TEST(ConfigWatcherTest, Rollback_ToNonExistentVersion_ReturnsError) {
     TempConfigFile file;
@@ -348,6 +394,7 @@ TEST(ConfigWatcherTest, Rollback_ToNonExistentVersion_ReturnsError) {
     EXPECT_EQ(result.error().code, watcher_error_codes::rollback_failed);
 }
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, Rollback_IncrementsVersion) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -378,6 +425,15 @@ TEST(ConfigWatcherTest, Rollback_InvokesChangeCallback) {
 
     EXPECT_TRUE(callback_called);
 }
+#else
+TEST(ConfigWatcherTest, Rollback_IncrementsVersion) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, Rollback_InvokesChangeCallback) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 // ============================================================================
 // Events Tests
@@ -391,6 +447,7 @@ TEST(ConfigWatcherTest, RecentEvents_InitiallyEmpty) {
     EXPECT_TRUE(events.empty());
 }
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, RecentEvents_RecordsReloads) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -427,6 +484,19 @@ TEST(ConfigWatcherTest, RecentEvents_LimitedCount) {
     auto events = watcher.recent_events(3);
     EXPECT_EQ(events.size(), 3);
 }
+#else
+TEST(ConfigWatcherTest, RecentEvents_RecordsReloads) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, RecentEvents_ContainsCorrectInfo) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, RecentEvents_LimitedCount) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 // ============================================================================
 // File Watching Tests (require actual file system watching)
@@ -478,6 +548,7 @@ TEST(ConfigWatcherTest, FileWatch_DetectsChanges) {
 // Thread Safety Tests
 // ============================================================================
 
+#ifdef BUILD_WITH_YAML_CPP
 TEST(ConfigWatcherTest, ThreadSafety_ConcurrentReloads) {
     TempConfigFile file;
     config_watcher watcher(file.path_string());
@@ -536,6 +607,15 @@ TEST(ConfigWatcherTest, ThreadSafety_ConcurrentReadWrite) {
     EXPECT_GT(read_count, 0);
     EXPECT_EQ(watcher.version(), 50);
 }
+#else
+TEST(ConfigWatcherTest, ThreadSafety_ConcurrentReloads) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+
+TEST(ConfigWatcherTest, ThreadSafety_ConcurrentReadWrite) {
+    GTEST_SKIP() << "YAML support not enabled (BUILD_WITH_YAML_CPP)";
+}
+#endif
 
 // ============================================================================
 // Hot Reloadable Field Tests
