@@ -115,6 +115,27 @@ set_tests_properties(common_unified_bootstrapper_test PROPERTIES
     LABELS "unit;di"
 )
 
+# Unified config tests (TICKET-201)
+add_executable(common_unified_config_test
+    unified_config_test.cpp
+)
+
+target_link_libraries(common_unified_config_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_unified_config_test PRIVATE cxx_std_17)
+
+add_test(NAME common_unified_config_test COMMAND common_unified_config_test)
+
+set_tests_properties(common_unified_config_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;config"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
