@@ -166,6 +166,27 @@ set_tests_properties(common_config_loader_test PROPERTIES
     LABELS "unit;config"
 )
 
+# CLI config parser tests (TICKET-204)
+add_executable(common_cli_config_parser_test
+    cli_config_parser_test.cpp
+)
+
+target_link_libraries(common_cli_config_parser_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_cli_config_parser_test PRIVATE cxx_std_17)
+
+add_test(NAME common_cli_config_parser_test COMMAND common_cli_config_parser_test)
+
+set_tests_properties(common_cli_config_parser_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;config;cli"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
