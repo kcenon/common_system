@@ -187,6 +187,36 @@ set_tests_properties(common_cli_config_parser_test PROPERTIES
     LABELS "unit;config;cli"
 )
 
+# Config watcher tests (TICKET-203)
+add_executable(common_config_watcher_test
+    config_watcher_test.cpp
+)
+
+target_link_libraries(common_config_watcher_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+# Optionally link yaml-cpp if available
+if(BUILD_WITH_YAML_CPP)
+    find_package(yaml-cpp QUIET)
+    if(yaml-cpp_FOUND)
+        target_link_libraries(common_config_watcher_test PRIVATE yaml-cpp::yaml-cpp)
+        target_compile_definitions(common_config_watcher_test PRIVATE BUILD_WITH_YAML_CPP)
+    endif()
+endif()
+
+target_compile_features(common_config_watcher_test PRIVATE cxx_std_17)
+
+add_test(NAME common_config_watcher_test COMMAND common_config_watcher_test)
+
+set_tests_properties(common_config_watcher_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;config;watcher"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
