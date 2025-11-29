@@ -73,6 +73,27 @@ set_tests_properties(common_thread_safety_test PROPERTIES
     LABELS "thread_safety"
 )
 
+# Service container tests (TICKET-102)
+add_executable(common_service_container_test
+    service_container_test.cpp
+)
+
+target_link_libraries(common_service_container_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_service_container_test PRIVATE cxx_std_17)
+
+add_test(NAME common_service_container_test COMMAND common_service_container_test)
+
+set_tests_properties(common_service_container_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;di"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
