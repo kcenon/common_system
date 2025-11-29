@@ -136,6 +136,36 @@ set_tests_properties(common_unified_config_test PROPERTIES
     LABELS "unit;config"
 )
 
+# Config loader tests (TICKET-202)
+add_executable(common_config_loader_test
+    config_loader_test.cpp
+)
+
+target_link_libraries(common_config_loader_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+# Optionally link yaml-cpp if available
+if(BUILD_WITH_YAML_CPP)
+    find_package(yaml-cpp QUIET)
+    if(yaml-cpp_FOUND)
+        target_link_libraries(common_config_loader_test PRIVATE yaml-cpp::yaml-cpp)
+        target_compile_definitions(common_config_loader_test PRIVATE BUILD_WITH_YAML_CPP)
+    endif()
+endif()
+
+target_compile_features(common_config_loader_test PRIVATE cxx_std_17)
+
+add_test(NAME common_config_loader_test COMMAND common_config_loader_test)
+
+set_tests_properties(common_config_loader_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;config"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
