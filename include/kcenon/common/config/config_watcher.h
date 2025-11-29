@@ -560,13 +560,11 @@ private:
     }
 
     void cleanup_kqueue() {
-        if (file_fd_ >= 0) {
-            close(file_fd_);
-            file_fd_ = -1;
-        }
-        if (kqueue_fd_ >= 0) {
-            close(kqueue_fd_);
-            kqueue_fd_ = -1;
+        // Only close kqueue to signal the watch thread to exit
+        // The watch thread will handle file_fd_ cleanup
+        int kq = kqueue_fd_.exchange(-1);
+        if (kq >= 0) {
+            close(kq);
         }
     }
 
@@ -575,7 +573,10 @@ private:
         struct timespec timeout = {0, 500000000};  // 500ms
 
         while (running_.load()) {
-            int n = kevent(kqueue_fd_, nullptr, 0, &event, 1, &timeout);
+            int kq = kqueue_fd_.load();
+            if (kq < 0) break;
+
+            int n = kevent(kq, nullptr, 0, &event, 1, &timeout);
 
             if (n < 0) {
                 if (errno == EINTR) continue;
@@ -591,20 +592,33 @@ private:
                 // If file was deleted/renamed and we need to re-watch
                 if (event.fflags & (NOTE_DELETE | NOTE_RENAME)) {
                     // Try to reopen the file
-                    close(file_fd_);
+                    std::lock_guard<std::mutex> lock(file_fd_mutex_);
+                    if (file_fd_ >= 0) {
+                        close(file_fd_);
+                    }
                     file_fd_ = open(config_path_.c_str(), O_RDONLY);
                     if (file_fd_ >= 0) {
-                        struct kevent change;
-                        EV_SET(&change, file_fd_, EVFILT_VNODE,
-                               EV_ADD | EV_ENABLE | EV_CLEAR,
-                               NOTE_WRITE | NOTE_EXTEND | NOTE_RENAME | NOTE_DELETE | NOTE_ATTRIB,
-                               0, nullptr);
-                        kevent(kqueue_fd_, &change, 1, nullptr, 0, nullptr);
+                        int kq_local = kqueue_fd_.load();
+                        if (kq_local >= 0) {
+                            struct kevent change;
+                            EV_SET(&change, file_fd_, EVFILT_VNODE,
+                                   EV_ADD | EV_ENABLE | EV_CLEAR,
+                                   NOTE_WRITE | NOTE_EXTEND | NOTE_RENAME | NOTE_DELETE | NOTE_ATTRIB,
+                                   0, nullptr);
+                            kevent(kq_local, &change, 1, nullptr, 0, nullptr);
+                        }
                     }
                 }
 
                 do_reload();
             }
+        }
+
+        // Cleanup file_fd_ when exiting the loop
+        std::lock_guard<std::mutex> lock(file_fd_mutex_);
+        if (file_fd_ >= 0) {
+            close(file_fd_);
+            file_fd_ = -1;
         }
     }
 
@@ -965,8 +979,9 @@ private:
     int inotify_fd_;
     int watch_fd_;
 #elif defined(__APPLE__) || defined(__FreeBSD__)
-    int kqueue_fd_;
+    std::atomic<int> kqueue_fd_;
     int file_fd_;
+    std::mutex file_fd_mutex_;
 #elif defined(_WIN32)
     HANDLE dir_handle_;
 #endif
