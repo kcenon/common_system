@@ -17,6 +17,7 @@ option(COMMON_BUILD_DOCS "Generate documentation" OFF)
 option(COMMON_BUILD_BENCHMARKS "Build performance benchmarks" OFF)
 option(COMMON_HEADER_ONLY "Use as header-only library" ON)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
+option(BUILD_WITH_YAML_CPP "Enable YAML configuration file support" OFF)
 
 # Event Bus ABI Configuration
 # The event bus now uses a standalone implementation without external dependencies
@@ -74,6 +75,18 @@ target_compile_features(common_system INTERFACE cxx_std_20)
 target_compile_definitions(common_system INTERFACE
     EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
 )
+
+# Optional: YAML configuration support
+if(BUILD_WITH_YAML_CPP)
+    find_package(yaml-cpp QUIET)
+    if(yaml-cpp_FOUND)
+        target_link_libraries(common_system INTERFACE yaml-cpp::yaml-cpp)
+        target_compile_definitions(common_system INTERFACE BUILD_WITH_YAML_CPP)
+        message(STATUS "YAML configuration support: enabled (yaml-cpp found)")
+    else()
+        message(WARNING "BUILD_WITH_YAML_CPP is ON but yaml-cpp not found. YAML support disabled.")
+    endif()
+endif()
 
 # Optional: If not header-only, add source files
 if(NOT COMMON_HEADER_ONLY)
@@ -218,6 +231,7 @@ message(STATUS "Build examples:      ${COMMON_BUILD_EXAMPLES}")
 message(STATUS "Build benchmarks:    ${COMMON_BUILD_BENCHMARKS}")
 message(STATUS "Build docs:          ${COMMON_BUILD_DOCS}")
 message(STATUS "Enable coverage:     ${ENABLE_COVERAGE}")
+message(STATUS "YAML support:        ${BUILD_WITH_YAML_CPP}")
 message(STATUS "Install prefix:      ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "======================================")
 message(STATUS "")
