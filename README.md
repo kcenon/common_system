@@ -17,7 +17,7 @@ The Common System Project is a foundational C++17 header-only library providing 
 - **Zero-overhead abstractions**: Template-based interfaces with compile-time resolution
 - **Header-only design**: No library linking, no dependencies, instant integration
 - **Production-ready**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
-- **Universal compatibility**: C++17 standard with optional C++20 features
+- **Universal compatibility**: C++20 standard with modern language features
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
 > **Latest Updates**: Complete separation from individual modules, comprehensive Result<T> pattern implementation, IExecutor interface standardization with ABI version checking, unified `kcenon::common` namespace, event bus integration tests, and enhanced documentation structure.
@@ -75,9 +75,9 @@ This common system serves as the foundational layer that all other system module
 
 ### System Requirements
 
-- **Compiler**: C++17 compatible (GCC 7+, Clang 5+, MSVC 2017+) - C++20 recommended
-- **Build System**: CMake 3.16 or higher
-- **Platform**: Windows, Linux, macOS (all architectures)
+- **Compiler**: C++20 compatible (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
+- **Build System**: CMake 3.20 or higher
+- **Platform**: Windows, Linux, macOS (x86_64, ARM64)
 
 ### Installation
 
@@ -414,7 +414,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] Unified `kcenon::common` namespace
 - [x] Task-based IExecutor interface
 - [x] Comprehensive documentation reorganization
-- [x] C++17 compatibility with optional C++20 features
+- [x] C++20 standard with modern language features
 
 **Planned:**
 - [ ] Coroutine support for async patterns
