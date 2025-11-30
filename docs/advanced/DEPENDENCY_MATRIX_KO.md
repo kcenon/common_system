@@ -30,6 +30,7 @@
   - [container_system (Level 1)](#container_system-level-1)
   - [database_system (Level 2)](#database_system-level-2)
   - [network_system (Level 2)](#network_system-level-2)
+  - [messaging_system (Level 3)](#messaging_system-level-3)
 - [필수 vs. 편의 의존성](#필수-vs-편의-의존성)
   - [필수 (Essential)](#필수-essential)
   - [편의 (Convenience)](#편의-convenience)
@@ -64,6 +65,7 @@
 | container_system | 0 | 1 (common) | ⚠️ Yes (Cycle 3 경유) | 최소 의존성 |
 | database_system | 0 | 0 | ✅ No | 독립적 |
 | network_system | 0 | 3 | ⚠️ Yes (Cycle 3 경유) | thread 통합 포함 |
+| messaging_system | 2+ | 6 (선택) | ✅ No | 고수준 메시징 |
 
 **주요 발견**: 대부분의 의존성이 **include-only** (CMakeLists.txt에 없음)이며, 이는 헤더 전용 사용을 나타냅니다.
 
@@ -392,6 +394,39 @@ include/network_system/integration/thread_integration.h
 
 ---
 
+### messaging_system (Level 3)
+
+**예상**: common_system, container_system, 선택적으로 network_system
+**실제**:
+- CMake: common_system, container_system (필수)
+- Include: common_system, container_system, thread_system, logger_system, monitoring_system, network_system
+
+**의존성 계층**:
+```
+messaging_system (Level 3 - 고수준 메시징)
+        │
+        ├── 필수:
+        │   ├── common_system (Level 0) - Result<T>, 인터페이스
+        │   └── container_system (Level 1) - 메시지 페이로드
+        │
+        └── 선택:
+            ├── thread_system (Level 1) - 디스패치용 thread pool
+            ├── logger_system (Level 1) - 구조화된 로깅
+            ├── monitoring_system (Level 2) - 메트릭 수집
+            ├── database_system (Level 2) - 메시지 영속성
+            └── network_system (Level 2) - 분산 메시징
+```
+
+**network_system과의 핵심 관계**:
+- **messaging_system**이 **network_system**을 사용 (반대가 아님)
+- network_system은 저수준 TCP/UDP/WebSocket 전송 제공
+- messaging_system은 고수준 pub/sub, request/reply 패턴 제공
+- 이것은 **단방향 의존성**: messaging → network
+
+**평가**: ✅ **준수** - 고수준에서 저수준으로의 올바른 의존성
+
+---
+
 ## 필수 vs. 편의 의존성
 
 ### 필수 (Essential)
@@ -404,6 +439,8 @@ include/network_system/integration/thread_integration.h
 | monitoring_system | logger_system | 모니터링 이벤트 로깅 |
 | monitoring_system | thread_system | thread pool 메트릭 모니터링 |
 | network_system | common_system | Result<T>, 인터페이스 |
+| messaging_system | common_system | Result<T>, 인터페이스 |
+| messaging_system | container_system | 타입 안전 메시지 페이로드 |
 
 ### 편의 (Convenience)
 
@@ -412,6 +449,11 @@ include/network_system/integration/thread_integration.h
 | common_system | monitoring_system | Event bus 전달 | ✅ Yes (조건부) |
 | network_system | thread_system | 비동기 I/O용 thread pool | ⚠️ Maybe (std::thread 사용) |
 | network_system | logger_system | 네트워크 이벤트 로깅 | ⚠️ Maybe (common 인터페이스 사용) |
+| messaging_system | thread_system | 메시지 디스패치용 thread pool | ✅ Yes (standalone 백엔드) |
+| messaging_system | logger_system | 구조화된 로깅 | ✅ Yes (선택) |
+| messaging_system | monitoring_system | 메트릭 수집 | ✅ Yes (선택) |
+| messaging_system | database_system | 메시지 영속성 | ✅ Yes (선택) |
+| messaging_system | network_system | TCP/IP를 통한 분산 메시징 | ✅ Yes (선택) |
 
 ---
 
