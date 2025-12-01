@@ -1,0 +1,140 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 16,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default Config",
+            "description": "Default build using system-installed external packages",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "COMMON_HEADER_ONLY": "ON",
+                "COMMON_BUILD_TESTS": "OFF",
+                "COMMON_BUILD_EXAMPLES": "OFF"
+            }
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "Debug build with tests enabled",
+            "inherits": "default",
+            "binaryDir": "${sourceDir}/build-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "COMMON_BUILD_TESTS": "ON",
+                "COMMON_BUILD_EXAMPLES": "ON",
+                "ENABLE_COVERAGE": "ON"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Optimized release build",
+            "binaryDir": "${sourceDir}/build-release",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "COMMON_BUILD_TESTS": "OFF",
+                "COMMON_BUILD_EXAMPLES": "OFF"
+            }
+        },
+        {
+            "name": "asan",
+            "displayName": "AddressSanitizer",
+            "description": "Build with AddressSanitizer",
+            "inherits": "debug",
+            "binaryDir": "${sourceDir}/build-asan",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address"
+            }
+        },
+        {
+            "name": "tsan",
+            "displayName": "ThreadSanitizer",
+            "description": "Build with ThreadSanitizer",
+            "inherits": "debug",
+            "binaryDir": "${sourceDir}/build-tsan",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=thread",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=thread"
+            }
+        },
+        {
+            "name": "ubsan",
+            "displayName": "UndefinedBehaviorSanitizer",
+            "description": "Build with UndefinedBehaviorSanitizer",
+            "inherits": "debug",
+            "binaryDir": "${sourceDir}/build-ubsan",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=undefined",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=undefined"
+            }
+        },
+        {
+            "name": "ci",
+            "displayName": "CI Build",
+            "description": "Configuration for continuous integration",
+            "inherits": "default",
+            "binaryDir": "${sourceDir}/build-ci",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "COMMON_BUILD_TESTS": "ON",
+                "COMMON_BUILD_BENCHMARKS": "ON",
+                "COMMON_HEADER_ONLY": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        },
+        {
+            "name": "debug",
+            "configurePreset": "debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release"
+        },
+        {
+            "name": "asan",
+            "configurePreset": "asan"
+        },
+        {
+            "name": "tsan",
+            "configurePreset": "tsan"
+        },
+        {
+            "name": "ubsan",
+            "configurePreset": "ubsan"
+        },
+        {
+            "name": "ci",
+            "configurePreset": "ci"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "ci",
+            "configurePreset": "ci",
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            }
+        }
+    ]
+}

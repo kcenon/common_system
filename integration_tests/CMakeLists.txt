@@ -22,25 +22,28 @@ file(GLOB FAILURE_TESTS failures/*.cpp)
 file(GLOB PERFORMANCE_TESTS performance/*.cpp)
 file(GLOB STRESS_TESTS stress/*.cpp)
 
-# Add integration test executable
-add_executable(integration_tests
+# Add integration test executable (renamed to avoid conflicts with other systems)
+add_executable(common_integration_tests
     ${SCENARIO_TESTS}
     ${FAILURE_TESTS}
     ${PERFORMANCE_TESTS}
     ${STRESS_TESTS}
 )
 
-target_link_libraries(integration_tests PRIVATE
+target_link_libraries(common_integration_tests PRIVATE
     integration_test_framework
     kcenon::common
 )
 
 # Set C++20 standard
-target_compile_features(integration_tests PRIVATE cxx_std_20)
+target_compile_features(common_integration_tests PRIVATE cxx_std_20)
+set_target_properties(common_integration_tests PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
 
 # Register with CTest
 include(GoogleTest)
-gtest_discover_tests(integration_tests)
+gtest_discover_tests(common_integration_tests)
 
 # Enable testing
 enable_testing()

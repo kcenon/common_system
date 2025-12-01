@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies (Ubuntu)
         if: runner.os == 'Linux'
@@ -47,7 +47,7 @@ jobs:
             -DENABLE_COVERAGE=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }}
 
       - name: Build integration tests
-        run: cmake --build build --target integration_tests
+        run: cmake --build build --target common_integration_tests
 
       - name: Run integration tests
         working-directory: build
@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies (Ubuntu)
         if: runner.os == 'Linux'
@@ -110,7 +110,7 @@ jobs:
             -DCOMMON_BUILD_INTEGRATION_TESTS=ON
 
       - name: Build performance tests
-        run: cmake --build build --target integration_tests
+        run: cmake --build build --target common_integration_tests
 
       - name: Run performance benchmarks
         working-directory: build
