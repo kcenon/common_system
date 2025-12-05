@@ -45,6 +45,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "interfaces/executor_interface.h"
 #include "interfaces/thread_pool_interface.h"
 #include "interfaces/database_interface.h"
+#include "interfaces/logger_interface.h"
+#include "interfaces/global_logger_registry.h"
 
 /// Common patterns
 #include "patterns/result.h"
