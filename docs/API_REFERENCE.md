@@ -1,6 +1,6 @@
 # common_system API Reference
 
-> **Version**: 2.1
+> **Version**: 2.2
 > **Last Updated**: 2025-12-05
 > **Status**: Production Ready (Tier 0)
 
@@ -10,7 +10,8 @@
 2. [Result<T> Pattern (Recommended)](#resultt-pattern-recommended)
 3. [Interfaces](#interfaces)
 4. [Unified Logging](#unified-logging)
-5. [Utilities](#utilities)
+5. [Bootstrap](#bootstrap)
+6. [Utilities](#utilities)
 
 ---
 
@@ -519,6 +520,131 @@ LOG_IF(log_level::debug, expensive_debug_string());
 // Flush before shutdown
 LOG_FLUSH();
 ```
+
+---
+
+## Bootstrap
+
+### SystemBootstrapper
+
+**Header**: `#include <kcenon/common/bootstrap/system_bootstrapper.h>`
+
+**Description**: Fluent API for system initialization and logger registration at the application level.
+
+SystemBootstrapper provides centralized management of:
+- Default and named loggers via factory functions
+- Initialization and shutdown lifecycle hooks
+- RAII-based automatic cleanup
+
+#### Constructor / Destructor
+
+```cpp
+// Default constructor - creates uninitialized bootstrapper
+SystemBootstrapper();
+
+// Destructor - automatically calls shutdown() if initialized
+~SystemBootstrapper();
+
+// Non-copyable, but movable
+SystemBootstrapper(SystemBootstrapper&& other) noexcept;
+SystemBootstrapper& operator=(SystemBootstrapper&& other) noexcept;
+```
+
+#### Fluent Configuration API
+
+```cpp
+// Register a factory for the default logger
+SystemBootstrapper& with_default_logger(LoggerFactory factory);
+
+// Register a factory for a named logger
+SystemBootstrapper& with_logger(const std::string& name, LoggerFactory factory);
+
+// Register an initialization callback (called in registration order)
+SystemBootstrapper& on_initialize(std::function<void()> callback);
+
+// Register a shutdown callback (called in reverse registration order - LIFO)
+SystemBootstrapper& on_shutdown(std::function<void()> callback);
+```
+
+#### Lifecycle Management
+
+```cpp
+// Initialize the system (registers loggers, calls init callbacks)
+VoidResult initialize();
+
+// Shutdown the system (calls shutdown callbacks, clears loggers)
+void shutdown();
+
+// Check if the system is initialized
+bool is_initialized() const noexcept;
+
+// Reset to initial state (calls shutdown if needed, clears all config)
+void reset();
+```
+
+**Usage Example**:
+```cpp
+#include <kcenon/common/bootstrap/system_bootstrapper.h>
+#include <kcenon/common/logging/log_macros.h>
+
+using namespace kcenon::common::bootstrap;
+using namespace kcenon::common::interfaces;
+
+int main() {
+    SystemBootstrapper bootstrapper;
+    bootstrapper
+        .with_default_logger([]() {
+            return std::make_shared<ConsoleLogger>();
+        })
+        .with_logger("database", []() {
+            return std::make_shared<FileLogger>("db.log");
+        })
+        .with_logger("network", []() {
+            return std::make_shared<FileLogger>("network.log");
+        })
+        .on_initialize([]() {
+            LOG_INFO("System initialized");
+        })
+        .on_shutdown([]() {
+            LOG_INFO("System shutting down");
+        });
+
+    auto result = bootstrapper.initialize();
+    if (result.is_err()) {
+        std::cerr << "Initialization failed: " << result.error().message;
+        return 1;
+    }
+
+    // Application logic...
+    LOG_INFO("Application running");
+    LOG_INFO_TO("database", "Connected to database");
+    LOG_INFO_TO("network", "Server started");
+
+    // Shutdown is called automatically by destructor (RAII)
+    return 0;
+}
+```
+
+**RAII Example**:
+```cpp
+void run_subsystem() {
+    SystemBootstrapper bootstrapper;
+    bootstrapper
+        .with_default_logger([]() { return create_logger(); })
+        .on_shutdown([]() { cleanup_resources(); });
+
+    bootstrapper.initialize();
+
+    // Do work...
+
+    // shutdown() is automatically called when bootstrapper goes out of scope
+}
+```
+
+**Thread Safety**:
+- Configuration methods (`with_*`, `on_*`) are NOT thread-safe
+- `initialize()` and `shutdown()` use mutex for state protection
+- Once initialized, registered loggers are thread-safe via GlobalLoggerRegistry
 
 ---
 
