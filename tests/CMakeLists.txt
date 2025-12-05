@@ -217,6 +217,27 @@ set_tests_properties(common_config_watcher_test PROPERTIES
     LABELS "unit;config;watcher"
 )
 
+# Global logger registry tests (Issue #174)
+add_executable(common_global_logger_registry_test
+    global_logger_registry_test.cpp
+)
+
+target_link_libraries(common_global_logger_registry_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_global_logger_registry_test PRIVATE cxx_std_17)
+
+add_test(NAME common_global_logger_registry_test COMMAND common_global_logger_registry_test)
+
+set_tests_properties(common_global_logger_registry_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;interfaces;logging"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
