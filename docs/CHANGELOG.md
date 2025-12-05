@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **GlobalLoggerRegistry**: Thread-safe singleton registry for runtime logger binding (#174)
+  - Centralized logger management across all subsystems
+  - Default and named logger support
+  - Factory-based lazy initialization for deferred logger creation
+  - NullLogger fallback for safe operation when logging is not configured
+  - Convenience functions: `get_registry()`, `get_logger()`, `get_logger(name)`
+  - Resolves circular dependency between thread_system and logger_system
 - Comprehensive documentation unification across ecosystem
 - Standardized CHANGELOG format following Keep a Changelog
 
