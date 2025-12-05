@@ -220,89 +220,90 @@ inline VoidResult log_critical(std::string_view message,
 
 // =============================================================================
 // Level-specific logging functions with named logger
+// Note: Using "_to" suffix to avoid overload ambiguity with source_location
 // =============================================================================
 
 /**
  * @brief Log a trace-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_trace(std::string_view message,
-                            const std::string& logger_name,
-                            const source_location& loc = source_location::current()) {
+inline VoidResult log_trace_to(const std::string& logger_name,
+                               std::string_view message,
+                               const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::trace, message, logger_name, loc);
 }
 
 /**
  * @brief Log a debug-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_debug(std::string_view message,
-                            const std::string& logger_name,
-                            const source_location& loc = source_location::current()) {
+inline VoidResult log_debug_to(const std::string& logger_name,
+                               std::string_view message,
+                               const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::debug, message, logger_name, loc);
 }
 
 /**
  * @brief Log an info-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_info(std::string_view message,
-                           const std::string& logger_name,
-                           const source_location& loc = source_location::current()) {
+inline VoidResult log_info_to(const std::string& logger_name,
+                              std::string_view message,
+                              const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::info, message, logger_name, loc);
 }
 
 /**
  * @brief Log a warning-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_warning(std::string_view message,
-                              const std::string& logger_name,
-                              const source_location& loc = source_location::current()) {
+inline VoidResult log_warning_to(const std::string& logger_name,
+                                 std::string_view message,
+                                 const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::warning, message, logger_name, loc);
 }
 
 /**
  * @brief Log an error-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_error(std::string_view message,
-                            const std::string& logger_name,
-                            const source_location& loc = source_location::current()) {
+inline VoidResult log_error_to(const std::string& logger_name,
+                               std::string_view message,
+                               const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::error, message, logger_name, loc);
 }
 
 /**
  * @brief Log a critical-level message to a named logger.
  *
- * @param message Message to log
  * @param logger_name Name of the logger
+ * @param message Message to log
  * @param loc Source location (automatically captured)
  * @return VoidResult indicating success or error
  */
-inline VoidResult log_critical(std::string_view message,
-                               const std::string& logger_name,
-                               const source_location& loc = source_location::current()) {
+inline VoidResult log_critical_to(const std::string& logger_name,
+                                  std::string_view message,
+                                  const source_location& loc = source_location::current()) {
     return log(interfaces::log_level::critical, message, logger_name, loc);
 }
 

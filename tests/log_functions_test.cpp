@@ -231,7 +231,7 @@ TEST_F(LogFunctionsTest, Log_ToNamedLogger) {
     auto network_logger = std::make_shared<CaptureLogger>();
     GlobalLoggerRegistry::instance().register_logger("network", network_logger);
 
-    logging::log_info("Network message", "network");
+    logging::log_info_to("network", "Network message");
 
     // Default logger should be empty
     EXPECT_EQ(test_logger_->entry_count(), 0);
@@ -419,7 +419,7 @@ TEST_F(LogFunctionsTest, LegacyMacro_AllLevels) {
 
 TEST_F(LogFunctionsTest, Log_ToUnregisteredLogger_UsesNullLogger) {
     // This should not throw, NullLogger handles it silently
-    auto result = logging::log_info("Message", "nonexistent_logger");
+    auto result = logging::log_info_to("nonexistent_logger", "Message");
     EXPECT_TRUE(result.is_ok());
 
     // Default logger should be empty
@@ -479,9 +479,9 @@ TEST_F(LogFunctionsTest, ConcurrentLogging_MultipleLoggers) {
         threads.emplace_back([t]() {
             for (int i = 0; i < logs_per_thread; ++i) {
                 if (t % 2 == 0) {
-                    logging::log_info("To A", "a");
+                    logging::log_info_to("a", "To A");
                 } else {
-                    logging::log_info("To B", "b");
+                    logging::log_info_to("b", "To B");
                 }
             }
         });

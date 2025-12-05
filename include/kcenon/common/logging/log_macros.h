@@ -106,7 +106,7 @@
  * @param msg The message to log
  */
 #define LOG_TRACE_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_trace(msg, logger_name)
+    ::kcenon::common::logging::log_trace_to(logger_name, msg)
 
 /**
  * @def LOG_DEBUG_TO(logger_name, msg)
@@ -115,7 +115,7 @@
  * @param msg The message to log
  */
 #define LOG_DEBUG_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_debug(msg, logger_name)
+    ::kcenon::common::logging::log_debug_to(logger_name, msg)
 
 /**
  * @def LOG_INFO_TO(logger_name, msg)
@@ -124,7 +124,7 @@
  * @param msg The message to log
  */
 #define LOG_INFO_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_info(msg, logger_name)
+    ::kcenon::common::logging::log_info_to(logger_name, msg)
 
 /**
  * @def LOG_WARNING_TO(logger_name, msg)
@@ -133,7 +133,7 @@
  * @param msg The message to log
  */
 #define LOG_WARNING_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_warning(msg, logger_name)
+    ::kcenon::common::logging::log_warning_to(logger_name, msg)
 
 /**
  * @def LOG_ERROR_TO(logger_name, msg)
@@ -142,7 +142,7 @@
  * @param msg The message to log
  */
 #define LOG_ERROR_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_error(msg, logger_name)
+    ::kcenon::common::logging::log_error_to(logger_name, msg)
 
 /**
  * @def LOG_CRITICAL_TO(logger_name, msg)
@@ -151,7 +151,7 @@
  * @param msg The message to log
  */
 #define LOG_CRITICAL_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_critical(msg, logger_name)
+    ::kcenon::common::logging::log_critical_to(logger_name, msg)
 
 // =============================================================================
 // Conditional Logging Macros

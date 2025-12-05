@@ -378,15 +378,22 @@ namespace kcenon::common::logging {
 #### Level-Specific Functions
 
 ```cpp
+// Log to default logger
 VoidResult log_trace(std::string_view message, ...);
 VoidResult log_debug(std::string_view message, ...);
 VoidResult log_info(std::string_view message, ...);
 VoidResult log_warning(std::string_view message, ...);
 VoidResult log_error(std::string_view message, ...);
 VoidResult log_critical(std::string_view message, ...);
-```
 
-Each function also has an overload accepting a logger name as the second parameter.
+// Log to named logger (using "_to" suffix to avoid overload ambiguity)
+VoidResult log_trace_to(const std::string& logger_name, std::string_view message, ...);
+VoidResult log_debug_to(const std::string& logger_name, std::string_view message, ...);
+VoidResult log_info_to(const std::string& logger_name, std::string_view message, ...);
+VoidResult log_warning_to(const std::string& logger_name, std::string_view message, ...);
+VoidResult log_error_to(const std::string& logger_name, std::string_view message, ...);
+VoidResult log_critical_to(const std::string& logger_name, std::string_view message, ...);
+```
 
 #### Utility Functions
 
@@ -412,9 +419,9 @@ log_info("Application started");
 log_warning("Low memory condition");
 log_error("Connection failed");
 
-// Using named loggers
-log_info("Request received", "network");
-log_debug("Query executed", "database");
+// Using named loggers (note: logger_name comes first)
+log_info_to("network", "Request received");
+log_debug_to("database", "Query executed");
 
 // Check before expensive message construction
 if (is_enabled(log_level::debug)) {
