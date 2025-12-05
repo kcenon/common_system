@@ -19,6 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - NullLogger fallback for safe operation when logging is not configured
   - Convenience functions: `get_registry()`, `get_logger()`, `get_logger(name)`
   - Resolves circular dependency between thread_system and logger_system
+- **Unified Logging Functions and Macros** (#175)
+  - `log_functions.h`: Inline logging functions with automatic source_location capture
+    - Level-specific functions: `log_trace()`, `log_debug()`, `log_info()`, `log_warning()`, `log_error()`, `log_critical()`
+    - Support for default logger and named loggers
+    - Utility functions: `is_enabled()`, `flush()`
+  - `log_macros.h`: Convenient preprocessor macros
+    - Standard macros: `LOG_TRACE`, `LOG_DEBUG`, `LOG_INFO`, `LOG_WARNING`, `LOG_ERROR`, `LOG_CRITICAL`
+    - Named logger macros: `LOG_*_TO(logger_name, msg)`
+    - Conditional logging: `LOG_IF(level, msg)` for avoiding expensive message construction
+    - Compile-time level filtering via `KCENON_MIN_LOG_LEVEL`
+  - Legacy compatibility macros: `THREAD_LOG_*` redirects to `LOG_*`
 - Comprehensive documentation unification across ecosystem
 - Standardized CHANGELOG format following Keep a Changelog
 

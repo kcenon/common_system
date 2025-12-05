@@ -48,6 +48,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "interfaces/logger_interface.h"
 #include "interfaces/global_logger_registry.h"
 
+/// Unified logging (Issue #175)
+#include "logging/log_functions.h"
+#include "logging/log_macros.h"
+
 /// Common patterns
 #include "patterns/result.h"
 #include "patterns/event_bus.h"
