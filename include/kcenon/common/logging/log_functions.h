@@ -59,6 +59,9 @@ namespace kcenon::common::logging {
  * @param message Message to log
  * @param loc Source location (automatically captured at call site)
  * @return VoidResult indicating success or error
+ *
+ * @note Issue #177: Now uses ILogger's source_location-based overload directly
+ *       for improved efficiency (avoids string copies for file/function names).
  */
 inline VoidResult log(interfaces::log_level level,
                       std::string_view message,
@@ -67,11 +70,8 @@ inline VoidResult log(interfaces::log_level level,
     if (!logger->is_enabled(level)) {
         return VoidResult::ok({});
     }
-    return logger->log(level,
-                       std::string(message),
-                       loc.file_name(),
-                       loc.line(),
-                       loc.function_name());
+    // Use the new source_location-based interface (Issue #177)
+    return logger->log(level, message, loc);
 }
 
 /**
@@ -85,6 +85,8 @@ inline VoidResult log(interfaces::log_level level,
  * @param logger Logger instance to use
  * @param loc Source location (automatically captured at call site)
  * @return VoidResult indicating success or error
+ *
+ * @note Issue #177: Now uses ILogger's source_location-based overload directly.
  */
 inline VoidResult log(interfaces::log_level level,
                       std::string_view message,
@@ -93,11 +95,8 @@ inline VoidResult log(interfaces::log_level level,
     if (!logger || !logger->is_enabled(level)) {
         return VoidResult::ok({});
     }
-    return logger->log(level,
-                       std::string(message),
-                       loc.file_name(),
-                       loc.line(),
-                       loc.function_name());
+    // Use the new source_location-based interface (Issue #177)
+    return logger->log(level, message, loc);
 }
 
 /**
@@ -110,6 +109,8 @@ inline VoidResult log(interfaces::log_level level,
  * @param logger_name Name of the logger in the registry
  * @param loc Source location (automatically captured at call site)
  * @return VoidResult indicating success or error
+ *
+ * @note Issue #177: Now uses ILogger's source_location-based overload directly.
  */
 inline VoidResult log(interfaces::log_level level,
                       std::string_view message,
@@ -119,11 +120,8 @@ inline VoidResult log(interfaces::log_level level,
     if (!logger->is_enabled(level)) {
         return VoidResult::ok({});
     }
-    return logger->log(level,
-                       std::string(message),
-                       loc.file_name(),
-                       loc.line(),
-                       loc.function_name());
+    // Use the new source_location-based interface (Issue #177)
+    return logger->log(level, message, loc);
 }
 
 // =============================================================================

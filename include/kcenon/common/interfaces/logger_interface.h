@@ -8,6 +8,10 @@
  *
  * This header defines the standard logging interface to be used across
  * all systems for consistent logging behavior.
+ *
+ * @note Issue #177: Extended with C++20 source_location support.
+ *       The interface now supports both the legacy file/line/function
+ *       parameters and the modern source_location approach.
  */
 
 #pragma once
@@ -17,7 +21,9 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 #include "../patterns/result.h"
+#include "../utils/source_location.h"
 
 namespace kcenon::common {
 namespace interfaces {
@@ -39,6 +45,10 @@ enum class log_level {
 /**
  * @struct log_entry
  * @brief Standard log entry structure
+ *
+ * @note Issue #177: Extended with source_location support.
+ *       The file, line, and function fields are now populated from
+ *       source_location when using the create() factory method.
  */
 struct log_entry {
     log_level level;
@@ -47,13 +57,53 @@ struct log_entry {
     int line;
     std::string function;
     std::chrono::system_clock::time_point timestamp;
+    source_location location;  ///< C++20 source_location (Issue #177)
 
+    /**
+     * @brief Default constructor
+     * @param lvl Log level (default: info)
+     * @param msg Log message (default: empty)
+     */
     log_entry(log_level lvl = log_level::info,
               const std::string& msg = "")
         : level(lvl)
         , message(msg)
         , line(0)
-        , timestamp(std::chrono::system_clock::now()) {}
+        , timestamp(std::chrono::system_clock::now())
+        , location() {}
+
+    /**
+     * @brief Factory method to create a log_entry with source_location
+     *
+     * This is the preferred way to create log entries as it automatically
+     * captures the source location at the call site and populates the
+     * file, line, and function fields for backward compatibility.
+     *
+     * @param lvl Log level
+     * @param msg Log message (string_view for efficiency)
+     * @param loc Source location (automatically captured at call site)
+     * @return Fully initialized log_entry
+     *
+     * @code
+     * auto entry = log_entry::create(log_level::info, "Operation completed");
+     * // entry.file, entry.line, entry.function are automatically populated
+     * @endcode
+     */
+    static log_entry create(
+        log_level lvl,
+        std::string_view msg,
+        const source_location& loc = source_location::current()) {
+
+        log_entry entry;
+        entry.level = lvl;
+        entry.message = std::string(msg);
+        entry.file = loc.file_name();
+        entry.line = loc.line();
+        entry.function = loc.function_name();
+        entry.timestamp = std::chrono::system_clock::now();
+        entry.location = loc;
+        return entry;
+    }
 };
 
 /**
@@ -63,6 +113,11 @@ struct log_entry {
  * This interface defines the contract for any logging implementation,
  * allowing modules to work with different logging backends without
  * direct dependencies.
+ *
+ * @note Issue #177: Extended with C++20 source_location support.
+ *       New implementations should override the source_location-based
+ *       log() method. The legacy file/line/function overload is
+ *       deprecated but still supported for backward compatibility.
  */
 class ILogger {
 public:
@@ -77,14 +132,51 @@ public:
     virtual VoidResult log(log_level level, const std::string& message) = 0;
 
     /**
-     * @brief Log a message with source location information
+     * @brief Log a message with source location information (C++20)
+     *
+     * This is the preferred method for logging with source location.
+     * The default implementation delegates to the legacy file/line/function
+     * overload for backward compatibility with existing implementations.
+     *
+     * @param level Log level
+     * @param message Log message (string_view for efficiency)
+     * @param loc Source location (automatically captured at call site)
+     * @return VoidResult indicating success or error
+     *
+     * @note Issue #177: New method with source_location support.
+     *       Implementations should override this method to directly use
+     *       source_location for improved type safety and efficiency.
+     *
+     * @code
+     * logger->log(log_level::info, "Operation completed");
+     * // Source location is automatically captured
+     * @endcode
+     */
+    virtual VoidResult log(log_level level,
+                           std::string_view message,
+                           const source_location& loc = source_location::current()) {
+        // Default implementation delegates to legacy method for compatibility
+        return log(level, std::string(message),
+                   std::string(loc.file_name()),
+                   loc.line(),
+                   std::string(loc.function_name()));
+    }
+
+    /**
+     * @brief Log a message with source location information (legacy)
      * @param level Log level
      * @param message Log message
      * @param file Source file name
      * @param line Source line number
      * @param function Function name
      * @return VoidResult indicating success or error
+     *
+     * @deprecated Use log(log_level, std::string_view, const source_location&)
+     *             instead. This method is maintained for backward compatibility
+     *             but new code should use the source_location-based overload.
+     *             Will be removed in v3.0.0.
      */
+    [[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
     virtual VoidResult log(log_level level,
                            const std::string& message,
                            const std::string& file,
