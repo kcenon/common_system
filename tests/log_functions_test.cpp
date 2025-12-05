@@ -14,12 +14,15 @@
  * - Conditional logging (LOG_IF)
  * - Named logger support
  * - Compile-time log level filtering
+ *
+ * @note Issue #177: Extended with source_location-specific tests.
  */
 
 #include <gtest/gtest.h>
 #include <kcenon/common/logging/log_functions.h>
 #include <kcenon/common/logging/log_macros.h>
 #include <kcenon/common/interfaces/global_logger_registry.h>
+#include <kcenon/common/utils/source_location.h>
 
 #include <atomic>
 #include <mutex>
@@ -37,6 +40,10 @@ using namespace kcenon::common::logging;
 
 /**
  * @brief Test logger that captures log entries for verification.
+ *
+ * @note Issue #177: Updated to support source_location-based logging.
+ *       Now overrides both the new source_location method and the legacy
+ *       file/line/function method for comprehensive testing.
  */
 class CaptureLogger : public ILogger {
 public:
@@ -46,6 +53,7 @@ public:
         std::string file;
         int line;
         std::string function;
+        source_location location;  // Issue #177: Store source_location
     };
 
     CaptureLogger() = default;
@@ -53,9 +61,39 @@ public:
 
     VoidResult log(log_level level, const std::string& message) override {
         std::lock_guard<std::mutex> lock(mutex_);
-        entries_.push_back({level, message, "", 0, ""});
+        entries_.push_back({level, message, "", 0, "", {}});
         return VoidResult::ok({});
     }
+
+    /**
+     * @brief Log with source_location (Issue #177 - preferred method)
+     *
+     * This override directly captures the source_location object,
+     * avoiding the need for string copies of file/function names.
+     */
+    VoidResult log(log_level level,
+                   std::string_view message,
+                   const source_location& loc = source_location::current()) override {
+        std::lock_guard<std::mutex> lock(mutex_);
+        entries_.push_back({
+            level,
+            std::string(message),
+            std::string(loc.file_name()),
+            static_cast<int>(loc.line()),
+            std::string(loc.function_name()),
+            loc
+        });
+        return VoidResult::ok({});
+    }
+
+// Suppress deprecation warning for implementing the deprecated interface method
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+    #pragma warning(push)
+    #pragma warning(disable: 4996)
+#endif
 
     VoidResult log(log_level level,
                    const std::string& message,
@@ -63,12 +101,27 @@ public:
                    int line,
                    const std::string& function) override {
         std::lock_guard<std::mutex> lock(mutex_);
-        entries_.push_back({level, message, file, line, function});
+        entries_.push_back({level, message, file, line, function, {}});
         return VoidResult::ok({});
     }
 
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+    #pragma warning(pop)
+#endif
+
     VoidResult log(const log_entry& entry) override {
-        return log(entry.level, entry.message, entry.file, entry.line, entry.function);
+        std::lock_guard<std::mutex> lock(mutex_);
+        entries_.push_back({
+            entry.level,
+            entry.message,
+            entry.file,
+            entry.line,
+            entry.function,
+            entry.location
+        });
+        return VoidResult::ok({});
     }
 
     bool is_enabled(log_level level) const override {
@@ -521,4 +574,146 @@ TEST_F(LogFunctionsTest, Log_StdString) {
 
     auto entry = test_logger_->last_entry();
     EXPECT_EQ(entry.message, "std::string message");
+}
+
+// ============================================================================
+// Issue #177: source_location Tests
+// ============================================================================
+
+/**
+ * @brief Test log_entry::create() factory method
+ */
+TEST_F(LogFunctionsTest, LogEntry_Create_FactoryMethod) {
+    auto entry = log_entry::create(log_level::info, "Factory created entry");
+
+    EXPECT_EQ(entry.level, log_level::info);
+    EXPECT_EQ(entry.message, "Factory created entry");
+
+    // Verify source location was captured
+    EXPECT_FALSE(std::string(entry.file).empty());
+    EXPECT_GT(entry.line, 0);
+    EXPECT_FALSE(std::string(entry.function).empty());
+
+    // Verify file contains this test file name
+    EXPECT_NE(std::string(entry.file).find("log_functions_test.cpp"), std::string::npos);
+
+    // Verify location field matches file/line/function
+    EXPECT_EQ(std::string(entry.location.file_name()), entry.file);
+    EXPECT_EQ(entry.location.line(), entry.line);
+    EXPECT_EQ(std::string(entry.location.function_name()), entry.function);
+}
+
+/**
+ * @brief Test log_entry::create() with different log levels
+ */
+TEST_F(LogFunctionsTest, LogEntry_Create_AllLevels) {
+    auto trace_entry = log_entry::create(log_level::trace, "Trace");
+    auto debug_entry = log_entry::create(log_level::debug, "Debug");
+    auto info_entry = log_entry::create(log_level::info, "Info");
+    auto warning_entry = log_entry::create(log_level::warning, "Warning");
+    auto error_entry = log_entry::create(log_level::error, "Error");
+    auto critical_entry = log_entry::create(log_level::critical, "Critical");
+
+    EXPECT_EQ(trace_entry.level, log_level::trace);
+    EXPECT_EQ(debug_entry.level, log_level::debug);
+    EXPECT_EQ(info_entry.level, log_level::info);
+    EXPECT_EQ(warning_entry.level, log_level::warning);
+    EXPECT_EQ(error_entry.level, log_level::error);
+    EXPECT_EQ(critical_entry.level, log_level::critical);
+
+    // All should have valid source location
+    EXPECT_GT(trace_entry.line, 0);
+    EXPECT_GT(debug_entry.line, 0);
+    EXPECT_GT(info_entry.line, 0);
+    EXPECT_GT(warning_entry.line, 0);
+    EXPECT_GT(error_entry.line, 0);
+    EXPECT_GT(critical_entry.line, 0);
+}
+
+/**
+ * @brief Test ILogger::log() with source_location directly
+ */
+TEST_F(LogFunctionsTest, ILogger_Log_SourceLocation) {
+    auto loc = source_location::current();
+    test_logger_->log(log_level::info, "Direct source_location", loc);
+
+    auto entry = test_logger_->last_entry();
+    EXPECT_EQ(entry.level, log_level::info);
+    EXPECT_EQ(entry.message, "Direct source_location");
+
+    // Verify source location was passed correctly
+    EXPECT_EQ(entry.line, loc.line());
+    EXPECT_EQ(entry.file, std::string(loc.file_name()));
+    EXPECT_EQ(entry.function, std::string(loc.function_name()));
+}
+
+/**
+ * @brief Test log_entry location field preservation
+ */
+TEST_F(LogFunctionsTest, LogEntry_LocationField_Preserved) {
+    auto entry = log_entry::create(log_level::debug, "Location test");
+    test_logger_->log(entry);
+
+    auto logged_entry = test_logger_->last_entry();
+
+    // Verify the location field was preserved
+    EXPECT_EQ(logged_entry.location.line(), entry.location.line());
+    EXPECT_STREQ(logged_entry.location.file_name(), entry.location.file_name());
+    EXPECT_STREQ(logged_entry.location.function_name(), entry.location.function_name());
+}
+
+/**
+ * @brief Test source_location::current() captures correct location
+ */
+TEST_F(LogFunctionsTest, SourceLocation_Current_CorrectCapture) {
+    auto loc = source_location::current();  // Line A
+
+    // Verify file name
+    std::string file_name(loc.file_name());
+    EXPECT_NE(file_name.find("log_functions_test.cpp"), std::string::npos);
+
+    // Verify function name contains test function name
+    std::string func_name(loc.function_name());
+    EXPECT_FALSE(func_name.empty());
+
+    // Verify line number is positive
+    EXPECT_GT(loc.line(), 0);
+}
+
+/**
+ * @brief Test that logging functions use source_location-based interface
+ */
+TEST_F(LogFunctionsTest, LoggingFunctions_UseSourceLocation) {
+    // Clear any previous entries
+    test_logger_->clear();
+
+    // Log via the logging functions
+    logging::log_info("Test via log_info");
+
+    EXPECT_EQ(test_logger_->entry_count(), 1);
+    auto entry = test_logger_->last_entry();
+
+    // Verify source location was captured (not empty)
+    EXPECT_FALSE(entry.file.empty());
+    EXPECT_GT(entry.line, 0);
+    EXPECT_FALSE(entry.function.empty());
+}
+
+/**
+ * @brief Test default log_entry constructor backward compatibility
+ */
+TEST_F(LogFunctionsTest, LogEntry_DefaultConstructor_BackwardCompatible) {
+    // Old-style construction
+    log_entry old_entry(log_level::warning, "Legacy entry");
+
+    EXPECT_EQ(old_entry.level, log_level::warning);
+    EXPECT_EQ(old_entry.message, "Legacy entry");
+    EXPECT_EQ(old_entry.line, 0);  // Default
+    EXPECT_TRUE(old_entry.file.empty());
+    EXPECT_TRUE(old_entry.function.empty());
+
+    // Log it and verify
+    test_logger_->log(old_entry);
+    auto logged = test_logger_->last_entry();
+    EXPECT_EQ(logged.message, "Legacy entry");
 }

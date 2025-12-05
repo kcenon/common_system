@@ -39,8 +39,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Conditional logging: `LOG_IF(level, msg)` for avoiding expensive message construction
     - Compile-time level filtering via `KCENON_MIN_LOG_LEVEL`
   - Legacy compatibility macros: `THREAD_LOG_*` redirects to `LOG_*`
+- **ILogger source_location Support** (#177)
+  - Extended `ILogger` interface with C++20 `source_location` support
+  - New preferred method: `log(log_level, std::string_view, const source_location&)`
+  - Default implementation in base class delegates to legacy method for backward compatibility
+  - Extended `log_entry` struct with `source_location location` field
+  - New factory method: `log_entry::create()` automatically captures source_location
+  - Updated logging functions to use new source_location-based interface
 - Comprehensive documentation unification across ecosystem
 - Standardized CHANGELOG format following Keep a Changelog
+
+### Deprecated
+- **ILogger legacy file/line/function method** (#177)
+  - `log(log_level, const std::string&, const std::string&, int, const std::string&)` is now deprecated
+  - Use `log(log_level, std::string_view, const source_location&)` instead
+  - Will be removed in v3.0.0
 
 ### Removed
 - **BREAKING**: `Result<T>::is_uninitialized()` method removed

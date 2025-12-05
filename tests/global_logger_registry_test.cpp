@@ -31,6 +31,8 @@ using namespace kcenon::common::interfaces;
 
 /**
  * @brief Test logger implementation that tracks log messages.
+ *
+ * @note Issue #177: Updated to support source_location-based logging.
  */
 class TestLogger : public ILogger {
 public:
@@ -43,6 +45,24 @@ public:
         return VoidResult::ok({});
     }
 
+    /**
+     * @brief Log with source_location (Issue #177 - preferred method)
+     */
+    VoidResult log(log_level level,
+                   std::string_view message,
+                   const source_location& /*loc*/ = source_location::current()) override {
+        return log(level, std::string(message));
+    }
+
+// Suppress deprecation warning for implementing the deprecated interface method
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+    #pragma warning(push)
+    #pragma warning(disable: 4996)
+#endif
+
     VoidResult log(log_level level,
                    const std::string& message,
                    const std::string& /*file*/,
@@ -50,6 +70,12 @@ public:
                    const std::string& /*function*/) override {
         return log(level, message);
     }
+
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+    #pragma warning(pop)
+#endif
 
     VoidResult log(const log_entry& entry) override {
         return log(entry.level, entry.message);
@@ -382,8 +408,25 @@ TEST_F(GlobalLoggerRegistryTest, NullLogger_AllOperationsSucceed) {
     auto null_logger = GlobalLoggerRegistry::null_logger();
 
     // All operations should succeed without throwing
-    EXPECT_TRUE(null_logger->log(log_level::info, "test").is_ok());
-    EXPECT_TRUE(null_logger->log(log_level::error, "test", "file.cpp", 42, "func").is_ok());
+    // Use string_view overload (Issue #177 - preferred)
+    EXPECT_TRUE(null_logger->log(log_level::info, std::string_view("test")).is_ok());
+
+// Suppress deprecation warning for testing the deprecated method
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+    #pragma warning(push)
+    #pragma warning(disable: 4996)
+#endif
+    // Test legacy file/line/function overload
+    EXPECT_TRUE(null_logger->log(log_level::error, std::string("test"),
+                                  std::string("file.cpp"), 42, std::string("func")).is_ok());
+#if defined(__GNUC__) || defined(__clang__)
+    #pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+    #pragma warning(pop)
+#endif
 
     log_entry entry;
     entry.level = log_level::warning;
@@ -641,7 +684,8 @@ TEST_F(GlobalLoggerRegistryTest, LoggingThroughRegistry) {
     GlobalLoggerRegistry::instance().register_logger("integration", test_logger);
 
     auto logger = get_logger("integration");
-    logger->log(log_level::info, "Test message");
+    // Use string_view overload (Issue #177)
+    logger->log(log_level::info, std::string_view("Test message"));
 
     EXPECT_EQ(test_logger->message_count(), 1);
     auto [level, message] = test_logger->last_message();
@@ -658,9 +702,10 @@ TEST_F(GlobalLoggerRegistryTest, MultipleNamedLoggers) {
     GlobalLoggerRegistry::instance().register_logger("database", database_logger);
     GlobalLoggerRegistry::instance().register_logger("api", api_logger);
 
-    get_logger("network")->log(log_level::info, "Network message");
-    get_logger("database")->log(log_level::warning, "Database message");
-    get_logger("api")->log(log_level::error, "API message");
+    // Use string_view overload (Issue #177)
+    get_logger("network")->log(log_level::info, std::string_view("Network message"));
+    get_logger("database")->log(log_level::warning, std::string_view("Database message"));
+    get_logger("api")->log(log_level::error, std::string_view("API message"));
 
     EXPECT_EQ(network_logger->message_count(), 1);
     EXPECT_EQ(database_logger->message_count(), 1);
