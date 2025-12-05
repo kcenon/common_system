@@ -1,7 +1,7 @@
 # common_system API Reference
 
-> **Version**: 2.1
-> **Last Updated**: 2025-12-05
+> **Version**: 2.2
+> **Last Updated**: 2025-12-06
 > **Status**: Production Ready (Tier 0)
 
 ## Table of Contents
@@ -166,10 +166,24 @@ public:
 #### Pure Virtual Functions
 
 ```cpp
+// Core logging method
 virtual auto log(log_level level, const std::string& message) -> VoidResult = 0;
+
+// Log with source_location (C++20 - PREFERRED, Issue #177)
+// Default implementation delegates to legacy method for backward compatibility
+virtual auto log(log_level level, std::string_view message,
+                 const source_location& loc = source_location::current()) -> VoidResult;
+
+// Legacy method with file/line/function parameters (DEPRECATED)
+// Use the source_location overload instead
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
 virtual auto log(log_level level, const std::string& message,
                  const std::string& file, int line, const std::string& function) -> VoidResult = 0;
+
+// Log structured entry
 virtual auto log(const log_entry& entry) -> VoidResult = 0;
+
+// Level management
 virtual auto is_enabled(log_level level) const -> bool = 0;
 virtual auto set_level(log_level level) -> VoidResult = 0;
 virtual auto get_level() const -> log_level = 0;
@@ -187,6 +201,40 @@ enum class log_level {
     critical = 5,
     off = 6
 };
+```
+
+#### log_entry Structure
+
+```cpp
+struct log_entry {
+    log_level level;
+    std::string message;
+    std::string file;
+    int line;
+    std::string function;
+    std::chrono::system_clock::time_point timestamp;
+    source_location location;  // C++20 source_location (Issue #177)
+
+    // Default constructor (backward compatible)
+    log_entry(log_level lvl = log_level::info, const std::string& msg = "");
+
+    // Factory method with automatic source_location capture (PREFERRED)
+    static log_entry create(log_level lvl, std::string_view msg,
+                           const source_location& loc = source_location::current());
+};
+```
+
+**Usage Example**:
+```cpp
+// New API (Issue #177) - source_location automatically captured
+logger->log(log_level::info, "Operation completed");
+
+// Using log_entry factory method
+auto entry = log_entry::create(log_level::warning, "Low memory");
+logger->log(entry);
+
+// Legacy API (deprecated but still functional)
+// logger->log(log_level::info, "message", __FILE__, __LINE__, __FUNCTION__);
 ```
 
 ---
