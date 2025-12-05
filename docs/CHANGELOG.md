@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **SystemBootstrapper**: Fluent API for system initialization at the application level (#176)
+  - Factory-based logger registration for lazy initialization
+  - Default logger and named logger support via `with_default_logger()` and `with_logger()`
+  - Initialization hooks via `on_initialize()` (called in registration order)
+  - Shutdown hooks via `on_shutdown()` (called in reverse order - LIFO)
+  - RAII support with automatic shutdown on destruction
+  - Move semantics support for transferring ownership
+  - Prevention of duplicate initialization/shutdown
+  - `reset()` method for reconfiguration scenarios
 - **GlobalLoggerRegistry**: Thread-safe singleton registry for runtime logger binding (#174)
   - Centralized logger management across all subsystems
   - Default and named logger support

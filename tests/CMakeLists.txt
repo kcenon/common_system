@@ -259,6 +259,27 @@ set_tests_properties(common_log_functions_test PROPERTIES
     LABELS "unit;logging"
 )
 
+# SystemBootstrapper tests (Issue #176)
+add_executable(common_system_bootstrapper_test
+    system_bootstrapper_test.cpp
+)
+
+target_link_libraries(common_system_bootstrapper_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_system_bootstrapper_test PRIVATE cxx_std_17)
+
+add_test(NAME common_system_bootstrapper_test COMMAND common_system_bootstrapper_test)
+
+set_tests_properties(common_system_bootstrapper_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;bootstrap"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)

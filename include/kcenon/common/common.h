@@ -52,6 +52,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "logging/log_functions.h"
 #include "logging/log_macros.h"
 
+/// Bootstrap (Issue #176)
+#include "bootstrap/system_bootstrapper.h"
+
 /// Common patterns
 #include "patterns/result.h"
 #include "patterns/event_bus.h"
