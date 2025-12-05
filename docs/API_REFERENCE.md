@@ -1,7 +1,7 @@
 # common_system API Reference
 
-> **Version**: 2.0
-> **Last Updated**: 2025-11-21
+> **Version**: 2.1
+> **Last Updated**: 2025-12-05
 > **Status**: Production Ready (Tier 0)
 
 ## Table of Contents
@@ -9,7 +9,8 @@
 1. [Namespace](#namespace)
 2. [Result<T> Pattern (Recommended)](#resultt-pattern-recommended)
 3. [Interfaces](#interfaces)
-4. [Utilities](#utilities)
+4. [Unified Logging](#unified-logging)
+5. [Utilities](#utilities)
 
 ---
 
@@ -342,6 +343,174 @@ virtual auto stop_timer(const std::string& name) -> result_void = 0;
 virtual auto connect(const connection_info& info) -> result_void = 0;
 virtual auto execute(const std::string& query) -> result<query_result> = 0;
 virtual auto disconnect() -> result_void = 0;
+```
+
+---
+
+## Unified Logging
+
+### Logging Functions
+
+**Header**: `#include <kcenon/common/logging/log_functions.h>`
+
+**Description**: Inline logging functions with automatic source_location capture.
+
+#### Core Functions
+
+```cpp
+namespace kcenon::common::logging {
+    // Log with specified level to default logger
+    VoidResult log(log_level level, std::string_view message,
+                   const source_location& loc = source_location::current());
+
+    // Log to a specific logger instance
+    VoidResult log(log_level level, std::string_view message,
+                   const std::shared_ptr<ILogger>& logger,
+                   const source_location& loc = source_location::current());
+
+    // Log to a named logger
+    VoidResult log(log_level level, std::string_view message,
+                   const std::string& logger_name,
+                   const source_location& loc = source_location::current());
+}
+```
+
+#### Level-Specific Functions
+
+```cpp
+VoidResult log_trace(std::string_view message, ...);
+VoidResult log_debug(std::string_view message, ...);
+VoidResult log_info(std::string_view message, ...);
+VoidResult log_warning(std::string_view message, ...);
+VoidResult log_error(std::string_view message, ...);
+VoidResult log_critical(std::string_view message, ...);
+```
+
+Each function also has an overload accepting a logger name as the second parameter.
+
+#### Utility Functions
+
+```cpp
+// Check if a log level is enabled
+bool is_enabled(log_level level);
+bool is_enabled(log_level level, const std::string& logger_name);
+
+// Flush buffered log messages
+VoidResult flush();
+VoidResult flush(const std::string& logger_name);
+```
+
+**Usage Example**:
+```cpp
+#include <kcenon/common/logging/log_functions.h>
+
+using namespace kcenon::common::logging;
+using namespace kcenon::common::interfaces;
+
+// Basic logging (uses default logger)
+log_info("Application started");
+log_warning("Low memory condition");
+log_error("Connection failed");
+
+// Using named loggers
+log_info("Request received", "network");
+log_debug("Query executed", "database");
+
+// Check before expensive message construction
+if (is_enabled(log_level::debug)) {
+    log_debug("Detailed state: " + expensive_to_string(state));
+}
+```
+
+---
+
+### Logging Macros
+
+**Header**: `#include <kcenon/common/logging/log_macros.h>`
+
+**Description**: Convenient preprocessor macros for logging.
+
+#### Standard Macros
+
+```cpp
+LOG_TRACE(msg)     // Log trace message
+LOG_DEBUG(msg)     // Log debug message
+LOG_INFO(msg)      // Log info message
+LOG_WARNING(msg)   // Log warning message
+LOG_ERROR(msg)     // Log error message
+LOG_CRITICAL(msg)  // Log critical message
+```
+
+#### Named Logger Macros
+
+```cpp
+LOG_TRACE_TO(logger_name, msg)
+LOG_DEBUG_TO(logger_name, msg)
+LOG_INFO_TO(logger_name, msg)
+LOG_WARNING_TO(logger_name, msg)
+LOG_ERROR_TO(logger_name, msg)
+LOG_CRITICAL_TO(logger_name, msg)
+```
+
+#### Conditional Logging
+
+```cpp
+// Log only if level is enabled (avoids message construction when disabled)
+LOG_IF(level, msg)
+LOG_IF_TO(level, logger_name, msg)
+```
+
+#### Utility Macros
+
+```cpp
+LOG_FLUSH()                          // Flush default logger
+LOG_FLUSH_TO(logger_name)            // Flush named logger
+LOG_IS_ENABLED(level)                // Check if level is enabled
+LOG_IS_ENABLED_FOR(level, logger_name)
+```
+
+#### Legacy Compatibility
+
+```cpp
+// These macros redirect to LOG_* equivalents (deprecated)
+THREAD_LOG_TRACE(msg)
+THREAD_LOG_DEBUG(msg)
+THREAD_LOG_INFO(msg)
+THREAD_LOG_WARNING(msg)
+THREAD_LOG_ERROR(msg)
+THREAD_LOG_CRITICAL(msg)
+```
+
+#### Compile-Time Level Filtering
+
+Define `KCENON_MIN_LOG_LEVEL` before including the header to disable lower log levels at compile time:
+
+```cpp
+// Disable trace and debug in release builds
+#define KCENON_MIN_LOG_LEVEL 2  // 0=trace, 1=debug, 2=info, etc.
+#include <kcenon/common/logging/log_macros.h>
+
+LOG_TRACE("This becomes a no-op");  // Compiled out
+LOG_DEBUG("This too");               // Compiled out
+LOG_INFO("This is logged");          // Active
+```
+
+**Usage Example**:
+```cpp
+#include <kcenon/common/logging/log_macros.h>
+
+// Simple logging
+LOG_INFO("Server starting on port 8080");
+LOG_DEBUG("Configuration loaded");
+
+// Named logger
+LOG_ERROR_TO("database", "Connection timeout");
+
+// Conditional (efficient when debug is disabled)
+LOG_IF(log_level::debug, expensive_debug_string());
+
+// Flush before shutdown
+LOG_FLUSH();
 ```
 
 ---
