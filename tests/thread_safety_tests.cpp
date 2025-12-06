@@ -39,8 +39,8 @@ TEST_F(CommonSystemThreadSafetyTest, ResultConcurrentAccess) {
                 try {
                     // Create Result in this thread
                     Result<int> result = (j % 3 == 0)
-                        ? Ok(thread_id * 1000 + j)
-                        : Err<int>("Error in thread " + std::to_string(thread_id));
+                        ? ok(thread_id * 1000 + j)
+                        : make_error<int>(-1, "Error in thread " + std::to_string(thread_id));
 
                     // Pass to another lambda
                     auto process = [&](Result<int> r) {
@@ -136,9 +136,9 @@ TEST_F(CommonSystemThreadSafetyTest, ResultTransformationChain) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < chains_per_thread; ++j) {
                 try {
-                    auto result = Ok(j)
+                    auto result = ok(j)
                         .map([](int x) { return x * 2; })
-                        .and_then([](int x) { return Ok(x + 1); })
+                        .and_then([](int x) { return ok(x + 1); })
                         .map([](int x) { return x * 3; });
 
                     if (result.is_ok()) {
@@ -288,8 +288,8 @@ TEST_F(CommonSystemThreadSafetyTest, ResultUnwrapSafety) {
         threads.emplace_back([&, thread_id = i]() {
             for (int j = 0; j < operations_per_thread; ++j) {
                 Result<int> result = (j % 4 == 0)
-                    ? Err<int>("Test error")
-                    : Ok(thread_id * 1000 + j);
+                    ? make_error<int>(-1, "Test error")
+                    : ok(thread_id * 1000 + j);
 
                 if (result.is_ok()) {
                     int value = result.unwrap();
@@ -429,7 +429,7 @@ TEST_F(CommonSystemThreadSafetyTest, MemorySafetyTest) {
                         bus.unsubscribe(id);
 
                         // Test Result
-                        auto result = Ok(j).map([](int x) { return x * 2; });
+                        auto result = ok(j).map([](int x) { return x * 2; });
                     } catch (...) {
                         ++total_errors;
                     }
@@ -578,22 +578,22 @@ TEST_F(CommonSystemThreadSafetyTest, ResultLifecycleStressTest) {
                 try {
                     // Test various Result lifecycle scenarios
                     {
-                        Result<std::vector<int>> result = Ok(std::vector<int>{1, 2, 3, 4, 5});
+                        Result<std::vector<int>> result = ok(std::vector<int>{1, 2, 3, 4, 5});
                         auto mapped = result.map([](const std::vector<int>& v) {
                             return v.size();
                         });
                     }
 
                     {
-                        Result<std::string> result = Err<std::string>("error");
+                        Result<std::string> result = make_error<std::string>(-1, "error");
                         auto recovered = result.or_else([](const error_info& e) {
-                            return Ok(std::string("recovered"));
+                            return ok(std::string("recovered"));
                         });
                     }
 
                     {
-                        auto result = Ok(thread_id)
-                            .and_then([](int x) { return Ok(x * 2); })
+                        auto result = ok(thread_id)
+                            .and_then([](int x) { return ok(x * 2); })
                             .map([](int x) { return std::to_string(x); });
                     }
                 } catch (...) {
