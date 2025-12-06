@@ -12,6 +12,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Cross-System Integration Tests**: Comprehensive tests for runtime binding pattern (#178)
+  - GlobalLoggerRegistry integration tests (7 tests)
+    - MultipleSystemsShareLogger: Verifies systems share unified logger
+    - ThreadSafeAccess: 100 threads × 10 logs concurrent access
+    - ConcurrentRegistrationAndRetrieval: Mixed register/retrieve operations
+    - FactoryBasedLazyInitialization: Factory called only on first access
+    - NullLoggerFallback: Safe fallback for unregistered loggers
+    - StressTestHighConcurrency: 50 threads × 1000 mixed operations
+    - CleanupAfterHeavyUsage: Proper cleanup after bulk operations
+  - SystemBootstrapper integration tests (6 tests)
+    - InitializeAndShutdown: Basic lifecycle verification
+    - ShutdownHooksExecuteInOrder: LIFO order verification
+    - InitializationHooksExecuteInOrder: FIFO order verification
+    - MultipleNamedLoggers: Default + named logger registration
+    - DoubleInitializationPrevented: Error on duplicate init
+    - RAIIShutdownOnDestruction: Automatic cleanup on scope exit
+  - CrossSystem integration tests (3 tests)
+    - LoggingFromMultipleSystems: Unified logging from mock systems
+    - ConcurrentCrossSystemLogging: Thread-safe cross-system logging
+    - PerSystemNamedLoggers: Separate loggers per system type
+  - LevelConversion tests (4 tests)
+    - AllLevelsConvertCorrectly: trace through critical verification
+    - LevelFilteringWorks: is_enabled() behavior verification
+    - LevelStringRoundtrip: to_string/from_string inverse
+    - CaseInsensitiveLevelParsing: Case-insensitive level parsing
 - **SystemBootstrapper**: Fluent API for system initialization at the application level (#176)
   - Factory-based logger registration for lazy initialization
   - Default logger and named logger support via `with_default_logger()` and `with_logger()`
