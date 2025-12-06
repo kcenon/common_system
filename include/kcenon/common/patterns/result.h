@@ -558,16 +558,6 @@ inline Result<T> ok(T value) {
 }
 
 /**
- * @brief Create a successful result (uppercase - Rust style)
- * @deprecated Use lowercase ok() instead for consistency.
- */
-template<typename T>
-[[deprecated("Use ok() instead")]]
-inline Result<T> Ok(T value) {
-    return Result<T>(std::move(value));
-}
-
-/**
  * @brief Create a successful void result
  *
  * @note RECOMMENDED: Use for functions that don't return a value.
@@ -582,27 +572,6 @@ inline Result<T> Ok(T value) {
  */
 inline VoidResult ok() {
     return VoidResult(std::monostate{});
-}
-
-/**
- * @brief Create an error result (Rust style)
- * @deprecated Use make_error<T>() instead for consistency.
- */
-template<typename T>
-[[deprecated("Use make_error<T>() instead")]]
-inline Result<T> Err(const std::string& message) {
-    return Result<T>(error_info{message});
-}
-
-/**
- * @brief Create an error result with code (Rust style)
- * @deprecated Use make_error<T>() instead for consistency.
- */
-template<typename T>
-[[deprecated("Use make_error<T>() instead")]]
-inline Result<T> Err(int code, const std::string& message,
-                     const std::string& module = "") {
-    return Result<T>(error_info{code, message, module});
 }
 
 /**
@@ -929,10 +898,3 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
         } \
     } while(false)
 
-// Backward compatibility - deprecated, will be removed in future versions
-#ifndef COMMON_DISABLE_LEGACY_MACROS
-#define RETURN_IF_ERROR(expr) COMMON_RETURN_IF_ERROR(expr)
-#define ASSIGN_OR_RETURN(decl, expr) COMMON_ASSIGN_OR_RETURN(decl, expr)
-#define RETURN_ERROR_IF(condition, code, message, module) COMMON_RETURN_ERROR_IF(condition, code, message, module)
-#define RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details) COMMON_RETURN_ERROR_IF_WITH_DETAILS(condition, code, message, module, details)
-#endif // COMMON_DISABLE_LEGACY_MACROS

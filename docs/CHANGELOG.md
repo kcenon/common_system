@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## [2.0.0] - 2025-12-07
 
 ### Added
 - **Cross-System Integration Tests**: Comprehensive tests for runtime binding pattern (#178)
@@ -63,7 +63,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Named logger macros: `LOG_*_TO(logger_name, msg)`
     - Conditional logging: `LOG_IF(level, msg)` for avoiding expensive message construction
     - Compile-time level filtering via `KCENON_MIN_LOG_LEVEL`
-  - Legacy compatibility macros: `THREAD_LOG_*` redirects to `LOG_*`
 - **ILogger source_location Support** (#177)
   - Extended `ILogger` interface with C++20 `source_location` support
   - New preferred method: `log(log_level, std::string_view, const source_location&)`
@@ -85,6 +84,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - This method was deprecated and always returned `false`
   - Use `is_err()` instead to check for error state
   - See [Migration Guide](advanced/MIGRATION.md#migrating-from-is_uninitialized) for details
+- **BREAKING**: Deprecated Result factory functions removed (#180)
+  - `Ok<T>(value)` - use lowercase `ok<T>(value)` instead
+  - `Err<T>(message)` and `Err<T>(code, message, module)` - use `make_error<T>()` instead
+- **BREAKING**: Legacy macro aliases removed (#180)
+  - `RETURN_IF_ERROR` - use `COMMON_RETURN_IF_ERROR` instead
+  - `ASSIGN_OR_RETURN` - use `COMMON_ASSIGN_OR_RETURN` instead
+  - `RETURN_ERROR_IF` - use `COMMON_RETURN_ERROR_IF` instead
+  - `RETURN_ERROR_IF_WITH_DETAILS` - use `COMMON_RETURN_ERROR_IF_WITH_DETAILS` instead
+- **BREAKING**: Legacy logging macros removed (#180)
+  - `THREAD_LOG_TRACE`, `THREAD_LOG_DEBUG`, `THREAD_LOG_INFO`,
+    `THREAD_LOG_WARNING`, `THREAD_LOG_ERROR`, `THREAD_LOG_CRITICAL`
+  - Use `LOG_TRACE`, `LOG_DEBUG`, `LOG_INFO`, `LOG_WARNING`, `LOG_ERROR`, `LOG_CRITICAL` instead
 
 ---
 
@@ -204,6 +215,7 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 
 ---
 
-[Unreleased]: https://github.com/kcenon/common_system/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/kcenon/common_system/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/kcenon/common_system/releases/tag/v2.0.0
 [1.0.0]: https://github.com/kcenon/common_system/releases/tag/v1.0.0
 [0.9.0-beta]: https://github.com/kcenon/common_system/releases/tag/v0.9.0-beta

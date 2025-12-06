@@ -234,52 +234,6 @@
     ::kcenon::common::logging::is_enabled(level, logger_name)
 
 // =============================================================================
-// Legacy Compatibility Macros (Deprecated)
-// =============================================================================
-
-/**
- * @def THREAD_LOG_TRACE(msg)
- * @brief Legacy trace logging macro.
- * @deprecated Use LOG_TRACE instead.
- */
-#define THREAD_LOG_TRACE(msg) LOG_TRACE(msg)
-
-/**
- * @def THREAD_LOG_DEBUG(msg)
- * @brief Legacy debug logging macro.
- * @deprecated Use LOG_DEBUG instead.
- */
-#define THREAD_LOG_DEBUG(msg) LOG_DEBUG(msg)
-
-/**
- * @def THREAD_LOG_INFO(msg)
- * @brief Legacy info logging macro.
- * @deprecated Use LOG_INFO instead.
- */
-#define THREAD_LOG_INFO(msg) LOG_INFO(msg)
-
-/**
- * @def THREAD_LOG_WARNING(msg)
- * @brief Legacy warning logging macro.
- * @deprecated Use LOG_WARNING instead.
- */
-#define THREAD_LOG_WARNING(msg) LOG_WARNING(msg)
-
-/**
- * @def THREAD_LOG_ERROR(msg)
- * @brief Legacy error logging macro.
- * @deprecated Use LOG_ERROR instead.
- */
-#define THREAD_LOG_ERROR(msg) LOG_ERROR(msg)
-
-/**
- * @def THREAD_LOG_CRITICAL(msg)
- * @brief Legacy critical logging macro.
- * @deprecated Use LOG_CRITICAL instead.
- */
-#define THREAD_LOG_CRITICAL(msg) LOG_CRITICAL(msg)
-
-// =============================================================================
 // Compile-time Log Level Control (Optional)
 // =============================================================================
 

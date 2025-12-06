@@ -9,7 +9,7 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 
 ---
 
-## [Unreleased]
+## [2.0.0] - 2025-12-07
 
 ### Added
 - **Cross-System 통합 테스트**: 런타임 바인딩 패턴을 위한 포괄적인 테스트 (#178)
@@ -47,6 +47,18 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 
 ### Removed
 - **BREAKING**: `Result<T>::is_uninitialized()` 메서드 제거
+- **BREAKING**: 지원 중단된 Result 팩토리 함수 제거 (#180)
+  - `Ok<T>(value)` - 소문자 `ok<T>(value)` 사용
+  - `Err<T>(message)` 및 `Err<T>(code, message, module)` - `make_error<T>()` 사용
+- **BREAKING**: 레거시 매크로 별칭 제거 (#180)
+  - `RETURN_IF_ERROR` - `COMMON_RETURN_IF_ERROR` 사용
+  - `ASSIGN_OR_RETURN` - `COMMON_ASSIGN_OR_RETURN` 사용
+  - `RETURN_ERROR_IF` - `COMMON_RETURN_ERROR_IF` 사용
+  - `RETURN_ERROR_IF_WITH_DETAILS` - `COMMON_RETURN_ERROR_IF_WITH_DETAILS` 사용
+- **BREAKING**: 레거시 로깅 매크로 제거 (#180)
+  - `THREAD_LOG_TRACE`, `THREAD_LOG_DEBUG`, `THREAD_LOG_INFO`,
+    `THREAD_LOG_WARNING`, `THREAD_LOG_ERROR`, `THREAD_LOG_CRITICAL`
+  - `LOG_TRACE`, `LOG_DEBUG`, `LOG_INFO`, `LOG_WARNING`, `LOG_ERROR`, `LOG_CRITICAL` 사용
 
 ---
 
@@ -166,6 +178,7 @@ common::Result<Config> load_config(const std::string& path) {
 
 ---
 
-[Unreleased]: https://github.com/kcenon/common_system/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/kcenon/common_system/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/kcenon/common_system/releases/tag/v2.0.0
 [1.0.0]: https://github.com/kcenon/common_system/releases/tag/v1.0.0
 [0.9.0-beta]: https://github.com/kcenon/common_system/releases/tag/v0.9.0-beta

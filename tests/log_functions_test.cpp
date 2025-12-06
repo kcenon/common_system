@@ -10,12 +10,12 @@
  * - Inline logging function behavior
  * - source_location automatic capture
  * - LOG_* macro functionality
- * - THREAD_LOG_* legacy compatibility
  * - Conditional logging (LOG_IF)
  * - Named logger support
  * - Compile-time log level filtering
  *
  * @note Issue #177: Extended with source_location-specific tests.
+ * @note Issue #180: Removed deprecated THREAD_LOG_* legacy macro tests.
  */
 
 #include <gtest/gtest.h>
@@ -440,30 +440,6 @@ TEST_F(LogFunctionsTest, Macro_LOG_IS_ENABLED) {
     EXPECT_FALSE(LOG_IS_ENABLED(log_level::debug));
     EXPECT_TRUE(LOG_IS_ENABLED(log_level::warning));
     EXPECT_TRUE(LOG_IS_ENABLED(log_level::error));
-}
-
-// ============================================================================
-// Legacy Compatibility Tests
-// ============================================================================
-
-TEST_F(LogFunctionsTest, LegacyMacro_THREAD_LOG_INFO) {
-    THREAD_LOG_INFO("Legacy macro test");
-
-    EXPECT_EQ(test_logger_->entry_count(), 1);
-    auto entry = test_logger_->last_entry();
-    EXPECT_EQ(entry.level, log_level::info);
-    EXPECT_EQ(entry.message, "Legacy macro test");
-}
-
-TEST_F(LogFunctionsTest, LegacyMacro_AllLevels) {
-    THREAD_LOG_TRACE("Trace");
-    THREAD_LOG_DEBUG("Debug");
-    THREAD_LOG_INFO("Info");
-    THREAD_LOG_WARNING("Warning");
-    THREAD_LOG_ERROR("Error");
-    THREAD_LOG_CRITICAL("Critical");
-
-    EXPECT_EQ(test_logger_->entry_count(), 6);
 }
 
 // ============================================================================

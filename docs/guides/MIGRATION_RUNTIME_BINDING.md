@@ -296,33 +296,29 @@ int main() {
 | `logger_interface` | `ILogger` |
 | `log_level` enum values | Same values, different namespace |
 
-### Compatibility Aliases (Temporary)
+### Removed in v2.0.0
 
-For gradual migration, compatibility aliases are available but deprecated:
+The following deprecated items have been **removed** in v2.0.0:
 
+#### Result Factory Functions
 ```cpp
-// These work but generate deprecation warnings
-namespace kcenon::logger {
-    using log_level [[deprecated]] = common::interfaces::log_level;
-}
-
-namespace kcenon::thread::interfaces {
-    using logger_interface [[deprecated]] = common::interfaces::ILogger;
-}
+// REMOVED - use lowercase versions instead
+Ok<int>(42);              // → ok<int>(42)
+Err<int>("error");        // → make_error<int>(-1, "error")
 ```
 
-**Warning**: These aliases will be removed in v3.0.0. Complete migration before upgrading.
-
-### Legacy Macro Compatibility
-
-Old macros still work but are deprecated:
-
+#### Legacy Logging Macros
 ```cpp
-// Deprecated - still works
-THREAD_LOG_INFO("message");
+// REMOVED - use LOG_* macros instead
+THREAD_LOG_INFO("message");   // → LOG_INFO("message")
+THREAD_LOG_ERROR("message");  // → LOG_ERROR("message")
+```
 
-// Preferred - use this instead
-LOG_INFO("message");
+#### Legacy Macro Aliases
+```cpp
+// REMOVED - use COMMON_* prefixed versions instead
+RETURN_IF_ERROR(expr);        // → COMMON_RETURN_IF_ERROR(expr)
+ASSIGN_OR_RETURN(decl, expr); // → COMMON_ASSIGN_OR_RETURN(decl, expr)
 ```
 
 ## Step 6: Update Custom Logger Implementations

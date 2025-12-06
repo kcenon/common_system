@@ -100,13 +100,13 @@ namespace kcenon::common {
  */
 struct version_info {
     /// Major version - incremented for breaking changes
-    static constexpr int major = 1;
+    static constexpr int major = 2;
     /// Minor version - incremented for new features
     static constexpr int minor = 0;
     /// Patch version - incremented for bug fixes
     static constexpr int patch = 0;
     /// Version as human-readable string
-    static constexpr const char* string = "1.0.0";
+    static constexpr const char* string = "2.0.0";
 };
 
 } // namespace kcenon::common
