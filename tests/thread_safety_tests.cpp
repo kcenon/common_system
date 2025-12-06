@@ -207,7 +207,7 @@ TEST_F(CommonSystemThreadSafetyTest, ResultErrorPropagation) {
         threads.emplace_back([&]() {
             for (int j = 0; j < operations_per_thread; ++j) {
                 try {
-                    auto result = Err<int>("Initial error")
+                    auto result = make_error<int>(-1, "Initial error")
                         .map([](int x) { return x * 2; })  // Should not execute
                         .map([](int x) { return x + 1; }); // Should not execute
 
