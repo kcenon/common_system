@@ -12,8 +12,41 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 ## [Unreleased]
 
 ### Added
+- **Cross-System 통합 테스트**: 런타임 바인딩 패턴을 위한 포괄적인 테스트 (#178)
+  - GlobalLoggerRegistry 통합 테스트 (7개 테스트)
+    - MultipleSystemsShareLogger: 여러 시스템이 통합 로거를 공유하는지 검증
+    - ThreadSafeAccess: 100 스레드 × 10 로그 동시 접근 테스트
+    - ConcurrentRegistrationAndRetrieval: 등록/조회 혼합 작업
+    - FactoryBasedLazyInitialization: 첫 접근 시에만 팩토리 호출 확인
+    - NullLoggerFallback: 미등록 로거에 대한 안전한 폴백
+    - StressTestHighConcurrency: 50 스레드 × 1000 혼합 작업
+    - CleanupAfterHeavyUsage: 대량 작업 후 적절한 정리
+  - SystemBootstrapper 통합 테스트 (6개 테스트)
+  - CrossSystem 통합 테스트 (3개 테스트)
+  - LevelConversion 테스트 (4개 테스트)
+- **SystemBootstrapper**: 애플리케이션 레벨 시스템 초기화를 위한 Fluent API (#176)
+  - 지연 초기화를 위한 팩토리 기반 로거 등록
+  - `with_default_logger()` 및 `with_logger()`를 통한 기본/명명된 로거 지원
+  - `on_initialize()`를 통한 초기화 훅 (등록 순서대로 호출)
+  - `on_shutdown()`을 통한 종료 훅 (역순으로 호출 - LIFO)
+  - 소멸 시 자동 종료를 통한 RAII 지원
+  - 소유권 이전을 위한 이동 의미론 지원
+  - 중복 초기화/종료 방지
+  - 재구성 시나리오를 위한 `reset()` 메서드
+- **GlobalLoggerRegistry**: 런타임 로거 바인딩을 위한 스레드 안전 싱글톤 레지스트리 (#174)
+- **통합 로깅 함수 및 매크로** (#175)
+- **ILogger source_location 지원** (#177)
 - 생태계 전반의 포괄적인 문서 통일화
 - Keep a Changelog 형식을 따르는 표준화된 CHANGELOG
+
+### Deprecated
+- **ILogger 레거시 file/line/function 메서드** (#177)
+  - `log(log_level, const std::string&, const std::string&, int, const std::string&)` 지원 중단
+  - `log(log_level, std::string_view, const source_location&)` 사용 권장
+  - v3.0.0에서 제거 예정
+
+### Removed
+- **BREAKING**: `Result<T>::is_uninitialized()` 메서드 제거
 
 ---
 
