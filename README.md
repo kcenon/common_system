@@ -295,6 +295,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - Result<T> is 400x faster than exceptions in error paths
 - IExecutor is 53x faster than std::async for high-frequency tasks
 - Event bus scales linearly with subscriber count
+- GlobalLoggerRegistry is thread-safe with O(1) logger access
 
 [⚡ Full Benchmarks →](docs/BENCHMARKS.md)
 
@@ -310,6 +311,12 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [Error Handling Guide](docs/guides/ERROR_HANDLING.md) - Result<T> pattern and best practices
 - [Best Practices](docs/guides/BEST_PRACTICES.md) - Recommended usage patterns
 - [FAQ](docs/guides/FAQ.md) - Frequently asked questions
+
+### Runtime Binding (v2.0)
+- [Runtime Binding Architecture](docs/architecture/RUNTIME_BINDING.md) - Core design pattern for decoupled systems
+- [Migration Guide](docs/guides/MIGRATION_RUNTIME_BINDING.md) - Migrate to runtime binding pattern
+- [Logging Best Practices](docs/guides/LOGGING_BEST_PRACTICES.md) - Effective logging patterns
+- [Logging Troubleshooting](docs/guides/TROUBLESHOOTING_LOGGING.md) - Diagnose logging issues
 
 ### Advanced Topics
 - [Migration Guide](docs/advanced/MIGRATION.md) - Migrating to common_system
@@ -415,6 +422,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] Task-based IExecutor interface
 - [x] Comprehensive documentation reorganization
 - [x] C++20 standard with modern language features
+- [x] Runtime binding architecture (GlobalLoggerRegistry, SystemBootstrapper)
+- [x] Unified logging macros (LOG_*)
+- [x] C++20 source_location integration
 
 **Planned:**
 - [ ] Coroutine support for async patterns
