@@ -14,7 +14,7 @@ using namespace kcenon::common;
 
 // Helper to wait for a condition to be true
 template<typename Predicate>
-bool WaitForCondition(Predicate pred, std::chrono::milliseconds timeout = std::chrono::seconds(1)) {
+bool wait_for_condition(Predicate pred, std::chrono::milliseconds timeout = std::chrono::seconds(1)) {
     auto start = std::chrono::steady_clock::now();
     while (std::chrono::steady_clock::now() - start < timeout) {
         if (pred()) return true;
@@ -59,7 +59,7 @@ TEST(ImprovedEventBusTest, BasicFiltering) {
     bus.publish(TestEvent{10, "High ID", 1});  // Should pass filter
 
     // Give time for events to process
-    EXPECT_TRUE(WaitForCondition([&]() { return handler_calls == 2; }));
+    EXPECT_TRUE(wait_for_condition([&]() { return handler_calls == 2; }));
 
     EXPECT_EQ(handler_calls, 2);  // Only 2 events should have passed the filter
 
@@ -100,7 +100,7 @@ TEST(ImprovedEventBusTest, MultipleFilters) {
     bus.publish(TestEvent{4, "High", 10});  // High priority
     bus.publish(TestEvent{5, "Med", 5});    // High priority (>= 5)
 
-    EXPECT_TRUE(WaitForCondition([&]() { 
+    EXPECT_TRUE(wait_for_condition([&]() { 
         return low_priority_calls == 2 && high_priority_calls == 3; 
     }));
 
@@ -138,7 +138,7 @@ TEST(ImprovedEventBusTest, ComplexFiltering) {
     bus.publish(FilterableEvent{1, 150, false});  // FAIL: not active
     bus.publish(FilterableEvent{1, 200, true});   // PASS: all conditions met
 
-    EXPECT_TRUE(WaitForCondition([&]() {
+    EXPECT_TRUE(wait_for_condition([&]() {
         std::lock_guard<std::mutex> lock(received_mutex);
         return received_events.size() == 2;
     }));
@@ -185,7 +185,7 @@ TEST(ImprovedEventBusTest, MixedFilteredAndNonFiltered) {
         bus.publish(TestEvent{i, "Event", 1});
     }
 
-    EXPECT_TRUE(WaitForCondition([&]() {
+    EXPECT_TRUE(wait_for_condition([&]() {
         return filtered_calls == 5 && unfiltered_calls == 10;
     }));
 
@@ -278,7 +278,7 @@ TEST(ImprovedEventBusTest, ThreadSafetyWithFilters) {
         thread.join();
     }
 
-    EXPECT_TRUE(WaitForCondition([&]() {
+    EXPECT_TRUE(wait_for_condition([&]() {
         return total_handled == num_threads * events_per_thread;
     }));
 
@@ -326,7 +326,7 @@ TEST(ImprovedEventBusTest, FilterExceptionHandling) {
     bus.publish(TestEvent{666, "Bad", 1});  // This will throw in filter
     bus.publish(TestEvent{2, "Normal", 1});
 
-    EXPECT_TRUE(WaitForCondition([&]() {
+    EXPECT_TRUE(wait_for_condition([&]() {
         return handler_calls >= 2;
     }));
 
