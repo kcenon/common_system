@@ -113,8 +113,6 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusThreadSafety) {
         t.join();
     }
 
-    std::this_thread::sleep_for(100ms);
-
     // Unsubscribe
     for (auto id : subscriptions) {
         bus.unsubscribe(id);
@@ -266,8 +264,6 @@ TEST_F(CommonSystemThreadSafetyTest, EventFilteringConcurrent) {
     for (auto& t : threads) {
         t.join();
     }
-
-    std::this_thread::sleep_for(100ms);
 
     bus.unsubscribe(id_a);
     bus.unsubscribe(id_b);
