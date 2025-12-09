@@ -603,8 +603,223 @@ namespace common::error_codes {
 
 ---
 
-**최종 업데이트**: 2025-11-28
-**버전**: 1.0
+## 고급 기능
+
+### Source Location 지원 (C++20)
+
+C++20으로 컴파일 시 common_system은 향상된 오류 진단을 제공합니다:
+
+```cpp
+#include <kcenon/common/utils/source_location.h>
+
+// 자동 source_location 캡처로 로깅
+logger->log(log_level::info, "작업 완료");
+// 파일, 라인, 함수 정보가 자동으로 캡처됨
+
+// log_entry 팩토리 메서드 사용
+auto entry = log_entry::create(log_level::error, "연결 실패");
+// entry.file, entry.line, entry.function이 자동으로 채워짐
+
+// Result<T>에서 향상된 오류 메시지
+auto result = some_operation();
+if (result.is_err()) {
+    result.unwrap();  // 에러 시 파일/라인/함수 정보 포함 예외 발생
+}
+```
+
+**C++17 폴백**:
+- C++17에서는 `__FILE__`, `__LINE__`, `__FUNCTION__` 매크로로 폴백
+- 동일한 API 유지, 런타임 비용 없음
+
+### ABI 버전 검사
+
+컴파일 타임 ABI 호환성 검증:
+
+```cpp
+namespace kcenon::common::abi {
+    constexpr int MAJOR = 1;
+    constexpr int MINOR = 0;
+    constexpr int PATCH = 0;
+
+    constexpr int VERSION = (MAJOR << 16) | (MINOR << 8) | PATCH;
+}
+
+// 클라이언트 코드에서 ABI 호환성 검증 가능
+static_assert(kcenon::common::abi::MAJOR == 1, "호환되지 않는 ABI 버전");
+```
+
+### 커스텀 에러 타입
+
+에러 시스템을 커스텀 에러 타입으로 확장:
+
+```cpp
+namespace my_system::errors {
+    // common 범위 외부의 커스텀 에러 코드
+    constexpr int MY_CUSTOM_ERROR = -1001;
+
+    inline std::string get_error_message(int code) {
+        if (code == MY_CUSTOM_ERROR) {
+            return "커스텀 에러 발생";
+        }
+        return kcenon::common::get_error_message(code);
+    }
+}
+
+// 강타입 enum 에러 코드도 지원
+enum class DatabaseError {
+    connection_failed = -501,
+    query_failed = -502,
+    transaction_failed = -503
+};
+
+// error_info 생성 시 enum 직접 사용 가능
+auto err = error_info{DatabaseError::connection_failed, "연결 실패"};
+```
+
+### vcpkg 및 Conan 지원
+
+패키지 관리자를 통한 간편한 통합:
+
+**Conan 사용**:
+```bash
+# 소스에서 패키지 생성
+conan create . --build=missing
+
+# conanfile.txt에 추가
+[requires]
+common_system/1.0.0
+
+# 설치
+conan install . --build=missing
+```
+
+**CMake FetchContent 사용 (권장)**:
+```cmake
+include(FetchContent)
+FetchContent_Declare(
+    common_system
+    GIT_REPOSITORY https://github.com/kcenon/common_system.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(common_system)
+
+target_link_libraries(your_target PRIVATE kcenon::common)
+```
+
+### 프로덕션 예제
+
+#### 완전한 애플리케이션 초기화
+
+```cpp
+#include <kcenon/common/bootstrap/system_bootstrapper.h>
+#include <kcenon/common/logging/log_macros.h>
+
+using namespace kcenon::common::bootstrap;
+using namespace kcenon::common::interfaces;
+
+int main() {
+    SystemBootstrapper bootstrapper;
+    bootstrapper
+        .with_default_logger([]() {
+            return std::make_shared<ConsoleLogger>();
+        })
+        .with_logger("network", []() {
+            return std::make_shared<FileLogger>("network.log");
+        })
+        .on_initialize([]() {
+            LOG_INFO("시스템 초기화 완료");
+        })
+        .on_shutdown([]() {
+            LOG_INFO("시스템 종료 중");
+        });
+
+    if (auto result = bootstrapper.initialize(); result.is_err()) {
+        std::cerr << "초기화 실패: " << result.error().message;
+        return 1;
+    }
+
+    // 애플리케이션 로직...
+    LOG_INFO("서버 시작");
+    LOG_INFO_TO("network", "포트 8080에서 대기 중");
+
+    // RAII로 자동 정리
+    return 0;
+}
+```
+
+#### Job 기반 Executor 사용
+
+```cpp
+#include <kcenon/common/interfaces/executor_interface.h>
+
+using namespace kcenon::common;
+using namespace kcenon::common::interfaces;
+
+class DataProcessingJob : public IJob {
+    std::vector<int> data_;
+public:
+    DataProcessingJob(std::vector<int> data) : data_(std::move(data)) {}
+
+    VoidResult execute() override {
+        // 데이터 처리 로직
+        for (auto& item : data_) {
+            item *= 2;
+        }
+        return ok();
+    }
+
+    std::string get_name() const override { return "data_processing"; }
+    int get_priority() const override { return 10; }
+};
+
+void process_data(std::shared_ptr<IExecutor> executor) {
+    auto job = std::make_unique<DataProcessingJob>(std::vector{1, 2, 3, 4, 5});
+
+    auto result = executor->execute(std::move(job));
+    if (result.is_ok()) {
+        result.value().wait();  // 완료 대기
+        LOG_INFO("데이터 처리 완료");
+    } else {
+        LOG_ERROR("실행 실패: " + result.error().message);
+    }
+}
+```
+
+#### Result<T> 모나딕 체이닝
+
+```cpp
+#include <kcenon/common/patterns/result.h>
+
+using namespace kcenon::common;
+
+Result<Config> load_and_validate_config(const std::string& path) {
+    return load_config(path)
+        .and_then([](const Config& cfg) -> Result<Config> {
+            if (cfg.port <= 0 || cfg.port > 65535) {
+                return make_error<Config>(
+                    error_codes::INVALID_ARGUMENT,
+                    "잘못된 포트 번호",
+                    "config_validator"
+                );
+            }
+            return Result<Config>::ok(cfg);
+        })
+        .map([](const Config& cfg) {
+            auto validated = cfg;
+            validated.validated = true;
+            return validated;
+        })
+        .or_else([](const error_info& err) -> Result<Config> {
+            LOG_WARNING("설정 로드 실패, 기본값 사용: " + err.message);
+            return Result<Config>::ok(Config::default_config());
+        });
+}
+```
+
+---
+
+**최종 업데이트**: 2025-12-09
+**버전**: 1.1
 
 ---
 
