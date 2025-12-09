@@ -63,6 +63,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <typeinfo>
 #include <typeindex>
+#include <concepts>
+
+// Include C++20 concepts for type validation
+#include <kcenon/common/concepts/event.h>
 
 // Provide a simple standalone implementation
 // Note: monitoring_system can extend or wrap this if needed
@@ -170,7 +174,15 @@ namespace detail {
                                                      size_t event_type_id,
                                                      uint64_t handler_id)>;
 
-        template<typename EventType>
+        /**
+         * @brief Publish an event to all subscribed handlers.
+         * @tparam EventType The event type (must satisfy concepts::EventType)
+         * @param evt The event to publish
+         * @param priority Event priority (default: normal)
+         *
+         * @note Uses C++20 concepts for compile-time type validation.
+         */
+        template<concepts::EventType EventType>
         void publish(const EventType& evt, event_priority = event_priority::normal) {
             std::lock_guard<std::mutex> lock(mutex_);
 
@@ -256,7 +268,16 @@ namespace detail {
             }
         }
 
-        template<typename EventType, typename HandlerFunc>
+        /**
+         * @brief Subscribe to events of a specific type.
+         * @tparam EventType The event type (must satisfy concepts::EventType)
+         * @tparam HandlerFunc The handler function type (must satisfy concepts::EventHandler)
+         * @param func The handler function to call when the event is published
+         * @return Subscription ID for later unsubscription
+         *
+         * @note Uses C++20 concepts for compile-time type validation.
+         */
+        template<concepts::EventType EventType, concepts::EventHandler<EventType> HandlerFunc>
         uint64_t subscribe(HandlerFunc&& func) {
             std::lock_guard<std::mutex> lock(mutex_);
 
@@ -297,10 +318,10 @@ namespace detail {
         }
 
         /**
-         * @brief Subscribe to events with a filter function
-         * @tparam EventType The type of event to subscribe to
-         * @tparam HandlerFunc The handler function type
-         * @tparam FilterFunc The filter function type
+         * @brief Subscribe to events with a filter function.
+         * @tparam EventType The event type (must satisfy concepts::EventType)
+         * @tparam HandlerFunc The handler function type (must satisfy concepts::EventHandler)
+         * @tparam FilterFunc The filter function type (must satisfy concepts::EventFilter)
          * @param func The handler function to call when the event passes the filter
          * @param filter The filter function to determine if the handler should be called
          * @return Subscription ID for later unsubscription
@@ -308,8 +329,11 @@ namespace detail {
          * @note The filter function is called before the handler. If it returns false,
          *       the handler is not invoked. This allows for efficient event filtering
          *       without creating multiple event types.
+         * @note Uses C++20 concepts for compile-time type validation.
          */
-        template<typename EventType, typename HandlerFunc, typename FilterFunc>
+        template<concepts::EventType EventType,
+                 concepts::EventHandler<EventType> HandlerFunc,
+                 concepts::EventFilter<EventType> FilterFunc>
         uint64_t subscribe_filtered(HandlerFunc&& func, FilterFunc&& filter) {
             // Create a wrapped handler that includes the filtering logic
             auto wrapped_handler = [f = std::forward<HandlerFunc>(func),
