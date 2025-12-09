@@ -26,6 +26,7 @@
 #pragma once
 
 #include <any>
+#include <concepts>
 #include <functional>
 #include <memory>
 #include <string>
@@ -33,6 +34,7 @@
 #include <vector>
 
 #include "../patterns/result.h"
+#include "../concepts/service.h"
 
 namespace kcenon::common {
 namespace di {
@@ -190,18 +192,18 @@ public:
      * is resolved. TImpl must be constructible with no arguments or
      * with dependencies that are also registered in the container.
      *
-     * @tparam TInterface The interface type to register
-     * @tparam TImpl The implementation type (must derive from TInterface)
+     * @tparam TInterface The interface type to register (must satisfy ServiceInterface)
+     * @tparam TImpl The implementation type (must satisfy ServiceImplementation)
      * @param lifetime Lifetime policy for the service
      * @return VoidResult indicating success or registration error
      *
      * @note TImpl must have a default constructor or use register_factory
      *       for types requiring constructor arguments.
+     * @note Uses C++20 concepts for compile-time type validation.
      */
-    template<typename TInterface, typename TImpl>
+    template<concepts::ServiceInterface TInterface,
+             concepts::ServiceImplementation<TInterface> TImpl>
     VoidResult register_type(service_lifetime lifetime = service_lifetime::singleton) {
-        static_assert(std::is_base_of_v<TInterface, TImpl>,
-                      "TImpl must derive from TInterface");
 
         return register_factory_internal(
             std::type_index(typeid(TInterface)),
@@ -247,13 +249,16 @@ public:
      * (once for singleton, each time for transient, once per scope for scoped).
      * The factory receives a reference to the container for resolving dependencies.
      *
-     * @tparam TInterface The interface type to register
-     * @tparam TFactory Callable returning shared_ptr<TInterface>
+     * @tparam TInterface The interface type to register (must satisfy ServiceInterface)
+     * @tparam TFactory Callable returning shared_ptr<TInterface> (must satisfy ServiceFactory)
      * @param factory Factory function: (IServiceContainer&) -> shared_ptr<TInterface>
      * @param lifetime Lifetime policy for the service
      * @return VoidResult indicating success or registration error
+     *
+     * @note Uses C++20 concepts for compile-time type validation.
      */
-    template<typename TInterface, typename TFactory>
+    template<concepts::ServiceInterface TInterface,
+             concepts::ServiceFactory<TInterface> TFactory>
     VoidResult register_factory(TFactory&& factory,
                                 service_lifetime lifetime = service_lifetime::singleton) {
         return register_factory_internal(
@@ -271,13 +276,16 @@ public:
      *
      * Convenience overload for factories that don't need to resolve dependencies.
      *
-     * @tparam TInterface The interface type to register
-     * @tparam TFactory Callable returning shared_ptr<TInterface>
+     * @tparam TInterface The interface type to register (must satisfy ServiceInterface)
+     * @tparam TFactory Callable returning shared_ptr<TInterface> (must satisfy SimpleServiceFactory)
      * @param factory Factory function: () -> shared_ptr<TInterface>
      * @param lifetime Lifetime policy for the service
      * @return VoidResult indicating success or registration error
+     *
+     * @note Uses C++20 concepts for compile-time type validation.
      */
-    template<typename TInterface, typename TFactory>
+    template<concepts::ServiceInterface TInterface,
+             concepts::SimpleServiceFactory<TInterface> TFactory>
     VoidResult register_simple_factory(TFactory&& factory,
                                        service_lifetime lifetime = service_lifetime::singleton) {
         return register_factory_internal(

@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Added
+- **C++20 Concepts for Type Validation** (#192)
+  - New `include/kcenon/common/concepts/` directory with comprehensive concept definitions
+  - `core.h`: Result/Optional concepts (Resultable, Unwrappable, Mappable, Chainable, MonadicResult)
+  - `callable.h`: Callable concepts (Invocable, VoidCallable, Predicate, JobLike, ExecutorLike)
+  - `event.h`: Event bus concepts (EventType, EventHandler, EventFilter, TimestampedEvent)
+  - `service.h`: DI concepts (ServiceInterface, ServiceImplementation, ServiceFactory)
+  - `container.h`: Container concepts (Container, SequenceContainer, CircularBuffer)
+  - `concepts.h`: Unified header for all concepts
+  - Added `value_type` and `error_type` type aliases to `Result<T>` for concept compatibility
+  - Added `value_type` type alias to `Optional<T>` for concept compatibility
+  - Applied concepts to `simple_event_bus` (publish, subscribe, subscribe_filtered methods)
+  - Applied concepts to `IServiceContainer` (register_type, register_factory, register_simple_factory methods)
+
+### Benefits
+- **Clearer compile-time errors**: Template errors now show concept violations instead of SFINAE failures
+- **Self-documenting code**: Concepts explicitly express type requirements
+- **Reduced boilerplate**: Eliminates `std::enable_if` and `static_assert` noise
+- **Better IDE support**: Improved auto-completion and type hints
+
+---
+
 ## [2.0.0] - 2025-12-07
 
 ### Added

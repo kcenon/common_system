@@ -133,6 +133,13 @@ enum class result_state {
  */
 template<typename T>
 class Result {
+public:
+    /// @brief Type alias for the contained value type (for concept compatibility)
+    using value_type = T;
+
+    /// @brief Type alias for the error type
+    using error_type = error_info;
+
 private:
     // Use std::optional<T> for value, which naturally supports uninitialized state
     // Store error separately to avoid variant issues
@@ -402,6 +409,10 @@ using VoidResult = Result<std::monostate>;
  */
 template<typename T>
 class Optional {
+public:
+    /// @brief Type alias for the contained value type (for concept compatibility)
+    using value_type = T;
+
 private:
     std::optional<T> value_;
 
