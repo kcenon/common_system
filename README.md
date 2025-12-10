@@ -29,6 +29,7 @@ The Common System Project is a foundational C++17 header-only library providing 
 - **Event Bus**: Publish-subscribe pattern for decoupled event-driven architecture
 - **Error Code Registry**: Centralized error code system across all ecosystem modules
 - **Smart Interfaces**: Mockable abstractions for easy testing and dependency injection
+- **C++20 Concepts**: Compile-time type validation with clear error messages
 
 [📚 Detailed Features Documentation →](docs/FEATURES.md)
 
@@ -324,6 +325,9 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [RAII Guidelines](docs/guides/RAII_GUIDELINES.md) - Resource management patterns
 - [Smart Pointer Guidelines](docs/guides/SMART_POINTER_GUIDELINES.md) - Smart pointer usage
 
+### C++20 Features
+- [Concepts Guide](docs/guides/CONCEPTS_GUIDE.md) - C++20 Concepts for compile-time type validation
+
 ### Reference
 - [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) - Error code management
 - [Project Structure](docs/PROJECT_STRUCTURE.md) - Repository organization
@@ -425,12 +429,13 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] Runtime binding architecture (GlobalLoggerRegistry, SystemBootstrapper)
 - [x] Unified logging macros (LOG_*)
 - [x] C++20 source_location integration
+- [x] C++20 Concepts for type validation
+- [x] Package manager support (Conan)
 
 **Planned:**
 - [ ] Coroutine support for async patterns
 - [ ] std::expected migration (C++23)
 - [ ] Additional design patterns (Observer, Command)
-- [x] Package manager support (Conan)
 - [ ] Package manager official registry (vcpkg, Conan Center)
 
 ## Support

@@ -29,6 +29,7 @@ Common System Project는 모듈식, 느슨하게 결합된 시스템 아키텍�
 - **Event Bus**: 분리된 이벤트 주도 아키텍처를 위한 Publish-Subscribe 패턴
 - **Error Code Registry**: 모든 생태계 모듈 간 중앙화된 오류 코드 시스템
 - **Smart Interfaces**: 쉬운 테스트 및 의존성 주입을 위한 모의 가능 추상화
+- **C++20 Concepts**: 명확한 오류 메시지를 제공하는 컴파일 타임 타입 검증
 
 [📚 상세 기능 문서 →](docs/FEATURES_KO.md)
 
@@ -303,6 +304,9 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [RAII 가이드라인](docs/guides/RAII_GUIDELINES_KO.md) - 리소스 관리 패턴
 - [스마트 포인터 가이드라인](docs/guides/SMART_POINTER_GUIDELINES_KO.md) - 스마트 포인터 사용법
 
+### C++20 기능
+- [Concepts 가이드](docs/guides/CONCEPTS_GUIDE_KO.md) - 컴파일 타임 타입 검증을 위한 C++20 Concepts
+
 ### 참조
 - [오류 코드 가이드라인](docs/guides/ERROR_CODE_GUIDELINES.md) - 오류 코드 관리
 - [프로젝트 구조](docs/PROJECT_STRUCTURE_KO.md) - 저장소 구성
@@ -404,6 +408,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [x] 런타임 바인딩 아키텍처 (GlobalLoggerRegistry, SystemBootstrapper)
 - [x] 통합 로깅 매크로 (LOG_*)
 - [x] C++20 source_location 통합
+- [x] C++20 Concepts 타입 검증
 - [x] 패키지 관리자 지원 (Conan)
 
 **계획:**
