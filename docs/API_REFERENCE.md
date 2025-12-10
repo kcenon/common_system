@@ -1,17 +1,18 @@
 # common_system API Reference
 
-> **Version**: 2.2
-> **Last Updated**: 2025-12-06
+> **Version**: 2.3
+> **Last Updated**: 2025-12-10
 > **Status**: Production Ready (Tier 0)
 
 ## Table of Contents
 
 1. [Namespace](#namespace)
 2. [Result<T> Pattern (Recommended)](#resultt-pattern-recommended)
-3. [Interfaces](#interfaces)
-4. [Unified Logging](#unified-logging)
-5. [Bootstrap](#bootstrap)
-6. [Utilities](#utilities)
+3. [Concepts](#concepts)
+4. [Interfaces](#interfaces)
+5. [Unified Logging](#unified-logging)
+6. [Bootstrap](#bootstrap)
+7. [Utilities](#utilities)
 
 ---
 
@@ -121,6 +122,115 @@ if (res.is_ok()) {
     // Success handling
 }
 ```
+
+---
+
+## Concepts
+
+C++20 concepts provide compile-time type validation with clear error messages. All concepts are defined in the `kcenon::common::concepts` namespace.
+
+**Header**: `#include <kcenon/common/concepts/concepts.h>`
+
+### Core Concepts (core.h)
+
+| Concept | Description |
+|---------|-------------|
+| `Resultable` | Types with `is_ok()` and `is_err()` methods |
+| `Unwrappable` | Types supporting value extraction (`unwrap()`, `unwrap_or()`) |
+| `Mappable` | Types supporting `map()` transformation |
+| `Chainable` | Types supporting `and_then()` chaining |
+| `MonadicResult` | Complete Result-like types with all monadic operations |
+| `OptionalLike` | Optional value containers (`has_value()`, `is_some()`, `is_none()`) |
+| `ErrorInfo` | Error information types with `code`, `message`, `module` |
+| `ValueOrError` | Types holding either value or error |
+
+### Callable Concepts (callable.h)
+
+| Concept | Description |
+|---------|-------------|
+| `Invocable<F, Args...>` | Callable types |
+| `VoidCallable<F, Args...>` | Callables returning void |
+| `ReturnsResult<F, R, Args...>` | Callables returning specific type |
+| `NoexceptCallable<F, Args...>` | Noexcept callables |
+| `Predicate<F, Args...>` | Boolean-returning callables |
+| `UnaryFunction<F, Arg>` | Single-argument callables |
+| `BinaryFunction<F, Arg1, Arg2>` | Two-argument callables |
+| `JobLike` | Types satisfying IJob interface |
+| `ExecutorLike` | Types satisfying IExecutor interface |
+
+### Event Concepts (event.h)
+
+| Concept | Description |
+|---------|-------------|
+| `EventType` | Valid event types (class, copy-constructible) |
+| `EventHandler<H, E>` | Event handler callables |
+| `EventFilter<F, E>` | Event filter predicates |
+| `TimestampedEvent` | Events with timestamp |
+| `NamedEvent` | Events with module name |
+| `ErrorEvent` | Error events with message and code |
+| `MetricEvent` | Metric events with name, value, unit |
+| `EventBusLike` | Event bus interface types |
+
+### Service Concepts (service.h)
+
+| Concept | Description |
+|---------|-------------|
+| `ServiceInterface` | Valid service interfaces (polymorphic, virtual destructor) |
+| `ServiceImplementation<TImpl, TIface>` | Service implementations |
+| `ServiceFactory<F, T>` | Service factory callables (with container) |
+| `SimpleServiceFactory<F, T>` | Simple factory callables (no container) |
+| `ServiceContainerLike` | Service container types |
+| `InjectableService` | Auto-injectable services |
+| `Validatable` | Self-validating types |
+| `InitializableService` | Services requiring initialization |
+| `DisposableService` | Services requiring cleanup |
+
+### Container Concepts (container.h)
+
+| Concept | Description |
+|---------|-------------|
+| `Container` | Basic container requirements |
+| `SequenceContainer` | Sequential containers (push_back, front, back) |
+| `AssociativeContainer` | Key-based containers (find, count) |
+| `MappingContainer` | Key-value containers |
+| `ResizableContainer` | Resizable containers (resize, reserve, capacity) |
+| `ClearableContainer` | Clearable containers |
+| `RandomAccessContainer` | Random access containers (operator[]) |
+| `BoundedContainer` | Fixed capacity containers |
+| `ThreadSafeContainer` | Thread-safe containers |
+| `CircularBuffer` | Circular buffer types |
+
+### Usage Example
+
+```cpp
+#include <kcenon/common/concepts/concepts.h>
+
+using namespace kcenon::common::concepts;
+
+// Constrain template to Result-like types
+template<MonadicResult R>
+auto process_chain(const R& result) {
+    return result
+        .map([](auto& v) { return v * 2; })
+        .and_then([](auto v) { return R::ok(v + 1); });
+}
+
+// Constrain to valid event handlers
+template<EventType E, EventHandler<E> H>
+void subscribe_with_logging(H&& handler) {
+    std::cout << "Subscribing handler..." << std::endl;
+    bus.subscribe<E>(std::forward<H>(handler));
+}
+
+// Constrain to validatable types
+template<Validatable T>
+bool is_valid(const T& obj) {
+    auto result = obj.validate();
+    return result.is_ok();
+}
+```
+
+For detailed documentation and migration guide, see [Concepts Guide](guides/CONCEPTS_GUIDE.md).
 
 ---
 
@@ -802,5 +912,5 @@ int val = res.value();
 ---
 
 **Created**: 2025-11-21
-**Version**: 2.0
+**Version**: 2.3
 **Author**: kcenon@naver.com
