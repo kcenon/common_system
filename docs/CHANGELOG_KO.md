@@ -9,6 +9,30 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 
 ---
 
+## [Unreleased]
+
+### Added
+- **타입 검증을 위한 C++20 Concepts** (#192)
+  - 포괄적인 concept 정의를 포함한 새로운 `include/kcenon/common/concepts/` 디렉토리
+  - `core.h`: Result/Optional concepts (Resultable, Unwrappable, Mappable, Chainable, MonadicResult)
+  - `callable.h`: Callable concepts (Invocable, VoidCallable, Predicate, JobLike, ExecutorLike)
+  - `event.h`: Event bus concepts (EventType, EventHandler, EventFilter, TimestampedEvent)
+  - `service.h`: DI concepts (ServiceInterface, ServiceImplementation, ServiceFactory)
+  - `container.h`: Container concepts (Container, SequenceContainer, CircularBuffer)
+  - `concepts.h`: 모든 concepts를 위한 통합 헤더
+  - concept 호환성을 위해 `Result<T>`에 `value_type` 및 `error_type` 타입 별칭 추가
+  - concept 호환성을 위해 `Optional<T>`에 `value_type` 타입 별칭 추가
+  - `simple_event_bus`에 concepts 적용 (publish, subscribe, subscribe_filtered 메서드)
+  - `IServiceContainer`에 concepts 적용 (register_type, register_factory, register_simple_factory 메서드)
+
+### Benefits
+- **더 명확한 컴파일 타임 에러**: 템플릿 에러가 SFINAE 실패 대신 concept 위반을 표시
+- **자체 문서화 코드**: concepts가 타입 요구사항을 명시적으로 표현
+- **보일러플레이트 감소**: `std::enable_if` 및 `static_assert` 노이즈 제거
+- **향상된 IDE 지원**: 개선된 자동 완성 및 타입 힌트
+
+---
+
 ## [2.0.0] - 2025-12-07
 
 ### Added
