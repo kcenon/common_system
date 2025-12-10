@@ -1,17 +1,18 @@
 # common_system API 레퍼런스
 
-> **버전**: 2.2
-> **최종 업데이트**: 2025-12-09
+> **버전**: 2.3
+> **최종 업데이트**: 2025-12-10
 > **상태**: 프로덕션 레디 (Tier 0)
 
 ## 목차
 
 1. [네임스페이스](#네임스페이스)
 2. [Result<T> 패턴 (권장)](#resultt-패턴-권장)
-3. [인터페이스](#인터페이스)
-4. [통합 로깅](#통합-로깅)
-5. [부트스트랩](#부트스트랩)
-6. [유틸리티](#유틸리티)
+3. [Concepts](#concepts)
+4. [인터페이스](#인터페이스)
+5. [통합 로깅](#통합-로깅)
+6. [부트스트랩](#부트스트랩)
+7. [유틸리티](#유틸리티)
 
 ---
 
@@ -193,6 +194,115 @@ Result<T> make_error(int code, const std::string& message,
 template<typename T>
 Result<T> make_error(const error_info& err);
 ```
+
+---
+
+## Concepts
+
+C++20 concepts는 명확한 오류 메시지와 함께 컴파일 타임 타입 검증을 제공합니다. 모든 concepts는 `kcenon::common::concepts` 네임스페이스에 정의되어 있습니다.
+
+**헤더**: `#include <kcenon/common/concepts/concepts.h>`
+
+### Core Concepts (core.h)
+
+| Concept | 설명 |
+|---------|------|
+| `Resultable` | `is_ok()` 및 `is_err()` 메서드를 가진 타입 |
+| `Unwrappable` | 값 추출을 지원하는 타입 (`unwrap()`, `unwrap_or()`) |
+| `Mappable` | `map()` 변환을 지원하는 타입 |
+| `Chainable` | `and_then()` 체이닝을 지원하는 타입 |
+| `MonadicResult` | 모든 모나딕 연산을 갖춘 완전한 Result 유사 타입 |
+| `OptionalLike` | 선택적 값 컨테이너 (`has_value()`, `is_some()`, `is_none()`) |
+| `ErrorInfo` | `code`, `message`, `module`을 가진 에러 정보 타입 |
+| `ValueOrError` | 값 또는 에러를 보유하는 타입 |
+
+### Callable Concepts (callable.h)
+
+| Concept | 설명 |
+|---------|------|
+| `Invocable<F, Args...>` | 호출 가능한 타입 |
+| `VoidCallable<F, Args...>` | void를 반환하는 호출 가능 타입 |
+| `ReturnsResult<F, R, Args...>` | 특정 타입을 반환하는 호출 가능 타입 |
+| `NoexceptCallable<F, Args...>` | noexcept 호출 가능 타입 |
+| `Predicate<F, Args...>` | bool을 반환하는 호출 가능 타입 |
+| `UnaryFunction<F, Arg>` | 단일 인자 호출 가능 타입 |
+| `BinaryFunction<F, Arg1, Arg2>` | 두 인자 호출 가능 타입 |
+| `JobLike` | IJob 인터페이스를 만족하는 타입 |
+| `ExecutorLike` | IExecutor 인터페이스를 만족하는 타입 |
+
+### Event Concepts (event.h)
+
+| Concept | 설명 |
+|---------|------|
+| `EventType` | 유효한 이벤트 타입 (클래스, 복사 생성 가능) |
+| `EventHandler<H, E>` | 이벤트 핸들러 호출 가능 타입 |
+| `EventFilter<F, E>` | 이벤트 필터 술어 |
+| `TimestampedEvent` | 타임스탬프를 가진 이벤트 |
+| `NamedEvent` | 모듈 이름을 가진 이벤트 |
+| `ErrorEvent` | 메시지와 코드를 가진 에러 이벤트 |
+| `MetricEvent` | 이름, 값, 단위를 가진 메트릭 이벤트 |
+| `EventBusLike` | 이벤트 버스 인터페이스 타입 |
+
+### Service Concepts (service.h)
+
+| Concept | 설명 |
+|---------|------|
+| `ServiceInterface` | 유효한 서비스 인터페이스 (다형적, 가상 소멸자) |
+| `ServiceImplementation<TImpl, TIface>` | 서비스 구현 |
+| `ServiceFactory<F, T>` | 서비스 팩토리 호출 가능 타입 (컨테이너 포함) |
+| `SimpleServiceFactory<F, T>` | 단순 팩토리 호출 가능 타입 (컨테이너 없음) |
+| `ServiceContainerLike` | 서비스 컨테이너 타입 |
+| `InjectableService` | 자동 주입 가능한 서비스 |
+| `Validatable` | 자체 검증 타입 |
+| `InitializableService` | 초기화가 필요한 서비스 |
+| `DisposableService` | 정리가 필요한 서비스 |
+
+### Container Concepts (container.h)
+
+| Concept | 설명 |
+|---------|------|
+| `Container` | 기본 컨테이너 요구사항 |
+| `SequenceContainer` | 순차 컨테이너 (push_back, front, back) |
+| `AssociativeContainer` | 키 기반 컨테이너 (find, count) |
+| `MappingContainer` | 키-값 컨테이너 |
+| `ResizableContainer` | 크기 조절 가능 컨테이너 (resize, reserve, capacity) |
+| `ClearableContainer` | 삭제 가능 컨테이너 |
+| `RandomAccessContainer` | 임의 접근 컨테이너 (operator[]) |
+| `BoundedContainer` | 고정 용량 컨테이너 |
+| `ThreadSafeContainer` | 스레드 안전 컨테이너 |
+| `CircularBuffer` | 순환 버퍼 타입 |
+
+### 사용 예시
+
+```cpp
+#include <kcenon/common/concepts/concepts.h>
+
+using namespace kcenon::common::concepts;
+
+// Result 유사 타입으로 템플릿 제약
+template<MonadicResult R>
+auto process_chain(const R& result) {
+    return result
+        .map([](auto& v) { return v * 2; })
+        .and_then([](auto v) { return R::ok(v + 1); });
+}
+
+// 유효한 이벤트 핸들러로 제약
+template<EventType E, EventHandler<E> H>
+void subscribe_with_logging(H&& handler) {
+    std::cout << "핸들러 구독 중..." << std::endl;
+    bus.subscribe<E>(std::forward<H>(handler));
+}
+
+// 검증 가능한 타입으로 제약
+template<Validatable T>
+bool is_valid(const T& obj) {
+    auto result = obj.validate();
+    return result.is_ok();
+}
+```
+
+상세 문서 및 마이그레이션 가이드는 [Concepts 가이드](guides/CONCEPTS_GUIDE_KO.md)를 참조하세요.
 
 ---
 
@@ -947,5 +1057,5 @@ int val = res.value();
 ---
 
 **작성일**: 2025-11-21
-**버전**: 2.2
+**버전**: 2.3
 **관리자**: kcenon@naver.com
