@@ -1,6 +1,6 @@
 # Common System - Frequently Asked Questions
 
-**Version:** 1.0 | **Last Updated:** November 2025
+**Version:** 0.2.0 | **Last Updated:** November 2025
 
 This FAQ covers the most common questions about the common_system library - a header-only C++17 foundation library providing universal interfaces and design patterns for modular system architectures.
 

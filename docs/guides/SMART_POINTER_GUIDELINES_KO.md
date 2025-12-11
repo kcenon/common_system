@@ -45,7 +45,7 @@
 - [빠른 참조 (Quick Reference)](#빠른-참조-quick-reference)
 - [참고 자료 (References)](#참고-자료-references)
 
-**문서 버전**: 1.0
+**문서 버전**: 0.1.0
 **생성일**: 2025-10-08
 **관련 문서**: [RAII_GUIDELINES.md](./RAII_GUIDELINES.md)
 

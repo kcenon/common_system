@@ -3,7 +3,7 @@
 > **Language:** [English](RAII_GUIDELINES.md) | **한국어**
 
 
-**문서 버전**: 1.0
+**문서 버전**: 0.1.0
 **생성일**: 2025-10-08
 **대상**: common_system을 사용하는 모든 시스템
 
