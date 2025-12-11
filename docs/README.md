@@ -2,7 +2,7 @@
 
 > **Language:** **English** | [한국어](README_KO.md)
 
-**Version:** 1.0
+**Version:** 0.2.0
 **Last Updated:** 2025-11-11
 **Status:** Comprehensive
 

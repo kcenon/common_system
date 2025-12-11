@@ -819,7 +819,7 @@ Result<Config> load_and_validate_config(const std::string& path) {
 ---
 
 **최종 업데이트**: 2025-12-09
-**버전**: 1.1
+**버전**: 0.1.1
 
 ---
 

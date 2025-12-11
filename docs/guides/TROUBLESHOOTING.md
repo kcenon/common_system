@@ -4,7 +4,7 @@
 
 A comprehensive troubleshooting guide for the common_system header-only library. This document covers the most common issues encountered when using, integrating, and debugging header-only C++ libraries.
 
-**Version:** 1.0 | **Last Updated:** November 2025
+**Version:** 0.2.0 | **Last Updated:** November 2025
 
 ---
 
