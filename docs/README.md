@@ -197,7 +197,7 @@ For contributors and maintainers:
 - **Type**: Header-Only Library
 - **C++ Standard**: C++17 (C++20 for optional features)
 - **License**: BSD 3-Clause
-- **Test Status**: Production-ready
+- **Test Status**: Under Development
 
 ### Layer 0 Foundation
 Common system provides the foundational layer for all KCENON systems:
