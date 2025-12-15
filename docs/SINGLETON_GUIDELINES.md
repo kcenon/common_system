@@ -76,11 +76,11 @@ private:
 
 ## common_system Audit Results
 
-| Singleton | Location | Current Pattern | SDOF Risk | Recommendation |
-|-----------|----------|-----------------|-----------|----------------|
+| Singleton | Location | Current Pattern | SDOF Risk | Status |
+|-----------|----------|-----------------|-----------|--------|
 | `simple_event_bus::instance()` | event_bus.h:424 | Meyer's Singleton | ⚠️ Medium | Consider Intentional Leak if used during destruction |
-| `GlobalLoggerRegistry::instance()` | global_logger_registry.h:335 | Meyer's Singleton | ⚠️ Medium | Consider Intentional Leak for cross-system logging |
-| `GlobalLoggerRegistry::null_logger()` | global_logger_registry.h:340 | Meyer's Singleton | ✅ Low | Acceptable (pure data, no dependencies) |
+| `GlobalLoggerRegistry::instance()` | global_logger_registry.h:346 | Intentional Leak | ✅ Safe | Resolved in #200 |
+| `GlobalLoggerRegistry::null_logger()` | global_logger_registry.h:353 | Intentional Leak | ✅ Safe | Resolved in #200 |
 | `patterns::Singleton<T>` | forward.h:21 | Forward declaration only | N/A | No implementation found |
 
 ### Detailed Analysis
@@ -103,17 +103,29 @@ static simple_event_bus& instance() {
 #### GlobalLoggerRegistry
 
 ```cpp
-// Current implementation (global_logger_registry.h:335-338)
+// Current implementation (global_logger_registry.h:346-351)
 static GlobalLoggerRegistry& instance() {
-    static GlobalLoggerRegistry instance;
-    return instance;
+    // Intentionally leak to avoid static destruction order issues.
+    // Registry may be accessed during other singletons' destruction.
+    static GlobalLoggerRegistry* instance = new GlobalLoggerRegistry();
+    return *instance;
+}
+
+// null_logger (global_logger_registry.h:353-359)
+static std::shared_ptr<ILogger> null_logger() {
+    // Intentionally leak to avoid static destruction order issues.
+    // NullLogger may be accessed during other singletons' destruction.
+    static auto* null_logger_ptr =
+        new std::shared_ptr<NullLogger>(std::make_shared<NullLogger>());
+    return *null_logger_ptr;
 }
 ```
 
-**Risk Analysis:**
+**Status: Resolved in #200**
+- Both `instance()` and `null_logger()` now use Intentional Leak pattern
 - Logger registry is likely accessed during shutdown for final logging
 - Other system destructors may call logging functions
-- Strong candidate for Intentional Leak pattern
+- Memory impact: ~200 bytes for registry + ~32 bytes for null_logger (reclaimed by OS at process exit)
 
 ## Static Destruction Safety Checklist
 
