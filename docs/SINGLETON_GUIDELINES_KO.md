@@ -76,11 +76,11 @@ private:
 
 ## common_system 감사 결과
 
-| 싱글톤 | 위치 | 현재 패턴 | SDOF 위험 | 권장사항 |
-|--------|------|----------|----------|---------|
+| 싱글톤 | 위치 | 현재 패턴 | SDOF 위험 | 상태 |
+|--------|------|----------|----------|------|
 | `simple_event_bus::instance()` | event_bus.h:424 | Meyer's 싱글톤 | ⚠️ 중간 | 소멸 중 사용 시 의도적 누수 고려 |
-| `GlobalLoggerRegistry::instance()` | global_logger_registry.h:335 | Meyer's 싱글톤 | ⚠️ 중간 | 시스템 간 로깅에 의도적 누수 고려 |
-| `GlobalLoggerRegistry::null_logger()` | global_logger_registry.h:340 | Meyer's 싱글톤 | ✅ 낮음 | 허용 (순수 데이터, 의존성 없음) |
+| `GlobalLoggerRegistry::instance()` | global_logger_registry.h:346 | 의도적 누수 | ✅ 안전 | #200에서 해결됨 |
+| `GlobalLoggerRegistry::null_logger()` | global_logger_registry.h:353 | 의도적 누수 | ✅ 안전 | #200에서 해결됨 |
 | `patterns::Singleton<T>` | forward.h:21 | 전방 선언만 | N/A | 구현 없음 |
 
 ### 상세 분석
@@ -103,17 +103,29 @@ static simple_event_bus& instance() {
 #### GlobalLoggerRegistry
 
 ```cpp
-// 현재 구현 (global_logger_registry.h:335-338)
+// 현재 구현 (global_logger_registry.h:346-351)
 static GlobalLoggerRegistry& instance() {
-    static GlobalLoggerRegistry instance;
-    return instance;
+    // 정적 소멸 순서 문제를 피하기 위해 의도적으로 누수.
+    // 레지스트리는 다른 싱글톤의 소멸 중에 접근될 수 있음.
+    static GlobalLoggerRegistry* instance = new GlobalLoggerRegistry();
+    return *instance;
+}
+
+// null_logger (global_logger_registry.h:353-359)
+static std::shared_ptr<ILogger> null_logger() {
+    // 정적 소멸 순서 문제를 피하기 위해 의도적으로 누수.
+    // NullLogger는 다른 싱글톤의 소멸 중에 접근될 수 있음.
+    static auto* null_logger_ptr =
+        new std::shared_ptr<NullLogger>(std::make_shared<NullLogger>());
+    return *null_logger_ptr;
 }
 ```
 
-**위험 분석:**
+**상태: #200에서 해결됨**
+- `instance()`와 `null_logger()` 모두 의도적 누수 패턴 사용
 - 로거 레지스트리는 최종 로깅을 위해 종료 중에 접근될 가능성이 높음
 - 다른 시스템 소멸자가 로깅 함수를 호출할 수 있음
-- 의도적 누수 패턴의 강력한 후보
+- 메모리 영향: 레지스트리 ~200 바이트 + null_logger ~32 바이트 (프로세스 종료 시 OS가 회수)
 
 ## 정적 소멸 안전 체크리스트
 
