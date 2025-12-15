@@ -71,6 +71,7 @@ For experienced users and contributors:
 | [NAMESPACE_MIGRATION.md](advanced/NAMESPACE_MIGRATION.md) | Namespace migration strategy and patterns | - | 150+ |
 | [DEPENDENCY_MATRIX.md](advanced/DEPENDENCY_MATRIX.md) | System dependency relationships and integration status | [🇰🇷](advanced/DEPENDENCY_MATRIX_KO.md) | 200+ |
 | [STRUCTURE.md](advanced/STRUCTURE.md) | Project directory layout and organization | - | 150+ |
+| [SINGLETON_GUIDELINES.md](SINGLETON_GUIDELINES.md) | Singleton pattern guidelines for SDOF prevention | [🇰🇷](SINGLETON_GUIDELINES_KO.md) | 300+ |
 
 ### 🤝 Contributing
 
