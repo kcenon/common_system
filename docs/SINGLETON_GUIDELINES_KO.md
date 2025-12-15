@@ -74,6 +74,51 @@ private:
 - 다른 객체의 소멸 중에 접근될 수 있는 모든 싱글톤
 - 시스템 간 리소스를 조정하는 글로벌 매니저
 
+### 3. shared_ptr No-op Deleter 패턴
+
+정적 소멸 중에 접근될 수 있는 `shared_ptr`로 관리되는 객체에 대해, 마지막 `shared_ptr`가 범위를 벗어날 때 객체가 소멸되지 않도록 no-op deleter를 사용합니다.
+
+```cpp
+class SharedManager {
+public:
+    static std::shared_ptr<SharedManager> instance() {
+        // no-op deleter로 생성 - SDOF를 피하기 위한 의도적 누수
+        static auto* ptr = new std::shared_ptr<SharedManager>(
+            new SharedManager(),
+            [](SharedManager*) { /* no-op deleter - 의도적 누수 */ }
+        );
+        return *ptr;
+    }
+
+private:
+    SharedManager() = default;
+    ~SharedManager() = default;  // no-op deleter로 인해 절대 호출되지 않음
+};
+```
+
+**사용 시기:**
+- `shared_ptr` 의미론이 필요할 때 (예: weak_ptr 옵저버용)
+- 싱글톤이 shared_ptr을 필요로 하는 컨테이너에 저장될 때
+- shared_ptr 소유권을 기대하는 API와 통합할 때
+- 조건부 접근 패턴을 위한 참조 카운팅이 필요할 때
+
+**실제 예제 (GlobalLoggerRegistry에서):**
+
+```cpp
+static std::shared_ptr<ILogger> null_logger() {
+    // 정적 소멸 순서 문제를 피하기 위해 의도적으로 누수.
+    // NullLogger는 다른 싱글톤의 소멸 중에 접근될 수 있음.
+    static auto* null_logger_ptr =
+        new std::shared_ptr<NullLogger>(std::make_shared<NullLogger>());
+    return *null_logger_ptr;
+}
+```
+
+**메모리 영향:**
+- shared_ptr 제어 블록에 ~16-32 바이트
+- 관리되는 객체의 크기 추가
+- 프로세스 종료 시 OS가 메모리 회수
+
 ## common_system 감사 결과
 
 | 싱글톤 | 위치 | 현재 패턴 | SDOF 위험 | 상태 |
@@ -256,7 +301,9 @@ int main() {
 |------|-----------|--------|----------|----------|
 | Meyer's 싱글톤 | 예 (C++11) | 자동 해제 | 아니오 | 순수 데이터, 의존성 없음 |
 | 의도적 누수 | 예 | 누수됨 | 예 | 인프라, 시스템 간 |
+| shared_ptr No-op Deleter | 예 | 누수됨 | 예 | shared_ptr 의미론, weak_ptr 지원 |
 
 ## 버전 기록
 
+- **1.1.0** (2025-12-15): shared_ptr No-op Deleter 패턴 문서화 추가
 - **1.0.0** (2025-12-15): common_system 감사 결과를 포함한 초기 릴리스
