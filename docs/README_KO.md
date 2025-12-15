@@ -84,6 +84,11 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
   - 소유권 의미
   - 성능 고려사항
 
+- **[싱글톤 패턴 가이드라인](SINGLETON_GUIDELINES_KO.md)** / **[English](SINGLETON_GUIDELINES.md)**
+  - SDOF(Static Destruction Order Fiasco) 방지
+  - Meyer's 싱글톤 vs 의도적 누수 패턴
+  - 시스템 간 싱글톤 관리
+
 ### 📊 분석 및 메트릭
 
 - **[성능 베이스라인](BASELINE.md)**
