@@ -74,6 +74,51 @@ private:
 - Any singleton that might be accessed during other objects' destruction
 - Global managers that coordinate cross-system resources
 
+### 3. shared_ptr with No-op Deleter Pattern
+
+For objects managed by `shared_ptr` that may be accessed during static destruction, use a no-op deleter to prevent the object from being destroyed when the last `shared_ptr` goes out of scope.
+
+```cpp
+class SharedManager {
+public:
+    static std::shared_ptr<SharedManager> instance() {
+        // Create with no-op deleter - intentional leak to avoid SDOF
+        static auto* ptr = new std::shared_ptr<SharedManager>(
+            new SharedManager(),
+            [](SharedManager*) { /* no-op deleter - intentional leak */ }
+        );
+        return *ptr;
+    }
+
+private:
+    SharedManager() = default;
+    ~SharedManager() = default;  // Never called due to no-op deleter
+};
+```
+
+**When to Use:**
+- When you need `shared_ptr` semantics (e.g., for weak_ptr observers)
+- When the singleton is stored in containers that require shared_ptr
+- When integrating with APIs that expect shared_ptr ownership
+- When you need reference counting for conditional access patterns
+
+**Real-world Example (from GlobalLoggerRegistry):**
+
+```cpp
+static std::shared_ptr<ILogger> null_logger() {
+    // Intentionally leak to avoid static destruction order issues.
+    // NullLogger may be accessed during other singletons' destruction.
+    static auto* null_logger_ptr =
+        new std::shared_ptr<NullLogger>(std::make_shared<NullLogger>());
+    return *null_logger_ptr;
+}
+```
+
+**Memory Impact:**
+- ~16-32 bytes for the shared_ptr control block
+- Plus the size of the managed object
+- Memory is reclaimed by OS at process exit
+
 ## common_system Audit Results
 
 | Singleton | Location | Current Pattern | SDOF Risk | Status |
@@ -256,7 +301,9 @@ When reviewing singleton implementations:
 |---------|-------------|--------|-----------|----------|
 | Meyer's Singleton | Yes (C++11) | Auto-freed | No | Pure data, no dependencies |
 | Intentional Leak | Yes | Leaked | Yes | Infrastructure, cross-system |
+| shared_ptr No-op Deleter | Yes | Leaked | Yes | shared_ptr semantics, weak_ptr support |
 
 ## Version History
 
+- **1.1.0** (2025-12-15): Added shared_ptr with No-op Deleter pattern documentation
 - **1.0.0** (2025-12-15): Initial release with common_system audit results
