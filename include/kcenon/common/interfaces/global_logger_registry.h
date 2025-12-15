@@ -151,7 +151,13 @@ public:
      * @brief Get the singleton instance of GlobalLoggerRegistry.
      *
      * Returns a reference to the application-wide singleton registry.
-     * Thread-safe for concurrent access using Meyer's singleton pattern.
+     * Thread-safe for concurrent access.
+     *
+     * @note Uses Intentional Leak pattern to avoid Static Destruction Order
+     *       Fiasco (SDOF). The registry may be accessed during other static
+     *       objects' destruction, so it must remain valid throughout the
+     *       entire process lifetime. The leaked memory is reclaimed by the OS
+     *       at process termination.
      *
      * @return Reference to the GlobalLoggerRegistry singleton
      */
@@ -294,6 +300,11 @@ public:
      * Returns the singleton NullLogger instance used as a fallback
      * when no logger is registered.
      *
+     * @note Uses Intentional Leak pattern to avoid Static Destruction Order
+     *       Fiasco (SDOF). The NullLogger may be accessed during other static
+     *       objects' destruction, so it must remain valid throughout the
+     *       entire process lifetime.
+     *
      * @return Shared pointer to NullLogger
      */
     static std::shared_ptr<ILogger> null_logger();
@@ -333,13 +344,18 @@ private:
 // ============================================================================
 
 inline GlobalLoggerRegistry& GlobalLoggerRegistry::instance() {
-    static GlobalLoggerRegistry instance;
-    return instance;
+    // Intentionally leak to avoid static destruction order issues.
+    // Registry may be accessed during other singletons' destruction.
+    static GlobalLoggerRegistry* instance = new GlobalLoggerRegistry();
+    return *instance;
 }
 
 inline std::shared_ptr<ILogger> GlobalLoggerRegistry::null_logger() {
-    static auto null_logger_instance = std::make_shared<NullLogger>();
-    return null_logger_instance;
+    // Intentionally leak to avoid static destruction order issues.
+    // NullLogger may be accessed during other singletons' destruction.
+    static auto* null_logger_ptr =
+        new std::shared_ptr<NullLogger>(std::make_shared<NullLogger>());
+    return *null_logger_ptr;
 }
 
 inline VoidResult GlobalLoggerRegistry::register_logger(
