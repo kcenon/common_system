@@ -25,6 +25,7 @@
 
 #include "logger_interface.h"
 
+#include <atomic>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -294,6 +295,31 @@ public:
      */
     size_t size() const;
 
+    // ===== Security Controls =====
+
+    /**
+     * @brief Freeze the registry to prevent further modifications.
+     *
+     * Once frozen, the registry cannot be modified (no registrations,
+     * unregistrations, or clears allowed). This is a one-way operation
+     * and cannot be undone.
+     *
+     * @note This should be called after system initialization to prevent
+     *       unauthorized logger swapping which could be used to suppress
+     *       security audit logs.
+     * @note This is a security feature to prevent audit log tampering.
+     *
+     * @see Issue #206 for security requirements.
+     */
+    void freeze();
+
+    /**
+     * @brief Check if the registry is frozen.
+     *
+     * @return true if the registry is frozen and cannot be modified
+     */
+    bool is_frozen() const;
+
     /**
      * @brief Get the shared NullLogger instance.
      *
@@ -337,6 +363,7 @@ private:
     std::unordered_map<std::string, LoggerFactory> factories_;
     std::shared_ptr<ILogger> default_logger_;
     LoggerFactory default_factory_;
+    std::atomic<bool> frozen_{false};
 };
 
 // ============================================================================
@@ -361,6 +388,14 @@ inline std::shared_ptr<ILogger> GlobalLoggerRegistry::null_logger() {
 inline VoidResult GlobalLoggerRegistry::register_logger(
     const std::string& name,
     std::shared_ptr<ILogger> logger) {
+
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
 
     if (name.empty()) {
         return make_error<std::monostate>(
@@ -407,6 +442,14 @@ inline std::shared_ptr<ILogger> GlobalLoggerRegistry::get_logger(const std::stri
 }
 
 inline VoidResult GlobalLoggerRegistry::unregister_logger(const std::string& name) {
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot unregister logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     std::unique_lock lock(mutex_);
     loggers_.erase(name);
     factories_.erase(name);
@@ -433,6 +476,14 @@ inline std::shared_ptr<ILogger> GlobalLoggerRegistry::get_default_logger() {
 }
 
 inline VoidResult GlobalLoggerRegistry::set_default_logger(std::shared_ptr<ILogger> logger) {
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot set default logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (!logger) {
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
@@ -452,6 +503,14 @@ inline VoidResult GlobalLoggerRegistry::set_default_logger(std::shared_ptr<ILogg
 inline VoidResult GlobalLoggerRegistry::register_factory(
     const std::string& name,
     LoggerFactory factory) {
+
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register factory: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
 
     if (name.empty()) {
         return make_error<std::monostate>(
@@ -485,6 +544,14 @@ inline VoidResult GlobalLoggerRegistry::register_factory(
 }
 
 inline VoidResult GlobalLoggerRegistry::set_default_factory(LoggerFactory factory) {
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot set default factory: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (!factory) {
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
@@ -520,6 +587,11 @@ inline bool GlobalLoggerRegistry::has_default_logger() const {
 }
 
 inline void GlobalLoggerRegistry::clear() {
+    if (is_frozen()) {
+        // Silently ignore clear when frozen to maintain API compatibility
+        return;
+    }
+
     std::unique_lock lock(mutex_);
     loggers_.clear();
     factories_.clear();
@@ -530,6 +602,14 @@ inline void GlobalLoggerRegistry::clear() {
 inline size_t GlobalLoggerRegistry::size() const {
     std::shared_lock lock(mutex_);
     return loggers_.size() + factories_.size();
+}
+
+inline void GlobalLoggerRegistry::freeze() {
+    frozen_.store(true, std::memory_order_release);
+}
+
+inline bool GlobalLoggerRegistry::is_frozen() const {
+    return frozen_.load(std::memory_order_acquire);
 }
 
 inline std::shared_ptr<ILogger> GlobalLoggerRegistry::create_from_factory(
