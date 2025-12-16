@@ -310,6 +310,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 ### Core Documentation
 - [Features](docs/FEATURES.md) - Detailed feature descriptions
 - [Error Handling Guide](docs/guides/ERROR_HANDLING.md) - Result<T> pattern and best practices
+- [Result Migration Guide](docs/guides/RESULT_MIGRATION_GUIDE.md) - Cross-system Result<T> standardization
 - [Best Practices](docs/guides/BEST_PRACTICES.md) - Recommended usage patterns
 - [FAQ](docs/guides/FAQ.md) - Frequently asked questions
 

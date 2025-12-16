@@ -295,6 +295,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 ### 핵심 문서
 - [기능](docs/FEATURES_KO.md) - 상세 기능 설명
 - [오류 처리 가이드](docs/guides/ERROR_HANDLING_KO.md) - Result<T> 패턴 및 모범 사례
+- [Result 마이그레이션 가이드](docs/guides/RESULT_MIGRATION_GUIDE_KO.md) - 시스템 간 Result<T> 표준화
 - [모범 사례](docs/guides/BEST_PRACTICES.md) - 권장 사용 패턴
 - [FAQ](docs/guides/FAQ.md) - 자주 묻는 질문
 
