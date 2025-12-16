@@ -37,6 +37,7 @@ These errors can occur in any system.
 | -8 | `out_of_memory` | Memory allocation failed | Large allocation, memory leak | Free unused resources |
 | -9 | `io_error` | I/O operation failed | Disk full, file locked, hardware error | Check storage/permissions |
 | -10 | `network_error` | Network operation failed | No connectivity, DNS failure | Check network connection |
+| -11 | `registry_frozen` | Registry is frozen | Modification after freeze | Expected behavior; use before freeze |
 | -99 | `internal_error` | Internal system error | Bug, unexpected state | Report issue with logs |
 
 ---
