@@ -22,6 +22,7 @@
 #pragma once
 
 #include "service_container_interface.h"
+#include "../interfaces/registry_audit_log.h"
 
 #include <atomic>
 #include <mutex>
@@ -327,16 +328,28 @@ inline std::vector<service_descriptor> service_container::registered_services() 
 
 inline void service_container::clear() {
     if (is_frozen()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::clear_services, "",
+            std::source_location::current(), false,
+            "Container is frozen"));
         // Silently ignore clear when frozen to maintain API compatibility
         return;
     }
 
     std::unique_lock lock(mutex_);
     services_.clear();
+
+    interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+        interfaces::registry_action::clear_services, "",
+        std::source_location::current(), true));
 }
 
 inline void service_container::freeze() {
     frozen_.store(true, std::memory_order_release);
+
+    interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+        interfaces::registry_action::freeze_service_container, "",
+        std::source_location::current(), true));
 }
 
 inline bool service_container::is_frozen() const {
@@ -350,6 +363,10 @@ inline VoidResult service_container::register_factory_internal(
     service_lifetime lifetime) {
 
     if (is_frozen()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::register_service, type_name,
+            std::source_location::current(), false,
+            "Container is frozen"));
         return make_error<std::monostate>(
             error_codes::REGISTRY_FROZEN,
             "Cannot register service: container is frozen",
@@ -361,6 +378,10 @@ inline VoidResult service_container::register_factory_internal(
 
     // Check if already registered
     if (services_.find(interface_type) != services_.end()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::register_service, type_name,
+            std::source_location::current(), false,
+            "Service already registered"));
         return make_error<std::monostate>(
             di_error_codes::already_registered,
             "Service already registered: " + type_name,
@@ -373,6 +394,10 @@ inline VoidResult service_container::register_factory_internal(
         service_entry(interface_type, type_name, std::move(factory), lifetime)
     );
 
+    interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+        interfaces::registry_action::register_service, type_name,
+        std::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
@@ -382,6 +407,10 @@ inline VoidResult service_container::register_instance_internal(
     std::shared_ptr<void> instance) {
 
     if (is_frozen()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::register_service, type_name,
+            std::source_location::current(), false,
+            "Container is frozen"));
         return make_error<std::monostate>(
             error_codes::REGISTRY_FROZEN,
             "Cannot register instance: container is frozen",
@@ -393,6 +422,10 @@ inline VoidResult service_container::register_instance_internal(
 
     // Check if already registered
     if (services_.find(interface_type) != services_.end()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::register_service, type_name,
+            std::source_location::current(), false,
+            "Service already registered"));
         return make_error<std::monostate>(
             di_error_codes::already_registered,
             "Service already registered: " + type_name,
@@ -411,6 +444,10 @@ inline VoidResult service_container::register_instance_internal(
     entry.is_instantiated = true;
 
     services_.emplace(interface_type, std::move(entry));
+
+    interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+        interfaces::registry_action::register_service, type_name,
+        std::source_location::current(), true));
 
     return VoidResult::ok({});
 }
@@ -565,7 +602,13 @@ inline bool service_container::is_registered_internal(std::type_index interface_
 }
 
 inline VoidResult service_container::unregister_internal(std::type_index interface_type) {
+    std::string type_name = interface_type.name();
+
     if (is_frozen()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::unregister_service, type_name,
+            std::source_location::current(), false,
+            "Container is frozen"));
         return make_error<std::monostate>(
             error_codes::REGISTRY_FROZEN,
             "Cannot unregister service: container is frozen",
@@ -577,6 +620,10 @@ inline VoidResult service_container::unregister_internal(std::type_index interfa
 
     auto it = services_.find(interface_type);
     if (it == services_.end()) {
+        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+            interfaces::registry_action::unregister_service, type_name,
+            std::source_location::current(), false,
+            "Service not registered"));
         return make_error<std::monostate>(
             di_error_codes::service_not_registered,
             "Service not registered",
@@ -585,6 +632,11 @@ inline VoidResult service_container::unregister_internal(std::type_index interfa
     }
 
     services_.erase(it);
+
+    interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
+        interfaces::registry_action::unregister_service, type_name,
+        std::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
