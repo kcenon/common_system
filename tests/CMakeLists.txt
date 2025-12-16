@@ -281,6 +281,27 @@ set_tests_properties(common_system_bootstrapper_test PROPERTIES
     LABELS "unit;bootstrap"
 )
 
+# Security controls tests (Issue #206)
+add_executable(common_security_controls_test
+    security_controls_test.cpp
+)
+
+target_link_libraries(common_security_controls_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_security_controls_test PRIVATE cxx_std_20)
+
+add_test(NAME common_security_controls_test COMMAND common_security_controls_test)
+
+set_tests_properties(common_security_controls_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;security"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)

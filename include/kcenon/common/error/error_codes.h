@@ -65,6 +65,7 @@ namespace common_errors {
     constexpr int out_of_memory = -8;
     constexpr int io_error = -9;
     constexpr int network_error = -10;
+    constexpr int registry_frozen = -11;
     constexpr int internal_error = -99;
 } // namespace common_errors
 
@@ -325,6 +326,7 @@ inline std::string_view get_error_message(int code) {
         case codes::common_errors::out_of_memory: return "Out of memory";
         case codes::common_errors::io_error: return "I/O error";
         case codes::common_errors::network_error: return "Network error";
+        case codes::common_errors::registry_frozen: return "Registry is frozen";
         case codes::common_errors::internal_error: return "Internal error";
 
         // thread_system errors

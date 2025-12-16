@@ -24,7 +24,9 @@
 #pragma once
 
 #include "logger_interface.h"
+#include "registry_audit_log.h"
 
+#include <atomic>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -294,6 +296,31 @@ public:
      */
     size_t size() const;
 
+    // ===== Security Controls =====
+
+    /**
+     * @brief Freeze the registry to prevent further modifications.
+     *
+     * Once frozen, the registry cannot be modified (no registrations,
+     * unregistrations, or clears allowed). This is a one-way operation
+     * and cannot be undone.
+     *
+     * @note This should be called after system initialization to prevent
+     *       unauthorized logger swapping which could be used to suppress
+     *       security audit logs.
+     * @note This is a security feature to prevent audit log tampering.
+     *
+     * @see Issue #206 for security requirements.
+     */
+    void freeze();
+
+    /**
+     * @brief Check if the registry is frozen.
+     *
+     * @return true if the registry is frozen and cannot be modified
+     */
+    bool is_frozen() const;
+
     /**
      * @brief Get the shared NullLogger instance.
      *
@@ -337,6 +364,7 @@ private:
     std::unordered_map<std::string, LoggerFactory> factories_;
     std::shared_ptr<ILogger> default_logger_;
     LoggerFactory default_factory_;
+    std::atomic<bool> frozen_{false};
 };
 
 // ============================================================================
@@ -362,7 +390,23 @@ inline VoidResult GlobalLoggerRegistry::register_logger(
     const std::string& name,
     std::shared_ptr<ILogger> logger) {
 
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_logger, name,
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (name.empty()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_logger, name,
+            interfaces::source_location::current(), false,
+            "Logger name cannot be empty"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Logger name cannot be empty",
@@ -371,6 +415,10 @@ inline VoidResult GlobalLoggerRegistry::register_logger(
     }
 
     if (!logger) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_logger, name,
+            interfaces::source_location::current(), false,
+            "Logger instance cannot be null"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Logger instance cannot be null",
@@ -382,6 +430,10 @@ inline VoidResult GlobalLoggerRegistry::register_logger(
     loggers_[name] = std::move(logger);
     // Remove factory if one exists for this name (logger takes precedence)
     factories_.erase(name);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, name,
+        interfaces::source_location::current(), true));
 
     return VoidResult::ok({});
 }
@@ -407,9 +459,26 @@ inline std::shared_ptr<ILogger> GlobalLoggerRegistry::get_logger(const std::stri
 }
 
 inline VoidResult GlobalLoggerRegistry::unregister_logger(const std::string& name) {
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::unregister_logger, name,
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot unregister logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     std::unique_lock lock(mutex_);
     loggers_.erase(name);
     factories_.erase(name);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::unregister_logger, name,
+        interfaces::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
@@ -433,7 +502,23 @@ inline std::shared_ptr<ILogger> GlobalLoggerRegistry::get_default_logger() {
 }
 
 inline VoidResult GlobalLoggerRegistry::set_default_logger(std::shared_ptr<ILogger> logger) {
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::set_default_logger, "default",
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot set default logger: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (!logger) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::set_default_logger, "default",
+            interfaces::source_location::current(), false,
+            "Default logger instance cannot be null"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Default logger instance cannot be null",
@@ -446,6 +531,10 @@ inline VoidResult GlobalLoggerRegistry::set_default_logger(std::shared_ptr<ILogg
     // Clear factory since we have a concrete instance
     default_factory_ = nullptr;
 
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::set_default_logger, "default",
+        interfaces::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
@@ -453,7 +542,23 @@ inline VoidResult GlobalLoggerRegistry::register_factory(
     const std::string& name,
     LoggerFactory factory) {
 
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_factory, name,
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register factory: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (name.empty()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_factory, name,
+            interfaces::source_location::current(), false,
+            "Logger name cannot be empty"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Logger name cannot be empty",
@@ -462,6 +567,10 @@ inline VoidResult GlobalLoggerRegistry::register_factory(
     }
 
     if (!factory) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_factory, name,
+            interfaces::source_location::current(), false,
+            "Factory function cannot be null"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Factory function cannot be null",
@@ -473,6 +582,10 @@ inline VoidResult GlobalLoggerRegistry::register_factory(
 
     // Only register factory if no logger already exists
     if (loggers_.find(name) != loggers_.end()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::register_factory, name,
+            interfaces::source_location::current(), false,
+            "Logger already registered with name: " + name));
         return make_error<std::monostate>(
             error_codes::ALREADY_EXISTS,
             "Logger already registered with name: " + name,
@@ -481,11 +594,32 @@ inline VoidResult GlobalLoggerRegistry::register_factory(
     }
 
     factories_[name] = std::move(factory);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_factory, name,
+        interfaces::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
 inline VoidResult GlobalLoggerRegistry::set_default_factory(LoggerFactory factory) {
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::set_default_factory, "default",
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot set default factory: registry is frozen",
+            "interfaces::GlobalLoggerRegistry"
+        );
+    }
+
     if (!factory) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::set_default_factory, "default",
+            interfaces::source_location::current(), false,
+            "Factory function cannot be null"));
         return make_error<std::monostate>(
             error_codes::INVALID_ARGUMENT,
             "Factory function cannot be null",
@@ -497,6 +631,10 @@ inline VoidResult GlobalLoggerRegistry::set_default_factory(LoggerFactory factor
 
     // Only set factory if no default logger exists
     if (default_logger_) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::set_default_factory, "default",
+            interfaces::source_location::current(), false,
+            "Default logger already registered"));
         return make_error<std::monostate>(
             error_codes::ALREADY_EXISTS,
             "Default logger already registered",
@@ -505,6 +643,11 @@ inline VoidResult GlobalLoggerRegistry::set_default_factory(LoggerFactory factor
     }
 
     default_factory_ = std::move(factory);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::set_default_factory, "default",
+        interfaces::source_location::current(), true));
+
     return VoidResult::ok({});
 }
 
@@ -520,16 +663,41 @@ inline bool GlobalLoggerRegistry::has_default_logger() const {
 }
 
 inline void GlobalLoggerRegistry::clear() {
+    if (is_frozen()) {
+        RegistryAuditLog::log_event(registry_event(
+            registry_action::clear_loggers, "",
+            interfaces::source_location::current(), false,
+            "Registry is frozen"));
+        // Silently ignore clear when frozen to maintain API compatibility
+        return;
+    }
+
     std::unique_lock lock(mutex_);
     loggers_.clear();
     factories_.clear();
     default_logger_.reset();
     default_factory_ = nullptr;
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::clear_loggers, "",
+        interfaces::source_location::current(), true));
 }
 
 inline size_t GlobalLoggerRegistry::size() const {
     std::shared_lock lock(mutex_);
     return loggers_.size() + factories_.size();
+}
+
+inline void GlobalLoggerRegistry::freeze() {
+    frozen_.store(true, std::memory_order_release);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::freeze_logger_registry, "",
+        interfaces::source_location::current(), true));
+}
+
+inline bool GlobalLoggerRegistry::is_frozen() const {
+    return frozen_.load(std::memory_order_acquire);
 }
 
 inline std::shared_ptr<ILogger> GlobalLoggerRegistry::create_from_factory(

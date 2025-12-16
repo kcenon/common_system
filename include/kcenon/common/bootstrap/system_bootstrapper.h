@@ -53,6 +53,7 @@
 #pragma once
 
 #include "../interfaces/global_logger_registry.h"
+#include "../di/service_container.h"
 #include "../patterns/result.h"
 
 #include <functional>
@@ -172,6 +173,37 @@ public:
     SystemBootstrapper& on_shutdown(std::function<void()> callback);
 
     // =========================================================================
+    // Security Configuration
+    // =========================================================================
+
+    /**
+     * @brief Enable automatic freezing of registries after initialization.
+     *
+     * When enabled, the GlobalLoggerRegistry and service_container::global()
+     * will be frozen after all initialization callbacks complete. This prevents
+     * unauthorized modifications to loggers and services after system startup.
+     *
+     * @param freeze_logger_registry Whether to freeze GlobalLoggerRegistry (default: true)
+     * @param freeze_service_container Whether to freeze service_container (default: true)
+     * @return Reference to this bootstrapper for method chaining
+     *
+     * @note This is a security feature to prevent audit log tampering and
+     *       service hijacking after system initialization.
+     * @note Freezing is a one-way operation and cannot be undone.
+     *
+     * @see Issue #206 for security requirements.
+     *
+     * @code
+     * SystemBootstrapper()
+     *     .with_default_logger(create_console_logger)
+     *     .with_auto_freeze()  // Freeze after initialization
+     *     .initialize();
+     * @endcode
+     */
+    SystemBootstrapper& with_auto_freeze(bool freeze_logger_registry = true,
+                                         bool freeze_service_container = true);
+
+    // =========================================================================
     // Lifecycle Management
     // =========================================================================
 
@@ -256,6 +288,10 @@ private:
     std::vector<std::function<void()>> init_callbacks_;
     std::vector<std::function<void()>> shutdown_callbacks_;
 
+    // Security configuration
+    bool auto_freeze_logger_registry_ = false;
+    bool auto_freeze_service_container_ = false;
+
     // Lifecycle state
     bool initialized_ = false;
     mutable std::mutex state_mutex_;
@@ -276,6 +312,8 @@ inline SystemBootstrapper::SystemBootstrapper(SystemBootstrapper&& other) noexce
     , named_logger_factories_(std::move(other.named_logger_factories_))
     , init_callbacks_(std::move(other.init_callbacks_))
     , shutdown_callbacks_(std::move(other.shutdown_callbacks_))
+    , auto_freeze_logger_registry_(other.auto_freeze_logger_registry_)
+    , auto_freeze_service_container_(other.auto_freeze_service_container_)
     , initialized_(other.initialized_) {
     other.initialized_ = false;  // Prevent double shutdown
 }
@@ -292,6 +330,8 @@ inline SystemBootstrapper& SystemBootstrapper::operator=(
         named_logger_factories_ = std::move(other.named_logger_factories_);
         init_callbacks_ = std::move(other.init_callbacks_);
         shutdown_callbacks_ = std::move(other.shutdown_callbacks_);
+        auto_freeze_logger_registry_ = other.auto_freeze_logger_registry_;
+        auto_freeze_service_container_ = other.auto_freeze_service_container_;
         initialized_ = other.initialized_;
         other.initialized_ = false;  // Prevent double shutdown
     }
@@ -334,6 +374,14 @@ inline SystemBootstrapper& SystemBootstrapper::on_shutdown(
     return *this;
 }
 
+inline SystemBootstrapper& SystemBootstrapper::with_auto_freeze(
+    bool freeze_logger_registry,
+    bool freeze_service_container) {
+    auto_freeze_logger_registry_ = freeze_logger_registry;
+    auto_freeze_service_container_ = freeze_service_container;
+    return *this;
+}
+
 inline VoidResult SystemBootstrapper::initialize() {
     std::lock_guard<std::mutex> lock(state_mutex_);
 
@@ -354,7 +402,15 @@ inline VoidResult SystemBootstrapper::initialize() {
     // Step 2: Execute initialization callbacks
     execute_init_callbacks();
 
-    // Step 3: Mark as initialized
+    // Step 3: Freeze registries if auto-freeze is enabled
+    if (auto_freeze_logger_registry_) {
+        interfaces::GlobalLoggerRegistry::instance().freeze();
+    }
+    if (auto_freeze_service_container_) {
+        di::service_container::global().freeze();
+    }
+
+    // Step 4: Mark as initialized
     initialized_ = true;
 
     return VoidResult::ok({});
@@ -395,6 +451,8 @@ inline void SystemBootstrapper::reset() {
     named_logger_factories_.clear();
     init_callbacks_.clear();
     shutdown_callbacks_.clear();
+    auto_freeze_logger_registry_ = false;
+    auto_freeze_service_container_ = false;
 }
 
 inline VoidResult SystemBootstrapper::register_loggers() {
