@@ -311,6 +311,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [오류 코드 가이드라인](docs/guides/ERROR_CODE_GUIDELINES.md) - 오류 코드 관리
 - [프로젝트 구조](docs/PROJECT_STRUCTURE_KO.md) - 저장소 구성
 - [의존성 매트릭스](docs/advanced/DEPENDENCY_MATRIX_KO.md) - 생태계 의존성
+- [호환성 매트릭스](docs/COMPATIBILITY_KO.md) - 시스템 간 버전 호환성
 - [문제 해결](docs/guides/TROUBLESHOOTING.md) - 일반적인 문제 및 해결책
 
 [📖 전체 문서 인덱스 →](docs/)

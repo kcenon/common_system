@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Unified Version Management System** (#204)
+  - New `docs/COMPATIBILITY.md` with version compatibility matrix
+  - Document version requirements for all 7 KCENON ecosystem systems
+  - Dependency graph showing system relationships
+  - CMake version validation examples for dependent systems
+  - Safe upgrade order guidelines
+  - Known incompatibilities and resolutions documentation
+  - Both English and Korean versions
+  - New `docs/contributing/CHANGELOG_TEMPLATE.md` for ecosystem-wide standardization
+
 - **C++20 Concepts for Type Validation** (#192)
   - New `include/kcenon/common/concepts/` directory with comprehensive concept definitions
   - `core.h`: Result/Optional concepts (Resultable, Unwrappable, Mappable, Chainable, MonadicResult)

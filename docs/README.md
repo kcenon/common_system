@@ -66,6 +66,7 @@ For experienced users and contributors:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
+| [COMPATIBILITY.md](COMPATIBILITY.md) | Version compatibility matrix for KCENON ecosystem | [🇰🇷](COMPATIBILITY_KO.md) | 300+ |
 | [MIGRATION.md](advanced/MIGRATION.md) | Migration guide to common_system integration | [🇰🇷](advanced/MIGRATION_KO.md) | 400+ |
 | [IEXECUTOR_MIGRATION_GUIDE.md](advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Function-based to job-based API migration | - | 200+ |
 | [NAMESPACE_MIGRATION.md](advanced/NAMESPACE_MIGRATION.md) | Namespace migration strategy and patterns | - | 150+ |
@@ -81,6 +82,7 @@ For contributors and maintainers:
 |----------|-------------|--------|-------|
 | [CONTRIBUTING.md](contributing/CONTRIBUTING.md) | Contribution guidelines, header-only best practices, testing | - | 996 |
 | [CI_CD_GUIDE.md](contributing/CI_CD_GUIDE.md) | CI/CD pipeline, static analysis, header validation | - | 864 |
+| [CHANGELOG_TEMPLATE.md](contributing/CHANGELOG_TEMPLATE.md) | Standardized CHANGELOG format for ecosystem | - | 200+ |
 
 ---
 
@@ -126,6 +128,7 @@ For contributors and maintainers:
 - [IExecutor Migration](advanced/IEXECUTOR_MIGRATION_GUIDE.md) - Update executor usage
 - [Namespace Migration](advanced/NAMESPACE_MIGRATION.md) - Namespace changes
 - [Dependency Matrix](advanced/DEPENDENCY_MATRIX.md) - System relationships
+- [Compatibility Matrix](COMPATIBILITY.md) - Version requirements across ecosystem
 
 ### 🤝 For Contributors
 

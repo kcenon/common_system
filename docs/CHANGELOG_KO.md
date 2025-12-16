@@ -12,6 +12,16 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 ## [Unreleased]
 
 ### Added
+- **통합 버전 관리 시스템** (#204)
+  - 버전 호환성 매트릭스가 포함된 새로운 `docs/COMPATIBILITY.md`
+  - 7개 KCENON 에코시스템 시스템의 버전 요구사항 문서화
+  - 시스템 관계를 보여주는 의존성 그래프
+  - 종속 시스템을 위한 CMake 버전 검증 예제
+  - 안전한 업그레이드 순서 가이드라인
+  - 알려진 비호환성 및 해결 방법 문서화
+  - 영어 및 한국어 버전 제공
+  - 에코시스템 전체 표준화를 위한 새로운 `docs/contributing/CHANGELOG_TEMPLATE.md`
+
 - **타입 검증을 위한 C++20 Concepts** (#192)
   - 포괄적인 concept 정의를 포함한 새로운 `include/kcenon/common/concepts/` 디렉토리
   - `core.h`: Result/Optional concepts (Resultable, Unwrappable, Mappable, Chainable, MonadicResult)
