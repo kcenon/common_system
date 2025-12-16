@@ -332,6 +332,7 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) - Error code management
 - [Project Structure](docs/PROJECT_STRUCTURE.md) - Repository organization
 - [Dependency Matrix](docs/advanced/DEPENDENCY_MATRIX.md) - Ecosystem dependencies
+- [Compatibility Matrix](docs/COMPATIBILITY.md) - Version compatibility across systems
 - [Troubleshooting](docs/guides/TROUBLESHOOTING.md) - Common issues and solutions
 
 [📖 Complete Documentation Index →](docs/)
