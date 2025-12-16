@@ -23,6 +23,7 @@
 
 #include "service_container_interface.h"
 
+#include <atomic>
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_map>
@@ -108,6 +109,31 @@ public:
      */
     void clear() override;
 
+    // ===== Security Controls =====
+
+    /**
+     * @brief Freeze the container to prevent further registrations.
+     *
+     * Once frozen, no new services can be registered or unregistered.
+     * Existing services can still be resolved. This is a one-way operation
+     * and cannot be undone.
+     *
+     * @note This should be called after system initialization to prevent
+     *       unauthorized service replacement which could be used to inject
+     *       malicious implementations.
+     * @note This is a security feature to prevent service hijacking.
+     *
+     * @see Issue #206 for security requirements.
+     */
+    void freeze();
+
+    /**
+     * @brief Check if the container is frozen.
+     *
+     * @return true if the container is frozen and cannot be modified
+     */
+    bool is_frozen() const;
+
 protected:
     // ===== Internal Implementation =====
 
@@ -186,6 +212,9 @@ private:
     // Service registry
     mutable std::shared_mutex mutex_;
     std::unordered_map<std::type_index, service_entry> services_;
+
+    // Security controls
+    std::atomic<bool> frozen_{false};
 
     // Thread-local resolution stack for circular dependency detection
     static thread_local std::unordered_set<std::type_index> resolution_stack_;
@@ -297,8 +326,21 @@ inline std::vector<service_descriptor> service_container::registered_services() 
 }
 
 inline void service_container::clear() {
+    if (is_frozen()) {
+        // Silently ignore clear when frozen to maintain API compatibility
+        return;
+    }
+
     std::unique_lock lock(mutex_);
     services_.clear();
+}
+
+inline void service_container::freeze() {
+    frozen_.store(true, std::memory_order_release);
+}
+
+inline bool service_container::is_frozen() const {
+    return frozen_.load(std::memory_order_acquire);
 }
 
 inline VoidResult service_container::register_factory_internal(
@@ -306,6 +348,14 @@ inline VoidResult service_container::register_factory_internal(
     const std::string& type_name,
     std::function<std::shared_ptr<void>(IServiceContainer&)> factory,
     service_lifetime lifetime) {
+
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register service: container is frozen",
+            "di::service_container"
+        );
+    }
 
     std::unique_lock lock(mutex_);
 
@@ -330,6 +380,14 @@ inline VoidResult service_container::register_instance_internal(
     std::type_index interface_type,
     const std::string& type_name,
     std::shared_ptr<void> instance) {
+
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot register instance: container is frozen",
+            "di::service_container"
+        );
+    }
 
     std::unique_lock lock(mutex_);
 
@@ -507,6 +565,14 @@ inline bool service_container::is_registered_internal(std::type_index interface_
 }
 
 inline VoidResult service_container::unregister_internal(std::type_index interface_type) {
+    if (is_frozen()) {
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot unregister service: container is frozen",
+            "di::service_container"
+        );
+    }
+
     std::unique_lock lock(mutex_);
 
     auto it = services_.find(interface_type);
