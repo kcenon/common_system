@@ -93,7 +93,7 @@ jobs:
 
     - name: Upload build artifacts
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: build-${{ matrix.os }}-${{ matrix.compiler }}-logs
         path: |
@@ -146,7 +146,7 @@ jobs:
 
     - name: Upload sanitizer results
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: sanitizer-${{ matrix.sanitizer }}-results
         path: |
