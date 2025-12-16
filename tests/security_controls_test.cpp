@@ -124,7 +124,7 @@ TEST_F(RegistryAuditLogTest, LogEventCapture) {
     registry_event event(
         registry_action::register_logger,
         "test-logger",
-        std::source_location::current(),
+        interfaces::source_location::current(),
         true
     );
 
@@ -170,7 +170,7 @@ TEST_F(RegistryAuditLogTest, FailedEventCapture) {
     registry_event event(
         registry_action::register_logger,
         "test-logger",
-        std::source_location::current(),
+        interfaces::source_location::current(),
         false,
         "Registry is frozen"
     );

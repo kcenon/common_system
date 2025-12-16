@@ -21,14 +21,19 @@
 
 #pragma once
 
+#include "../utils/source_location.h"
+
+#include <atomic>
 #include <chrono>
 #include <mutex>
-#include <source_location>
 #include <string>
 #include <vector>
 
 namespace kcenon::common {
 namespace interfaces {
+
+// Use project's source_location for C++17 compatibility
+using source_location = kcenon::common::source_location;
 
 /**
  * @enum registry_action
@@ -114,7 +119,7 @@ struct registry_event {
     registry_event(
         registry_action act,
         std::string target,
-        const std::source_location& loc = std::source_location::current(),
+        const source_location& loc = source_location::current(),
         bool succeeded = true,
         std::string error = "")
         : action(act)
@@ -141,7 +146,7 @@ struct registry_event {
  * RegistryAuditLog::log_event(registry_event(
  *     registry_action::register_service,
  *     "ILogger",
- *     std::source_location::current(),
+ *     source_location::current(),
  *     true
  * ));
  *
