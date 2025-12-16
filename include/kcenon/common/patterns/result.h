@@ -693,6 +693,7 @@ namespace error_codes {
     constexpr int OUT_OF_MEMORY = error::codes::common_errors::out_of_memory;
     constexpr int IO_ERROR = error::codes::common_errors::io_error;
     constexpr int NETWORK_ERROR = error::codes::common_errors::network_error;
+    constexpr int REGISTRY_FROZEN = error::codes::common_errors::registry_frozen;
     constexpr int INTERNAL_ERROR = error::codes::common_errors::internal_error;
 
     // Module-specific base ranges
