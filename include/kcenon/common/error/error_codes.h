@@ -18,6 +18,7 @@
  * - -400 to -499: container_system errors
  * - -500 to -599: database_system errors
  * - -600 to -699: network_system errors
+ * - -700 to -799: pacs_system errors
  * - -1000+: Reserved for future systems
  */
 
@@ -42,6 +43,7 @@ enum class category : int {
     container_system = -400,
     database_system = -500,
     network_system = -600,
+    pacs_system = -700,
 };
 
 /**
@@ -234,6 +236,47 @@ namespace network_system {
     constexpr int bind_failed = base - 62;
 } // namespace network_system
 
+// ============================================================================
+// pacs_system Error Codes (-700 to -799)
+// ============================================================================
+namespace pacs_system {
+    constexpr int base = static_cast<int>(category::pacs_system);
+
+    // DICOM file errors (-700 to -719)
+    constexpr int file_not_found = base - 0;
+    constexpr int file_read_error = base - 1;
+    constexpr int file_write_error = base - 2;
+    constexpr int invalid_dicom_file = base - 3;
+    constexpr int missing_dicm_prefix = base - 4;
+    constexpr int invalid_meta_info = base - 5;
+    constexpr int missing_transfer_syntax = base - 6;
+    constexpr int unsupported_transfer_syntax = base - 7;
+
+    // DICOM element errors (-720 to -739)
+    constexpr int element_not_found = base - 20;
+    constexpr int value_conversion_error = base - 21;
+    constexpr int invalid_vr = base - 22;
+    constexpr int invalid_tag = base - 23;
+    constexpr int data_size_mismatch = base - 24;
+
+    // Encoding/Decoding errors (-740 to -759)
+    constexpr int decode_error = base - 40;
+    constexpr int encode_error = base - 41;
+    constexpr int compression_error = base - 42;
+    constexpr int decompression_error = base - 43;
+
+    // Network/Association errors (-760 to -779)
+    constexpr int association_rejected = base - 60;
+    constexpr int association_aborted = base - 61;
+    constexpr int dimse_error = base - 62;
+    constexpr int pdu_error = base - 63;
+
+    // Storage errors (-780 to -799)
+    constexpr int storage_failed = base - 80;
+    constexpr int retrieve_failed = base - 81;
+    constexpr int query_failed = base - 82;
+} // namespace pacs_system
+
 } // namespace codes
 
 // ============================================================================
@@ -305,6 +348,14 @@ static_assert(codes::common_errors::invalid_argument >= -99 && codes::common_err
 static_assert(codes::common_errors::internal_error >= -99 && codes::common_errors::internal_error <= -1,
               "common error codes must be in range [-99, -1]");
 
+// Validate pacs_system range (-700 to -799)
+static_assert(codes::pacs_system::base == -700,
+              "pacs_system base must be -700");
+static_assert(codes::pacs_system::file_not_found >= -799 && codes::pacs_system::file_not_found <= -700,
+              "pacs_system error codes must be in range [-799, -700]");
+static_assert(codes::pacs_system::query_failed >= -799 && codes::pacs_system::query_failed <= -700,
+              "pacs_system error codes must be in range [-799, -700]");
+
 } // namespace validation
 
 /**
@@ -359,6 +410,22 @@ inline std::string_view get_error_message(int code) {
         case codes::network_system::send_failed: return "Network send failed";
         case codes::network_system::server_not_started: return "Server not started";
 
+        // pacs_system errors
+        case codes::pacs_system::file_not_found: return "DICOM file not found";
+        case codes::pacs_system::file_read_error: return "Failed to read DICOM file";
+        case codes::pacs_system::file_write_error: return "Failed to write DICOM file";
+        case codes::pacs_system::invalid_dicom_file: return "Invalid DICOM file format";
+        case codes::pacs_system::missing_dicm_prefix: return "Missing DICM prefix";
+        case codes::pacs_system::invalid_meta_info: return "Invalid File Meta Information";
+        case codes::pacs_system::missing_transfer_syntax: return "Missing Transfer Syntax";
+        case codes::pacs_system::unsupported_transfer_syntax: return "Unsupported Transfer Syntax";
+        case codes::pacs_system::element_not_found: return "DICOM element not found";
+        case codes::pacs_system::value_conversion_error: return "Value conversion failed";
+        case codes::pacs_system::decode_error: return "DICOM decode error";
+        case codes::pacs_system::encode_error: return "DICOM encode error";
+        case codes::pacs_system::association_rejected: return "DICOM association rejected";
+        case codes::pacs_system::storage_failed: return "DICOM storage failed";
+
         default: return "Unknown error";
     }
 }
@@ -376,7 +443,8 @@ inline std::string_view get_category_name(int code) {
     if (code > static_cast<int>(category::container_system)) return "MonitoringSystem";
     if (code > static_cast<int>(category::database_system)) return "ContainerSystem";
     if (code > static_cast<int>(category::network_system)) return "DatabaseSystem";
-    return "NetworkSystem";
+    if (code > static_cast<int>(category::pacs_system)) return "NetworkSystem";
+    return "PACSSystem";
 }
 
 } // namespace error
