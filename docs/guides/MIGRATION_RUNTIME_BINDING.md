@@ -64,23 +64,35 @@ target_link_libraries(myapp PRIVATE kcenon::logger_system)
 
 ### Header Migration Table
 
-| Old Header | New Header |
-|------------|------------|
-| `<kcenon/logger/logger.h>` | `<kcenon/common/logging/log_macros.h>` |
+> **Important (thread_system v3.0)**: The legacy headers listed below are **removed** in thread_system v3.0. If you are upgrading to thread_system v3.0 or later, you must migrate to the new common_system headers.
+
+| Old Header | New Header | Status |
+|------------|------------|--------|
+| `<kcenon/logger/logger.h>` | `<kcenon/common/logging/log_macros.h>` | Deprecated |
+| `<kcenon/logger/log_level.h>` | `<kcenon/common/interfaces/logger_interface.h>` | Deprecated |
+| (new) | `<kcenon/common/interfaces/global_logger_registry.h>` | Current |
+| (new) | `<kcenon/common/bootstrap/system_bootstrapper.h>` | Current |
+
+#### Removed in thread_system v3.0
+
+The following headers have been **removed** in thread_system v3.0 and must be migrated:
+
+| Removed Header | Replacement |
+|----------------|-------------|
 | `<kcenon/thread/interfaces/logger_interface.h>` | `<kcenon/common/interfaces/logger_interface.h>` |
-| `<kcenon/logger/log_level.h>` | `<kcenon/common/interfaces/logger_interface.h>` |
-| (new) | `<kcenon/common/interfaces/global_logger_registry.h>` |
-| (new) | `<kcenon/common/bootstrap/system_bootstrapper.h>` |
 
 ### Example Migration
 
-**Before:**
+**Before (pre-v3.0 - these headers are removed in thread_system v3.0):**
 
 ```cpp
+// WARNING: These headers are REMOVED in thread_system v3.0
+// Migrate to common_system headers immediately
 #include <kcenon/logger/logger.h>
-#include <kcenon/thread/interfaces/logger_interface.h>
+// REMOVED in thread_system v3.0 - use <kcenon/common/interfaces/logger_interface.h>
+// #include <kcenon/thread/interfaces/logger_interface.h>
 
-// Using old logger interface
+// Using old logger interface (deprecated)
 class MyClass {
     std::shared_ptr<kcenon::thread::interfaces::logger_interface> logger_;
 public:
@@ -284,17 +296,37 @@ int main() {
 
 ### Namespace Changes
 
-| Old Namespace | New Namespace |
-|---------------|---------------|
-| `kcenon::logger::log_level` | `kcenon::common::interfaces::log_level` |
-| `kcenon::thread::interfaces::logger_interface` | `kcenon::common::interfaces::ILogger` |
+> **Note**: Items marked with ⚠️ are **removed** in thread_system v3.0.
+
+| Old Namespace | New Namespace | Status |
+|---------------|---------------|--------|
+| `kcenon::logger::log_level` | `kcenon::common::interfaces::log_level` | Deprecated |
+| `kcenon::thread::interfaces::logger_interface` | `kcenon::common::interfaces::ILogger` | ⚠️ Removed in v3.0 |
 
 ### Type Renames
 
-| Old Type | New Type |
-|----------|----------|
-| `logger_interface` | `ILogger` |
-| `log_level` enum values | Same values, different namespace |
+| Old Type | New Type | Status |
+|----------|----------|--------|
+| `logger_interface` | `ILogger` | ⚠️ Removed in v3.0 |
+| `log_level` enum values | Same values, different namespace | Deprecated |
+
+### Removed in thread_system v3.0
+
+The following legacy items are **removed** in thread_system v3.0:
+
+#### Legacy Headers
+```cpp
+// REMOVED - use common_system headers instead
+#include <kcenon/thread/interfaces/logger_interface.h>  // → <kcenon/common/interfaces/logger_interface.h>
+```
+
+#### Legacy Types
+```cpp
+// REMOVED - use ILogger instead
+kcenon::thread::interfaces::logger_interface  // → kcenon::common::interfaces::ILogger
+```
+
+**Migration action**: Replace all `thread/interfaces/` includes with `common/interfaces/` equivalents before upgrading to thread_system v3.0.
 
 ### Removed in v2.0.0
 
@@ -325,9 +357,11 @@ ASSIGN_OR_RETURN(decl, expr); // → COMMON_ASSIGN_OR_RETURN(decl, expr)
 
 If you have custom logger implementations:
 
-### Before:
+### Before (pre-v3.0 - this interface is removed in thread_system v3.0):
 
 ```cpp
+// WARNING: kcenon::thread::interfaces::logger_interface is REMOVED in thread_system v3.0
+// Migrate to kcenon::common::interfaces::ILogger immediately
 class MyLogger : public kcenon::thread::interfaces::logger_interface {
 public:
     void log(kcenon::logger::log_level level,
