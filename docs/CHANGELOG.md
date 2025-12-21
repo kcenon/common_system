@@ -12,6 +12,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Deprecated API Documentation** (#213)
+  - New `docs/DEPRECATION.md` documenting all deprecated APIs
+  - Migration guides with before/after examples
+  - Compiler warning suppression instructions
+  - CI integration guidance for deprecation warnings
+  - Timeline for v3.0.0 API removal
+  - Both English and Korean versions
+
 - **Unified Version Management System** (#204)
   - New `docs/COMPATIBILITY.md` with version compatibility matrix
   - Document version requirements for all 7 KCENON ecosystem systems

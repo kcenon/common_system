@@ -12,6 +12,14 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 ## [Unreleased]
 
 ### Added
+- **Deprecated API 문서화** (#213)
+  - 모든 deprecated API를 문서화한 새로운 `docs/DEPRECATION.md`
+  - Before/After 예제가 포함된 마이그레이션 가이드
+  - 컴파일러 경고 억제 방법
+  - deprecation 경고를 위한 CI 통합 가이드
+  - v3.0.0 API 제거 타임라인
+  - 영어 및 한국어 버전 제공
+
 - **통합 버전 관리 시스템** (#204)
   - 버전 호환성 매트릭스가 포함된 새로운 `docs/COMPATIBILITY.md`
   - 7개 KCENON 에코시스템 시스템의 버전 요구사항 문서화

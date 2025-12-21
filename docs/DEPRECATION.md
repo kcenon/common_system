@@ -1,0 +1,245 @@
+# Deprecated APIs
+
+This document lists all deprecated APIs in the Common System library, their replacements, and migration guidance.
+
+> **Language:** **English** | [한국어](DEPRECATION_KO.md)
+
+---
+
+## Overview
+
+The Common System library follows semantic versioning. Deprecated APIs are marked with the `[[deprecated]]` attribute and will be removed in the next major version (v3.0.0).
+
+### Deprecation Timeline
+
+| Phase | Version | Description |
+|-------|---------|-------------|
+| Deprecation | v2.0.0 | APIs marked deprecated with compiler warnings |
+| Grace Period | v2.x | Deprecated APIs remain functional |
+| Removal | v3.0.0 | Deprecated APIs removed |
+
+---
+
+## Currently Deprecated APIs
+
+### 1. Legacy Logger Method with File/Line/Function Parameters
+
+**File:** `include/kcenon/common/interfaces/logger_interface.h:179-184`
+
+**Status:** Deprecated in v2.0.0, removal planned for v3.0.0
+
+**Declaration:**
+```cpp
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
+virtual VoidResult log(log_level level,
+                       const std::string& message,
+                       const std::string& file,
+                       int line,
+                       const std::string& function) = 0;
+```
+
+**Reason for Deprecation:**
+- Replaced by C++20 `source_location`-based API
+- Type safety: `source_location` provides compile-time verification
+- Automatic capture: Source location is captured at call site without manual parameters
+- Cleaner API: Reduced parameter count improves usability
+
+**Replacement API:**
+```cpp
+virtual VoidResult log(log_level level,
+                       std::string_view message,
+                       const source_location& loc = source_location::current());
+```
+
+**Migration Guide:**
+
+<details>
+<summary>Before (Deprecated)</summary>
+
+```cpp
+// Direct call with manual parameters
+logger->log(log_level::info, "Operation completed", __FILE__, __LINE__, __func__);
+
+// Custom wrapper function
+void my_log(ILogger* logger, log_level level, const std::string& msg) {
+    logger->log(level, msg, __FILE__, __LINE__, __func__);
+}
+```
+</details>
+
+<details>
+<summary>After (Recommended)</summary>
+
+```cpp
+// Direct call - source_location auto-captured
+logger->log(log_level::info, "Operation completed");
+
+// Using convenience functions (preferred)
+#include <kcenon/common/logging/log_functions.h>
+log_info("Operation completed");
+
+// Using macros (preferred)
+#include <kcenon/common/logging/log_macros.h>
+LOG_INFO("Operation completed");
+```
+</details>
+
+**Implementation Migration:**
+
+If you have a custom `ILogger` implementation, update as follows:
+
+<details>
+<summary>Before (Deprecated Implementation)</summary>
+
+```cpp
+class MyLogger : public ILogger {
+public:
+    VoidResult log(log_level level,
+                   const std::string& message,
+                   const std::string& file,
+                   int line,
+                   const std::string& function) override {
+        // Log with file/line/function
+        std::cout << file << ":" << line << " [" << function << "] " << message;
+        return VoidResult::ok();
+    }
+};
+```
+</details>
+
+<details>
+<summary>After (Recommended Implementation)</summary>
+
+```cpp
+class MyLogger : public ILogger {
+public:
+    // Implement the source_location-based method
+    VoidResult log(log_level level,
+                   std::string_view message,
+                   const source_location& loc = source_location::current()) override {
+        std::cout << loc.file_name() << ":" << loc.line()
+                  << " [" << loc.function_name() << "] " << message;
+        return VoidResult::ok();
+    }
+
+    // Legacy method - suppress deprecation warning for backward compatibility
+    #ifdef __GNUC__
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    #endif
+    VoidResult log(log_level level,
+                   const std::string& message,
+                   const std::string& file,
+                   int line,
+                   const std::string& function) override {
+        // Delegate to new method
+        source_location loc;
+        // Note: Custom source_location construction for legacy support
+        return log(level, message, loc);
+    }
+    #ifdef __GNUC__
+    #pragma GCC diagnostic pop
+    #endif
+};
+```
+</details>
+
+---
+
+## APIs Removed in v2.0.0
+
+The following APIs were deprecated in earlier versions and have been removed in v2.0.0:
+
+### 1. Result::is_uninitialized()
+
+**Removed in:** v2.0.0
+
+**Reason:** The default constructor now initializes Result to an error state, making the "uninitialized" concept obsolete.
+
+**Migration:**
+```cpp
+// Before
+if (result.is_uninitialized()) { ... }
+
+// After - Check for specific error state
+if (!result.is_ok()) { ... }
+```
+
+### 2. Legacy THREAD_LOG_* Macros
+
+**Removed in:** v2.0.0 (Issue #180)
+
+**Reason:** Replaced by unified LOG_* macros that work with the global logger registry.
+
+**Migration:**
+```cpp
+// Before
+THREAD_LOG_INFO("Message");
+
+// After
+LOG_INFO("Message");
+```
+
+---
+
+## Compiler Warning Suppression
+
+If you need to use deprecated APIs during migration, you can suppress warnings:
+
+### GCC/Clang
+```cpp
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+// deprecated API usage
+#pragma GCC diagnostic pop
+```
+
+### MSVC
+```cpp
+#pragma warning(push)
+#pragma warning(disable: 4996)
+// deprecated API usage
+#pragma warning(pop)
+```
+
+---
+
+## Enabling Deprecation Warnings in CI
+
+To catch deprecated API usage early, enable deprecation warnings in your build:
+
+### CMake
+```cmake
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${TARGET} PRIVATE -Wdeprecated-declarations)
+elseif(MSVC)
+    target_compile_options(${TARGET} PRIVATE /W4)
+endif()
+```
+
+### Command Line
+```bash
+# GCC/Clang
+cmake -DCMAKE_CXX_FLAGS="-Wdeprecated-declarations" ..
+
+# Scan for deprecated usage
+make 2>&1 | grep -i deprecated
+```
+
+---
+
+## Related Documentation
+
+- [CHANGELOG](CHANGELOG.md) - Version history with deprecation notices
+- [API Reference](API_REFERENCE.md) - Complete API documentation
+- [Migration Guide](advanced/MIGRATION.md) - General migration guidance
+- [Logging Best Practices](guides/LOGGING_BEST_PRACTICES.md) - Recommended logging patterns
+
+---
+
+## Questions?
+
+If you have questions about migrating from deprecated APIs, please:
+1. Check the related documentation above
+2. Search existing [GitHub Issues](https://github.com/kcenon/common_system/issues)
+3. Open a new issue with the `question` label
