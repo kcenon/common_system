@@ -234,6 +234,52 @@
     ::kcenon::common::logging::is_enabled(level, logger_name)
 
 // =============================================================================
+// Legacy THREAD_LOG_* Macros (Deprecated)
+// =============================================================================
+//
+// These macros are provided for backward compatibility with thread_system code.
+// New code should use the LOG_* macros instead.
+//
+// @deprecated Use LOG_* macros instead. Will be removed in v3.0.0.
+// @see docs/DEPRECATION.md for migration guide.
+
+/**
+ * @def THREAD_LOG_TRACE(msg)
+ * @deprecated Use LOG_TRACE(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_TRACE(msg) LOG_TRACE(msg)
+
+/**
+ * @def THREAD_LOG_DEBUG(msg)
+ * @deprecated Use LOG_DEBUG(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_DEBUG(msg) LOG_DEBUG(msg)
+
+/**
+ * @def THREAD_LOG_INFO(msg)
+ * @deprecated Use LOG_INFO(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_INFO(msg) LOG_INFO(msg)
+
+/**
+ * @def THREAD_LOG_WARNING(msg)
+ * @deprecated Use LOG_WARNING(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_WARNING(msg) LOG_WARNING(msg)
+
+/**
+ * @def THREAD_LOG_ERROR(msg)
+ * @deprecated Use LOG_ERROR(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_ERROR(msg) LOG_ERROR(msg)
+
+/**
+ * @def THREAD_LOG_CRITICAL(msg)
+ * @deprecated Use LOG_CRITICAL(msg) instead. Will be removed in v3.0.0.
+ */
+#define THREAD_LOG_CRITICAL(msg) LOG_CRITICAL(msg)
+
+// =============================================================================
 // Compile-time Log Level Control (Optional)
 // =============================================================================
 
