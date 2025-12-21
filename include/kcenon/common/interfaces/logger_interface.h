@@ -192,7 +192,8 @@ public:
      *             but new code should use the source_location-based overload.
      *             Will be removed in v3.0.0.
      */
-    [[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
+    [[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
+                 "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
     virtual VoidResult log(log_level level,
                            const std::string& message,
                            const std::string& file,

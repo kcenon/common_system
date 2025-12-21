@@ -30,7 +30,8 @@ Common System 라이브러리는 시맨틱 버저닝을 따릅니다. Deprecated
 
 **선언:**
 ```cpp
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
+             "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
 virtual VoidResult log(log_level level,
                        const std::string& message,
                        const std::string& file,
@@ -164,18 +165,19 @@ if (result.is_uninitialized()) { ... }
 if (!result.is_ok()) { ... }
 ```
 
-### 2. 레거시 THREAD_LOG_* 매크로
+### 2. THREAD_LOG_* 매크로 (Deprecated로 재추가됨)
 
-**제거 버전:** v2.0.0 (Issue #180)
+**상태:** v2.x에서 하위 호환성을 위해 재추가됨, deprecated, v3.0.0에서 제거 예정
 
-**사유:** 글로벌 로거 레지스트리와 함께 동작하는 통합 LOG_* 매크로로 대체됨.
+**참고:** 이 매크로들은 v2.0.0에서 제거되었지만 마이그레이션을 돕기 위해 재추가되었습니다.
+현재 표준 LOG_* 매크로로 리디렉션되지만 deprecated로 표시되어 있습니다.
 
 **마이그레이션:**
 ```cpp
-// Before
+// Before (deprecated)
 THREAD_LOG_INFO("메시지");
 
-// After
+// After (권장)
 LOG_INFO("메시지");
 ```
 
