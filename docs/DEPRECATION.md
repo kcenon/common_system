@@ -30,7 +30,8 @@ The Common System library follows semantic versioning. Deprecated APIs are marke
 
 **Declaration:**
 ```cpp
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
+             "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
 virtual VoidResult log(log_level level,
                        const std::string& message,
                        const std::string& file,
@@ -165,18 +166,19 @@ if (result.is_uninitialized()) { ... }
 if (!result.is_ok()) { ... }
 ```
 
-### 2. Legacy THREAD_LOG_* Macros
+### 2. THREAD_LOG_* Macros (Re-added as Deprecated)
 
-**Removed in:** v2.0.0 (Issue #180)
+**Status:** Re-added in v2.x for backward compatibility, deprecated, removal planned for v3.0.0
 
-**Reason:** Replaced by unified LOG_* macros that work with the global logger registry.
+**Note:** These macros were removed in v2.0.0 but have been re-added to ease migration.
+They now redirect to the standard LOG_* macros but are marked as deprecated.
 
 **Migration:**
 ```cpp
-// Before
+// Before (deprecated)
 THREAD_LOG_INFO("Message");
 
-// After
+// After (recommended)
 LOG_INFO("Message");
 ```
 
