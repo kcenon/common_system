@@ -156,10 +156,26 @@ public:
                            std::string_view message,
                            const source_location& loc = source_location::current()) {
         // Default implementation delegates to legacy method for compatibility
-        return log(level, std::string(message),
+        // Suppress deprecated warning for internal delegation
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
+        auto result = log(level, std::string(message),
                    std::string(loc.file_name()),
                    loc.line(),
                    std::string(loc.function_name()));
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+        return result;
     }
 
     /**
