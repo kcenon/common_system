@@ -72,6 +72,8 @@ using namespace kcenon::common::bootstrap;
  *
  * This logger captures all log messages in a thread-safe manner, allowing
  * verification of logging behavior across multiple threads and systems.
+ *
+ * @note Issue #217: Removed deprecated file/line/function method in v3.0.0.
  */
 class ThreadSafeTestLogger : public ILogger {
 public:
@@ -92,29 +94,6 @@ public:
                         static_cast<int>(loc.line()), loc.function_name()});
     return VoidResult::ok({});
   }
-
-// Suppress deprecation warning for implementing the deprecated interface method
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
-  VoidResult log(log_level level, const std::string &message,
-                 const std::string &file, int line,
-                 const std::string &function) override {
-    std::lock_guard<std::mutex> lock(mutex_);
-    entries_.push_back({level, message, file, line, function});
-    return VoidResult::ok({});
-  }
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-#pragma warning(pop)
-#endif
 
   VoidResult log(const log_entry &entry) override {
     std::lock_guard<std::mutex> lock(mutex_);

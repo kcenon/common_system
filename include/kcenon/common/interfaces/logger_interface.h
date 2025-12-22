@@ -10,8 +10,8 @@
  * all systems for consistent logging behavior.
  *
  * @note Issue #177: Extended with C++20 source_location support.
- *       The interface now supports both the legacy file/line/function
- *       parameters and the modern source_location approach.
+ * @note Issue #217: Removed deprecated file/line/function API in v3.0.0.
+ *       Use the source_location-based log() method for all logging.
  */
 
 #pragma once
@@ -115,9 +115,8 @@ struct log_entry {
  * direct dependencies.
  *
  * @note Issue #177: Extended with C++20 source_location support.
- *       New implementations should override the source_location-based
- *       log() method. The legacy file/line/function overload is
- *       deprecated but still supported for backward compatibility.
+ * @note Issue #217: The deprecated file/line/function overload was
+ *       removed in v3.0.0. Use the source_location-based log() method.
  */
 class ILogger {
 public:
@@ -135,15 +134,15 @@ public:
      * @brief Log a message with source location information (C++20)
      *
      * This is the preferred method for logging with source location.
-     * The default implementation delegates to the legacy file/line/function
-     * overload for backward compatibility with existing implementations.
+     * The default implementation delegates to the simple log(level, message)
+     * method for implementations that don't need source location.
      *
      * @param level Log level
      * @param message Log message (string_view for efficiency)
      * @param loc Source location (automatically captured at call site)
      * @return VoidResult indicating success or error
      *
-     * @note Issue #177: New method with source_location support.
+     * @note Issue #177: Method with source_location support.
      *       Implementations should override this method to directly use
      *       source_location for improved type safety and efficiency.
      *
@@ -155,50 +154,11 @@ public:
     virtual VoidResult log(log_level level,
                            std::string_view message,
                            const source_location& loc = source_location::current()) {
-        // Default implementation delegates to legacy method for compatibility
-        // Suppress deprecated warning for internal delegation
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-#if defined(_MSC_VER)
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#endif
-        auto result = log(level, std::string(message),
-                   std::string(loc.file_name()),
-                   loc.line(),
-                   std::string(loc.function_name()));
-#if defined(_MSC_VER)
-#pragma warning(pop)
-#endif
-#if defined(__clang__) || defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-        return result;
+        // Default implementation delegates to simple log method
+        // Derived classes should override to use source location information
+        (void)loc;  // Unused in default implementation
+        return log(level, std::string(message));
     }
-
-    /**
-     * @brief Log a message with source location information (legacy)
-     * @param level Log level
-     * @param message Log message
-     * @param file Source file name
-     * @param line Source line number
-     * @param function Function name
-     * @return VoidResult indicating success or error
-     *
-     * @deprecated Use log(log_level, std::string_view, const source_location&)
-     *             instead. This method is maintained for backward compatibility
-     *             but new code should use the source_location-based overload.
-     *             Will be removed in v3.0.0.
-     */
-    [[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
-                 "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
-    virtual VoidResult log(log_level level,
-                           const std::string& message,
-                           const std::string& file,
-                           int line,
-                           const std::string& function) = 0;
 
     /**
      * @brief Log a structured entry

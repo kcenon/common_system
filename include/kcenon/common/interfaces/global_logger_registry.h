@@ -47,6 +47,7 @@ namespace interfaces {
  * code to function (silently) even when logging is not configured.
  *
  * @note Issue #177: Updated to support source_location-based logging.
+ * @note Issue #217: Removed deprecated file/line/function API in v3.0.0.
  */
 class NullLogger : public ILogger {
 public:
@@ -66,29 +67,6 @@ public:
                    const source_location& /*loc*/ = source_location::current()) override {
         return VoidResult::ok({});
     }
-
-// Suppress deprecation warning for implementing the deprecated interface method
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-    #pragma warning(push)
-    #pragma warning(disable: 4996)
-#endif
-
-    VoidResult log(log_level /*level*/,
-                   const std::string& /*message*/,
-                   const std::string& /*file*/,
-                   int /*line*/,
-                   const std::string& /*function*/) override {
-        return VoidResult::ok({});
-    }
-
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-    #pragma warning(pop)
-#endif
 
     VoidResult log(const log_entry& /*entry*/) override {
         return VoidResult::ok({});

@@ -400,14 +400,9 @@ if (result.is_ok()) {
 virtual VoidResult log(log_level level, const std::string& message) = 0;
 
 // source_location 기반 로깅 (C++20 - 권장, Issue #177)
-// 기본 구현은 레거시 메서드로 위임하여 역호환성 제공
+// 기본 구현은 단순 log() 메서드로 위임
 virtual VoidResult log(log_level level, std::string_view message,
                        const source_location& loc = source_location::current());
-
-// 레거시 메서드 (DEPRECATED)
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
-virtual VoidResult log(log_level level, const std::string& message,
-                       const std::string& file, int line, const std::string& function) = 0;
 
 // 구조화된 엔트리 로깅
 virtual VoidResult log(const log_entry& entry) = 0;

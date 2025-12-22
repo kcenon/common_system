@@ -8,7 +8,7 @@ This document lists all deprecated APIs in the Common System library, their repl
 
 ## Overview
 
-The Common System library follows semantic versioning. Deprecated APIs are marked with the `[[deprecated]]` attribute and will be removed in the next major version (v3.0.0).
+The Common System library follows semantic versioning. Deprecated APIs are marked with the `[[deprecated]]` attribute and will be removed in the next major version.
 
 ### Deprecation Timeline
 
@@ -22,16 +22,21 @@ The Common System library follows semantic versioning. Deprecated APIs are marke
 
 ## Currently Deprecated APIs
 
+No APIs are currently deprecated.
+
+---
+
+## APIs Removed in v3.0.0
+
 ### 1. Legacy Logger Method with File/Line/Function Parameters
 
-**File:** `include/kcenon/common/interfaces/logger_interface.h:179-184`
+**File:** `include/kcenon/common/interfaces/logger_interface.h`
 
-**Status:** Deprecated in v2.0.0, removal planned for v3.0.0
+**Removed in:** v3.0.0 (Issue #217)
 
-**Declaration:**
+**Previous Declaration:**
 ```cpp
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
-             "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead.")]]
 virtual VoidResult log(log_level level,
                        const std::string& message,
                        const std::string& file,
@@ -39,7 +44,7 @@ virtual VoidResult log(log_level level,
                        const std::string& function) = 0;
 ```
 
-**Reason for Deprecation:**
+**Reason for Removal:**
 - Replaced by C++20 `source_location`-based API
 - Type safety: `source_location` provides compile-time verification
 - Automatic capture: Source location is captured at call site without manual parameters
@@ -55,7 +60,7 @@ virtual VoidResult log(log_level level,
 **Migration Guide:**
 
 <details>
-<summary>Before (Deprecated)</summary>
+<summary>Before (Removed)</summary>
 
 ```cpp
 // Direct call with manual parameters
@@ -69,7 +74,7 @@ void my_log(ILogger* logger, log_level level, const std::string& msg) {
 </details>
 
 <details>
-<summary>After (Recommended)</summary>
+<summary>After (Current)</summary>
 
 ```cpp
 // Direct call - source_location auto-captured
@@ -90,7 +95,7 @@ LOG_INFO("Operation completed");
 If you have a custom `ILogger` implementation, update as follows:
 
 <details>
-<summary>Before (Deprecated Implementation)</summary>
+<summary>Before (Removed Implementation)</summary>
 
 ```cpp
 class MyLogger : public ILogger {
@@ -109,7 +114,7 @@ public:
 </details>
 
 <details>
-<summary>After (Recommended Implementation)</summary>
+<summary>After (Current Implementation)</summary>
 
 ```cpp
 class MyLogger : public ILogger {
@@ -122,25 +127,6 @@ public:
                   << " [" << loc.function_name() << "] " << message;
         return VoidResult::ok();
     }
-
-    // Legacy method - suppress deprecation warning for backward compatibility
-    #ifdef __GNUC__
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #endif
-    VoidResult log(log_level level,
-                   const std::string& message,
-                   const std::string& file,
-                   int line,
-                   const std::string& function) override {
-        // Delegate to new method
-        source_location loc;
-        // Note: Custom source_location construction for legacy support
-        return log(level, message, loc);
-    }
-    #ifdef __GNUC__
-    #pragma GCC diagnostic pop
-    #endif
 };
 ```
 </details>

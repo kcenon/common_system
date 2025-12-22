@@ -16,6 +16,7 @@
  *
  * @note Issue #177: Extended with source_location-specific tests.
  * @note Issue #180: Removed deprecated THREAD_LOG_* legacy macro tests.
+ * @note Issue #217: Removed deprecated file/line/function API in v3.0.0.
  */
 
 #include <gtest/gtest.h>
@@ -42,8 +43,7 @@ using namespace kcenon::common::logging;
  * @brief Test logger that captures log entries for verification.
  *
  * @note Issue #177: Updated to support source_location-based logging.
- *       Now overrides both the new source_location method and the legacy
- *       file/line/function method for comprehensive testing.
+ * @note Issue #217: Removed deprecated file/line/function method in v3.0.0.
  */
 class CaptureLogger : public ILogger {
 public:
@@ -85,31 +85,6 @@ public:
         });
         return VoidResult::ok({});
     }
-
-// Suppress deprecation warning for implementing the deprecated interface method
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-    #pragma warning(push)
-    #pragma warning(disable: 4996)
-#endif
-
-    VoidResult log(log_level level,
-                   const std::string& message,
-                   const std::string& file,
-                   int line,
-                   const std::string& function) override {
-        std::lock_guard<std::mutex> lock(mutex_);
-        entries_.push_back({level, message, file, line, function, {}});
-        return VoidResult::ok({});
-    }
-
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-    #pragma warning(pop)
-#endif
 
     VoidResult log(const log_entry& entry) override {
         std::lock_guard<std::mutex> lock(mutex_);

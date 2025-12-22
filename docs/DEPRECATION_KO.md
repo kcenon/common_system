@@ -8,7 +8,7 @@
 
 ## 개요
 
-Common System 라이브러리는 시맨틱 버저닝을 따릅니다. Deprecated API는 `[[deprecated]]` 속성으로 표시되며 다음 메이저 버전(v3.0.0)에서 제거될 예정입니다.
+Common System 라이브러리는 시맨틱 버저닝을 따릅니다. Deprecated API는 `[[deprecated]]` 속성으로 표시되며 다음 메이저 버전에서 제거될 예정입니다.
 
 ### Deprecation 타임라인
 
@@ -22,16 +22,21 @@ Common System 라이브러리는 시맨틱 버저닝을 따릅니다. Deprecated
 
 ## 현재 Deprecated API
 
+현재 deprecated된 API가 없습니다.
+
+---
+
+## v3.0.0에서 제거된 API
+
 ### 1. 레거시 로거 메서드 (File/Line/Function 파라미터)
 
-**파일:** `include/kcenon/common/interfaces/logger_interface.h:179-184`
+**파일:** `include/kcenon/common/interfaces/logger_interface.h`
 
-**상태:** v2.0.0에서 deprecated, v3.0.0에서 제거 예정
+**제거 버전:** v3.0.0 (Issue #217)
 
-**선언:**
+**이전 선언:**
 ```cpp
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead. "
-             "Will be removed in v3.0.0. See docs/DEPRECATION.md for migration guide.")]]
+[[deprecated("Use log(log_level, std::string_view, const source_location&) instead.")]]
 virtual VoidResult log(log_level level,
                        const std::string& message,
                        const std::string& file,
@@ -39,7 +44,7 @@ virtual VoidResult log(log_level level,
                        const std::string& function) = 0;
 ```
 
-**Deprecation 사유:**
+**제거 사유:**
 - C++20 `source_location` 기반 API로 대체됨
 - 타입 안전성: `source_location`은 컴파일 타임 검증 제공
 - 자동 캡처: 호출 위치에서 소스 위치가 자동으로 캡처됨
@@ -55,7 +60,7 @@ virtual VoidResult log(log_level level,
 **마이그레이션 가이드:**
 
 <details>
-<summary>Before (Deprecated)</summary>
+<summary>Before (제거됨)</summary>
 
 ```cpp
 // 수동 파라미터로 직접 호출
@@ -69,7 +74,7 @@ void my_log(ILogger* logger, log_level level, const std::string& msg) {
 </details>
 
 <details>
-<summary>After (권장)</summary>
+<summary>After (현재)</summary>
 
 ```cpp
 // 직접 호출 - source_location 자동 캡처
@@ -90,7 +95,7 @@ LOG_INFO("작업 완료");
 커스텀 `ILogger` 구현이 있다면 다음과 같이 업데이트하세요:
 
 <details>
-<summary>Before (Deprecated 구현)</summary>
+<summary>Before (제거된 구현)</summary>
 
 ```cpp
 class MyLogger : public ILogger {
@@ -109,7 +114,7 @@ public:
 </details>
 
 <details>
-<summary>After (권장 구현)</summary>
+<summary>After (현재 구현)</summary>
 
 ```cpp
 class MyLogger : public ILogger {
@@ -122,24 +127,6 @@ public:
                   << " [" << loc.function_name() << "] " << message;
         return VoidResult::ok();
     }
-
-    // 레거시 메서드 - 하위 호환성을 위해 deprecation 경고 억제
-    #ifdef __GNUC__
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    #endif
-    VoidResult log(log_level level,
-                   const std::string& message,
-                   const std::string& file,
-                   int line,
-                   const std::string& function) override {
-        // 새 메서드로 위임
-        source_location loc;
-        return log(level, message, loc);
-    }
-    #ifdef __GNUC__
-    #pragma GCC diagnostic pop
-    #endif
 };
 ```
 </details>
