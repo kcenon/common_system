@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Downstream System Deprecation Notifications** (#220)
+  - Created migration tracking issues in all dependent systems
+  - thread_system, logger_system, monitoring_system, pacs_system, database_system notified
+  - Each issue includes migration guide links and v3.0.0 removal timeline
+  - Updated `docs/DEPRECATION.md` with notification status table
+
 - **Deprecated API Documentation** (#213)
   - New `docs/DEPRECATION.md` documenting all deprecated APIs
   - Migration guides with before/after examples

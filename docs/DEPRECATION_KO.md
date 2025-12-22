@@ -229,6 +229,22 @@ make 2>&1 | grep -i deprecated
 
 ---
 
+## 다운스트림 시스템 알림
+
+모든 의존 시스템에 deprecated API 및 v3.0.0 제거 예정에 대해 알림을 완료했습니다:
+
+| 시스템 | 리포지토리 | 알림 이슈 |
+|--------|------------|-----------|
+| thread_system | [kcenon/thread_system](https://github.com/kcenon/thread_system) | [#331](https://github.com/kcenon/thread_system/issues/331) |
+| logger_system | [kcenon/logger_system](https://github.com/kcenon/logger_system) | [#248](https://github.com/kcenon/logger_system/issues/248) |
+| monitoring_system | [kcenon/monitoring_system](https://github.com/kcenon/monitoring_system) | [#269](https://github.com/kcenon/monitoring_system/issues/269) |
+| pacs_system | [kcenon/pacs_system](https://github.com/kcenon/pacs_system) | [#399](https://github.com/kcenon/pacs_system/issues/399) |
+| database_system | [kcenon/database_system](https://github.com/kcenon/database_system) | [#276](https://github.com/kcenon/database_system/issues/276) |
+
+전체 deprecation 계획 추적은 [#213](https://github.com/kcenon/common_system/issues/213)을 참조하세요.
+
+---
+
 ## 관련 문서
 
 - [CHANGELOG](CHANGELOG_KO.md) - deprecation 공지가 포함된 버전 히스토리
