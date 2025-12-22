@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **Unified Feature Flag Headers** (#224)
+  - New `feature_flags.h` as main entry point for all feature detection
+  - `feature_flags_core.h`: Preprocessor helpers, compiler/platform detection (KCENON_COMPILER_*, KCENON_PLATFORM_*, KCENON_HAS_CPP*)
+  - `feature_detection.h`: C++ standard library feature detection
+    - KCENON_HAS_SOURCE_LOCATION (C++20 std::source_location)
+    - KCENON_HAS_JTHREAD / KCENON_HAS_STOP_TOKEN (C++20 cooperative threading)
+    - KCENON_HAS_FORMAT, KCENON_HAS_SPAN, KCENON_HAS_RANGES (C++20)
+    - KCENON_HAS_EXPECTED, KCENON_HAS_STACKTRACE (C++23)
+    - KCENON_HAS_CONCEPTS, KCENON_HAS_COROUTINES
+  - `feature_system_deps.h`: System module integration flags (KCENON_WITH_THREAD_SYSTEM, KCENON_WITH_LOGGER_SYSTEM, etc.)
+  - Legacy aliases available via KCENON_ENABLE_LEGACY_ALIASES (default: enabled)
+  - Updated `features.cmake` with `export_kcenon_features()` function
+  - Refactored `source_location.h` to use unified feature detection
+
 - **Downstream System Deprecation Notifications** (#220)
   - Created migration tracking issues in all dependent systems
   - thread_system, logger_system, monitoring_system, pacs_system, database_system notified

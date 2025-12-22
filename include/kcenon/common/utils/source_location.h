@@ -9,27 +9,25 @@
  * Provides a source_location type that works with both C++17 and C++20.
  * Uses std::source_location when available (C++20), otherwise falls back
  * to compiler builtins for C++17 compatibility.
+ *
+ * This file uses the unified feature detection from feature_flags.h.
+ * The macro KCENON_HAS_SOURCE_LOCATION determines whether std::source_location
+ * is available.
  */
 
 #pragma once
 
-#if __cplusplus >= 202002L && __has_include(<source_location>)
-    #include <source_location>
-    #if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907L
-        #define KCENON_HAS_STD_SOURCE_LOCATION 1
-    #endif
-#endif
+#include "../config/feature_flags.h"
 
-#ifndef KCENON_HAS_STD_SOURCE_LOCATION
-    #define KCENON_HAS_STD_SOURCE_LOCATION 0
+#if KCENON_HAS_SOURCE_LOCATION
+    #include <source_location>
 #endif
 
 namespace kcenon::common {
 
-#if KCENON_HAS_STD_SOURCE_LOCATION
+#if KCENON_HAS_SOURCE_LOCATION
     // Use std::source_location when available (C++20)
     using source_location = std::source_location;
-    #define COMMON_HAS_SOURCE_LOCATION 1
 #else
     // Custom implementation for C++17 using compiler builtins
     struct source_location {
@@ -62,7 +60,6 @@ namespace kcenon::common {
         int line_;
         int column_;
     };
-    #define COMMON_HAS_SOURCE_LOCATION 1
 #endif
 
 } // namespace kcenon::common
