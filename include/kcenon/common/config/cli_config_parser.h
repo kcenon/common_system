@@ -279,7 +279,7 @@ public:
      *
      * @param version Version string
      */
-    static void print_version(const std::string& version = "1.0.0") {
+    static void print_version(const std::string& version = "0.1.0.0") {
         std::cout << "unified_system version " << version << "\n";
     }
 
