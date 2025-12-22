@@ -489,32 +489,130 @@ if (!result) {
 }
 ```
 
+### Unified Feature Flags
+
+The common_system provides a unified feature flag system for detecting C++ features and controlling system integration across all ecosystem modules.
+
+**Header Organization:**
+
+```cpp
+#include <kcenon/common/config/feature_flags.h>  // Main entry point
+
+// Individual headers for specific needs:
+// feature_flags_core.h    - Preprocessor helpers, compiler/platform detection
+// feature_detection.h     - C++ standard library feature detection
+// feature_system_deps.h   - System module integration flags
+```
+
+**C++ Feature Detection Macros:**
+
+| Macro | Description | Detected Via |
+|-------|-------------|--------------|
+| `KCENON_HAS_CPP17` | C++17 support | `__cplusplus >= 201703L` |
+| `KCENON_HAS_CPP20` | C++20 support | `__cplusplus >= 202002L` |
+| `KCENON_HAS_CPP23` | C++23 support | `__cplusplus >= 202302L` |
+| `KCENON_HAS_SOURCE_LOCATION` | `std::source_location` | `__cpp_lib_source_location` |
+| `KCENON_HAS_JTHREAD` | `std::jthread` | `__cpp_lib_jthread` |
+| `KCENON_HAS_FORMAT` | `std::format` | `__cpp_lib_format` |
+| `KCENON_HAS_CONCEPTS` | C++20 concepts | `__cpp_concepts` |
+| `KCENON_HAS_RANGES` | C++20 ranges | `__cpp_lib_ranges` |
+| `KCENON_HAS_COROUTINES` | C++20 coroutines | `__cpp_impl_coroutine` |
+| `KCENON_HAS_EXPECTED` | `std::expected` (C++23) | `__cpp_lib_expected` |
+
+**System Integration Macros:**
+
+| Macro | Description |
+|-------|-------------|
+| `KCENON_WITH_THREAD_SYSTEM` | thread_system integration enabled |
+| `KCENON_WITH_LOGGER_SYSTEM` | logger_system integration enabled |
+| `KCENON_WITH_MONITORING_SYSTEM` | monitoring_system integration enabled |
+| `KCENON_WITH_CONTAINER_SYSTEM` | container_system integration enabled |
+| `KCENON_WITH_NETWORK_SYSTEM` | network_system integration enabled |
+| `KCENON_WITH_DATABASE_SYSTEM` | database_system integration enabled |
+| `KCENON_WITH_MESSAGING_SYSTEM` | messaging_system integration enabled |
+
+**Usage Example:**
+
+```cpp
+#include <kcenon/common/config/feature_flags.h>
+
+#if KCENON_HAS_SOURCE_LOCATION
+    #include <source_location>
+    using location_type = std::source_location;
+#else
+    using location_type = kcenon::common::source_location;
+#endif
+
+#if KCENON_HAS_JTHREAD
+    std::jthread worker([](std::stop_token st) { /* ... */ });
+#else
+    std::thread worker([]{ /* ... */ });
+#endif
+```
+
+**CMake Integration:**
+
+The `features.cmake` module provides functions for configuring feature flags:
+
+```cmake
+include(cmake/features.cmake)
+
+# Configure feature flags for a target
+kcenon_configure_features(my_target
+    THREAD_SYSTEM ON
+    LOGGER_SYSTEM ON
+    LEGACY_ALIASES ON
+)
+
+# Detect features at configure time
+kcenon_detect_features()
+message(STATUS "jthread available: ${KCENON_DETECTED_JTHREAD}")
+```
+
+**Legacy Alias Support:**
+
+For backward compatibility, legacy macro names are available when `KCENON_ENABLE_LEGACY_ALIASES=1` (default):
+
+| Legacy Macro | New Macro |
+|--------------|-----------|
+| `COMMON_HAS_SOURCE_LOCATION` | `KCENON_HAS_SOURCE_LOCATION` |
+| `USE_THREAD_SYSTEM` | `KCENON_WITH_THREAD_SYSTEM` |
+| `BUILD_WITH_THREAD_SYSTEM` | `KCENON_WITH_THREAD_SYSTEM` |
+| `BUILD_WITH_LOGGER` | `KCENON_WITH_LOGGER_SYSTEM` |
+| `BUILD_WITH_MONITORING` | `KCENON_WITH_MONITORING_SYSTEM` |
+
+> **Note:** Legacy aliases are deprecated and will be removed in v1.0.0. Migrate to KCENON_* macros.
+
 ### Ecosystem Integration Flags
 
 For flexible integration with ecosystem modules:
 
 **Available Flags:**
 
-- `BUILD_WITH_THREAD_SYSTEM`: Enable thread_system integration
-- `BUILD_WITH_CONTAINER_SYSTEM`: Enable container_system integration
-- `BUILD_WITH_LOGGER_SYSTEM`: Enable logger_system integration
-- `BUILD_WITH_MONITORING_SYSTEM`: Enable monitoring_system integration
-- `BUILD_WITH_NETWORK_SYSTEM`: Enable network_system integration
-- `DATABASE_USE_COMMON_SYSTEM`: Enable Result<T> wrappers in database_system
+- `KCENON_WITH_THREAD_SYSTEM`: Enable thread_system integration
+- `KCENON_WITH_CONTAINER_SYSTEM`: Enable container_system integration
+- `KCENON_WITH_LOGGER_SYSTEM`: Enable logger_system integration
+- `KCENON_WITH_MONITORING_SYSTEM`: Enable monitoring_system integration
+- `KCENON_WITH_NETWORK_SYSTEM`: Enable network_system integration
+- `KCENON_WITH_DATABASE_SYSTEM`: Enable database_system integration
 
 **CMake Usage:**
 
 ```cmake
-# Enable integrations
-set(BUILD_WITH_THREAD_SYSTEM ON)
-set(BUILD_WITH_LOGGER_SYSTEM ON)
-set(DATABASE_USE_COMMON_SYSTEM ON)
+include(cmake/features.cmake)
 
-# Add modules
-add_subdirectory(common_system)
-add_subdirectory(thread_system)
-add_subdirectory(logger_system)
-add_subdirectory(database_system)
+# Configure feature flags
+kcenon_configure_features(my_target
+    THREAD_SYSTEM ON
+    LOGGER_SYSTEM ON
+    DATABASE_SYSTEM ON
+)
+
+# Or use traditional compile definitions
+target_compile_definitions(my_target PUBLIC
+    KCENON_WITH_THREAD_SYSTEM=1
+    KCENON_WITH_LOGGER_SYSTEM=1
+)
 
 # Link to your target
 target_link_libraries(my_app

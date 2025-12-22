@@ -2,6 +2,9 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/common_systemTargets.cmake")
 
+# Include feature flags configuration module
+include("${CMAKE_CURRENT_LIST_DIR}/features.cmake")
+
 # Provide old-style variables for compatibility
 set(common_system_FOUND TRUE)
 set(common_system_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@")
