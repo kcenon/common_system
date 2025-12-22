@@ -1,5 +1,14 @@
 # Central Feature Configuration for System Modules
 # This file centralizes all build options and feature flags for better maintainability
+#
+# This file works alongside the C++ feature detection headers:
+# - feature_flags.h       : Main entry point for C++ code
+# - feature_flags_core.h  : Preprocessor helpers and compiler detection
+# - feature_detection.h   : C++ standard library feature detection
+# - feature_system_deps.h : System module integration flags
+#
+# CMake options defined here are propagated to C++ code via compile definitions.
+# The C++ headers then use these definitions to set KCENON_* macros.
 
 # Thread System Integration Options
 option(ENABLE_THREAD_INTEGRATION
@@ -162,4 +171,175 @@ function(setup_sanitizers TARGET_NAME)
         target_compile_options(${TARGET_NAME} PRIVATE -fsanitize=undefined)
         target_link_options(${TARGET_NAME} PRIVATE -fsanitize=undefined)
     endif()
+endfunction()
+
+#==============================================================================
+# KCENON_* Feature Flag Export Functions
+#==============================================================================
+
+# Export KCENON_* compile definitions to a target
+# This function propagates all enabled integration flags as KCENON_* macros
+# for use in C++ code alongside the feature detection headers.
+#
+# Usage:
+#   export_kcenon_features(my_target)
+#   export_kcenon_features(my_target PUBLIC)  # For interface libraries
+#
+function(export_kcenon_features TARGET_NAME)
+    set(VISIBILITY PRIVATE)
+    if(ARGC GREATER 1)
+        set(VISIBILITY ${ARGV1})
+    endif()
+
+    # System integration flags
+    if(ENABLE_THREAD_INTEGRATION)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_WITH_THREAD_SYSTEM=1
+            ENABLE_THREAD_INTEGRATION=1)
+    endif()
+
+    if(ENABLE_LOGGER_INTEGRATION)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_WITH_LOGGER_SYSTEM=1
+            ENABLE_LOGGER_INTEGRATION=1)
+    endif()
+
+    if(ENABLE_MONITORING_INTEGRATION)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_WITH_MONITORING_SYSTEM=1
+            ENABLE_MONITORING_INTEGRATION=1)
+    endif()
+
+    if(ENABLE_CONTAINER_INTEGRATION)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_WITH_CONTAINER_SYSTEM=1
+            ENABLE_CONTAINER_INTEGRATION=1)
+    endif()
+
+    # Database backend flags
+    if(ENABLE_DATABASE_MYSQL)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_DATABASE_MYSQL=1
+            ENABLE_DATABASE_MYSQL=1)
+    endif()
+
+    if(ENABLE_DATABASE_POSTGRESQL)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_DATABASE_POSTGRESQL=1
+            ENABLE_DATABASE_POSTGRESQL=1)
+    endif()
+
+    if(ENABLE_DATABASE_SQLITE)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_DATABASE_SQLITE=1
+            ENABLE_DATABASE_SQLITE=1)
+    endif()
+
+    if(ENABLE_DATABASE_MONGODB)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_DATABASE_MONGODB=1
+            ENABLE_DATABASE_MONGODB=1)
+    endif()
+
+    if(ENABLE_DATABASE_REDIS)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_DATABASE_REDIS=1
+            ENABLE_DATABASE_REDIS=1)
+    endif()
+
+    # Network flags
+    if(ENABLE_NETWORK_SSL)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_NETWORK_SSL=1
+            ENABLE_NETWORK_SSL=1)
+    endif()
+
+    if(ENABLE_NETWORK_COMPRESSION)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_NETWORK_COMPRESSION=1
+            ENABLE_NETWORK_COMPRESSION=1)
+    endif()
+
+    # Build configuration flags
+    if(ENABLE_TESTING)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_TESTING=1)
+    endif()
+
+    if(ENABLE_BENCHMARKS)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_BENCHMARKS=1)
+    endif()
+
+    if(ENABLE_EXAMPLES)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_EXAMPLES=1)
+    endif()
+
+    # Sanitizer flags
+    if(ENABLE_ASAN)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_ASAN=1)
+    endif()
+
+    if(ENABLE_TSAN)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_TSAN=1)
+    endif()
+
+    if(ENABLE_UBSAN)
+        target_compile_definitions(${TARGET_NAME} ${VISIBILITY}
+            KCENON_ENABLE_UBSAN=1)
+    endif()
+endfunction()
+
+# Convenience function to print which KCENON_* flags would be exported
+function(print_kcenon_features)
+    message(STATUS "")
+    message(STATUS "=== KCENON Feature Flags ===")
+
+    # System integration
+    message(STATUS "System Integration:")
+    if(ENABLE_THREAD_INTEGRATION)
+        message(STATUS "  KCENON_WITH_THREAD_SYSTEM=1")
+    endif()
+    if(ENABLE_LOGGER_INTEGRATION)
+        message(STATUS "  KCENON_WITH_LOGGER_SYSTEM=1")
+    endif()
+    if(ENABLE_MONITORING_INTEGRATION)
+        message(STATUS "  KCENON_WITH_MONITORING_SYSTEM=1")
+    endif()
+    if(ENABLE_CONTAINER_INTEGRATION)
+        message(STATUS "  KCENON_WITH_CONTAINER_SYSTEM=1")
+    endif()
+
+    # Database
+    message(STATUS "Database Backends:")
+    if(ENABLE_DATABASE_MYSQL)
+        message(STATUS "  KCENON_DATABASE_MYSQL=1")
+    endif()
+    if(ENABLE_DATABASE_POSTGRESQL)
+        message(STATUS "  KCENON_DATABASE_POSTGRESQL=1")
+    endif()
+    if(ENABLE_DATABASE_SQLITE)
+        message(STATUS "  KCENON_DATABASE_SQLITE=1")
+    endif()
+    if(ENABLE_DATABASE_MONGODB)
+        message(STATUS "  KCENON_DATABASE_MONGODB=1")
+    endif()
+    if(ENABLE_DATABASE_REDIS)
+        message(STATUS "  KCENON_DATABASE_REDIS=1")
+    endif()
+
+    # Network
+    message(STATUS "Network Features:")
+    if(ENABLE_NETWORK_SSL)
+        message(STATUS "  KCENON_NETWORK_SSL=1")
+    endif()
+    if(ENABLE_NETWORK_COMPRESSION)
+        message(STATUS "  KCENON_NETWORK_COMPRESSION=1")
+    endif()
+
+    message(STATUS "============================")
+    message(STATUS "")
 endfunction()

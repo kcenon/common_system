@@ -19,6 +19,20 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
 
 ### Added
+- **통합 Feature Flag 헤더** (#224)
+  - 모든 feature 감지를 위한 메인 진입점인 새로운 `feature_flags.h`
+  - `feature_flags_core.h`: 전처리기 헬퍼, 컴파일러/플랫폼 감지 (KCENON_COMPILER_*, KCENON_PLATFORM_*, KCENON_HAS_CPP*)
+  - `feature_detection.h`: C++ 표준 라이브러리 기능 감지
+    - KCENON_HAS_SOURCE_LOCATION (C++20 std::source_location)
+    - KCENON_HAS_JTHREAD / KCENON_HAS_STOP_TOKEN (C++20 협력적 스레딩)
+    - KCENON_HAS_FORMAT, KCENON_HAS_SPAN, KCENON_HAS_RANGES (C++20)
+    - KCENON_HAS_EXPECTED, KCENON_HAS_STACKTRACE (C++23)
+    - KCENON_HAS_CONCEPTS, KCENON_HAS_COROUTINES
+  - `feature_system_deps.h`: 시스템 모듈 통합 플래그 (KCENON_WITH_THREAD_SYSTEM, KCENON_WITH_LOGGER_SYSTEM 등)
+  - KCENON_ENABLE_LEGACY_ALIASES를 통한 레거시 별칭 지원 (기본값: 활성화)
+  - `features.cmake`에 `export_kcenon_features()` 함수 추가
+  - 통합 feature 감지를 사용하도록 `source_location.h` 리팩토링
+
 - **다운스트림 시스템 Deprecation 알림** (#220)
   - 모든 의존 시스템에 마이그레이션 추적 이슈 생성
   - thread_system, logger_system, monitoring_system, pacs_system, database_system에 알림 완료
