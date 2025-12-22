@@ -216,17 +216,17 @@ make 2>&1 | grep -i deprecated
 
 ---
 
-## Downstream System Notifications
+## Downstream System Migration Status
 
-All dependent systems have been notified about the deprecated APIs and upcoming v3.0.0 removal:
+All dependent systems have been notified and have completed migration to the new APIs:
 
-| System | Repository | Notification Issue |
-|--------|------------|-------------------|
-| thread_system | [kcenon/thread_system](https://github.com/kcenon/thread_system) | [#331](https://github.com/kcenon/thread_system/issues/331) |
-| logger_system | [kcenon/logger_system](https://github.com/kcenon/logger_system) | [#248](https://github.com/kcenon/logger_system/issues/248) |
-| monitoring_system | [kcenon/monitoring_system](https://github.com/kcenon/monitoring_system) | [#269](https://github.com/kcenon/monitoring_system/issues/269) |
-| pacs_system | [kcenon/pacs_system](https://github.com/kcenon/pacs_system) | [#399](https://github.com/kcenon/pacs_system/issues/399) |
-| database_system | [kcenon/database_system](https://github.com/kcenon/database_system) | [#276](https://github.com/kcenon/database_system/issues/276) |
+| System | Repository | Notification Issue | Migration Status |
+|--------|------------|-------------------|------------------|
+| thread_system | [kcenon/thread_system](https://github.com/kcenon/thread_system) | [#331](https://github.com/kcenon/thread_system/issues/331) | ✅ Completed |
+| logger_system | [kcenon/logger_system](https://github.com/kcenon/logger_system) | [#248](https://github.com/kcenon/logger_system/issues/248) | ✅ Completed |
+| monitoring_system | [kcenon/monitoring_system](https://github.com/kcenon/monitoring_system) | [#269](https://github.com/kcenon/monitoring_system/issues/269) | ✅ Completed |
+| pacs_system | [kcenon/pacs_system](https://github.com/kcenon/pacs_system) | [#399](https://github.com/kcenon/pacs_system/issues/399) | ✅ Completed |
+| database_system | [kcenon/database_system](https://github.com/kcenon/database_system) | [#276](https://github.com/kcenon/database_system/issues/276) | ✅ Completed |
 
 For tracking the overall deprecation plan, see [#213](https://github.com/kcenon/common_system/issues/213).
 
