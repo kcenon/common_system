@@ -9,6 +9,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Export compile commands for IDE support
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Include feature flags configuration module
+include(cmake/features.cmake)
+
 # Options
 option(COMMON_BUILD_TESTS "Build unit tests for common_system" ON)
 option(COMMON_BUILD_INTEGRATION_TESTS "Build integration tests for common_system" ON)
@@ -150,6 +153,7 @@ write_basic_package_version_file(
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/features.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
 )
 
