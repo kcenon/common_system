@@ -281,15 +281,9 @@ public:
 virtual auto log(log_level level, const std::string& message) -> VoidResult = 0;
 
 // Log with source_location (C++20 - PREFERRED, Issue #177)
-// Default implementation delegates to legacy method for backward compatibility
+// Default implementation delegates to simple log() method
 virtual auto log(log_level level, std::string_view message,
                  const source_location& loc = source_location::current()) -> VoidResult;
-
-// Legacy method with file/line/function parameters (DEPRECATED)
-// Use the source_location overload instead
-[[deprecated("Use log(log_level, std::string_view, const source_location&) instead")]]
-virtual auto log(log_level level, const std::string& message,
-                 const std::string& file, int line, const std::string& function) -> VoidResult = 0;
 
 // Log structured entry
 virtual auto log(const log_entry& entry) -> VoidResult = 0;
@@ -337,15 +331,12 @@ struct log_entry {
 
 **Usage Example**:
 ```cpp
-// New API (Issue #177) - source_location automatically captured
+// source_location automatically captured (Issue #177)
 logger->log(log_level::info, "Operation completed");
 
 // Using log_entry factory method
 auto entry = log_entry::create(log_level::warning, "Low memory");
 logger->log(entry);
-
-// Legacy API (deprecated but still functional)
-// logger->log(log_level::info, "message", __FILE__, __LINE__, __FUNCTION__);
 ```
 
 ---

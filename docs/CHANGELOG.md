@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking Changes
+- **Removed deprecated file/line/function log() method from ILogger interface** (#217)
+  - Removed: `virtual VoidResult log(log_level, const std::string&, const std::string& file, int line, const std::string& function)`
+  - Use `log(log_level, std::string_view, const source_location&)` instead
+  - Custom ILogger implementations must remove this method override
+  - See `docs/DEPRECATION.md` for migration guide
+
 ### Added
 - **Downstream System Deprecation Notifications** (#220)
   - Created migration tracking issues in all dependent systems

@@ -11,6 +11,13 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 
 ## [Unreleased]
 
+### Breaking Changes
+- **ILogger 인터페이스에서 deprecated file/line/function log() 메서드 제거** (#217)
+  - 제거됨: `virtual VoidResult log(log_level, const std::string&, const std::string& file, int line, const std::string& function)`
+  - 대신 `log(log_level, std::string_view, const source_location&)` 사용
+  - 커스텀 ILogger 구현은 이 메서드 오버라이드를 제거해야 함
+  - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
+
 ### Added
 - **다운스트림 시스템 Deprecation 알림** (#220)
   - 모든 의존 시스템에 마이그레이션 추적 이슈 생성
