@@ -37,6 +37,9 @@ using namespace kcenon::common::bootstrap;
 // Test Logger Implementation
 // ============================================================================
 
+/**
+ * @note Issue #217: Removed deprecated file/line/function method in v3.0.0.
+ */
 class SecurityTestLogger : public ILogger {
 public:
     SecurityTestLogger() = default;
@@ -51,28 +54,6 @@ public:
                    const source_location& /*loc*/ = source_location::current()) override {
         return log(level, std::string(message));
     }
-
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif defined(_MSC_VER)
-    #pragma warning(push)
-    #pragma warning(disable: 4996)
-#endif
-
-    VoidResult log(log_level level,
-                   const std::string& message,
-                   const std::string& /*file*/,
-                   int /*line*/,
-                   const std::string& /*function*/) override {
-        return log(level, message);
-    }
-
-#if defined(__GNUC__) || defined(__clang__)
-    #pragma GCC diagnostic pop
-#elif defined(_MSC_VER)
-    #pragma warning(pop)
-#endif
 
     VoidResult log(const log_entry& entry) override {
         return log(entry.level, entry.message);

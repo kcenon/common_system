@@ -34,6 +34,8 @@ using namespace kcenon::common::interfaces;
 
 /**
  * @brief Test logger implementation that tracks log messages.
+ *
+ * @note Issue #217: Removed deprecated file/line/function method in v3.0.0.
  */
 class TestLogger : public ILogger {
 public:
@@ -47,11 +49,9 @@ public:
     }
 
     VoidResult log(log_level level,
-                   const std::string& message,
-                   const std::string& /*file*/,
-                   int /*line*/,
-                   const std::string& /*function*/) override {
-        return log(level, message);
+                   std::string_view message,
+                   const source_location& /*loc*/ = source_location::current()) override {
+        return log(level, std::string(message));
     }
 
     VoidResult log(const log_entry& entry) override {
