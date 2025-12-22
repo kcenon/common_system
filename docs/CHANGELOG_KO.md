@@ -12,6 +12,12 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 ## [Unreleased]
 
 ### Added
+- **다운스트림 시스템 Deprecation 알림** (#220)
+  - 모든 의존 시스템에 마이그레이션 추적 이슈 생성
+  - thread_system, logger_system, monitoring_system, pacs_system, database_system에 알림 완료
+  - 각 이슈에 마이그레이션 가이드 링크 및 v3.0.0 제거 타임라인 포함
+  - `docs/DEPRECATION.md`에 알림 상태 테이블 업데이트
+
 - **Deprecated API 문서화** (#213)
   - 모든 deprecated API를 문서화한 새로운 `docs/DEPRECATION.md`
   - Before/After 예제가 포함된 마이그레이션 가이드
