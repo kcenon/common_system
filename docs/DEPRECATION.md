@@ -22,7 +22,86 @@ The Common System library follows semantic versioning. Deprecated APIs are marke
 
 ## Currently Deprecated APIs
 
-No APIs are currently deprecated.
+### 1. Legacy Feature Flag Macros
+
+**File:** `include/kcenon/common/config/feature_flags.h`
+
+**Deprecated in:** v0.2.0
+
+**Planned Removal:** v1.0.0
+
+**Description:**
+Legacy macro names for feature detection and system integration have been replaced with the unified KCENON_* naming convention.
+
+**Deprecated Macros:**
+
+| Legacy Macro | Replacement |
+|--------------|-------------|
+| `COMMON_HAS_SOURCE_LOCATION` | `KCENON_HAS_SOURCE_LOCATION` |
+| `KCENON_HAS_STD_SOURCE_LOCATION` | `KCENON_HAS_SOURCE_LOCATION` |
+| `USE_THREAD_SYSTEM` | `KCENON_WITH_THREAD_SYSTEM` |
+| `BUILD_WITH_THREAD_SYSTEM` | `KCENON_WITH_THREAD_SYSTEM` |
+| `USE_LOGGER_SYSTEM` | `KCENON_WITH_LOGGER_SYSTEM` |
+| `BUILD_WITH_LOGGER` | `KCENON_WITH_LOGGER_SYSTEM` |
+| `USE_MONITORING_SYSTEM` | `KCENON_WITH_MONITORING_SYSTEM` |
+| `BUILD_WITH_MONITORING` | `KCENON_WITH_MONITORING_SYSTEM` |
+| `USE_CONTAINER_SYSTEM` | `KCENON_WITH_CONTAINER_SYSTEM` |
+| `BUILD_WITH_CONTAINER` | `KCENON_WITH_CONTAINER_SYSTEM` |
+| `WITH_*_SYSTEM` | `KCENON_WITH_*_SYSTEM` |
+
+**Reason for Deprecation:**
+- Standardize on KCENON_ prefix for all macros
+- Eliminate naming drift across ecosystem modules
+- Provide single source of truth for feature detection
+
+**Migration Guide:**
+
+<details>
+<summary>Before (Deprecated)</summary>
+
+```cpp
+#if COMMON_HAS_SOURCE_LOCATION
+    #include <source_location>
+#endif
+
+#ifdef USE_THREAD_SYSTEM
+    // thread system code
+#endif
+```
+</details>
+
+<details>
+<summary>After (Current)</summary>
+
+```cpp
+#include <kcenon/common/config/feature_flags.h>
+
+#if KCENON_HAS_SOURCE_LOCATION
+    #include <source_location>
+#endif
+
+#if KCENON_WITH_THREAD_SYSTEM
+    // thread system code
+#endif
+```
+</details>
+
+**Disabling Legacy Aliases:**
+
+To disable legacy aliases and ensure your code uses only the new KCENON_* macros:
+
+```cpp
+#define KCENON_ENABLE_LEGACY_ALIASES 0
+#include <kcenon/common/config/feature_flags.h>
+```
+
+Or via CMake:
+
+```cmake
+target_compile_definitions(my_target PUBLIC KCENON_ENABLE_LEGACY_ALIASES=0)
+```
+
+---
 
 ---
 
