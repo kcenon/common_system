@@ -245,7 +245,7 @@ public:
      * @throws std::runtime_error if result contains error
      * @note When source_location is available, error messages include file/line info
      */
-#if COMMON_HAS_SOURCE_LOCATION
+#if KCENON_HAS_SOURCE_LOCATION
     const T& unwrap(
         source_location loc = source_location::current()
     ) const {
@@ -279,7 +279,7 @@ public:
      * @throws std::runtime_error if result contains error
      * @note When source_location is available, error messages include file/line info
      */
-#if COMMON_HAS_SOURCE_LOCATION
+#if KCENON_HAS_SOURCE_LOCATION
     T& unwrap(
         source_location loc = source_location::current()
     ) {
@@ -434,7 +434,7 @@ public:
      * @throws std::runtime_error if optional is None with detailed location info
      * @note When source_location is available, error messages include file/line info
      */
-#if COMMON_HAS_SOURCE_LOCATION
+#if KCENON_HAS_SOURCE_LOCATION
     const T& unwrap(
         source_location loc = source_location::current()
     ) const {
