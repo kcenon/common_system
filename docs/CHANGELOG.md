@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **KCENON_WITH_COMMON_SYSTEM Flag** (#230)
+  - Added `KCENON_WITH_COMMON_SYSTEM=1` to `feature_system_deps.h`
+  - Auto-defined when `feature_flags.h` is included
+  - Exported via CMake compile definitions for dependent projects
+  - Prevents ABI incompatibility in downstream projects (e.g., network_system)
+  - Added `COMMON_SYSTEM` option to `kcenon_configure_features()` function
+
 - **Unified Feature Flag Headers** (#224)
   - New `feature_flags.h` as main entry point for all feature detection
   - `feature_flags_core.h`: Preprocessor helpers, compiler/platform detection (KCENON_COMPILER_*, KCENON_PLATFORM_*, KCENON_HAS_CPP*)

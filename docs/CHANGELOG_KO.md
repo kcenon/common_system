@@ -19,6 +19,13 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
 
 ### Added
+- **KCENON_WITH_COMMON_SYSTEM 플래그** (#230)
+  - `feature_system_deps.h`에 `KCENON_WITH_COMMON_SYSTEM=1` 추가
+  - `feature_flags.h` 포함 시 자동 정의
+  - CMake 컴파일 정의를 통해 종속 프로젝트에 전파
+  - 다운스트림 프로젝트(예: network_system)에서 ABI 비호환성 방지
+  - `kcenon_configure_features()` 함수에 `COMMON_SYSTEM` 옵션 추가
+
 - **통합 Feature Flag 헤더** (#224)
   - 모든 feature 감지를 위한 메인 진입점인 새로운 `feature_flags.h`
   - `feature_flags_core.h`: 전처리기 헬퍼, 컴파일러/플랫폼 감지 (KCENON_COMPILER_*, KCENON_PLATFORM_*, KCENON_HAS_CPP*)

@@ -523,6 +523,7 @@ The common_system provides a unified feature flag system for detecting C++ featu
 
 | Macro | Description |
 |-------|-------------|
+| `KCENON_WITH_COMMON_SYSTEM` | common_system types available (auto-defined when header is included) |
 | `KCENON_WITH_THREAD_SYSTEM` | thread_system integration enabled |
 | `KCENON_WITH_LOGGER_SYSTEM` | logger_system integration enabled |
 | `KCENON_WITH_MONITORING_SYSTEM` | monitoring_system integration enabled |
@@ -589,6 +590,7 @@ For flexible integration with ecosystem modules:
 
 **Available Flags:**
 
+- `KCENON_WITH_COMMON_SYSTEM`: Indicates common_system types are available (auto-set)
 - `KCENON_WITH_THREAD_SYSTEM`: Enable thread_system integration
 - `KCENON_WITH_CONTAINER_SYSTEM`: Enable container_system integration
 - `KCENON_WITH_LOGGER_SYSTEM`: Enable logger_system integration
