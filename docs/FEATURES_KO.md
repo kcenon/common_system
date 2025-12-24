@@ -411,26 +411,31 @@ if (!result) {
 
 **사용 가능한 플래그:**
 
-- `BUILD_WITH_THREAD_SYSTEM`: thread_system 통합 활성화
-- `BUILD_WITH_CONTAINER_SYSTEM`: container_system 통합 활성화
-- `BUILD_WITH_LOGGER_SYSTEM`: logger_system 통합 활성화
-- `BUILD_WITH_MONITORING_SYSTEM`: monitoring_system 통합 활성화
-- `BUILD_WITH_NETWORK_SYSTEM`: network_system 통합 활성화
-- `DATABASE_USE_COMMON_SYSTEM`: database_system에서 Result<T> 래퍼 활성화
+- `KCENON_WITH_COMMON_SYSTEM`: common_system 타입 사용 가능 (헤더 포함 시 자동 설정)
+- `KCENON_WITH_THREAD_SYSTEM`: thread_system 통합 활성화
+- `KCENON_WITH_CONTAINER_SYSTEM`: container_system 통합 활성화
+- `KCENON_WITH_LOGGER_SYSTEM`: logger_system 통합 활성화
+- `KCENON_WITH_MONITORING_SYSTEM`: monitoring_system 통합 활성화
+- `KCENON_WITH_NETWORK_SYSTEM`: network_system 통합 활성화
+- `KCENON_WITH_DATABASE_SYSTEM`: database_system 통합 활성화
 
 **CMake 사용:**
 
 ```cmake
-# 통합 활성화
-set(BUILD_WITH_THREAD_SYSTEM ON)
-set(BUILD_WITH_LOGGER_SYSTEM ON)
-set(DATABASE_USE_COMMON_SYSTEM ON)
+include(cmake/features.cmake)
 
-# 모듈 추가
-add_subdirectory(common_system)
-add_subdirectory(thread_system)
-add_subdirectory(logger_system)
-add_subdirectory(database_system)
+# 기능 플래그 설정
+kcenon_configure_features(my_target
+    THREAD_SYSTEM ON
+    LOGGER_SYSTEM ON
+    DATABASE_SYSTEM ON
+)
+
+# 또는 전통적인 컴파일 정의 사용
+target_compile_definitions(my_target PUBLIC
+    KCENON_WITH_THREAD_SYSTEM=1
+    KCENON_WITH_LOGGER_SYSTEM=1
+)
 
 # 타겟에 링크
 target_link_libraries(my_app

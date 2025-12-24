@@ -75,8 +75,11 @@ target_include_directories(common_system INTERFACE
 target_compile_features(common_system INTERFACE cxx_std_20)
 
 # Define ABI version for event bus
+# Define KCENON_WITH_COMMON_SYSTEM to indicate common_system types are available
+# This prevents ABI incompatibility in downstream projects
 target_compile_definitions(common_system INTERFACE
     EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
+    KCENON_WITH_COMMON_SYSTEM=1
 )
 
 # Optional: YAML configuration support
@@ -108,6 +111,7 @@ if(NOT COMMON_HEADER_ONLY)
 
     target_compile_definitions(common_system_static PUBLIC
         EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
+        KCENON_WITH_COMMON_SYSTEM=1
     )
 endif()
 
