@@ -14,12 +14,14 @@ Usage:
 
     # Configure feature flags for a target
     kcenon_configure_features(my_target
+        COMMON_SYSTEM ON
         THREAD_SYSTEM ON
         LOGGER_SYSTEM ON
         LEGACY_ALIASES ON
     )
 
 Available options:
+    COMMON_SYSTEM     - Enable KCENON_WITH_COMMON_SYSTEM (auto-set when linking common_system)
     THREAD_SYSTEM     - Enable KCENON_WITH_THREAD_SYSTEM
     LOGGER_SYSTEM     - Enable KCENON_WITH_LOGGER_SYSTEM
     MONITORING_SYSTEM - Enable KCENON_WITH_MONITORING_SYSTEM
@@ -36,6 +38,7 @@ include_guard(GLOBAL)
 
 #[=============================================================================[
 kcenon_configure_features(<target>
+    [COMMON_SYSTEM <bool>]
     [THREAD_SYSTEM <bool>]
     [LOGGER_SYSTEM <bool>]
     [MONITORING_SYSTEM <bool>]
@@ -52,13 +55,22 @@ Configure KCENON feature flags for the specified target.
 function(kcenon_configure_features TARGET)
     cmake_parse_arguments(PARSE_ARGV 1 ARG
         ""
-        "THREAD_SYSTEM;LOGGER_SYSTEM;MONITORING_SYSTEM;CONTAINER_SYSTEM;NETWORK_SYSTEM;DATABASE_SYSTEM;MESSAGING_SYSTEM;LEGACY_ALIASES;PRINT_SUMMARY"
+        "COMMON_SYSTEM;THREAD_SYSTEM;LOGGER_SYSTEM;MONITORING_SYSTEM;CONTAINER_SYSTEM;NETWORK_SYSTEM;DATABASE_SYSTEM;MESSAGING_SYSTEM;LEGACY_ALIASES;PRINT_SUMMARY"
         ""
     )
 
     # Validate target exists
     if(NOT TARGET ${TARGET})
         message(FATAL_ERROR "kcenon_configure_features: Target '${TARGET}' does not exist")
+    endif()
+
+    # Common system flag (usually auto-set by linking common_system)
+    if(DEFINED ARG_COMMON_SYSTEM)
+        if(ARG_COMMON_SYSTEM)
+            target_compile_definitions(${TARGET} PUBLIC KCENON_WITH_COMMON_SYSTEM=1)
+        else()
+            target_compile_definitions(${TARGET} PUBLIC KCENON_WITH_COMMON_SYSTEM=0)
+        endif()
     endif()
 
     # System integration flags

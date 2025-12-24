@@ -28,6 +28,38 @@
 #include "feature_flags_core.h"
 
 //==============================================================================
+// Common System Availability
+//==============================================================================
+
+/**
+ * @brief Indicates that common_system types are available
+ *
+ * When feature_flags.h is included, this macro is automatically defined to 1.
+ * Downstream projects (e.g., network_system) can use this to detect whether
+ * common_system types like kcenon::common::Result<T> are available.
+ *
+ * This prevents ABI incompatibility issues where:
+ * - Project A includes common_system headers and expects kcenon::common::Result<T>
+ * - Project B is built without the flag and uses a local fallback type
+ * - Linking causes symbol mismatches or heap corruption
+ *
+ * @note This flag is always set to 1 when feature_flags.h is included.
+ *       It is not configurable since including this header implies
+ *       common_system is available.
+ *
+ * @code
+ * #ifdef KCENON_WITH_COMMON_SYSTEM
+ *     using result_type = kcenon::common::Result<T>;
+ * #else
+ *     using result_type = local::Result<T>;  // fallback
+ * #endif
+ * @endcode
+ */
+#ifndef KCENON_WITH_COMMON_SYSTEM
+    #define KCENON_WITH_COMMON_SYSTEM 1
+#endif
+
+//==============================================================================
 // Thread System Integration
 //==============================================================================
 
