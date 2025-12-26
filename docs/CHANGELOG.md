@@ -19,6 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **Unified Transport Interfaces** (#233)
+  - New `include/kcenon/common/interfaces/transport/` directory with transport abstractions
+  - `IHttpClient`: HTTP client interface for dependency injection
+    - `http_request`/`http_response` structs with builder pattern support
+    - Status helpers: `is_success()`, `is_client_error()`, `is_server_error()`
+    - `null_http_client`: No-op implementation for disabled transport
+  - `IUdpClient`: UDP client interface for metric reporting and low-latency messaging
+    - Connected mode (`connect()` + `send()`) with kernel routing optimization
+    - Connectionless mode (`send_to()`) for ad-hoc packet delivery
+    - Statistics tracking: `packets_sent`, `bytes_sent`, `send_failures`
+    - String convenience methods for easy metric string transmission
+    - `null_udp_client`: No-op implementation for disabled transport
+  - `transport.h`: Umbrella header for all transport interfaces
+  - Header-only design with no runtime dependencies
+  - Comprehensive unit tests (26 tests) for interface concepts
+
 - **KCENON_WITH_COMMON_SYSTEM Flag** (#230)
   - Added `KCENON_WITH_COMMON_SYSTEM=1` to `feature_system_deps.h`
   - Auto-defined when `feature_flags.h` is included

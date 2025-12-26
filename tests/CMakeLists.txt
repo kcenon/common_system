@@ -302,6 +302,27 @@ set_tests_properties(common_security_controls_test PROPERTIES
     LABELS "unit;security"
 )
 
+# Transport interface tests (Issue #233)
+add_executable(common_transport_interface_test
+    transport_interface_test.cpp
+)
+
+target_link_libraries(common_transport_interface_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_transport_interface_test PRIVATE cxx_std_20)
+
+add_test(NAME common_transport_interface_test COMMAND common_transport_interface_test)
+
+set_tests_properties(common_transport_interface_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;interfaces;transport"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)

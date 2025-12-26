@@ -19,6 +19,22 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
 
 ### Added
+- **통합 Transport 인터페이스** (#233)
+  - transport 추상화를 위한 새로운 `include/kcenon/common/interfaces/transport/` 디렉토리
+  - `IHttpClient`: 의존성 주입을 위한 HTTP 클라이언트 인터페이스
+    - 빌더 패턴을 지원하는 `http_request`/`http_response` 구조체
+    - 상태 헬퍼: `is_success()`, `is_client_error()`, `is_server_error()`
+    - `null_http_client`: 비활성화된 transport를 위한 No-op 구현
+  - `IUdpClient`: 메트릭 리포팅 및 저지연 메시징을 위한 UDP 클라이언트 인터페이스
+    - 연결 모드 (`connect()` + `send()`): 커널 라우팅 최적화
+    - 비연결 모드 (`send_to()`): ad-hoc 패킷 전송
+    - 통계 추적: `packets_sent`, `bytes_sent`, `send_failures`
+    - 메트릭 문자열 전송을 위한 String 편의 메서드
+    - `null_udp_client`: 비활성화된 transport를 위한 No-op 구현
+  - `transport.h`: 모든 transport 인터페이스를 위한 Umbrella 헤더
+  - 런타임 의존성 없는 헤더 전용 설계
+  - 인터페이스 개념을 위한 포괄적인 단위 테스트 (26개 테스트)
+
 - **KCENON_WITH_COMMON_SYSTEM 플래그** (#230)
   - `feature_system_deps.h`에 `KCENON_WITH_COMMON_SYSTEM=1` 추가
   - `feature_flags.h` 포함 시 자동 정의
