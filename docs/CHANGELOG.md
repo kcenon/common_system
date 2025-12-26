@@ -19,6 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **Unified Metric Collection Interface** (#234)
+  - New `include/kcenon/common/interfaces/monitoring/` directory with metric abstractions
+  - `IMetricCollector`: Interface for cross-module metric reporting without direct monitoring_system dependencies
+    - `increment()`: Counter metrics (monotonically increasing values)
+    - `gauge()`: Gauge metrics (values that can go up or down)
+    - `histogram()`: Histogram metrics (distribution of values)
+    - `timing()`: Timing metrics (duration measurements)
+  - `scoped_timer`: RAII helper for automatic timing measurements
+    - Measures elapsed time from construction to destruction
+    - Non-copyable and non-movable to prevent accidental double-reporting
+    - `elapsed()` method for checking time while timer is running
+  - `null_metric_collector`: No-op implementation for disabled metrics
+  - `IMetricCollectorProvider`: Interface for dependency injection support
+  - `monitoring.h`: Umbrella header for all monitoring interfaces
+  - Complements existing `IMonitor` interface:
+    - `IMonitor`: Pull-based (read status, get snapshots)
+    - `IMetricCollector`: Push-based (emit metrics in real-time)
+  - Header-only design with no runtime dependencies
+  - Comprehensive unit tests (31 tests) for interface concepts
+
 - **Unified Transport Interfaces** (#233)
   - New `include/kcenon/common/interfaces/transport/` directory with transport abstractions
   - `IHttpClient`: HTTP client interface for dependency injection
