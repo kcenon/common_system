@@ -323,6 +323,27 @@ set_tests_properties(common_transport_interface_test PROPERTIES
     LABELS "unit;interfaces;transport"
 )
 
+# Metric collector interface tests (Issue #234)
+add_executable(common_metric_collector_interface_test
+    metric_collector_interface_test.cpp
+)
+
+target_link_libraries(common_metric_collector_interface_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_metric_collector_interface_test PRIVATE cxx_std_20)
+
+add_test(NAME common_metric_collector_interface_test COMMAND common_metric_collector_interface_test)
+
+set_tests_properties(common_metric_collector_interface_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;interfaces;monitoring"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
