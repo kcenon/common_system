@@ -1,6 +1,38 @@
 cmake_minimum_required(VERSION 3.16)
 project(common_system VERSION 0.2.0.0 LANGUAGES CXX)
 
+# =============================================================================
+# BUILD ORDER DOCUMENTATION
+# =============================================================================
+#
+# common_system is the foundation library for the unified_system ecosystem.
+# It has NO dependencies on other unified_system modules.
+#
+# Dependency Order (common_system must be built FIRST):
+#
+#   common_system (this project)
+#       └─> thread_system     (depends on common_system)
+#       └─> logger_system     (depends on common_system)
+#       └─> network_system    (depends on common_system)
+#       └─> monitoring_system (depends on common_system)
+#       └─> database_system   (depends on common_system)
+#       └─> container_system  (depends on common_system)
+#       └─> messaging_system  (depends on common_system)
+#
+# Interfaces provided by common_system:
+#   - IHttpClient, IUdpClient (transport interfaces)
+#   - IMetricCollector (monitoring interface)
+#   - Result<T>, Error (patterns)
+#   - Service container and DI utilities
+#   - Configuration management
+#   - Event bus (standalone implementation)
+#
+# For circular dependency prevention, see:
+#   - scripts/check_circular_deps.py
+#   - docs/CROSS_MODULE_INTEGRATION.md
+#
+# =============================================================================
+
 # C++20 as required standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
