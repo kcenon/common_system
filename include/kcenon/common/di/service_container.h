@@ -229,6 +229,15 @@ private:
  * A service scope shares singleton registrations with its parent container
  * but maintains its own instances for scoped services. When the scope is
  * destroyed, all scoped instances are disposed.
+ *
+ * Thread Safety:
+ * - service_scope is thread-safe for concurrent resolution.
+ * - Multiple threads can safely resolve services from the same scope.
+ * - Uses std::shared_mutex for read/write locking of scoped instances.
+ * - Recommended usage pattern: one scope per request/thread for best performance.
+ *
+ * @note While thread-safe, creating separate scopes per thread is recommended
+ *       for optimal performance and natural isolation of scoped instances.
  */
 class service_scope : public IServiceScope {
 public:
@@ -716,7 +725,10 @@ inline VoidResult service_scope::register_instance_internal(
 
 inline Result<std::shared_ptr<void>> service_scope::resolve_internal(
     std::type_index interface_type) {
-    // Resolve with scoped instances
+    // Protect scoped_instances_ for thread-safe concurrent resolution.
+    // The mutex is held during the entire resolution to prevent data races
+    // when multiple threads resolve the same scoped service simultaneously.
+    std::unique_lock lock(mutex_);
     return parent_.resolve_with_detection(interface_type, &scoped_instances_);
 }
 
