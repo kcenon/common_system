@@ -29,7 +29,7 @@ The common_system project uses GitHub Actions for automated CI/CD. All workflows
 | Workflow | File | Purpose |
 |----------|------|---------|
 | **CI** | `ci.yml` | Cross-platform compilation and tests |
-| **Static Analysis** | `static-analysis.yml` | Clang-Tidy and Cppcheck analysis |
+| **Static Analysis** | `static-analysis.yml` | Clang-Tidy, Cppcheck, and circular dependency detection |
 | **Integration Tests** | `integration-tests.yml` | Integration and performance tests |
 | **Code Coverage** | `coverage.yml` | Test coverage measurement |
 | **Documentation** | `build-Doxygen.yaml` | API documentation generation |
@@ -345,6 +345,48 @@ grep -oP 'severity="\K[^"]+' cppcheck-results.xml | \
 Artifacts:
 - `cppcheck-results.xml`: Detailed analysis results
 - `cppcheck-summary.md`: Summary with issue counts by severity
+
+### Circular Dependency Check
+
+The static analysis workflow includes a circular dependency detection job that analyzes header include relationships to prevent dependency cycles.
+
+#### What It Checks
+
+1. **Direct circular includes**: A includes B, and B includes A
+2. **Transitive cycles**: A -> B -> C -> A chains
+
+#### Execution
+
+```bash
+python3 scripts/check_circular_deps.py --output circular-deps-report.md
+```
+
+This Python script:
+- Scans all `.h` and `.hpp` files in `include/`
+- Builds a dependency graph from `#include` directives
+- Detects both direct and transitive circular dependencies
+- Generates a report with the dependency graph
+
+#### Local Testing
+
+```bash
+# Run the check locally
+python3 scripts/check_circular_deps.py --verbose
+
+# Generate a report file
+python3 scripts/check_circular_deps.py --output report.md
+```
+
+#### Artifacts
+
+- `circular-deps-report.md`: Dependency analysis report
+
+#### Failure Behavior
+
+Unlike other static analysis checks (which use `continue-on-error: true`), the circular dependency check will **fail the CI** if cycles are detected. This is enforced because:
+- Circular dependencies can cause build failures
+- They indicate architectural issues that should be resolved immediately
+- The common_system must remain the foundation with no upstream dependencies
 
 ## Integration Tests Pipeline
 

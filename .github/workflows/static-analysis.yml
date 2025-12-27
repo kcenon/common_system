@@ -165,3 +165,42 @@ jobs:
         if [ -f cppcheck-summary.md ]; then
           cat cppcheck-summary.md >> $GITHUB_STEP_SUMMARY
         fi
+
+  circular-deps:
+    name: Circular Dependency Check
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Run circular dependency check
+      id: circular-deps
+      run: |
+        python3 scripts/check_circular_deps.py --output circular-deps-report.md
+
+    - name: Upload report
+      if: always()
+      uses: actions/upload-artifact@v6
+      with:
+        name: circular-deps-report
+        path: circular-deps-report.md
+        retention-days: 30
+
+    - name: Add summary to job
+      if: always()
+      run: |
+        if [ -f circular-deps-report.md ]; then
+          cat circular-deps-report.md >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Fail on circular dependencies
+      if: failure()
+      run: |
+        echo "::error::Circular dependencies detected! Please resolve them before merging."
+        exit 1
