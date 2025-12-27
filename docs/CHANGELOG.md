@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **Thread-safe service_scope for DI Container** (#239)
+  - Added mutex protection to `service_scope::resolve_internal()` for thread-safe concurrent resolution
+  - Multiple threads can now safely share the same scope for service resolution
+  - Updated class documentation with explicit thread-safety guarantees
+  - Added unit tests for shared scope resolution and concurrent clear operations
+  - Recommended usage pattern: one scope per request/thread for optimal performance
+
 - **Unified Metric Collection Interface** (#234)
   - New `include/kcenon/common/interfaces/monitoring/` directory with metric abstractions
   - `IMetricCollector`: Interface for cross-module metric reporting without direct monitoring_system dependencies

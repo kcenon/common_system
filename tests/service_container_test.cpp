@@ -598,3 +598,91 @@ TEST(ServiceLifetimeTest, ToString) {
     EXPECT_STREQ(to_string(service_lifetime::transient), "transient");
     EXPECT_STREQ(to_string(service_lifetime::scoped), "scoped");
 }
+
+// ============================================================================
+// Shared Scope Thread Safety Tests (Issue #239)
+// ============================================================================
+
+TEST_F(ServiceContainerTest, ThreadSafety_SharedScopeResolution) {
+    // Test that multiple threads can safely share the same scope
+    container_->register_type<ITestService, CountingService>(
+        service_lifetime::scoped);
+
+    auto shared_scope = container_->create_scope();
+
+    constexpr int NUM_THREADS = 10;
+    constexpr int ITERATIONS = 100;
+    std::vector<std::thread> threads;
+    std::atomic<int> resolve_count{0};
+    std::shared_ptr<ITestService> first_instance;
+    std::mutex first_mutex;
+
+    for (int i = 0; i < NUM_THREADS; ++i) {
+        threads.emplace_back([&shared_scope, &resolve_count, &first_instance, &first_mutex]() {
+            for (int j = 0; j < ITERATIONS; ++j) {
+                auto result = shared_scope->resolve<ITestService>();
+                if (result.is_ok()) {
+                    resolve_count++;
+                    std::lock_guard<std::mutex> lock(first_mutex);
+                    if (!first_instance) {
+                        first_instance = result.value();
+                    } else {
+                        // All instances should be the same (scoped within shared scope)
+                        EXPECT_EQ(result.value().get(), first_instance.get());
+                    }
+                }
+            }
+        });
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    // All resolutions should succeed
+    EXPECT_EQ(resolve_count, NUM_THREADS * ITERATIONS);
+    // Only one instance should be created in the shared scope
+    EXPECT_EQ(g_instantiation_count, 1);
+}
+
+TEST_F(ServiceContainerTest, ThreadSafety_SharedScopeClearDuringResolution) {
+    // Test that clear() is thread-safe when other threads are resolving
+    container_->register_type<ITestService, TestServiceImpl>(
+        service_lifetime::scoped);
+
+    auto shared_scope = container_->create_scope();
+
+    constexpr int NUM_RESOLVE_THREADS = 5;
+    std::vector<std::thread> threads;
+    std::atomic<bool> should_stop{false};
+    std::atomic<int> resolve_attempts{0};
+
+    // Start resolver threads
+    for (int i = 0; i < NUM_RESOLVE_THREADS; ++i) {
+        threads.emplace_back([&shared_scope, &should_stop, &resolve_attempts]() {
+            while (!should_stop.load()) {
+                auto result = shared_scope->resolve<ITestService>();
+                resolve_attempts++;
+                // Result may be ok (service resolved successfully)
+                if (result.is_ok()) {
+                    EXPECT_NE(result.value(), nullptr);
+                }
+            }
+        });
+    }
+
+    // Periodically clear the scope while threads are resolving
+    for (int i = 0; i < 10; ++i) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        shared_scope->clear();
+    }
+
+    should_stop.store(true);
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    // Test completes without crashes or undefined behavior
+    EXPECT_GT(resolve_attempts.load(), 0);
+}
