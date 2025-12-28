@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Strict warning flags enforcement** (#245)
+  - Added `-Wall -Wextra -Wpedantic` flags to all test and integration test targets
+  - Added MSVC `/W4` for Windows builds
+  - Added `warning-check` job to CI workflow that builds with `-Werror`
+  - All code now compiles without warnings on GCC, Clang, and MSVC
+
+### Fixed
+- **Fixed all compiler warnings in test code** (#245)
+  - Fixed member initialization order warning in `config_watcher.h`
+  - Fixed unused parameter warnings with `[[maybe_unused]]` attribute
+  - Removed unnecessary lambda captures for const variables
+  - Removed unused variables from test code
+
 ### Changed
 - **Split result.h into modular sub-headers** (#243)
   - Reorganized 913-line `result.h` into focused sub-headers under `result/` directory
