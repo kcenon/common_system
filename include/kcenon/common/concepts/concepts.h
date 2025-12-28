@@ -16,6 +16,9 @@
  * - Event concepts: Event bus type constraints (event.h)
  * - Service concepts: DI container constraints (service.h)
  * - Container concepts: Collection type constraints (container.h)
+ * - Logger concepts: Logging interface constraints (logger.h)
+ * - Monitoring concepts: Metric collection constraints (monitoring.h)
+ * - Transport concepts: HTTP/UDP client constraints (transport.h)
  *
  * Requirements:
  * - C++20 compiler with concepts support
@@ -45,6 +48,9 @@
  * @see event.h for event bus concepts
  * @see service.h for dependency injection concepts
  * @see container.h for container type concepts
+ * @see logger.h for logging interface concepts
+ * @see monitoring.h for metric collection concepts
+ * @see transport.h for HTTP/UDP client concepts
  *
  * Benefits of using concepts:
  * - **Clearer error messages**: Template errors are displayed as concept
@@ -84,6 +90,15 @@
 
 // Container and collection concepts
 #include "container.h"
+
+// Logger concepts
+#include "logger.h"
+
+// Monitoring and metric collection concepts
+#include "monitoring.h"
+
+// Transport client concepts (HTTP, UDP)
+#include "transport.h"
 
 /**
  * @namespace kcenon::common::concepts
@@ -135,6 +150,25 @@
  * - AssociativeContainer: Key-based containers
  * - ResizableContainer: Resizable containers
  * - CircularBuffer: Circular buffer types
+ *
+ * **Logger (logger.h)**:
+ * - BasicLogger: Types with basic log functionality
+ * - LevelAwareLogger: Types supporting log level filtering
+ * - FlushableLogger: Types supporting flush operation
+ * - StructuredLogger: Types supporting structured log entries
+ * - LoggerLike: Complete ILogger interface constraint
+ *
+ * **Monitoring (monitoring.h)**:
+ * - CounterMetric: Types supporting increment operations
+ * - GaugeMetric: Types supporting gauge operations
+ * - HistogramMetric: Types supporting histogram observations
+ * - TimingMetric: Types supporting timing measurements
+ * - MetricCollectorLike: Complete IMetricCollector constraint
+ *
+ * **Transport (transport.h)**:
+ * - HttpClientLike: Complete IHttpClient interface constraint
+ * - UdpClientLike: Complete IUdpClient interface constraint
+ * - TransportClient: Generic transport client constraint
  */
 
 namespace kcenon::common::concepts {
