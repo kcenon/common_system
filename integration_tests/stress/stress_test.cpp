@@ -78,7 +78,7 @@ TEST_F(StressTest, ConcurrentPublish100Threads) {
     std::latch start_latch(thread_count);
 
     for (int t = 0; t < thread_count; ++t) {
-        threads.emplace_back([&bus, t, events_per_thread, &start_latch]() {
+        threads.emplace_back([&bus, t, &start_latch]() {
             start_latch.arrive_and_wait();
             for (int i = 0; i < events_per_thread; ++i) {
                 bus.publish(StressEvent{t, i});
@@ -109,7 +109,7 @@ TEST_F(StressTest, ConcurrentSubscribeUnsubscribe) {
 
     for (int t = 0; t < thread_count; ++t) {
         threads.emplace_back([&bus, &subscription_count, &unsubscription_count,
-                              ops_per_thread, &start_latch]() {
+                              &start_latch]() {
             start_latch.arrive_and_wait();
             for (int i = 0; i < ops_per_thread; ++i) {
                 auto sub_id = bus.subscribe<StressEvent>(
@@ -142,7 +142,7 @@ TEST_F(StressTest, MixedOperationsStress) {
     std::atomic<int> events_received{0};
     std::atomic<bool> stop{false};
     const int publisher_count = 20;
-    const int subscriber_count = 10;
+    [[maybe_unused]] const int subscriber_count = 10;
     const int churner_count = 5;
 
     // Long-running subscribers
@@ -383,7 +383,7 @@ TEST_F(ThreadContentionTest, HighContentionObjectPool) {
     std::latch start_latch(thread_count);
 
     for (int t = 0; t < thread_count; ++t) {
-        threads.emplace_back([&pool, &success, &total_ops, t, ops_per_thread, &start_latch]() {
+        threads.emplace_back([&pool, &success, &total_ops, t, &start_latch]() {
             start_latch.arrive_and_wait();
             for (int i = 0; i < ops_per_thread; ++i) {
                 bool reused = false;

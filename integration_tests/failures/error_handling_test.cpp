@@ -67,7 +67,7 @@ TEST_F(ErrorHandlingTest, ErrorRecoveryWithOrElse) {
     return Result<int>::err(error_code{1, "operation failed"});
   };
 
-  auto fallback = [](const error_code &err) -> Result<int> {
+  auto fallback = []([[maybe_unused]] const error_code &err) -> Result<int> {
     // Log error and return default value
     return Result<int>::ok(0);
   };
