@@ -1,5 +1,28 @@
 cmake_minimum_required(VERSION 3.16)
 
+# =============================================================================
+# STRICT WARNING FLAGS
+# =============================================================================
+# Enable strict warning flags to ensure code quality.
+# This aligns with the unified_system policy to eliminate warning suppressions.
+# See: https://github.com/kcenon/common_system/issues/245
+#
+# All code should compile without warnings when using these flags.
+# =============================================================================
+
+# Compiler-specific warning flags
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    set(COMMON_WARNING_FLAGS
+        -Wall
+        -Wextra
+        -Wpedantic
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(COMMON_WARNING_FLAGS
+        /W4
+    )
+endif()
+
 # Find GTest (should already be checked by parent)
 find_package(GTest REQUIRED)
 find_package(Threads REQUIRED)
@@ -399,4 +422,46 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_compile_options(common_system_tests PRIVATE --coverage -O0 -g)
         target_link_options(common_system_tests PRIVATE --coverage)
     endif()
+endif()
+
+# =============================================================================
+# APPLY STRICT WARNING FLAGS TO ALL TEST TARGETS
+# =============================================================================
+# Apply warning flags to all test executables to ensure code quality.
+# This ensures that both the header-only library and test code compile
+# without warnings.
+#
+# Note: Linker warnings (e.g., duplicate libraries) are not affected by
+# these flags and are handled by the build system.
+# =============================================================================
+
+set(COMMON_TEST_TARGETS
+    common_system_tests
+    common_event_bus_failure_test
+    common_thread_safety_test
+    common_service_container_test
+    common_unified_bootstrapper_test
+    common_unified_config_test
+    common_config_loader_test
+    common_cli_config_parser_test
+    common_config_watcher_test
+    common_global_logger_registry_test
+    common_log_functions_test
+    common_system_bootstrapper_test
+    common_security_controls_test
+    common_transport_interface_test
+    common_metric_collector_interface_test
+    common_concepts_test
+)
+
+# Apply warning flags to all test targets
+foreach(target ${COMMON_TEST_TARGETS})
+    if(TARGET ${target})
+        target_compile_options(${target} PRIVATE ${COMMON_WARNING_FLAGS})
+    endif()
+endforeach()
+
+# Apply to ABI version test if it exists
+if(TARGET common_abi_version_test)
+    target_compile_options(common_abi_version_test PRIVATE ${COMMON_WARNING_FLAGS})
 endif()

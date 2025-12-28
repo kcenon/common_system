@@ -161,7 +161,7 @@ TEST_F(MemoryPressureTest, ObjectPoolConcurrentAccess) {
 
     std::vector<std::thread> threads;
     for (int t = 0; t < thread_count; ++t) {
-        threads.emplace_back([&pool, &success_count, &failure_count, ops_per_thread]() {
+        threads.emplace_back([&pool, &success_count, &failure_count]() {
             for (int i = 0; i < ops_per_thread; ++i) {
                 bool reused = false;
                 auto obj = pool.acquire(&reused);

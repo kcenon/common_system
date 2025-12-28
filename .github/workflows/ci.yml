@@ -152,3 +152,56 @@ jobs:
         path: |
           build/Testing/Temporary/
           build/**/*.log
+
+  # Warning-free build verification
+  # See: https://github.com/kcenon/common_system/issues/245
+  warning-check:
+    name: Warning Check / ${{ matrix.compiler }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev
+
+    - name: Set up compiler (GCC)
+      if: matrix.compiler == 'gcc'
+      run: |
+        echo "CC=gcc" >> $GITHUB_ENV
+        echo "CXX=g++" >> $GITHUB_ENV
+
+    - name: Set up compiler (Clang)
+      if: matrix.compiler == 'clang'
+      run: |
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
+    - name: Configure CMake with strict warnings
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_FLAGS="-Werror" \
+          -DCOMMON_BUILD_TESTS=ON \
+          -DCOMMON_BUILD_INTEGRATION_TESTS=ON \
+          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build with -Werror
+      run: cmake --build build --config Debug
+
+    - name: Verify build succeeded
+      run: |
+        echo "✅ Build succeeded with -Werror flag"
+        echo "All code compiles without warnings"

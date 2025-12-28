@@ -141,7 +141,7 @@ public:
         return 0; // Simplified for testing
     }
 
-    void shutdown(bool wait_for_completion = true) override {
+    void shutdown([[maybe_unused]] bool wait_for_completion = true) override {
         running_ = false;
     }
 

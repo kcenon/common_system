@@ -361,7 +361,7 @@ TEST_F(GlobalLoggerRegistryIntegrationTest, ThreadSafeAccess) {
 
   // Launch multiple threads that all log concurrently
   for (int i = 0; i < num_threads; ++i) {
-    threads.emplace_back([i, logs_per_thread] {
+    threads.emplace_back([i] {
       for (int j = 0; j < logs_per_thread; ++j) {
         auto log = GlobalLoggerRegistry::instance().get_default_logger();
         if (log) {
@@ -729,7 +729,7 @@ TEST_F(CrossSystemIntegrationTest, ConcurrentCrossSystemLogging) {
   std::vector<std::thread> threads;
 
   // Thread system worker
-  threads.emplace_back([iterations]() {
+  threads.emplace_back([]() {
     MockThreadSystem sys;
     for (int i = 0; i < iterations; ++i) {
       sys.do_work();
@@ -737,7 +737,7 @@ TEST_F(CrossSystemIntegrationTest, ConcurrentCrossSystemLogging) {
   });
 
   // Network system worker
-  threads.emplace_back([iterations]() {
+  threads.emplace_back([]() {
     MockNetworkSystem sys;
     for (int i = 0; i < iterations; ++i) {
       sys.handle_connection();
@@ -745,7 +745,7 @@ TEST_F(CrossSystemIntegrationTest, ConcurrentCrossSystemLogging) {
   });
 
   // Database system worker
-  threads.emplace_back([iterations]() {
+  threads.emplace_back([]() {
     MockDatabaseSystem sys;
     for (int i = 0; i < iterations; ++i) {
       sys.execute_query("SELECT 1");
@@ -905,7 +905,7 @@ TEST_F(GlobalLoggerRegistryIntegrationTest, StressTestHighConcurrency) {
   GlobalLoggerRegistry::instance().set_default_logger(logger);
 
   for (int i = 0; i < num_threads; ++i) {
-    threads.emplace_back([i, operations_per_thread, &total_operations]() {
+    threads.emplace_back([i, &total_operations]() {
       for (int j = 0; j < operations_per_thread; ++j) {
         // Mix of operations
         if (j % 3 == 0) {

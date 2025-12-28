@@ -2,6 +2,27 @@ cmake_minimum_required(VERSION 3.16)
 
 project(CommonSystemIntegrationTests)
 
+# =============================================================================
+# STRICT WARNING FLAGS
+# =============================================================================
+# Enable strict warning flags to ensure code quality.
+# This aligns with the unified_system policy to eliminate warning suppressions.
+# See: https://github.com/kcenon/common_system/issues/245
+# =============================================================================
+
+# Compiler-specific warning flags
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    set(COMMON_WARNING_FLAGS
+        -Wall
+        -Wextra
+        -Wpedantic
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(COMMON_WARNING_FLAGS
+        /W4
+    )
+endif()
+
 # Find GTest
 # Note: If not found, parent CMakeLists.txt may provide it via FetchContent
 find_package(GTest QUIET)
@@ -47,3 +68,9 @@ gtest_discover_tests(common_integration_tests)
 
 # Enable testing
 enable_testing()
+
+# =============================================================================
+# APPLY STRICT WARNING FLAGS
+# =============================================================================
+# Apply warning flags to integration test executable
+target_compile_options(common_integration_tests PRIVATE ${COMMON_WARNING_FLAGS})
