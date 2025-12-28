@@ -221,7 +221,7 @@ TEST_F(EventBusFailureTest, ConcurrentSubscribeUnsubscribe) {
 
     // Subscribe/unsubscribe threads
     for (int i = 0; i < NUM_THREADS; ++i) {
-        threads.emplace_back([this, &handler_calls, ITERATIONS]() {
+        threads.emplace_back([this, &handler_calls]() {
             for (int j = 0; j < ITERATIONS; ++j) {
                 auto id = bus_->subscribe<TestEvent>([&handler_calls](const TestEvent&) {
                     handler_calls++;
@@ -250,7 +250,7 @@ TEST_F(EventBusFailureTest, UnsubscribeDuringPublish) {
     uint64_t sub_id = 0;
 
     // This handler unsubscribes itself
-    sub_id = bus_->subscribe<TestEvent>([this, &call_count, &sub_id](const TestEvent&) {
+    sub_id = bus_->subscribe<TestEvent>([&call_count](const TestEvent&) {
         call_count++;
         // Note: This is inside the lock, so unsubscribe will wait
         // The implementation should handle this gracefully

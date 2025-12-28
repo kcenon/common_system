@@ -455,7 +455,7 @@ TEST_F(ServiceContainerTest, ThreadSafety_ConcurrentRegistration) {
     std::atomic<int> success_count{0};
 
     for (int i = 0; i < NUM_THREADS; ++i) {
-        threads.emplace_back([this, i, &success_count]() {
+        threads.emplace_back([this, &success_count]() {
             auto result = container_->register_factory<ITestService>(
                 [](IServiceContainer&) {
                     return std::make_shared<TestServiceImpl>();
@@ -518,10 +518,9 @@ TEST_F(ServiceContainerTest, ThreadSafety_ConcurrentScopeResolution) {
 
     constexpr int NUM_THREADS = 10;
     std::vector<std::thread> threads;
-    std::atomic<int> total_instantiations{0};
 
     for (int i = 0; i < NUM_THREADS; ++i) {
-        threads.emplace_back([this, &total_instantiations]() {
+        threads.emplace_back([this]() {
             auto scope = container_->create_scope();
 
             // Multiple resolutions in same scope should return same instance

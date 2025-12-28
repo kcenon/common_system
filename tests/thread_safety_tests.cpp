@@ -81,7 +81,7 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusThreadSafety) {
 
     // Subscribe
     for (int i = 0; i < num_subscribers; ++i) {
-        auto id = bus.subscribe([&](const event& e) {
+        auto id = bus.subscribe([&]([[maybe_unused]] const event& e) {
             ++events_received;
         });
         subscriptions.push_back(id);
@@ -131,7 +131,7 @@ TEST_F(CommonSystemThreadSafetyTest, ResultTransformationChain) {
     std::vector<std::thread> threads;
 
     for (int i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&, thread_id = i]() {
+        threads.emplace_back([&]() {
             for (int j = 0; j < chains_per_thread; ++j) {
                 try {
                     auto result = ok(j)
@@ -171,7 +171,7 @@ TEST_F(CommonSystemThreadSafetyTest, SingletonEventBusSafety) {
                 try {
                     auto& bus = event_bus::instance();
 
-                    auto id = bus.subscribe([](const event& e) {});
+                    auto id = bus.subscribe([]([[maybe_unused]] const event& e) {});
 
                     event e;
                     e.set_type("singleton_test");
@@ -237,18 +237,18 @@ TEST_F(CommonSystemThreadSafetyTest, EventFilteringConcurrent) {
     std::atomic<int> type_b_received{0};
     std::atomic<int> errors{0};
 
-    auto id_a = bus.subscribe_filtered([&](const event& e) {
+    auto id_a = bus.subscribe_filtered([&]([[maybe_unused]] const event& e) {
         ++type_a_received;
     }, [](const event& e) { return e.get_type() == "type_a"; });
 
-    auto id_b = bus.subscribe_filtered([&](const event& e) {
+    auto id_b = bus.subscribe_filtered([&]([[maybe_unused]] const event& e) {
         ++type_b_received;
     }, [](const event& e) { return e.get_type() == "type_b"; });
 
     std::vector<std::thread> threads;
 
     for (int i = 0; i < num_threads; ++i) {
-        threads.emplace_back([&, thread_id = i]() {
+        threads.emplace_back([&]() {
             for (int j = 0; j < events_per_thread; ++j) {
                 try {
                     event e;
@@ -288,7 +288,7 @@ TEST_F(CommonSystemThreadSafetyTest, ResultUnwrapSafety) {
                     : ok(thread_id * 1000 + j);
 
                 if (result.is_ok()) {
-                    int value = result.unwrap();
+                    [[maybe_unused]] int value = result.unwrap();
                     ++successful_unwraps;
                 } else {
                     try {
@@ -380,7 +380,7 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusDynamicSubscriptions) {
         threads.emplace_back([&]() {
             while (running.load()) {
                 try {
-                    auto id = bus.subscribe([](const event& e) {});
+                    auto id = bus.subscribe([]([[maybe_unused]] const event& e) {});
                     std::this_thread::sleep_for(10ms);
                     bus.unsubscribe(id);
                 } catch (...) {
@@ -416,7 +416,7 @@ TEST_F(CommonSystemThreadSafetyTest, MemorySafetyTest) {
             threads.emplace_back([&]() {
                 for (int j = 0; j < operations_per_thread; ++j) {
                     try {
-                        auto id = bus.subscribe([](const event& e) {});
+                        auto id = bus.subscribe([]([[maybe_unused]] const event& e) {});
 
                         event e;
                         e.set_type("memory_test");
@@ -455,7 +455,7 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusSubscriptionDuringExecution) {
     std::vector<subscription_id> subscriptions;
 
     // Create initial subscription
-    auto initial_id = bus.subscribe([&](const event& e) {
+    auto initial_id = bus.subscribe([&]([[maybe_unused]] const event& e) {
         handler_running.store(true);
         ++handler_executions;
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -482,7 +482,7 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusSubscriptionDuringExecution) {
         for (int i = 0; i < num_iterations / 2; ++i) {
             try {
                 // Add new subscription
-                auto id = bus.subscribe([&](const event& e) {
+                auto id = bus.subscribe([&]([[maybe_unused]] const event& e) {
                     ++handler_executions;
                 });
                 subscriptions.push_back(id);
@@ -522,12 +522,14 @@ TEST_F(CommonSystemThreadSafetyTest, EventBusErrorCallbackSafety) {
     std::atomic<int> errors{0};
 
     // Set error callback that will be invoked from multiple threads
-    bus.set_error_callback([&](const std::string& msg, size_t type_id, uint64_t handler_id) {
+    bus.set_error_callback([&]([[maybe_unused]] const std::string& msg,
+                               [[maybe_unused]] size_t type_id,
+                               [[maybe_unused]] uint64_t handler_id) {
         ++error_callback_invocations;
     });
 
     // Subscribe with a handler that throws exceptions
-    auto id = bus.subscribe([](const event& e) {
+    auto id = bus.subscribe([]([[maybe_unused]] const event& e) {
         throw std::runtime_error("Intentional error for testing");
     });
 
@@ -582,7 +584,7 @@ TEST_F(CommonSystemThreadSafetyTest, ResultLifecycleStressTest) {
 
                     {
                         Result<std::string> result = make_error<std::string>(-1, "error");
-                        auto recovered = result.or_else([](const error_info& e) {
+                        auto recovered = result.or_else([]([[maybe_unused]] const error_info& e) {
                             return ok(std::string("recovered"));
                         });
                     }
