@@ -35,6 +35,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Added
+- **C++20 Concepts for Interface Type Constraints** (#244)
+  - New `logger.h`: Concepts for logger interfaces
+    - `BasicLogger`: Types with basic log functionality
+    - `LevelAwareLogger`: Types supporting log level filtering
+    - `FlushableLogger`: Types supporting flush operation
+    - `StructuredLogger`: Types supporting structured log entries
+    - `LoggerLike`: Complete ILogger interface constraint
+    - `LoggerProviderLike`, `LoggerRegistryLike`: DI support concepts
+  - New `monitoring.h`: Concepts for metric collection interfaces
+    - `CounterMetric`: Types supporting increment operations
+    - `GaugeMetric`: Types supporting gauge operations
+    - `HistogramMetric`: Types supporting histogram observations
+    - `TimingMetric`: Types supporting timing measurements
+    - `MetricCollectorLike`: Complete IMetricCollector constraint
+    - `MetricCollectorProviderLike`: DI support concept
+  - New `transport.h`: Concepts for transport client interfaces
+    - `HttpSender`, `HttpAvailabilityChecker`: HTTP client concepts
+    - `HttpClientLike`: Complete IHttpClient interface constraint
+    - `UdpConnectable`, `UdpSender`, `UdpConnectionStatus`: UDP client concepts
+    - `UdpClientLike`: Complete IUdpClient interface constraint
+    - `TransportClient`: Generic transport client constraint (HTTP or UDP)
+    - Provider concepts for dependency injection
+  - Updated `concepts.h` umbrella header with new concept categories
+  - Fixed forward declaration conflict in `callable.h` (VoidResult)
+  - Comprehensive unit tests with static_assert compile-time validation
+  - Benefits: clearer error messages, self-documenting code, zero runtime overhead
+
 - **Thread-safe service_scope for DI Container** (#239)
   - Added mutex protection to `service_scope::resolve_internal()` for thread-safe concurrent resolution
   - Multiple threads can now safely share the same scope for service resolution
