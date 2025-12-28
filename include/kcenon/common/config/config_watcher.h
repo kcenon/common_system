@@ -155,9 +155,9 @@ public:
      */
     explicit config_watcher(const std::string& config_path, size_t max_history = 10)
         : config_path_(config_path)
+        , version_(0)
         , max_history_(max_history)
         , running_(false)
-        , version_(0)
 #if defined(__linux__)
         , inotify_fd_(-1)
         , watch_fd_(-1)
