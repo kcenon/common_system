@@ -173,7 +173,7 @@ TEST(ImprovedEventBusTest, MixedFilteredAndNonFiltered) {
 
     // Unfiltered subscriber - receives all events
     auto unfiltered_sub = bus.subscribe<TestEvent>(
-        [&unfiltered_calls](const TestEvent& evt) {
+        [&unfiltered_calls]([[maybe_unused]] const TestEvent& evt) {
             unfiltered_calls++;
         }
     );
@@ -204,7 +204,7 @@ TEST(ImprovedEventBusTest, FilterPerformance) {
 
     // Heavy filter that checks multiple conditions
     auto sub_id = bus.subscribe_filtered<TestEvent>(
-        [&passed_count](const TestEvent& evt) {
+        [&passed_count]([[maybe_unused]] const TestEvent& evt) {
             passed_count++;
         },
         [](const TestEvent& evt) {
@@ -255,7 +255,7 @@ TEST(ImprovedEventBusTest, ThreadSafetyWithFilters) {
                 EXPECT_EQ(evt.id % num_threads, thread_id);
                 total_handled++;
             },
-            [thread_id, num_threads](const TestEvent& evt) {
+            [thread_id](const TestEvent& evt) {
                 return evt.id % num_threads == thread_id;
             }
         );
@@ -267,7 +267,7 @@ TEST(ImprovedEventBusTest, ThreadSafetyWithFilters) {
     // Multiple threads publishing events
     std::vector<std::thread> threads;
     for (int t = 0; t < num_threads; ++t) {
-        threads.emplace_back([&bus, t, events_per_thread]() {
+        threads.emplace_back([&bus, t]() {
             for (int i = 0; i < events_per_thread; ++i) {
                 bus.publish(TestEvent{i, "Thread event", t});
             }
@@ -308,7 +308,7 @@ TEST(ImprovedEventBusTest, FilterExceptionHandling) {
 
     // Subscribe with a filter that throws on certain conditions
     auto sub_id = bus.subscribe_filtered<TestEvent>(
-        [&handler_calls](const TestEvent& evt) {
+        [&handler_calls]([[maybe_unused]] const TestEvent& evt) {
             handler_calls++;
         },
         [](const TestEvent& evt) {
