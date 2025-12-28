@@ -32,10 +32,11 @@
 #include <memory>
 #include <chrono>
 
+#include "../patterns/result/fwd.h"
+
 namespace kcenon::common {
 
 // Forward declarations
-class VoidResult;
 namespace interfaces {
 class IJob;
 }
