@@ -11,6 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Split result.h into modular sub-headers** (#243)
+  - Reorganized 913-line `result.h` into focused sub-headers under `result/` directory
+  - New header structure:
+    - `result/fwd.h`: Forward declarations and result_state enum
+    - `result/error_info.h`: error_info struct and error_code alias
+    - `result/result_core.h`: Result<T> class definition
+    - `result/optional.h`: Optional<T> class
+    - `result/result_funcs.h`: Factory and helper functions (ok, make_error, etc.)
+    - `result/error_codes_compat.h`: Backward compatibility aliases for error codes
+    - `result/exception_conversion.h`: exception_mapper and try_catch utilities
+    - `result/result_macros.h`: Convenience macros (COMMON_RETURN_IF_ERROR, etc.)
+  - `result.h` is now an umbrella header that includes all sub-headers
+  - Full backward compatibility: existing `#include <kcenon/common/patterns/result.h>` works unchanged
+  - Selective includes available for faster compilation times
+
 ### Breaking Changes
 - **Removed deprecated file/line/function log() method from ILogger interface** (#217)
   - Removed: `virtual VoidResult log(log_level, const std::string&, const std::string& file, int line, const std::string& function)`

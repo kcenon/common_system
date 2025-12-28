@@ -2,6 +2,43 @@
 
 This guide documents the recommended patterns for creating and using `Result<T>` objects in the Common System.
 
+## Header Structure
+
+The Result pattern is organized into modular headers for improved compilation times and maintainability:
+
+```
+include/kcenon/common/patterns/
+├── result.h                      # Umbrella header (include this for full functionality)
+└── result/
+    ├── fwd.h                     # Forward declarations
+    ├── error_info.h              # error_info struct
+    ├── result_core.h             # Result<T> class definition
+    ├── optional.h                # Optional<T> class
+    ├── result_funcs.h            # Factory and helper functions
+    ├── error_codes_compat.h      # Backward compatibility aliases
+    ├── exception_conversion.h    # try_catch utilities
+    └── result_macros.h           # Convenience macros
+```
+
+### Include Strategies
+
+**Full Include (Recommended for most cases):**
+```cpp
+#include <kcenon/common/patterns/result.h>
+```
+
+**Selective Include (For faster compilation):**
+```cpp
+// Minimal: just Result class and error_info
+#include <kcenon/common/patterns/result/result_core.h>
+
+// Add factory functions
+#include <kcenon/common/patterns/result/result_funcs.h>
+
+// Add exception conversion
+#include <kcenon/common/patterns/result/exception_conversion.h>
+```
+
 ## Recommended Patterns
 
 ### Creating Successful Results
