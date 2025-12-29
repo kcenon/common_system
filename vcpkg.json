@@ -1,40 +1,25 @@
 {
-  "name": "common-system",
-  "version-string": "1.0.0",
-  "description": "Common interfaces and patterns for system module integration",
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "kcenon-common-system",
+  "version": "1.0.0",
+  "port-version": 0,
+  "description": "High-performance C++20 foundation library providing Result<T> pattern, interfaces, and common utilities",
   "homepage": "https://github.com/kcenon/common_system",
-  "maintainers": ["kcenon <kcenon@naver.com>"],
-  "license": "MIT",
-  "dependencies": [
-    {
-      "name": "gtest",
-      "features": [],
-      "$comment": "Google Test for unit testing"
-    },
-    {
-      "name": "benchmark",
-      "$comment": "Google Benchmark for performance testing"
-    }
-  ],
+  "license": "BSD-3-Clause",
+  "supports": "!(uwp | xbox)",
+  "dependencies": [],
   "features": {
-    "tests": {
-      "description": "Build unit tests",
+    "testing": {
+      "description": "Build unit tests and benchmarks",
       "dependencies": [
-        "gtest"
+        {
+          "name": "gtest",
+          "features": ["gmock"]
+        },
+        {
+          "name": "benchmark"
+        }
       ]
-    },
-    "benchmarks": {
-      "description": "Build performance benchmarks",
-      "dependencies": [
-        "benchmark"
-      ]
-    },
-    "docs": {
-      "description": "Generate documentation",
-      "dependencies": []
     }
-  },
-  "default-features": ["tests"],
-  "builtin-baseline": "C++17 standard library",
-  "$comment": "This project requires C++17 or later, with optional C++20 features (std::source_location) when available"
+  }
 }
