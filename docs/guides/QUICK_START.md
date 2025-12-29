@@ -1,10 +1,10 @@
 # Quick Start Guide - common_system
 
-**5-minute guide** to get started with the header-only common_system library for C++17+.
+**5-minute guide** to get started with the header-only common_system library for C++20.
 
 ## Prerequisites
 
-- **Compiler**: C++17 compatible (GCC 7+, Clang 5+, MSVC 2017+)
+- **Compiler**: C++20 compatible (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
 - **Build System**: CMake 3.16+ (optional for header-only usage)
 
 ## Installation

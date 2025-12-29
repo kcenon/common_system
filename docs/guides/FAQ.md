@@ -2,7 +2,7 @@
 
 **Version:** 0.2.0 | **Last Updated:** November 2025
 
-This FAQ covers the most common questions about the common_system library - a header-only C++17 foundation library providing universal interfaces and design patterns for modular system architectures.
+This FAQ covers the most common questions about the common_system library - a header-only C++20 foundation library providing universal interfaces and design patterns for modular system architectures.
 
 ---
 
@@ -21,7 +21,7 @@ This FAQ covers the most common questions about the common_system library - a he
 
 ### Q1: Is common_system a header-only library? Do I need to build it?
 
-**A:** Yes, common_system is a **pure header-only C++17 library**. There is no compilation step required.
+**A:** Yes, common_system is a **pure header-only C++20 library**. There is no compilation step required.
 
 **Installation options:**
 
@@ -46,24 +46,24 @@ No linking or .lib/.a files needed. Just include headers and compile.
 
 **A:** common_system requires:
 
-- **C++ Standard:** C++17 minimum (C++20 recommended for enhanced features)
+- **C++ Standard:** C++20 required
 - **Compiler Support:**
-  - GCC 7.0+
-  - Clang 5.0+
-  - MSVC 2017+
-  - AppleClang 10.0+
+  - GCC 11+
+  - Clang 14+
+  - MSVC 2022+
+  - Apple Clang 14+
 
-**Compiler flags for C++17:**
+**Compiler flags for C++20:**
 
 ```bash
 # GCC/Clang
-g++ -std=c++17 myfile.cpp
+g++ -std=c++20 myfile.cpp
 
 # MSVC
-cl /std:c++17 myfile.cpp
+cl /std:c++20 myfile.cpp
 
 # CMake
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 ```
 
