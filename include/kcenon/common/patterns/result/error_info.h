@@ -6,11 +6,26 @@
  * @file error_info.h
  * @brief Error information struct for Result<T> type.
  *
+ * @deprecated This header is deprecated. Use result/core.h instead.
+ * This header will be removed in a future version.
+ *
  * This header defines the error_info struct used by Result<T> to represent
  * error states with code, message, module, and optional details.
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: error_info.h is deprecated. Use result/core.h instead.")
+#else
+#pragma message("error_info.h is deprecated. Use result/core.h instead.")
+#endif
+
+#include "core.h"
+
+// Backward compatibility - error_info is now defined in core.h
+
+#if 0  // Original content preserved for reference
 
 #include <string>
 #include <optional>
@@ -78,3 +93,5 @@ struct error_info {
 using error_code = error_info;
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference

@@ -3,14 +3,17 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * @file result_core.h
- * @brief Core Result<T> class definition.
+ * @file core.h
+ * @brief Consolidated core types for Result<T> pattern.
  *
- * @deprecated This header is deprecated. Use result/core.h instead.
- * This header will be removed in a future version.
+ * This header consolidates the core Result pattern types:
+ * - Forward declarations and common types
+ * - error_info struct for error representation
+ * - Result<T> class for exception-free error handling
+ * - Optional<T> class with Rust-like API
  *
- * Provides the Result<T> type for exception-free error handling.
- * This is the main class that holds either a value or an error.
+ * This consolidation reduces header count from 4 to 1, preparing for
+ * C++20 module migration while following Kent Beck's "Fewest Elements" principle.
  *
  * Thread Safety:
  * - Result<T> objects are NOT thread-safe for concurrent modification.
@@ -21,23 +24,11 @@
 
 #pragma once
 
-#ifdef _MSC_VER
-#pragma message("warning: result_core.h is deprecated. Use result/core.h instead.")
-#else
-#pragma message("result_core.h is deprecated. Use result/core.h instead.")
-#endif
-
-#include "core.h"
-
-// Backward compatibility - Result<T> is now defined in core.h
-
-#if 0  // Original content preserved for reference
-
-#include "error_info.h"
-
 #include <optional>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
 #include <utility>
 #include <variant>
 
@@ -45,6 +36,98 @@
 #include <kcenon/common/utils/source_location.h>
 
 namespace kcenon::common {
+
+// ============================================================================
+// Forward Declarations (from fwd.h)
+// ============================================================================
+
+// Forward declarations
+struct error_info;
+template<typename T> class Result;
+template<typename T> class Optional;
+
+/**
+ * @brief Result state enum for tracking initialization
+ */
+enum class result_state {
+    uninitialized,  // Result has not been initialized with a value or error
+    ok,             // Result contains a valid value
+    error           // Result contains an error
+};
+
+/**
+ * @brief Specialized Result for void operations
+ *
+ * Forward declaration of VoidResult typedef.
+ * Full definition in void_result.h.
+ */
+using VoidResult = Result<std::monostate>;
+
+// ============================================================================
+// Error Info (from error_info.h)
+// ============================================================================
+
+/**
+ * @struct error_info
+ * @brief Standard error information used by Result<T>.
+ */
+struct error_info {
+    int code;
+    std::string message;
+    std::string module;
+    std::optional<std::string> details;
+
+    error_info() : code(0) {}
+
+    /** @brief Construct with message only. */
+    error_info(const std::string& msg)
+        : code(-1), message(msg), module("") {}
+
+    /** @brief Construct with code, message and optional module. */
+    error_info(int c, const std::string& msg, const std::string& mod = "")
+        : code(c), message(msg), module(mod) {}
+
+    /** @brief Construct with code, message, module and details. */
+    error_info(int c, const std::string& msg, const std::string& mod,
+               const std::string& det)
+        : code(c), message(msg), module(mod), details(det) {}
+
+    /**
+     * @brief Construct from strongly-typed enum error codes.
+     *
+     * Enables database_system/network_system enums to be passed directly
+     * without manual static_cast noise.
+     */
+    template<typename Enum,
+             typename std::enable_if_t<std::is_enum_v<Enum>, int> = 0>
+    error_info(Enum c, std::string msg, std::string mod = "",
+               std::optional<std::string> det = std::nullopt)
+        : code(static_cast<int>(c)),
+          message(std::move(msg)),
+          module(std::move(mod)),
+          details(std::move(det)) {}
+
+    bool operator==(const error_info& other) const {
+        return code == other.code && message == other.message &&
+               module == other.module && details == other.details;
+    }
+
+    bool operator!=(const error_info& other) const {
+        return !(*this == other);
+    }
+};
+
+/**
+ * @brief Alias for backward compatibility
+ *
+ * Some code may use error_code instead of error_info.
+ * This alias ensures compatibility.
+ */
+using error_code = error_info;
+
+// ============================================================================
+// Result<T> Class (from result_core.h)
+// ============================================================================
 
 /**
  * @class Result
@@ -331,6 +414,95 @@ public:
     }
 };
 
-} // namespace kcenon::common
+// ============================================================================
+// Optional<T> Class (from optional.h)
+// ============================================================================
 
-#endif  // Original content preserved for reference
+/**
+ * @class Optional
+ * @brief Optional type similar to std::optional with Rust-like API
+ */
+template<typename T>
+class Optional {
+public:
+    /// @brief Type alias for the contained value type (for concept compatibility)
+    using value_type = T;
+
+private:
+    std::optional<T> value_;
+
+public:
+    Optional() : value_(std::nullopt) {}
+    Optional(const T& value) : value_(value) {}
+    Optional(T&& value) : value_(std::move(value)) {}
+    Optional(std::nullopt_t) : value_(std::nullopt) {}
+
+    bool has_value() const { return value_.has_value(); }
+    bool is_some() const { return value_.has_value(); }
+    bool is_none() const { return !value_.has_value(); }
+
+    const T& value() const { return value_.value(); }
+    T& value() { return value_.value(); }
+
+    /**
+     * @brief Get value from optional (throws if None)
+     * @throws std::runtime_error if optional is None with detailed location info
+     * @note When source_location is available, error messages include file/line info
+     */
+#if KCENON_HAS_SOURCE_LOCATION
+    const T& unwrap(
+        source_location loc = source_location::current()
+    ) const {
+        if (!has_value()) {
+            std::ostringstream oss;
+            oss << "Called unwrap on None\n"
+                << "  Location: " << loc.file_name() << ":" << loc.line() << ":" << loc.column() << "\n"
+                << "  Function: " << loc.function_name();
+            throw std::runtime_error(oss.str());
+        }
+        return value_.value();
+    }
+#else
+    const T& unwrap() const {
+        if (!has_value()) {
+            throw std::runtime_error("Called unwrap on None");
+        }
+        return value_.value();
+    }
+#endif
+
+    T unwrap_or(T default_value) const {
+        return value_.value_or(default_value);
+    }
+
+    template<typename F>
+    auto map(F&& func) const -> Optional<decltype(func(std::declval<T>()))> {
+        using ReturnType = decltype(func(std::declval<T>()));
+
+        if (has_value()) {
+            return Optional<ReturnType>(func(value_.value()));
+        } else {
+            return Optional<ReturnType>(std::nullopt);
+        }
+    }
+};
+
+// Optional factory functions
+
+/**
+ * @brief Create an Optional with value
+ */
+template<typename T>
+inline Optional<T> Some(T value) {
+    return Optional<T>(std::move(value));
+}
+
+/**
+ * @brief Create an empty Optional
+ */
+template<typename T>
+inline Optional<T> None() {
+    return Optional<T>(std::nullopt);
+}
+
+} // namespace kcenon::common
