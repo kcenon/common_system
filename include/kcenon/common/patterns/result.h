@@ -9,18 +9,17 @@
  * This is the main include file for the Result pattern. Including this
  * header provides access to all Result-related types and functions.
  *
- * For selective includes to reduce compilation times, you can include
- * individual headers from the result/ subdirectory:
+ * The Result pattern has been consolidated into 3 logical headers:
  *
  * @code
- * // Minimal include for just the Result class
- * #include <kcenon/common/patterns/result/result_core.h>
+ * // Core types: Result<T>, Optional<T>, error_info
+ * #include <kcenon/common/patterns/result/core.h>
  *
- * // Include factory functions
- * #include <kcenon/common/patterns/result/result_funcs.h>
+ * // Utilities: factory functions, exception conversion, macros
+ * #include <kcenon/common/patterns/result/utilities.h>
  *
- * // Include exception conversion utilities
- * #include <kcenon/common/patterns/result/exception_conversion.h>
+ * // Compatibility: legacy error code aliases
+ * #include <kcenon/common/patterns/result/compat.h>
  * @endcode
  *
  * Thread Safety:
@@ -33,22 +32,7 @@
 
 #pragma once
 
-// Forward declarations and common types
-#include "result/fwd.h"
-
-// Core types
-#include "result/error_info.h"
-#include "result/result_core.h"
-#include "result/optional.h"
-
-// Factory and helper functions
-#include "result/result_funcs.h"
-
-// Error codes compatibility layer
-#include "result/error_codes_compat.h"
-
-// Exception conversion utilities
-#include "result/exception_conversion.h"
-
-// Convenience macros
-#include "result/result_macros.h"
+// New consolidated headers (C++20 module-ready)
+#include "result/core.h"
+#include "result/utilities.h"
+#include "result/compat.h"
