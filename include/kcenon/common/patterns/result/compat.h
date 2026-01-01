@@ -3,30 +3,18 @@
 // See the LICENSE file in the project root for full license information.
 
 /**
- * @file error_codes_compat.h
- * @brief Backward compatibility aliases for error codes.
+ * @file compat.h
+ * @brief Backward compatibility layer for error codes.
  *
- * @deprecated This header is deprecated. Use result/compat.h instead.
- * This header will be removed in a future version.
- *
- * This header provides uppercase aliases for error codes to maintain
- * backward compatibility with existing code that uses the old naming
+ * This header provides backward compatibility aliases for error codes
+ * to maintain compatibility with existing code that uses the old naming
  * convention (e.g., INVALID_ARGUMENT instead of invalid_argument).
+ *
+ * This consolidation prepares for C++20 module migration while following
+ * Kent Beck's "Fewest Elements" principle.
  */
 
 #pragma once
-
-#ifdef _MSC_VER
-#pragma message("warning: error_codes_compat.h is deprecated. Use result/compat.h instead.")
-#else
-#pragma message("error_codes_compat.h is deprecated. Use result/compat.h instead.")
-#endif
-
-#include "compat.h"
-
-// Backward compatibility - error codes are now defined in compat.h
-
-#if 0  // Original content preserved for reference
 
 // Import error codes from centralized location
 #include <kcenon/common/error/error_codes.h>
@@ -63,5 +51,3 @@ namespace error_codes {
 }
 
 } // namespace kcenon::common
-
-#endif  // Original content preserved for reference

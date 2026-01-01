@@ -26,6 +26,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed unused variables from test code
 
 ### Changed
+- **Consolidated Result<T> headers for C++20 module preparation** (#255)
+  - Consolidated 8 individual headers into 3 logical groups following Kent Beck's "Fewest Elements" principle
+  - New consolidated header structure:
+    - `result/core.h`: Combines fwd, error_info, result_core, and optional
+    - `result/utilities.h`: Combines result_funcs, exception_conversion, and macros
+    - `result/compat.h`: Error codes compatibility layer
+  - Individual headers deprecated with pragma warnings (removal planned for v1.0.0)
+  - `result.h` umbrella now uses consolidated headers
+  - Prepares for future C++20 module structure: `kcenon.common.result:core`, `:utils`, `:compat`
+  - Full backward compatibility: all existing includes continue to work
+
 - **Split result.h into modular sub-headers** (#243)
   - Reorganized 913-line `result.h` into focused sub-headers under `result/` directory
   - New header structure:
@@ -40,6 +51,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `result.h` is now an umbrella header that includes all sub-headers
   - Full backward compatibility: existing `#include <kcenon/common/patterns/result.h>` works unchanged
   - Selective includes available for faster compilation times
+
+### Deprecated
+- **Individual Result<T> headers** (#255)
+  - `result/fwd.h`, `error_info.h`, `result_core.h`, `optional.h` -> Use `result/core.h`
+  - `result/result_funcs.h`, `exception_conversion.h`, `result_macros.h` -> Use `result/utilities.h`
+  - `result/error_codes_compat.h` -> Use `result/compat.h`
+  - See `docs/DEPRECATION.md` for migration guide
 
 ### Breaking Changes
 - **Removed deprecated file/line/function log() method from ILogger interface** (#217)

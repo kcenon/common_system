@@ -6,11 +6,26 @@
  * @file optional.h
  * @brief Optional<T> type with Rust-like API.
  *
+ * @deprecated This header is deprecated. Use result/core.h instead.
+ * This header will be removed in a future version.
+ *
  * Provides an Optional<T> type similar to std::optional with additional
  * Rust-inspired methods like is_some(), is_none(), and unwrap().
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: optional.h is deprecated. Use result/core.h instead.")
+#else
+#pragma message("optional.h is deprecated. Use result/core.h instead.")
+#endif
+
+#include "core.h"
+
+// Backward compatibility - Optional<T> is now defined in core.h
+
+#if 0  // Original content preserved for reference
 
 #include <optional>
 #include <stdexcept>
@@ -110,3 +125,5 @@ inline Optional<T> None() {
 }
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference

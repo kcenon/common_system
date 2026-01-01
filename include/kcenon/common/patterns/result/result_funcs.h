@@ -6,11 +6,26 @@
  * @file result_funcs.h
  * @brief Factory and helper functions for Result<T>.
  *
+ * @deprecated This header is deprecated. Use result/utilities.h instead.
+ * This header will be removed in a future version.
+ *
  * This header provides free functions for creating and working with Result<T>
  * objects, including factory functions (ok, make_error) and utility functions.
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: result_funcs.h is deprecated. Use result/utilities.h instead.")
+#else
+#pragma message("result_funcs.h is deprecated. Use result/utilities.h instead.")
+#endif
+
+#include "utilities.h"
+
+// Backward compatibility - factory functions are now defined in utilities.h
+
+#if 0  // Original content preserved for reference
 
 #include "result_core.h"
 
@@ -203,3 +218,5 @@ Result<T> or_else(const Result<T>& result, F&& func) {
 }
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference

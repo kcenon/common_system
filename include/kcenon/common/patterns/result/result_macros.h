@@ -6,6 +6,9 @@
  * @file result_macros.h
  * @brief Convenience macros for Result<T> pattern usage.
  *
+ * @deprecated This header is deprecated. Use result/utilities.h instead.
+ * This header will be removed in a future version.
+ *
  * These macros provide shorthand for common Result patterns like
  * early return on error and conditional error generation.
  *
@@ -14,6 +17,18 @@
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: result_macros.h is deprecated. Use result/utilities.h instead.")
+#else
+#pragma message("result_macros.h is deprecated. Use result/utilities.h instead.")
+#endif
+
+#include "utilities.h"
+
+// Backward compatibility - macros are now defined in utilities.h
+
+#if 0  // Original content preserved for reference
 
 #include "result_funcs.h"
 
@@ -73,3 +88,5 @@
             return kcenon::common::error_info{code, message, module, details}; \
         } \
     } while(false)
+
+#endif  // Original content preserved for reference
