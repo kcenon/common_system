@@ -32,7 +32,7 @@
 #include <memory>
 #include <chrono>
 
-#include "../patterns/result/fwd.h"
+#include "../patterns/result/core.h"
 
 namespace kcenon::common {
 
