@@ -6,11 +6,29 @@
  * @file fwd.h
  * @brief Forward declarations for Result pattern types.
  *
+ * @deprecated This header is deprecated. Use result/core.h instead.
+ * This header will be removed in a future version.
+ *
  * This header provides forward declarations to minimize compilation
  * dependencies and enable type references without full definitions.
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: fwd.h is deprecated. Use result/core.h instead.")
+#else
+#pragma message("fwd.h is deprecated. Use result/core.h instead.")
+#endif
+
+#include "core.h"
+
+// Backward compatibility - all types are now defined in core.h
+namespace kcenon::common {
+// Types re-exported from core.h for backward compatibility
+} // namespace kcenon::common
+
+#if 0  // Original content preserved for reference
 
 #include <variant>
 
@@ -39,3 +57,5 @@ enum class result_state {
 using VoidResult = Result<std::monostate>;
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference

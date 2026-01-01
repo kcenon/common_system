@@ -6,6 +6,9 @@
  * @file result_core.h
  * @brief Core Result<T> class definition.
  *
+ * @deprecated This header is deprecated. Use result/core.h instead.
+ * This header will be removed in a future version.
+ *
  * Provides the Result<T> type for exception-free error handling.
  * This is the main class that holds either a value or an error.
  *
@@ -17,6 +20,18 @@
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: result_core.h is deprecated. Use result/core.h instead.")
+#else
+#pragma message("result_core.h is deprecated. Use result/core.h instead.")
+#endif
+
+#include "core.h"
+
+// Backward compatibility - Result<T> is now defined in core.h
+
+#if 0  // Original content preserved for reference
 
 #include "error_info.h"
 
@@ -317,3 +332,5 @@ public:
 };
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference

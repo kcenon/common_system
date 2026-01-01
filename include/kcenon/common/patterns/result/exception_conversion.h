@@ -6,12 +6,27 @@
  * @file exception_conversion.h
  * @brief Exception to Result conversion utilities.
  *
+ * @deprecated This header is deprecated. Use result/utilities.h instead.
+ * This header will be removed in a future version.
+ *
  * Provides utilities for converting exceptions to Result<T> objects,
  * enabling seamless integration between exception-based and Result-based
  * error handling.
  */
 
 #pragma once
+
+#ifdef _MSC_VER
+#pragma message("warning: exception_conversion.h is deprecated. Use result/utilities.h instead.")
+#else
+#pragma message("exception_conversion.h is deprecated. Use result/utilities.h instead.")
+#endif
+
+#include "utilities.h"
+
+// Backward compatibility - exception conversion is now defined in utilities.h
+
+#if 0  // Original content preserved for reference
 
 #include "result_funcs.h"
 #include "error_codes_compat.h"
@@ -168,3 +183,5 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
 }
 
 } // namespace kcenon::common
+
+#endif  // Original content preserved for reference
