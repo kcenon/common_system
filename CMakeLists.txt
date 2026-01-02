@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 project(common_system VERSION 0.2.0.0 LANGUAGES CXX)
 
 # =============================================================================
@@ -37,6 +37,9 @@ project(common_system VERSION 0.2.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+# C++20 Module Support (requires CMake 3.28+)
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
 # Export compile commands for IDE support
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -145,6 +148,84 @@ if(NOT COMMON_HEADER_ONLY)
         EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
         KCENON_WITH_COMMON_SYSTEM=1
     )
+endif()
+
+# =============================================================================
+# C++20 Module Support (Phase 2)
+# =============================================================================
+# Enable C++20 modules with CMake 3.28+ when building with module-capable compilers.
+# This provides an alternative to the header-only interface.
+#
+# Usage:
+#   cmake -DCOMMON_BUILD_MODULES=ON ..
+#
+# Requirements:
+#   - CMake 3.28 or later
+#   - Clang 16+, GCC 14+, or MSVC 2022 17.4+
+# =============================================================================
+
+option(COMMON_BUILD_MODULES "Build C++20 module version of common_system" OFF)
+
+if(COMMON_BUILD_MODULES)
+    # Check CMake version
+    if(CMAKE_VERSION VERSION_LESS "3.28")
+        message(WARNING "C++20 modules require CMake 3.28+. Disabling module build.")
+        set(COMMON_BUILD_MODULES OFF)
+    else()
+        message(STATUS "C++20 module build enabled")
+
+        # Create module library target
+        add_library(common_system_modules)
+        add_library(kcenon::common_modules ALIAS common_system_modules)
+
+        # Set C++20 standard for module target
+        target_compile_features(common_system_modules PUBLIC cxx_std_20)
+
+        # Enable module scanning
+        set_target_properties(common_system_modules PROPERTIES
+            CXX_SCAN_FOR_MODULES ON
+        )
+
+        # Add module source files
+        target_sources(common_system_modules
+            PUBLIC FILE_SET CXX_MODULES
+            FILES
+                # Primary module
+                src/modules/common.cppm
+                # Tier 1: Core partitions
+                src/modules/utils.cppm
+                src/modules/error.cppm
+                # Tier 2: Foundation partitions
+                src/modules/result.cppm
+                src/modules/result/core.cppm
+                src/modules/result/utilities.cppm
+                src/modules/concepts.cppm
+                # Tier 3: Infrastructure partitions
+                src/modules/interfaces.cppm
+                src/modules/interfaces/core.cppm
+                src/modules/config.cppm
+                src/modules/di.cppm
+                # Tier 4: Application partitions
+                src/modules/patterns.cppm
+                src/modules/logging.cppm
+        )
+
+        # Include directories for module target
+        target_include_directories(common_system_modules PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+            $<INSTALL_INTERFACE:include>
+        )
+
+        # Compile definitions
+        target_compile_definitions(common_system_modules PUBLIC
+            EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
+            KCENON_WITH_COMMON_SYSTEM=1
+            KCENON_USE_MODULES=1
+        )
+
+        message(STATUS "C++20 module target: common_system_modules")
+    endif()
 endif()
 
 # Installation rules
