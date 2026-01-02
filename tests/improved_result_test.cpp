@@ -143,7 +143,7 @@ TEST(ImprovedResultTest, ThreadSafetyConsiderations) {
     // Multiple threads can safely receive copies
     std::vector<std::thread> threads;
     for (int i = 0; i < 10; ++i) {
-        threads.emplace_back([create_result, i]() {
+        threads.emplace_back([create_result]() {
             auto r = create_result();  // Each thread gets its own copy
             EXPECT_TRUE(r.is_ok());
             EXPECT_EQ(r.unwrap(), 42);
