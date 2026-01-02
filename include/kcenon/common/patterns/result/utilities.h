@@ -33,19 +33,25 @@ namespace kcenon::common {
 // ============================================================================
 
 // Helper functions for working with Results
+// NOTE: Free functions are deprecated in favor of member methods.
+// See docs/guides/RESULT_MIGRATION_GUIDE.md for migration instructions.
 
 /**
  * @brief Check if result contains a successful value
+ * @deprecated Use result.is_ok() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.is_ok() instead. Will be removed in v2.0.0.")]]
 inline bool is_ok(const Result<T>& result) {
     return result.is_ok();
 }
 
 /**
  * @brief Check if result contains an error
+ * @deprecated Use result.is_err() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.is_err() instead. Will be removed in v2.0.0.")]]
 inline bool is_error(const Result<T>& result) {
     return result.is_err();
 }
@@ -53,8 +59,10 @@ inline bool is_error(const Result<T>& result) {
 /**
  * @brief Get value from result
  * @throws std::bad_variant_access if result contains error
+ * @deprecated Use result.value() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.value() instead. Will be removed in v2.0.0.")]]
 inline const T& get_value(const Result<T>& result) {
     return result.value();
 }
@@ -62,8 +70,10 @@ inline const T& get_value(const Result<T>& result) {
 /**
  * @brief Get mutable value from result
  * @throws std::bad_variant_access if result contains error
+ * @deprecated Use result.value() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.value() instead. Will be removed in v2.0.0.")]]
 inline T& get_value(Result<T>& result) {
     return result.value();
 }
@@ -71,24 +81,30 @@ inline T& get_value(Result<T>& result) {
 /**
  * @brief Get error from result
  * @throws std::bad_variant_access if result contains value
+ * @deprecated Use result.error() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.error() instead. Will be removed in v2.0.0.")]]
 inline const error_info& get_error(const Result<T>& result) {
     return result.error();
 }
 
 /**
  * @brief Get value or return default
+ * @deprecated Use result.value_or(default) or result.unwrap_or(default) instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.value_or(default) or result.unwrap_or(default) instead. Will be removed in v2.0.0.")]]
 inline T value_or(const Result<T>& result, T default_value) {
     return result.unwrap_or(default_value);
 }
 
 /**
  * @brief Get value pointer if ok, nullptr if error
+ * @deprecated Use result.is_ok() with result.value() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.is_ok() with result.value() instead. Will be removed in v2.0.0.")]]
 inline const T* get_if_ok(const Result<T>& result) {
     if (result.is_ok()) {
         return &result.value();
@@ -98,8 +114,10 @@ inline const T* get_if_ok(const Result<T>& result) {
 
 /**
  * @brief Get error pointer if error, nullptr if ok
+ * @deprecated Use result.is_err() with result.error() instead. Will be removed in v2.0.0.
  */
 template<typename T>
+[[deprecated("Use result.is_err() with result.error() instead. Will be removed in v2.0.0.")]]
 inline const error_info* get_if_error(const Result<T>& result) {
     if (result.is_err()) {
         return &result.error();
@@ -185,11 +203,14 @@ inline Result<T> make_error(const error_info& err) {
 }
 
 // Monadic operations (for free functions)
+// NOTE: These are deprecated in favor of member methods.
 
 /**
  * @brief Map a function over a successful result
+ * @deprecated Use result.map(func) instead. Will be removed in v2.0.0.
  */
 template<typename T, typename F>
+[[deprecated("Use result.map(func) instead. Will be removed in v2.0.0.")]]
 auto map(const Result<T>& result, F&& func)
     -> Result<decltype(func(std::declval<T>()))> {
     return result.map(std::forward<F>(func));
@@ -197,8 +218,10 @@ auto map(const Result<T>& result, F&& func)
 
 /**
  * @brief Map a function that returns a Result
+ * @deprecated Use result.and_then(func) instead. Will be removed in v2.0.0.
  */
 template<typename T, typename F>
+[[deprecated("Use result.and_then(func) instead. Will be removed in v2.0.0.")]]
 auto and_then(const Result<T>& result, F&& func)
     -> decltype(func(std::declval<T>())) {
     return result.and_then(std::forward<F>(func));
@@ -206,8 +229,10 @@ auto and_then(const Result<T>& result, F&& func)
 
 /**
  * @brief Provide alternative value if error
+ * @deprecated Use result.or_else(func) instead. Will be removed in v2.0.0.
  */
 template<typename T, typename F>
+[[deprecated("Use result.or_else(func) instead. Will be removed in v2.0.0.")]]
 Result<T> or_else(const Result<T>& result, F&& func) {
     return result.or_else(std::forward<F>(func));
 }
@@ -380,8 +405,8 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
 #define COMMON_RETURN_IF_ERROR(expr) \
     do { \
         auto _result_temp = (expr); \
-        if (kcenon::common::is_error(_result_temp)) { \
-            return kcenon::common::get_error(_result_temp); \
+        if (_result_temp.is_err()) { \
+            return _result_temp.error(); \
         } \
     } while(false)
 
@@ -394,10 +419,10 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  */
 #define COMMON_ASSIGN_OR_RETURN(decl, expr) \
     auto _result_##decl = (expr); \
-    if (kcenon::common::is_error(_result_##decl)) { \
-        return kcenon::common::get_error(_result_##decl); \
+    if (_result_##decl.is_err()) { \
+        return _result_##decl.error(); \
     } \
-    decl = kcenon::common::get_value(std::move(_result_##decl))
+    decl = std::move(_result_##decl).value()
 
 /**
  * @brief Return error if condition is false
