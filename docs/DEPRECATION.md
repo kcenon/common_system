@@ -22,83 +22,11 @@ The Common System library follows semantic versioning. Deprecated APIs are marke
 
 ## Currently Deprecated APIs
 
-### 1. Individual Result<T> Headers
-
-**Directory:** `include/kcenon/common/patterns/result/`
-
-**Deprecated in:** v0.2.0
-
-**Planned Removal:** v1.0.0
-
-**Description:**
-As part of C++20 module migration preparation, the 8 individual Result<T> headers have been consolidated into 3 logical groups following Kent Beck's "Fewest Elements" principle.
-
-**Deprecated Headers:**
-
-| Deprecated Header | Replacement |
-|-------------------|-------------|
-| `result/fwd.h` | `result/core.h` |
-| `result/error_info.h` | `result/core.h` |
-| `result/result_core.h` | `result/core.h` |
-| `result/optional.h` | `result/core.h` |
-| `result/result_funcs.h` | `result/utilities.h` |
-| `result/exception_conversion.h` | `result/utilities.h` |
-| `result/result_macros.h` | `result/utilities.h` |
-| `result/error_codes_compat.h` | `result/compat.h` |
-
-**New Consolidated Headers:**
-
-| Header | Contents |
-|--------|----------|
-| `result/core.h` | Forward declarations, error_info, Result<T>, Optional<T> |
-| `result/utilities.h` | Factory functions, exception conversion, macros |
-| `result/compat.h` | Legacy error code aliases |
-
-**Reason for Deprecation:**
-- Prepare for C++20 module migration with clear module partitions
-- Reduce header count from 8 to 3 (Kent Beck's "Fewest Elements")
-- Simplify include dependencies
-- Reduce compile-time overhead (fewer file opens)
-
-**Migration Guide:**
-
-<details>
-<summary>Before (Deprecated)</summary>
-
-```cpp
-// Individual includes
-#include <kcenon/common/patterns/result/fwd.h>
-#include <kcenon/common/patterns/result/result_core.h>
-#include <kcenon/common/patterns/result/result_funcs.h>
-```
-</details>
-
-<details>
-<summary>After (Current)</summary>
-
-```cpp
-// Option 1: Umbrella header (recommended for most users)
-#include <kcenon/common/patterns/result.h>
-
-// Option 2: Consolidated headers for selective includes
-#include <kcenon/common/patterns/result/core.h>       // Core types
-#include <kcenon/common/patterns/result/utilities.h>  // Factory functions
-#include <kcenon/common/patterns/result/compat.h>     // Legacy codes
-```
-</details>
-
-**Future C++20 Module Structure:**
-
-```cpp
-// Future module imports
-import kcenon.common.result;        // Full module
-import kcenon.common.result:core;   // Partition
-import kcenon.common.result:utils;  // Partition
-```
+*No currently deprecated APIs. See "Removed APIs" sections below for previously deprecated items.*
 
 ---
 
-### 2. Legacy Feature Flag Macros
+### 1. Legacy Feature Flag Macros
 
 **File:** `include/kcenon/common/config/feature_flags.h`
 
@@ -178,6 +106,60 @@ target_compile_definitions(my_target PUBLIC KCENON_ENABLE_LEGACY_ALIASES=0)
 ```
 
 ---
+
+---
+
+## APIs Removed in v0.2.x
+
+### 1. Individual Result<T> Headers
+
+**Directory:** `include/kcenon/common/patterns/result/`
+
+**Deprecated in:** v0.2.0
+
+**Removed in:** v0.2.x (Issue #266)
+
+**Description:**
+As part of C++20 module migration preparation, the 8 individual Result<T> headers were consolidated into 3 logical groups following Kent Beck's "Fewest Elements" principle. The deprecated headers have been removed.
+
+**Removed Headers:**
+
+| Removed Header | Replacement |
+|----------------|-------------|
+| `result/fwd.h` | `result/core.h` |
+| `result/error_info.h` | `result/core.h` |
+| `result/result_core.h` | `result/core.h` |
+| `result/optional.h` | `result/core.h` |
+| `result/result_funcs.h` | `result/utilities.h` |
+| `result/exception_conversion.h` | `result/utilities.h` |
+| `result/result_macros.h` | `result/utilities.h` |
+| `result/error_codes_compat.h` | `result/compat.h` |
+
+**Current Headers:**
+
+| Header | Contents |
+|--------|----------|
+| `result/core.h` | Forward declarations, error_info, Result<T>, Optional<T> |
+| `result/utilities.h` | Factory functions, exception conversion, macros |
+| `result/compat.h` | Legacy error code aliases |
+
+**Reason for Removal:**
+- Prepare for C++20 module migration with clear module partitions
+- Reduce header count from 8 to 3 (Kent Beck's "Fewest Elements")
+- Simplify include dependencies
+- Zero internal/external usage detected
+
+**Migration:**
+
+```cpp
+// Recommended: Use umbrella header
+#include <kcenon/common/patterns/result.h>
+
+// Or use consolidated headers
+#include <kcenon/common/patterns/result/core.h>       // Core types
+#include <kcenon/common/patterns/result/utilities.h>  // Factory functions
+#include <kcenon/common/patterns/result/compat.h>     // Legacy codes
+```
 
 ---
 
