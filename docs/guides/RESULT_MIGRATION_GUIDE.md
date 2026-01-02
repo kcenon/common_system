@@ -11,7 +11,8 @@
   - [Factory Functions](#factory-functions)
   - [Member Functions](#member-functions)
   - [Monadic Operations](#monadic-operations)
-  - [Helper Functions](#helper-functions)
+  - [Helper Functions (Deprecated)](#helper-functions-deprecated)
+- [Free Function Deprecation](#free-function-deprecation)
 - [Migration Steps](#migration-steps)
   - [Phase 1: Add Deprecated Aliases](#phase-1-add-deprecated-aliases)
   - [Phase 2: Update Internal Usage](#phase-2-update-internal-usage)
@@ -27,8 +28,8 @@
 - [FAQ](#faq)
 - [References](#references)
 
-**Version**: 1.0
-**Last Updated**: 2025-12-16
+**Version**: 1.1
+**Last Updated**: 2026-01-03
 
 ---
 
@@ -175,18 +176,87 @@ template<typename F>
 Result<T> or_else(F&& func) const;
 ```
 
-### Helper Functions
+### Helper Functions (Deprecated)
+
+> ⚠️ **Deprecation Notice**: Free functions are deprecated in favor of member methods.
+> See [API Standardization](#free-function-deprecation) for migration details.
 
 ```cpp
-// Free functions
-template<typename T> bool is_ok(const Result<T>& result);
-template<typename T> bool is_error(const Result<T>& result);
-template<typename T> const T& get_value(const Result<T>& result);
-template<typename T> const error_info& get_error(const Result<T>& result);
-template<typename T> T value_or(const Result<T>& result, T default_value);
+// Free functions (DEPRECATED - use member methods instead)
+template<typename T> bool is_ok(const Result<T>& result);       // Use result.is_ok()
+template<typename T> bool is_error(const Result<T>& result);    // Use result.is_err()
+template<typename T> const T& get_value(const Result<T>& result);  // Use result.value()
+template<typename T> const error_info& get_error(const Result<T>& result);  // Use result.error()
+template<typename T> T value_or(const Result<T>& result, T default_value);  // Use result.unwrap_or()
 template<typename T> const T* get_if_ok(const Result<T>& result);
 template<typename T> const error_info* get_if_error(const Result<T>& result);
 ```
+
+---
+
+## Free Function Deprecation
+
+As part of the API standardization effort (see [Issue #258](https://github.com/kcenon/common_system/issues/258)), free functions for `Result<T>` operations are being deprecated in favor of member methods.
+
+### Rationale
+
+Analysis of the codebase shows that member methods are used **5.6x more frequently** than free functions:
+
+| API Style | Usage Count | Percentage |
+|-----------|-------------|------------|
+| Member Methods | 510 | **84.9%** |
+| Free Functions | 91 | 15.1% |
+
+### Migration Table
+
+| Free Function | Replacement Member Method |
+|---------------|--------------------------|
+| `is_ok(result)` | `result.is_ok()` |
+| `is_error(result)` | `result.is_err()` |
+| `get_value(result)` | `result.value()` |
+| `get_error(result)` | `result.error()` |
+| `value_or(result, def)` | `result.unwrap_or(def)` or `result.value_or(def)` |
+| `map(result, func)` | `result.map(func)` |
+| `and_then(result, func)` | `result.and_then(func)` |
+| `or_else(result, func)` | `result.or_else(func)` |
+
+### Deprecation Timeline
+
+| Phase | Version | Status | Action |
+|-------|---------|--------|--------|
+| Documentation | Current | In Progress | Update docs to recommend member methods |
+| Deprecation Attributes | Next Minor | Planned | Add `[[deprecated]]` to free functions |
+| Removal | Next Major+2 | Planned | Remove deprecated free functions |
+
+### When Free Functions Are Still Appropriate
+
+Free functions should only be used in these specific contexts:
+
+1. **Macro Internals**: The `COMMON_ASSIGN_OR_RETURN` macro uses free functions internally for technical reasons
+2. **ADL Requirements**: Generic templates that require argument-dependent lookup
+3. **Functional Composition**: When working with higher-order functions that expect free functions
+
+### Code Migration Example
+
+```cpp
+// BEFORE (free function style)
+if (is_ok(result)) {
+    auto value = get_value(result);
+    process(value);
+} else {
+    log_error(get_error(result));
+}
+
+// AFTER (member method style - RECOMMENDED)
+if (result.is_ok()) {
+    auto value = result.value();
+    process(value);
+} else {
+    log_error(result.error());
+}
+```
+
+For more details, see [Best Practices - Recommended API Style](BEST_PRACTICES.md#recommended-api-style).
 
 ---
 
