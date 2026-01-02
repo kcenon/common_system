@@ -49,9 +49,12 @@ The `Result<T>` API provides two styles for the same operations:
 - **Method chaining**: Fluent API style: `result.map(...).and_then(...)`
 
 **When free functions are appropriate:**
-- **Macro internals**: `COMMON_ASSIGN_OR_RETURN` macro uses free functions internally
 - **ADL contexts**: Generic templates that require argument-dependent lookup
 - **Legacy compatibility**: When interfacing with code that expects free functions
+
+> **Note**: Free functions are now marked as `[[deprecated]]` and will be removed in v2.0.0.
+> The `COMMON_ASSIGN_OR_RETURN` and `COMMON_RETURN_IF_ERROR` macros have been updated
+> to use member methods internally.
 
 **Example:**
 ```cpp

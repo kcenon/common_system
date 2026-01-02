@@ -80,8 +80,8 @@ public:
             tasks_.emplace([shared_job, promise]() {
                 try {
                     auto result = shared_job->execute();
-                    if (is_error(result)) {
-                        auto& err = get_error(result);
+                    if (result.is_err()) {
+                        const auto& err = result.error();
                         promise->set_exception(
                             std::make_exception_ptr(
                                 std::runtime_error(err.message)));
@@ -118,8 +118,8 @@ public:
                 std::this_thread::sleep_for(delay);
                 try {
                     auto result = shared_job->execute();
-                    if (is_error(result)) {
-                        auto& err = get_error(result);
+                    if (result.is_err()) {
+                        const auto& err = result.error();
                         promise->set_exception(
                             std::make_exception_ptr(
                                 std::runtime_error(err.message)));
@@ -281,8 +281,8 @@ void process_data_batch(IExecutor& executor, const std::vector<int>& data) {
         });
 
         auto result = executor.execute(std::move(job));
-        if (is_ok(result)) {
-            futures.push_back(std::move(get_value(result)));
+        if (result.is_ok()) {
+            futures.push_back(std::move(result.value()));
         }
     }
 
@@ -325,16 +325,16 @@ int main() {
         std::cout << "   Task 1 executed\n";
     });
     auto result1 = executor.execute(std::move(job1));
-    if (is_ok(result1)) {
-        get_value(std::move(result1)).wait();
+    if (result1.is_ok()) {
+        std::move(result1).value().wait();
     }
 
     auto job2 = std::make_unique<function_job>([] {
         std::cout << "   Task 2 executed\n";
     });
     auto result2 = executor.execute(std::move(job2));
-    if (is_ok(result2)) {
-        get_value(std::move(result2)).wait();
+    if (result2.is_ok()) {
+        std::move(result2).value().wait();
     }
 
     // Example 2: Check executor status
@@ -357,8 +357,8 @@ int main() {
         std::cout << "   Task from shared executor\n";
     });
     auto provider_result = shared_executor->execute(std::move(provider_job));
-    if (is_ok(provider_result)) {
-        get_value(std::move(provider_result)).wait();
+    if (provider_result.is_ok()) {
+        std::move(provider_result).value().wait();
     }
 
     // Example 5: Delayed execution
@@ -373,8 +373,8 @@ int main() {
     });
 
     auto delayed_result = executor.execute_delayed(std::move(delayed_job), 500ms);
-    if (is_ok(delayed_result)) {
-        get_value(std::move(delayed_result)).wait();
+    if (delayed_result.is_ok()) {
+        std::move(delayed_result).value().wait();
     }
 
     // Example 6: Error handling
@@ -384,9 +384,9 @@ int main() {
     });
 
     auto error_result = executor.execute(std::move(error_job));
-    if (is_ok(error_result)) {
+    if (error_result.is_ok()) {
         try {
-            auto error_future = std::move(get_value(error_result));
+            auto error_future = std::move(error_result.value());
             error_future.get();
         } catch (const std::exception& e) {
             std::cout << "   Caught exception: " << e.what() << "\n";
@@ -405,10 +405,10 @@ int main() {
             auto job = std::make_unique<calculation_job>(i, job_sum);
             auto result = job_executor.execute(std::move(job));
 
-            if (is_ok(result)) {
-                job_futures.push_back(std::move(get_value(result)));
+            if (result.is_ok()) {
+                job_futures.push_back(std::move(result.value()));
             } else {
-                auto& err = get_error(result);
+                const auto& err = result.error();
                 std::cout << "   Failed to execute job: "
                          << err.message << "\n";
             }

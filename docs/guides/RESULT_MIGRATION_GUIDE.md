@@ -224,17 +224,23 @@ Analysis of the codebase shows that member methods are used **5.6x more frequent
 
 | Phase | Version | Status | Action |
 |-------|---------|--------|--------|
-| Documentation | Current | In Progress | Update docs to recommend member methods |
-| Deprecation Attributes | Next Minor | Planned | Add `[[deprecated]]` to free functions |
-| Removal | Next Major+2 | Planned | Remove deprecated free functions |
+| Documentation | v1.x | ✅ Completed | Update docs to recommend member methods |
+| Deprecation Attributes | v1.x | ✅ Completed | Add `[[deprecated]]` to free functions |
+| Removal | v2.0.0 | 🔜 Planned | Remove deprecated free functions |
+
+> **Note**: As of the current release, all free functions in `utilities.h` are marked with
+> `[[deprecated]]` attributes. Using them will generate compiler warnings. Plan to migrate
+> to member methods before v2.0.0 to avoid breaking changes.
 
 ### When Free Functions Are Still Appropriate
 
 Free functions should only be used in these specific contexts:
 
-1. **Macro Internals**: The `COMMON_ASSIGN_OR_RETURN` macro uses free functions internally for technical reasons
-2. **ADL Requirements**: Generic templates that require argument-dependent lookup
-3. **Functional Composition**: When working with higher-order functions that expect free functions
+1. **ADL Requirements**: Generic templates that require argument-dependent lookup
+2. **Functional Composition**: When working with higher-order functions that expect free functions
+
+> **Note**: The `COMMON_ASSIGN_OR_RETURN` and `COMMON_RETURN_IF_ERROR` macros now use
+> member methods internally, so they no longer trigger deprecation warnings.
 
 ### Code Migration Example
 

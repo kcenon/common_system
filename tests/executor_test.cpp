@@ -84,12 +84,12 @@ public:
         std::thread([job = std::move(job), promise]() {
             try {
                 auto result = job->execute();
-                if (is_ok(result)) {
+                if (result.is_ok()) {
                     promise->set_value();
                 } else {
                     promise->set_exception(
                         std::make_exception_ptr(
-                            std::runtime_error(get_error(result).message)));
+                            std::runtime_error(result.error().message)));
                 }
             } catch (...) {
                 promise->set_exception(std::current_exception());
@@ -114,12 +114,12 @@ public:
             std::this_thread::sleep_for(delay);
             try {
                 auto result = job->execute();
-                if (is_ok(result)) {
+                if (result.is_ok()) {
                     promise->set_value();
                 } else {
                     promise->set_exception(
                         std::make_exception_ptr(
-                            std::runtime_error(get_error(result).message)));
+                            std::runtime_error(result.error().message)));
                 }
             } catch (...) {
                 promise->set_exception(std::current_exception());
@@ -177,9 +177,9 @@ TEST_F(ExecutorTest, ExecuteTask) {
     });
 
     auto result = executor_->execute(std::move(job));
-    ASSERT_TRUE(is_ok(result));
+    ASSERT_TRUE(result.is_ok());
 
-    get_value(std::move(result)).wait();
+    std::move(result).value().wait();
     EXPECT_TRUE(executed);
 }
 
@@ -194,8 +194,8 @@ TEST_F(ExecutorTest, ExecuteMultipleTasks) {
         });
 
         auto result = executor_->execute(std::move(job));
-        ASSERT_TRUE(is_ok(result));
-        futures.push_back(std::move(get_value(result)));
+        ASSERT_TRUE(result.is_ok());
+        futures.push_back(std::move(result.value()));
     }
 
     for (auto& future : futures) {
@@ -214,9 +214,9 @@ TEST_F(ExecutorTest, ExecuteDelayed) {
     });
 
     auto result = executor_->execute_delayed(std::move(job), 100ms);
-    ASSERT_TRUE(is_ok(result));
+    ASSERT_TRUE(result.is_ok());
 
-    get_value(std::move(result)).wait();
+    std::move(result).value().wait();
     auto elapsed = std::chrono::steady_clock::now() - start;
 
     EXPECT_TRUE(executed);
@@ -240,9 +240,9 @@ TEST_F(ExecutorTest, ExceptionHandling) {
     });
 
     auto result = executor_->execute(std::move(job));
-    ASSERT_TRUE(is_ok(result));
+    ASSERT_TRUE(result.is_ok());
 
-    auto future = std::move(get_value(result));
+    auto future = std::move(result.value());
     EXPECT_THROW(future.get(), std::runtime_error);
 }
 
@@ -285,7 +285,7 @@ TEST_F(ExecutorTest, SubmittedCount) {
             std::this_thread::sleep_for(1ms);
         });
         auto result = executor_->execute(std::move(job));
-        ASSERT_TRUE(is_ok(result));
+        ASSERT_TRUE(result.is_ok());
     }
 
     EXPECT_EQ(executor_->get_submitted_count(), task_count);

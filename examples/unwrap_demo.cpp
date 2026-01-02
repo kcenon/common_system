@@ -81,11 +81,11 @@ void demonstrate_improved_error_messages() {
         std::cout << "  Module: " << error.module << "\n";
     }
 
-    // Option C: get_if_ok pattern
-    if (const int* value_ptr = get_if_ok(result)) {
-        std::cout << "Value via get_if_ok: " << *value_ptr << "\n";
+    // Option C: is_ok() check with value() access
+    if (result.is_ok()) {
+        std::cout << "Value via is_ok check: " << result.value() << "\n";
     } else {
-        std::cout << "get_if_ok returned nullptr (error state)\n";
+        std::cout << "Result is in error state\n";
     }
 
     // Option D: Monadic operations
