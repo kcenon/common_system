@@ -103,23 +103,23 @@ Result<int> parse_and_compute(const std::string& expr) {
 int main() {
     std::cout << "=== Result Pattern Examples ===\n\n";
 
-    // Example 1: Basic usage
+    // Example 1: Basic usage with member methods
     std::cout << "1. Basic division:\n";
     auto result1 = divide(10, 2);
-    if (is_ok(result1)) {
-        std::cout << "   10 / 2 = " << get_value(result1) << "\n";
+    if (result1.is_ok()) {
+        std::cout << "   10 / 2 = " << result1.value() << "\n";
     }
 
     auto result2 = divide(10, 0);
-    if (is_error(result2)) {
-        auto& err = get_error(result2);
+    if (result2.is_err()) {
+        const auto& err = result2.error();
         std::cout << "   Error: " << err.message
                   << " (code: " << err.code << ")\n";
     }
 
-    // Example 2: Using value_or
+    // Example 2: Using value_or / unwrap_or
     std::cout << "\n2. Using value_or:\n";
-    auto value = value_or(divide(10, 0), -1);
+    auto value = divide(10, 0).unwrap_or(-1);
     std::cout << "   10 / 0 with default -1 = " << value << "\n";
 
     // Example 3: Pattern matching with if-else
@@ -131,31 +131,27 @@ int main() {
         std::cout << "   Failed: " << result3.error().message << "\n";
     }
 
-    // Example 4: Monadic operations
+    // Example 4: Monadic operations using member methods
     std::cout << "\n4. Monadic operations:\n";
     auto result4 = divide(100, 5);
-    auto doubled = map(result4, [](int x) { return x * 2; });
-    if (is_ok(doubled)) {
-        std::cout << "   (100 / 5) * 2 = " << get_value(doubled) << "\n";
+    auto doubled = result4.map([](int x) { return x * 2; });
+    if (doubled.is_ok()) {
+        std::cout << "   (100 / 5) * 2 = " << doubled.value() << "\n";
     }
 
-    // Example 5: Chaining with and_then
+    // Example 5: Chaining with and_then using member methods
     std::cout << "\n5. Chaining operations:\n";
-    auto chain_result = and_then(
-        divide(50, 5),
-        [](int x) { return divide(x, 2); }
-    );
-    if (is_ok(chain_result)) {
-        std::cout << "   (50 / 5) / 2 = " << get_value(chain_result) << "\n";
+    auto chain_result = divide(50, 5)
+        .and_then([](int x) { return divide(x, 2); });
+    if (chain_result.is_ok()) {
+        std::cout << "   (50 / 5) / 2 = " << chain_result.value() << "\n";
     }
 
-    // Example 6: Error recovery with or_else
+    // Example 6: Error recovery with or_else using member methods
     std::cout << "\n6. Error recovery:\n";
-    auto recovered = or_else(
-        divide(10, 0),
-        [](const error_info&) { return ok(0); }
-    );
-    std::cout << "   10 / 0 with recovery = " << get_value(recovered) << "\n";
+    auto recovered = divide(10, 0)
+        .or_else([](const error_info&) { return ok(0); });
+    std::cout << "   10 / 0 with recovery = " << recovered.value() << "\n";
 
     // Example 7: try_catch wrapper
     std::cout << "\n7. Exception wrapping:\n";
@@ -164,8 +160,8 @@ int main() {
         return 42;
     }, "example_module");
 
-    if (is_error(wrapped)) {
-        auto& err = get_error(wrapped);
+    if (wrapped.is_err()) {
+        const auto& err = wrapped.error();
         std::cout << "   Caught exception: " << err.message << "\n";
     }
 
