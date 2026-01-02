@@ -11,7 +11,8 @@
   - [팩토리 함수](#팩토리-함수)
   - [멤버 함수](#멤버-함수)
   - [모나딕 연산](#모나딕-연산)
-  - [헬퍼 함수](#헬퍼-함수)
+  - [헬퍼 함수 (Deprecated)](#헬퍼-함수-deprecated)
+- [자유 함수 Deprecation](#자유-함수-deprecation)
 - [마이그레이션 단계](#마이그레이션-단계)
   - [Phase 1: Deprecated 별칭 추가](#phase-1-deprecated-별칭-추가)
   - [Phase 2: 내부 사용 업데이트](#phase-2-내부-사용-업데이트)
@@ -27,8 +28,8 @@
 - [FAQ](#faq)
 - [참고 자료](#참고-자료)
 
-**버전**: 1.0
-**최종 업데이트**: 2025-12-16
+**버전**: 1.1
+**최종 업데이트**: 2026-01-03
 
 ---
 
@@ -175,18 +176,87 @@ template<typename F>
 Result<T> or_else(F&& func) const;
 ```
 
-### 헬퍼 함수
+### 헬퍼 함수 (Deprecated)
+
+> ⚠️ **Deprecation 공지**: 자유 함수는 멤버 메서드 사용을 권장하며 더 이상 사용되지 않습니다.
+> 마이그레이션 세부사항은 [API 표준화](#자유-함수-deprecation)를 참조하세요.
 
 ```cpp
-// 자유 함수
-template<typename T> bool is_ok(const Result<T>& result);
-template<typename T> bool is_error(const Result<T>& result);
-template<typename T> const T& get_value(const Result<T>& result);
-template<typename T> const error_info& get_error(const Result<T>& result);
-template<typename T> T value_or(const Result<T>& result, T default_value);
+// 자유 함수 (DEPRECATED - 대신 멤버 메서드를 사용하세요)
+template<typename T> bool is_ok(const Result<T>& result);       // result.is_ok() 사용
+template<typename T> bool is_error(const Result<T>& result);    // result.is_err() 사용
+template<typename T> const T& get_value(const Result<T>& result);  // result.value() 사용
+template<typename T> const error_info& get_error(const Result<T>& result);  // result.error() 사용
+template<typename T> T value_or(const Result<T>& result, T default_value);  // result.unwrap_or() 사용
 template<typename T> const T* get_if_ok(const Result<T>& result);
 template<typename T> const error_info* get_if_error(const Result<T>& result);
 ```
+
+---
+
+## 자유 함수 Deprecation
+
+API 표준화 작업의 일환으로 ([Issue #258](https://github.com/kcenon/common_system/issues/258) 참조), `Result<T>` 연산을 위한 자유 함수는 멤버 메서드를 권장하며 더 이상 사용되지 않습니다.
+
+### 근거
+
+코드베이스 분석 결과, 멤버 메서드가 자유 함수보다 **5.6배 더 많이** 사용됩니다:
+
+| API 스타일 | 사용 횟수 | 비율 |
+|-----------|-----------|------|
+| 멤버 메서드 | 510 | **84.9%** |
+| 자유 함수 | 91 | 15.1% |
+
+### 마이그레이션 테이블
+
+| 자유 함수 | 대체 멤버 메서드 |
+|----------|-----------------|
+| `is_ok(result)` | `result.is_ok()` |
+| `is_error(result)` | `result.is_err()` |
+| `get_value(result)` | `result.value()` |
+| `get_error(result)` | `result.error()` |
+| `value_or(result, def)` | `result.unwrap_or(def)` 또는 `result.value_or(def)` |
+| `map(result, func)` | `result.map(func)` |
+| `and_then(result, func)` | `result.and_then(func)` |
+| `or_else(result, func)` | `result.or_else(func)` |
+
+### Deprecation 타임라인
+
+| 단계 | 버전 | 상태 | 작업 |
+|-----|------|------|-----|
+| 문서화 | 현재 | 진행 중 | 멤버 메서드 권장 문서 업데이트 |
+| Deprecation 속성 | 다음 마이너 | 계획됨 | 자유 함수에 `[[deprecated]]` 추가 |
+| 제거 | 다음 메이저+2 | 계획됨 | deprecated 자유 함수 제거 |
+
+### 자유 함수가 여전히 적절한 경우
+
+자유 함수는 다음과 같은 특정 상황에서만 사용해야 합니다:
+
+1. **매크로 내부**: `COMMON_ASSIGN_OR_RETURN` 매크로는 기술적인 이유로 내부적으로 자유 함수를 사용합니다
+2. **ADL 요구사항**: 인자 의존 조회가 필요한 제네릭 템플릿
+3. **함수형 조합**: 자유 함수를 기대하는 고차 함수와 작업할 때
+
+### 코드 마이그레이션 예제
+
+```cpp
+// 변경 전 (자유 함수 스타일)
+if (is_ok(result)) {
+    auto value = get_value(result);
+    process(value);
+} else {
+    log_error(get_error(result));
+}
+
+// 변경 후 (멤버 메서드 스타일 - 권장)
+if (result.is_ok()) {
+    auto value = result.value();
+    process(value);
+} else {
+    log_error(result.error());
+}
+```
+
+자세한 내용은 [모범 사례 - 권장 API 스타일](BEST_PRACTICES.md#recommended-api-style)을 참조하세요.
 
 ---
 

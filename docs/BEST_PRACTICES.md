@@ -4,20 +4,15 @@ This guide documents the recommended patterns for creating and using `Result<T>`
 
 ## Header Structure
 
-The Result pattern is organized into modular headers for improved compilation times and maintainability:
+The Result pattern is organized into consolidated headers for improved compilation times and C++20 module readiness:
 
 ```
 include/kcenon/common/patterns/
 ├── result.h                      # Umbrella header (include this for full functionality)
 └── result/
-    ├── fwd.h                     # Forward declarations
-    ├── error_info.h              # error_info struct
-    ├── result_core.h             # Result<T> class definition
-    ├── optional.h                # Optional<T> class
-    ├── result_funcs.h            # Factory and helper functions
-    ├── error_codes_compat.h      # Backward compatibility aliases
-    ├── exception_conversion.h    # try_catch utilities
-    └── result_macros.h           # Convenience macros
+    ├── core.h                    # Result<T> class, error_info, forward declarations
+    ├── utilities.h               # Factory functions, helpers, exception conversion, macros
+    └── compat.h                  # Backward compatibility aliases
 ```
 
 ### Include Strategies
@@ -30,14 +25,48 @@ include/kcenon/common/patterns/
 **Selective Include (For faster compilation):**
 ```cpp
 // Minimal: just Result class and error_info
-#include <kcenon/common/patterns/result/result_core.h>
+#include <kcenon/common/patterns/result/core.h>
 
-// Add factory functions
-#include <kcenon/common/patterns/result/result_funcs.h>
-
-// Add exception conversion
-#include <kcenon/common/patterns/result/exception_conversion.h>
+// Add factory functions and helpers
+#include <kcenon/common/patterns/result/utilities.h>
 ```
+
+## Recommended API Style
+
+> **Important:** Always prefer member methods over free functions when working with `Result<T>`.
+
+The `Result<T>` API provides two styles for the same operations. **Member methods are strongly recommended**:
+
+| Operation | Member Method (✅ Recommended) | Free Function (⚠ Deprecated) |
+|-----------|-------------------------------|------------------------------|
+| Check success | `result.is_ok()` | `is_ok(result)` |
+| Check error | `result.is_err()` | `is_error(result)` |
+| Get value | `result.value()` | `get_value(result)` |
+| Get error | `result.error()` | `get_error(result)` |
+| Get with default | `result.unwrap_or(def)` | `value_or(result, def)` |
+| Transform | `result.map(func)` | `map(result, func)` |
+| Chain | `result.and_then(func)` | `and_then(result, func)` |
+
+**Example:**
+```cpp
+// ✅ RECOMMENDED - Member method style
+auto result = parse_config(filename);
+if (result.is_ok()) {
+    const auto& config = result.value();
+    process(config);
+} else {
+    log_error("Failed: {}", result.error().message);
+}
+
+// ⚠ DEPRECATED - Free function style
+auto result = parse_config(filename);
+if (is_ok(result)) {
+    const auto& config = get_value(result);  // Avoid
+    process(config);
+}
+```
+
+See [RESULT_MIGRATION_GUIDE.md](guides/RESULT_MIGRATION_GUIDE.md#free-function-deprecation) for full details.
 
 ## Recommended Patterns
 

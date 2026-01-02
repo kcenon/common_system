@@ -1,7 +1,7 @@
 # Best Practices for common_system
 
-**Version**: 1.0
-**Last Updated**: 2025-11-11
+**Version**: 1.1
+**Last Updated**: 2026-01-03
 
 A comprehensive guide to building reliable, maintainable code using common_system patterns and idioms.
 
@@ -25,6 +25,54 @@ A comprehensive guide to building reliable, maintainable code using common_syste
 ## 1. Result<T> Pattern
 
 The `Result<T>` type provides exception-free, explicit error handling throughout the codebase.
+
+### Recommended API Style
+
+> **Important:** Always prefer member methods over free functions when working with `Result<T>`.
+
+The `Result<T>` API provides two styles for the same operations:
+
+| Operation | Member Method (✅ Recommended) | Free Function (⚠ Legacy) |
+|-----------|-------------------------------|--------------------------|
+| Check success | `result.is_ok()` | `is_ok(result)` |
+| Check error | `result.is_err()` | `is_error(result)` |
+| Get value | `result.value()` | `get_value(result)` |
+| Get error | `result.error()` | `get_error(result)` |
+| Get with default | `result.unwrap_or(def)` | `value_or(result, def)` |
+| Transform | `result.map(func)` | `map(result, func)` |
+| Chain | `result.and_then(func)` | `and_then(result, func)` |
+
+**Why member methods are preferred:**
+- **Consistency**: 84.9% of codebase usage already uses member methods
+- **Readability**: `result.is_ok()` reads more naturally than `is_ok(result)`
+- **IDE support**: Better autocomplete and navigation
+- **Method chaining**: Fluent API style: `result.map(...).and_then(...)`
+
+**When free functions are appropriate:**
+- **Macro internals**: `COMMON_ASSIGN_OR_RETURN` macro uses free functions internally
+- **ADL contexts**: Generic templates that require argument-dependent lookup
+- **Legacy compatibility**: When interfacing with code that expects free functions
+
+**Example:**
+```cpp
+// ✅ RECOMMENDED - Member method style
+auto result = parse_config(filename);
+if (result.is_ok()) {
+    const auto& config = result.value();
+    process(config);
+} else {
+    log_error("Parse failed: {}", result.error().message);
+}
+
+// ⚠ LEGACY - Free function style (avoid for new code)
+auto result = parse_config(filename);
+if (is_ok(result)) {
+    const auto& config = get_value(result);
+    process(config);
+} else {
+    log_error("Parse failed: {}", get_error(result).message);
+}
+```
 
 ### Creation
 
@@ -1268,5 +1316,5 @@ When reviewing code using common_system patterns:
 
 ---
 
-*Last Updated: 2025-11-11*
-*Version: 1.0*
+*Last Updated: 2026-01-03*
+*Version: 1.1*
