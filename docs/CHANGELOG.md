@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **Deprecated Result<T> individual headers** (#266)
+  - Removed 8 deprecated headers that were consolidated in #255:
+    - `result/fwd.h`, `result/error_info.h`, `result/result_core.h`, `result/optional.h`
+    - `result/result_funcs.h`, `result/exception_conversion.h`, `result/result_macros.h`
+    - `result/error_codes_compat.h`
+  - Use consolidated headers instead: `result/core.h`, `result/utilities.h`, `result/compat.h`
+  - Or use umbrella header: `#include <kcenon/common/patterns/result.h>`
+  - Zero internal/external usage detected before removal
+
 ### Added
 - **Strict warning flags enforcement** (#245)
   - Added `-Wall -Wextra -Wpedantic` flags to all test and integration test targets
@@ -53,10 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Selective includes available for faster compilation times
 
 ### Deprecated
-- **Individual Result<T> headers** (#255)
-  - `result/fwd.h`, `error_info.h`, `result_core.h`, `optional.h` -> Use `result/core.h`
-  - `result/result_funcs.h`, `exception_conversion.h`, `result_macros.h` -> Use `result/utilities.h`
-  - `result/error_codes_compat.h` -> Use `result/compat.h`
+- **Individual Result<T> headers** (#255) - **Removed in #266**
+  - Headers have been removed, see "Removed" section above
   - See `docs/DEPRECATION.md` for migration guide
 
 ### Breaking Changes
