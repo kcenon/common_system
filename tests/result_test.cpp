@@ -29,7 +29,23 @@
 
 /**
  * @file result_test.cpp
- * @brief Unit tests for Result<T> pattern
+ * @brief Free function contract tests for Result<T> pattern
+ *
+ * This test file validates the free function API for Result<T> operations.
+ * Free functions are provided for backward compatibility and specific use cases
+ * such as macro internals and ADL-dependent templates.
+ *
+ * For new code, prefer member methods (see improved_result_test.cpp).
+ *
+ * API Style: Free functions
+ * - is_ok(result), is_error(result)
+ * - get_value(result), get_error(result)
+ * - value_or(result, default)
+ * - get_if_ok(result), get_if_error(result)
+ * - map(result, func), and_then(result, func), or_else(result, func)
+ *
+ * @see improved_result_test.cpp for member method API tests
+ * @see docs/guides/RESULT_MIGRATION_GUIDE.md for API migration guidance
  */
 
 #include <gtest/gtest.h>

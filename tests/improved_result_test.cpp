@@ -1,6 +1,23 @@
 /**
  * @file improved_result_test.cpp
- * @brief Additional tests for improved Result<T> implementation
+ * @brief Member method API tests for Result<T> pattern (RECOMMENDED)
+ *
+ * This test file validates the member method API for Result<T> operations.
+ * Member methods are the RECOMMENDED approach for new code due to:
+ * - Better IDE support (autocomplete, navigation)
+ * - More readable fluent API style (result.map(...).and_then(...))
+ * - Consistency with modern C++ patterns (std::optional, std::expected)
+ * - 84.9% of codebase already uses this style
+ *
+ * API Style: Member methods
+ * - State checking: is_ok(), is_err()
+ * - Value access: value(), unwrap(), unwrap_or(), value_or()
+ * - Error access: error()
+ * - Monadic operations: map(), and_then(), or_else()
+ * - Factory methods: Result<T>::ok(), Result<T>::err(), Result<T>::uninitialized()
+ *
+ * @see result_test.cpp for free function contract tests (legacy)
+ * @see docs/guides/BEST_PRACTICES.md#recommended-api-style for API guidance
  * @date 2025-11-19
  */
 
@@ -8,6 +25,8 @@
 #include <kcenon/common/patterns/result.h>
 #include <string>
 #include <memory>
+#include <thread>
+#include <vector>
 
 using namespace kcenon::common;
 
@@ -124,7 +143,7 @@ TEST(ImprovedResultTest, ThreadSafetyConsiderations) {
     // Multiple threads can safely receive copies
     std::vector<std::thread> threads;
     for (int i = 0; i < 10; ++i) {
-        threads.emplace_back([create_result, i]() {
+        threads.emplace_back([create_result]() {
             auto r = create_result();  // Each thread gets its own copy
             EXPECT_TRUE(r.is_ok());
             EXPECT_EQ(r.unwrap(), 42);
@@ -158,4 +177,57 @@ TEST(ImprovedResultTest, ValueOrMethods) {
     auto err_result = Result<int>::err(-1, "Error");
     EXPECT_EQ(err_result.value_or(99), 99);
     EXPECT_EQ(err_result.unwrap_or(99), 99);
+}
+
+// Test or_else for error recovery (member method style)
+TEST(ImprovedResultTest, OrElseRecovery) {
+    auto err_result = Result<int>::err(-1, "Error");
+    auto recovered = err_result.or_else([](const error_info&) {
+        return Result<int>::ok(42);
+    });
+
+    EXPECT_TRUE(recovered.is_ok());
+    EXPECT_EQ(recovered.unwrap(), 42);
+
+    // or_else should not execute on success
+    auto ok_result = Result<int>::ok(10);
+    bool or_else_executed = false;
+
+    auto unchanged = ok_result.or_else([&or_else_executed](const error_info&) {
+        or_else_executed = true;
+        return Result<int>::ok(0);
+    });
+
+    EXPECT_FALSE(or_else_executed);
+    EXPECT_TRUE(unchanged.is_ok());
+    EXPECT_EQ(unchanged.unwrap(), 10);
+}
+
+// Test VoidResult (Result<std::monostate>) with member methods
+TEST(ImprovedResultTest, VoidResultMemberMethods) {
+    auto void_ok = ok();  // Factory function for VoidResult
+    EXPECT_TRUE(void_ok.is_ok());
+    EXPECT_FALSE(void_ok.is_err());
+
+    auto void_error = make_error<std::monostate>(-1, "Void error", "test");
+    EXPECT_FALSE(void_error.is_ok());
+    EXPECT_TRUE(void_error.is_err());
+    EXPECT_EQ(void_error.error().code, -1);
+    EXPECT_EQ(void_error.error().message, "Void error");
+}
+
+// Test value() vs unwrap() - value() returns reference, unwrap() may throw
+TEST(ImprovedResultTest, ValueVsUnwrap) {
+    auto result = Result<std::string>::ok("Hello");
+
+    // value() returns const reference
+    const std::string& ref = result.value();
+    EXPECT_EQ(ref, "Hello");
+
+    // unwrap() also returns reference but throws on error
+    EXPECT_EQ(result.unwrap(), "Hello");
+
+    // Test that unwrap() throws on error result
+    auto error_result = Result<std::string>::err(-1, "Error");
+    EXPECT_THROW(error_result.unwrap(), std::runtime_error);
 }
