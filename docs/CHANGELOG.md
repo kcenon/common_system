@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **C++20 Module Interface Files** (#265)
+  - Added C++20 module files (.cppm) for common_system as part of module migration Phase 2
+  - New module structure under `src/modules/`:
+    - `common.cppm`: Primary module aggregator (`import kcenon.common;`)
+    - `utils.cppm`: CircularBuffer, ObjectPool, source_location
+    - `error.cppm`: Error codes and categories
+    - `result/*.cppm`: Result<T> pattern implementation
+    - `concepts.cppm`: C++20 type constraints
+    - `interfaces/*.cppm`: IExecutor, ILogger, IThreadPool interfaces
+    - `config.cppm`: Configuration utilities
+    - `di.cppm`: Dependency injection
+    - `patterns.cppm`: EventBus implementation
+    - `logging.cppm`: Logging utilities
+  - CMake module target: `common_system_modules` (enable with `-DCOMMON_BUILD_MODULES=ON`)
+  - Requires CMake 3.28+ and module-capable compiler (Clang 16+, GCC 14+, MSVC 2022 17.4+)
+  - Header-only interface remains the default and fully supported
+
 ### Removed
 - **Deprecated Result<T> individual headers** (#266)
   - Removed 8 deprecated headers that were consolidated in #255:
