@@ -38,9 +38,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# C++20 Module Support (requires CMake 3.28+)
-set(CMAKE_CXX_SCAN_FOR_MODULES ON)
-
 # Export compile commands for IDE support
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
