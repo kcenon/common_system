@@ -46,7 +46,20 @@
  *
  * @see improved_result_test.cpp for member method API tests
  * @see docs/guides/RESULT_MIGRATION_GUIDE.md for API migration guidance
+ *
+ * @note This file intentionally uses deprecated free functions to ensure
+ *       backward compatibility. Deprecation warnings are suppressed.
  */
+
+// Suppress deprecation warnings for this test file
+// This file intentionally tests deprecated free functions for backward compatibility
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#endif
 
 #include <gtest/gtest.h>
 #include <kcenon/common/patterns/result.h>
@@ -284,3 +297,10 @@ TEST_F(ResultTest, TryCatchVoid_Success) {
     EXPECT_TRUE(is_ok(result));
     EXPECT_EQ(counter, 100);
 }
+
+// Restore warning settings
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning(pop)
+#endif
