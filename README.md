@@ -18,6 +18,7 @@ The Common System Project is a foundational C++20 header-only library providing 
 - **Header-only design**: No library linking, no dependencies, instant integration
 - **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
 - **Universal compatibility**: C++20 standard with modern language features
+- **C++20 Module support**: Optional module-based build for faster compilation (experimental)
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
 > **Latest Updates**: Complete separation from individual modules, comprehensive Result<T> pattern implementation, IExecutor interface standardization with ABI version checking, unified `kcenon::common` namespace, event bus integration tests, and enhanced documentation structure.
@@ -131,6 +132,29 @@ cd common_system
 ./scripts/build.sh --release --install-prefix=/usr/local
 sudo cmake --build build --target install
 ```
+
+#### Option 5: C++20 Modules (Experimental)
+
+```bash
+# Build with C++20 module support (requires CMake 3.28+, Ninja, Clang 16+/GCC 14+)
+cmake -G Ninja -B build -DCOMMON_BUILD_MODULES=ON
+cmake --build build
+```
+
+```cpp
+// Using modules instead of headers
+import kcenon.common;
+
+int main() {
+    auto result = kcenon::common::ok(42);
+    if (result.is_ok()) {
+        std::cout << result.value() << std::endl;
+    }
+    return 0;
+}
+```
+
+> **Note**: Module support requires Ninja generator and a C++20-capable compiler with module support (Clang 16+, GCC 14+, MSVC 2022 17.4+). AppleClang does not fully support modules yet.
 
 ### Building from Source
 
@@ -433,6 +457,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] C++20 source_location integration
 - [x] C++20 Concepts for type validation
 - [x] Package manager support (Conan)
+- [x] C++20 Module files for faster compilation (experimental)
 
 **Planned:**
 - [ ] Coroutine support for async patterns
