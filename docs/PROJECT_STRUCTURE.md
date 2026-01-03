@@ -113,8 +113,25 @@ common_system/
 │               └── ...
 │
 ├── src/                        # Source files (minimal - header-only)
-│   └── config/                # Configuration implementation
-│       └── build_config.cpp   # Build configuration (if needed)
+│   ├── config/                # Configuration implementation
+│   │   └── build_config.cpp   # Build configuration (if needed)
+│   │
+│   └── modules/               # C++20 Module files (experimental)
+│       ├── common.cppm        # Primary module interface
+│       ├── utils.cppm         # Utility partition
+│       ├── error.cppm         # Error codes partition
+│       ├── result.cppm        # Result<T> aggregator
+│       │   └── result/
+│       │       ├── core.cppm
+│       │       └── utilities.cppm
+│       ├── concepts.cppm      # C++20 concepts partition
+│       ├── interfaces.cppm    # Interfaces aggregator
+│       │   └── interfaces/
+│       │       └── core.cppm
+│       ├── config.cppm        # Configuration partition
+│       ├── di.cppm            # Dependency injection partition
+│       ├── patterns.cppm      # Design patterns partition
+│       └── logging.cppm       # Logging utilities partition
 │
 ├── tests/                      # Test suite
 │   ├── unit/                  # Unit tests
@@ -340,6 +357,43 @@ option(BUILD_WITH_MONITORING_SYSTEM "Enable monitoring_system integration" OFF)
 # Feature flags
 option(COMMON_ENABLE_CPP20 "Enable C++20 features" OFF)
 option(COMMON_ENABLE_COROUTINES "Enable coroutine support" OFF)
+
+# C++20 Module support (experimental)
+option(COMMON_BUILD_MODULES "Build C++20 module version" OFF)
+```
+
+### C++20 Module Support
+
+**Experimental Feature**: C++20 modules provide an alternative to header-only usage with potentially faster compilation.
+
+**Requirements:**
+- CMake 3.28+
+- Ninja generator
+- Clang 16+, GCC 14+, or MSVC 2022 17.4+
+
+**Module Structure:**
+
+```
+kcenon.common                    # Primary module
+├── :utils                       # Tier 1: CircularBuffer, ObjectPool
+├── :error                       # Tier 1: Error codes
+├── :result                      # Tier 2: Result<T>, error_info
+│   ├── :result.core
+│   └── :result.utilities
+├── :concepts                    # Tier 2: C++20 concepts
+├── :interfaces                  # Tier 3: IExecutor, ILogger, etc.
+│   └── :interfaces.core
+├── :config                      # Tier 3: Configuration
+├── :di                          # Tier 3: Dependency injection
+├── :patterns                    # Tier 4: EventBus
+└── :logging                     # Tier 4: Logging utilities
+```
+
+**Building with Modules:**
+
+```bash
+cmake -G Ninja -B build -DCOMMON_BUILD_MODULES=ON
+cmake --build build
 ```
 
 ### CMake Modules
@@ -361,6 +415,9 @@ option(COMMON_ENABLE_COROUTINES "Enable coroutine support" OFF)
 ```bash
 # Main library target (interface library)
 kcenon::common
+
+# C++20 Module target (when COMMON_BUILD_MODULES=ON)
+kcenon::common_modules
 
 # Test targets
 common_tests           # Unit tests
@@ -682,5 +739,5 @@ After `cmake --install`, the following files are installed:
 
 ---
 
-**Last Updated**: 2024-11-15
-**Version**: 1.0
+**Last Updated**: 2025-01-03
+**Version**: 1.1
