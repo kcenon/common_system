@@ -217,7 +217,7 @@ public:
      * @param request The HTTP request to send
      * @return Result containing response or error information
      */
-    virtual Result<http_response> send(const http_request& request) = 0;
+    virtual ::kcenon::common::Result<http_response> send(const http_request& request) = 0;
 
     /**
      * @brief Check if the HTTP client is available and properly configured
@@ -243,9 +243,9 @@ public:
  */
 class null_http_client : public IHttpClient {
 public:
-    Result<http_response> send(const http_request& /*request*/) override {
-        return make_error<http_response>(
-            error_codes::NOT_INITIALIZED,
+    ::kcenon::common::Result<http_response> send(const http_request& /*request*/) override {
+        return ::kcenon::common::make_error<http_response>(
+            ::kcenon::common::error_codes::NOT_INITIALIZED,
             "HTTP client not available",
             "null_http_client");
     }
