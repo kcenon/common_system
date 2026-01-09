@@ -147,14 +147,14 @@ public:
      * @param port Remote port number
      * @return VoidResult indicating success or error
      */
-    virtual VoidResult connect(const std::string& host, uint16_t port) = 0;
+    virtual ::kcenon::common::VoidResult connect(const std::string& host, uint16_t port) = 0;
 
     /**
      * @brief Connect to a remote endpoint
      * @param endpoint Remote endpoint
      * @return VoidResult indicating success or error
      */
-    virtual VoidResult connect(const udp_endpoint& endpoint) {
+    virtual ::kcenon::common::VoidResult connect(const udp_endpoint& endpoint) {
         return connect(endpoint.host, endpoint.port);
     }
 
@@ -166,7 +166,7 @@ public:
      * @param data Data to send
      * @return VoidResult indicating success or error
      */
-    virtual VoidResult send(std::span<const uint8_t> data) = 0;
+    virtual ::kcenon::common::VoidResult send(std::span<const uint8_t> data) = 0;
 
     /**
      * @brief Send data to the connected endpoint with options
@@ -175,7 +175,7 @@ public:
      * @param options Send options
      * @return VoidResult indicating success or error
      */
-    virtual VoidResult send(std::span<const uint8_t> data,
+    virtual ::kcenon::common::VoidResult send(std::span<const uint8_t> data,
                             const udp_send_options& options) {
         // Default implementation ignores options
         (void)options;
@@ -191,7 +191,7 @@ public:
      * @param endpoint Target endpoint
      * @return VoidResult indicating success or error
      */
-    virtual VoidResult send_to(std::span<const uint8_t> data,
+    virtual ::kcenon::common::VoidResult send_to(std::span<const uint8_t> data,
                                const udp_endpoint& endpoint) = 0;
 
     /**
@@ -244,7 +244,7 @@ public:
      * @param data String to send
      * @return VoidResult indicating success or error
      */
-    VoidResult send(const std::string& data) {
+    ::kcenon::common::VoidResult send(const std::string& data) {
         return send(std::span<const uint8_t>(
             reinterpret_cast<const uint8_t*>(data.data()),
             data.size()));
@@ -256,7 +256,7 @@ public:
      * @param endpoint Target endpoint
      * @return VoidResult indicating success or error
      */
-    VoidResult send_to(const std::string& data, const udp_endpoint& endpoint) {
+    ::kcenon::common::VoidResult send_to(const std::string& data, const udp_endpoint& endpoint) {
         return send_to(std::span<const uint8_t>(
             reinterpret_cast<const uint8_t*>(data.data()),
             data.size()), endpoint);
@@ -272,24 +272,24 @@ public:
  */
 class null_udp_client : public IUdpClient {
 public:
-    VoidResult connect(const std::string& /*host*/, uint16_t /*port*/) override {
-        return VoidResult(error_info{
-            error_codes::NOT_INITIALIZED,
+    ::kcenon::common::VoidResult connect(const std::string& /*host*/, uint16_t /*port*/) override {
+        return ::kcenon::common::VoidResult(::kcenon::common::error_info{
+            ::kcenon::common::error_codes::NOT_INITIALIZED,
             "UDP client not available",
             "null_udp_client"});
     }
 
-    VoidResult send(std::span<const uint8_t> /*data*/) override {
-        return VoidResult(error_info{
-            error_codes::NOT_INITIALIZED,
+    ::kcenon::common::VoidResult send(std::span<const uint8_t> /*data*/) override {
+        return ::kcenon::common::VoidResult(::kcenon::common::error_info{
+            ::kcenon::common::error_codes::NOT_INITIALIZED,
             "UDP client not available",
             "null_udp_client"});
     }
 
-    VoidResult send_to(std::span<const uint8_t> /*data*/,
+    ::kcenon::common::VoidResult send_to(std::span<const uint8_t> /*data*/,
                        const udp_endpoint& /*endpoint*/) override {
-        return VoidResult(error_info{
-            error_codes::NOT_INITIALIZED,
+        return ::kcenon::common::VoidResult(::kcenon::common::error_info{
+            ::kcenon::common::error_codes::NOT_INITIALIZED,
             "UDP client not available",
             "null_udp_client"});
     }
