@@ -28,6 +28,7 @@ The Common System Project is a foundational C++20 header-only library providing 
 - **IExecutor Interface**: Universal task execution abstraction for any threading backend
 - **Result<T> Pattern**: Type-safe error handling without exceptions, inspired by Rust
 - **Event Bus**: Publish-subscribe pattern for decoupled event-driven architecture
+- **Health Monitoring**: Comprehensive health check system with dependency graph and recovery handlers
 - **Error Code Registry**: Centralized error code system across all ecosystem modules
 - **Smart Interfaces**: Mockable abstractions for easy testing and dependency injection
 - **C++20 Concepts**: Compile-time type validation with clear error messages
@@ -250,6 +251,53 @@ auto result = load_config("app.conf")
     });
 ```
 
+### Health Monitoring
+
+Comprehensive health check system with dependencies:
+
+```cpp
+#include <kcenon/common/interfaces/monitoring.h>
+
+using namespace kcenon::common::interfaces;
+
+// Get global health monitor
+auto& monitor = global_health_monitor();
+
+// Register health checks using builder
+auto db_check = health_check_builder()
+    .name("database")
+    .type(health_check_type::dependency)
+    .timeout(std::chrono::seconds{5})
+    .with_check([]() {
+        health_check_result result;
+        if (is_database_connected()) {
+            result.status = health_status::healthy;
+            result.message = "Database connection OK";
+        } else {
+            result.status = health_status::unhealthy;
+            result.message = "Database connection failed";
+        }
+        return result;
+    })
+    .build();
+
+monitor.register_check("database", db_check.value());
+monitor.register_check("cache", cache_check);
+monitor.register_check("api", api_check);
+
+// Define dependencies (api depends on database and cache)
+monitor.add_dependency("api", "database");
+monitor.add_dependency("api", "cache");
+
+// Register recovery handler
+monitor.register_recovery_handler("database", []() {
+    return reconnect_database();
+});
+
+// Get health report
+std::cout << monitor.get_health_report();
+```
+
 ### Event Bus Integration
 
 When used with monitoring_system:
@@ -458,6 +506,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] C++20 Concepts for type validation
 - [x] Package manager support (Conan)
 - [x] C++20 Module files for faster compilation (experimental)
+- [x] Health monitoring system with dependency graph and recovery handlers
 
 **Planned:**
 - [ ] Coroutine support for async patterns
