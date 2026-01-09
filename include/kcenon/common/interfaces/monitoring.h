@@ -20,3 +20,8 @@
 #pragma once
 
 #include "monitoring/metric_collector_interface.h"
+#include "monitoring/health_check.h"
+#include "monitoring/composite_health_check.h"
+#include "monitoring/health_dependency_graph.h"
+#include "monitoring/health_check_builder.h"
+#include "monitoring/health_monitor.h"

@@ -389,6 +389,27 @@ set_tests_properties(common_concepts_test PROPERTIES
     LABELS "unit;concepts"
 )
 
+# Health monitoring tests (Issue #271)
+add_executable(common_health_monitoring_test
+    health_monitoring_test.cpp
+)
+
+target_link_libraries(common_health_monitoring_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_health_monitoring_test PRIVATE cxx_std_20)
+
+add_test(NAME common_health_monitoring_test COMMAND common_health_monitoring_test)
+
+set_tests_properties(common_health_monitoring_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;interfaces;monitoring;health"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
@@ -453,6 +474,7 @@ set(COMMON_TEST_TARGETS
     common_transport_interface_test
     common_metric_collector_interface_test
     common_concepts_test
+    common_health_monitoring_test
 )
 
 # Apply warning flags to all test targets
