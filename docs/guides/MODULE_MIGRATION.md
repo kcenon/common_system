@@ -96,8 +96,13 @@ kcenon.common
 ├── :utils       (Tier 1) - CircularBuffer, ObjectPool, source_location
 ├── :error       (Tier 1) - Error codes and categories
 ├── :result      (Tier 2) - Result<T> pattern implementation
+│   ├── :result.core      - Core Result<T>, VoidResult, error_info types
+│   └── :result.utilities - Helper functions and macros
 ├── :concepts    (Tier 2) - C++20 concepts for type validation
-├── :interfaces  (Tier 3) - IExecutor, ILogger, IThreadPool interfaces
+├── :interfaces  (Tier 3) - Core interfaces (aggregator)
+│   ├── :interfaces.logger   - ILogger, log_level, log_entry
+│   ├── :interfaces.executor - IJob, IExecutor, IThreadPool
+│   └── :interfaces.core     - Re-exports both logger and executor
 ├── :config      (Tier 3) - Configuration utilities
 ├── :di          (Tier 3) - Dependency injection
 ├── :patterns    (Tier 4) - EventBus implementation

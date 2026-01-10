@@ -139,6 +139,12 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - VoidResult 타입 가시성을 위해 `logging.cppm`에 누락된 `import :result.core;` 추가
   - Clang 모듈 빌드 오류 해결: "declaration of 'VoidResult' must be imported from module 'kcenon.common:result.core'"
 
+- **GCC-14 모듈 빌드 Internal Compiler Error 수정** (#283)
+  - `interfaces/core.cppm`을 별도 파티션으로 분리: `interfaces/logger.cppm`과 `interfaces/executor.cppm`
+  - GCC 14 ICE는 `logging.cppm`이 `interfaces.core`를 통해 `IExecutor`를 import할 때 가상 소멸자 처리에서 트리거됨
+  - `logging.cppm`이 이제 `interfaces.logger` 파티션만 import하여 문제가 되는 `IExecutor` 코드 경로를 우회
+  - 하위 호환성 유지: `interfaces.core`가 `logger`와 `executor` 파티션을 모두 re-export
+
 - **테스트 코드의 모든 컴파일러 경고 수정** (#245)
   - `config_watcher.h`의 멤버 초기화 순서 경고 수정
   - `[[maybe_unused]]` 속성으로 미사용 매개변수 경고 수정

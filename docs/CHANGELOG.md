@@ -72,6 +72,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added missing `import :result.core;` to `logging.cppm` for VoidResult type visibility
   - Resolved Clang module build error: "declaration of 'VoidResult' must be imported from module 'kcenon.common:result.core'"
 
+- **Fixed GCC-14 Internal Compiler Error in module builds** (#283)
+  - Split `interfaces/core.cppm` into separate partitions: `interfaces/logger.cppm` and `interfaces/executor.cppm`
+  - GCC 14 ICE was triggered by virtual destructor handling when `logging.cppm` imported `IExecutor` through `interfaces.core`
+  - `logging.cppm` now imports only `interfaces.logger` partition, avoiding the problematic `IExecutor` code path
+  - Backward compatibility maintained: `interfaces.core` re-exports both `logger` and `executor` partitions
+
 - **Fixed all compiler warnings in test code** (#245)
   - Fixed member initialization order warning in `config_watcher.h`
   - Fixed unused parameter warnings with `[[maybe_unused]]` attribute

@@ -96,8 +96,13 @@ kcenon.common
 ├── :utils       (Tier 1) - CircularBuffer, ObjectPool, source_location
 ├── :error       (Tier 1) - 에러 코드 및 카테고리
 ├── :result      (Tier 2) - Result<T> 패턴 구현
+│   ├── :result.core      - 핵심 Result<T>, VoidResult, error_info 타입
+│   └── :result.utilities - 헬퍼 함수 및 매크로
 ├── :concepts    (Tier 2) - 타입 검증을 위한 C++20 컨셉
-├── :interfaces  (Tier 3) - IExecutor, ILogger, IThreadPool 인터페이스
+├── :interfaces  (Tier 3) - 핵심 인터페이스 (집계자)
+│   ├── :interfaces.logger   - ILogger, log_level, log_entry
+│   ├── :interfaces.executor - IJob, IExecutor, IThreadPool
+│   └── :interfaces.core     - logger와 executor 모두 re-export
 ├── :config      (Tier 3) - 설정 유틸리티
 ├── :di          (Tier 3) - 의존성 주입
 ├── :patterns    (Tier 4) - EventBus 구현
