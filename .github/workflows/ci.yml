@@ -279,8 +279,19 @@ jobs:
       if: matrix.compiler == 'msvc'
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Configure CMake with Modules (Unix)
-      if: runner.os != 'Windows'
+    - name: Configure CMake with Modules (Clang)
+      if: matrix.compiler == 'clang-16'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_FLAGS="-stdlib=libstdc++ -pthread" \
+          -DCMAKE_C_FLAGS="-pthread" \
+          -DCOMMON_BUILD_TESTS=ON \
+          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_BUILD_MODULES=ON
+
+    - name: Configure CMake with Modules (GCC)
+      if: matrix.compiler == 'gcc-14'
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
