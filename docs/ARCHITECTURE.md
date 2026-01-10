@@ -416,8 +416,101 @@ All systems follow Semantic Versioning (SemVer):
 
 Current versions aligned to **v1.0.0** baseline (2025-10-03).
 
+## C++20 Module Architecture
+
+### Module Overview
+
+C++20 modules provide an alternative to the header-only build with significant compilation speed improvements.
+
+```
+kcenon.common (Main Module)
+├── :utils       ─── Tier 1: CircularBuffer, ObjectPool, source_location
+├── :error       ─── Tier 1: Error codes and categories
+├── :result      ─── Tier 2: Result<T> pattern implementation
+├── :concepts    ─── Tier 2: C++20 concepts for type validation
+├── :interfaces  ─── Tier 3: IExecutor, ILogger, IThreadPool interfaces
+├── :config      ─── Tier 3: Configuration utilities
+├── :di          ─── Tier 3: Dependency injection
+├── :patterns    ─── Tier 4: EventBus implementation
+└── :logging     ─── Tier 4: Logging utilities
+```
+
+### Module Build Dependencies
+
+```mermaid
+graph TD
+    subgraph "Tier 0 - Foundation"
+        common[kcenon.common]
+    end
+
+    subgraph "Tier 1 - Core"
+        thread[kcenon.thread]
+        container[kcenon.container]
+    end
+
+    subgraph "Tier 2 - Logging"
+        logger[kcenon.logger]
+    end
+
+    subgraph "Tier 3 - Services"
+        database[kcenon.database]
+        monitoring[kcenon.monitoring]
+    end
+
+    subgraph "Tier 4 - Network"
+        network[kcenon.network]
+    end
+
+    subgraph "Tier 5 - Application"
+        messaging[kcenon.messaging]
+    end
+
+    common --> thread
+    common --> container
+    thread --> logger
+    container --> logger
+    logger --> database
+    logger --> monitoring
+    monitoring --> network
+    database --> network
+    network --> messaging
+
+    style common fill:#e1f5ff
+    style thread fill:#fff4e1
+    style container fill:#fff4e1
+    style logger fill:#e8f5e9
+    style database fill:#e8f5e9
+    style monitoring fill:#e8f5e9
+    style network fill:#f3e5f5
+    style messaging fill:#fce4ec
+```
+
+### Build Configuration
+
+```cmake
+# Enable module build
+cmake -G Ninja -B build \
+    -DCOMMON_BUILD_MODULES=ON \
+    -DCMAKE_CXX_COMPILER=clang++
+
+# Use module target in your project
+target_link_libraries(your_app PRIVATE kcenon::common_modules)
+```
+
+### Compiler Support
+
+| Compiler | Minimum Version | Status |
+|----------|-----------------|--------|
+| Clang | 16.0 | ✅ Supported |
+| GCC | 14.0 | ✅ Supported |
+| MSVC | 17.4 (2022) | ✅ Supported |
+| AppleClang | - | ❌ Not supported |
+
+For detailed migration instructions, see the [Module Migration Guide](guides/MODULE_MIGRATION.md).
+
 ## References
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
 - [INTEGRATION.md](./INTEGRATION.md) - Integration examples
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Improvement tracking
+- [Module Migration Guide](guides/MODULE_MIGRATION.md) - C++20 module migration

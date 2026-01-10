@@ -416,8 +416,101 @@ target_link_libraries(MyApp PRIVATE
 
 현재 버전은 **v1.0.0** 기준선에 맞춰져 있습니다 (2025-10-03).
 
+## C++20 모듈 아키텍처
+
+### 모듈 개요
+
+C++20 모듈은 header-only 빌드의 대안으로, 상당한 컴파일 속도 향상을 제공합니다.
+
+```
+kcenon.common (메인 모듈)
+├── :utils       ─── Tier 1: CircularBuffer, ObjectPool, source_location
+├── :error       ─── Tier 1: Error 코드 및 카테고리
+├── :result      ─── Tier 2: Result<T> 패턴 구현
+├── :concepts    ─── Tier 2: 타입 검증을 위한 C++20 Concepts
+├── :interfaces  ─── Tier 3: IExecutor, ILogger, IThreadPool 인터페이스
+├── :config      ─── Tier 3: 구성 유틸리티
+├── :di          ─── Tier 3: 의존성 주입
+├── :patterns    ─── Tier 4: EventBus 구현
+└── :logging     ─── Tier 4: 로깅 유틸리티
+```
+
+### 모듈 빌드 의존성
+
+```mermaid
+graph TD
+    subgraph "Tier 0 - 기반"
+        common[kcenon.common]
+    end
+
+    subgraph "Tier 1 - 핵심"
+        thread[kcenon.thread]
+        container[kcenon.container]
+    end
+
+    subgraph "Tier 2 - 로깅"
+        logger[kcenon.logger]
+    end
+
+    subgraph "Tier 3 - 서비스"
+        database[kcenon.database]
+        monitoring[kcenon.monitoring]
+    end
+
+    subgraph "Tier 4 - 네트워크"
+        network[kcenon.network]
+    end
+
+    subgraph "Tier 5 - 애플리케이션"
+        messaging[kcenon.messaging]
+    end
+
+    common --> thread
+    common --> container
+    thread --> logger
+    container --> logger
+    logger --> database
+    logger --> monitoring
+    monitoring --> network
+    database --> network
+    network --> messaging
+
+    style common fill:#e1f5ff
+    style thread fill:#fff4e1
+    style container fill:#fff4e1
+    style logger fill:#e8f5e9
+    style database fill:#e8f5e9
+    style monitoring fill:#e8f5e9
+    style network fill:#f3e5f5
+    style messaging fill:#fce4ec
+```
+
+### 빌드 구성
+
+```cmake
+# 모듈 빌드 활성화
+cmake -G Ninja -B build \
+    -DCOMMON_BUILD_MODULES=ON \
+    -DCMAKE_CXX_COMPILER=clang++
+
+# 프로젝트에서 모듈 타겟 사용
+target_link_libraries(your_app PRIVATE kcenon::common_modules)
+```
+
+### 컴파일러 지원
+
+| 컴파일러 | 최소 버전 | 상태 |
+|---------|----------|------|
+| Clang | 16.0 | ✅ 지원 |
+| GCC | 14.0 | ✅ 지원 |
+| MSVC | 17.4 (2022) | ✅ 지원 |
+| AppleClang | - | ❌ 미지원 |
+
+자세한 마이그레이션 지침은 [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION_KO.md)를 참조하세요.
+
 ## 참고 자료
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
 - [INTEGRATION.md](./INTEGRATION.md) - 통합 예제
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 개선 추적
+- [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION_KO.md) - C++20 모듈 마이그레이션
