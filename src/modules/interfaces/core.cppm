@@ -24,132 +24,35 @@ module;
 #include <functional>
 #include <future>
 #include <memory>
-#include <optional>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 #include <string_view>
-#include <type_traits>
-#include <utility>
 #include <variant>
-
-// Feature detection for source_location
-#if __has_include(<source_location>)
-    #include <source_location>
-    #define KCENON_MODULE_HAS_SOURCE_LOCATION 1
-#else
-    #define KCENON_MODULE_HAS_SOURCE_LOCATION 0
-#endif
 
 export module kcenon.common:interfaces.core;
 
+// Import result.core partition to reuse error_info, Result<T>, VoidResult, source_location
+// This avoids symbol duplication issues in MSVC module builds
+import :result.core;
+
 export namespace kcenon::common {
 
-// ============================================================================
-// Source Location (for interfaces that need it)
-// ============================================================================
+// Re-export types from result.core for use in interfaces namespace
+// (Types are already exported from result.core, just need VoidResult factory here)
 
-#if KCENON_MODULE_HAS_SOURCE_LOCATION
-using source_location = std::source_location;
-#else
-struct source_location {
-public:
-    constexpr source_location(
-        const char* file = __builtin_FILE(),
-        const char* function = __builtin_FUNCTION(),
-        int line = __builtin_LINE()
-    ) noexcept
-        : file_(file), function_(function), line_(line), column_(0) {}
-
-    constexpr const char* file_name() const noexcept { return file_; }
-    constexpr const char* function_name() const noexcept { return function_; }
-    constexpr int line() const noexcept { return line_; }
-    constexpr int column() const noexcept { return column_; }
-
-    static constexpr source_location current(
-        const char* file = __builtin_FILE(),
-        const char* function = __builtin_FUNCTION(),
-        int line = __builtin_LINE()
-    ) noexcept {
-        return source_location(file, function, line);
-    }
-
-private:
-    const char* file_;
-    const char* function_;
-    int line_;
-    int column_;
-};
-#endif
-
-// ============================================================================
-// Forward declarations for Result types (minimal definitions)
-// ============================================================================
-
-struct error_info {
-    int code;
-    std::string message;
-    std::string module;
-    std::optional<std::string> details;
-
-    error_info() : code(0) {}
-    error_info(const std::string& msg) : code(-1), message(msg), module("") {}
-    error_info(int c, const std::string& msg, const std::string& mod = "")
-        : code(c), message(msg), module(mod) {}
-    error_info(int c, const std::string& msg, const std::string& mod, const std::string& det)
-        : code(c), message(msg), module(mod), details(det) {}
-};
-
-template<typename T>
-class Result {
-public:
-    using value_type = T;
-    using error_type = error_info;
-
-private:
-    std::optional<T> value_;
-    std::optional<error_info> error_;
-
-public:
-    Result(const T& value) : value_(value), error_(std::nullopt) {}
-    Result(T&& value) : value_(std::move(value)), error_(std::nullopt) {}
-    Result(const error_info& error) : value_(std::nullopt), error_(error) {}
-    Result(error_info&& error) : value_(std::nullopt), error_(std::move(error)) {}
-    Result() = delete;
-
-    Result(const Result&) = default;
-    Result(Result&&) = default;
-    Result& operator=(const Result&) = default;
-    Result& operator=(Result&&) = default;
-
-    template<typename U = T>
-    static Result<T> ok(U&& value) { return Result<T>(std::forward<U>(value)); }
-    static Result<T> err(const error_info& error) { return Result<T>(error); }
-    static Result<T> err(error_info&& error) { return Result<T>(std::move(error)); }
-    static Result<T> err(int code, const std::string& message, const std::string& module = "") {
-        return Result<T>(error_info{code, message, module});
-    }
-
-    bool is_ok() const { return value_.has_value(); }
-    bool is_err() const { return error_.has_value(); }
-
-    const T& value() const { return value_.value(); }
-    T& value() { return value_.value(); }
-    const error_info& error() const { return error_.value(); }
-
-    T unwrap_or(T default_value) const {
-        if (is_ok()) return value_.value();
-        return default_value;
-    }
-};
-
-using VoidResult = Result<std::monostate>;
-
+/**
+ * @brief Factory function to create successful VoidResult.
+ */
 inline VoidResult ok() { return VoidResult(std::monostate{}); }
 
 } // namespace kcenon::common
 
 export namespace kcenon::common::interfaces {
+
+// Bring types from parent namespace for use in interfaces
+using kcenon::common::source_location;
+using kcenon::common::error_info;
+using kcenon::common::Result;
+using kcenon::common::VoidResult;
 
 // ============================================================================
 // IJob Interface
