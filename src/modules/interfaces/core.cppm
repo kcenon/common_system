@@ -46,13 +46,16 @@ inline VoidResult ok() { return VoidResult(std::monostate{}); }
 
 } // namespace kcenon::common
 
-export namespace kcenon::common::interfaces {
-
-// Bring types from parent namespace for use in interfaces
+// Internal type aliases for this partition (non-exported to avoid symbol duplication)
+// MSVC module build requires using declarations to be outside export namespace
+namespace kcenon::common::interfaces {
 using kcenon::common::source_location;
 using kcenon::common::error_info;
 using kcenon::common::Result;
 using kcenon::common::VoidResult;
+} // namespace kcenon::common::interfaces
+
+export namespace kcenon::common::interfaces {
 
 // ============================================================================
 // IJob Interface

@@ -106,15 +106,15 @@ public:
 
     VoidResult log(interfaces::log_level level, const std::string& message) override {
         if (!is_enabled(level)) {
-            return ok();
+            return kcenon::common::ok();
         }
         std::cout << "[" << interfaces::to_string(level) << "] " << message << std::endl;
-        return ok();
+        return kcenon::common::ok();
     }
 
     VoidResult log(const interfaces::log_entry& entry) override {
         if (!is_enabled(entry.level)) {
-            return ok();
+            return kcenon::common::ok();
         }
         std::cout << "[" << interfaces::to_string(entry.level) << "] "
                   << entry.message;
@@ -122,7 +122,7 @@ public:
             std::cout << " (" << entry.file << ":" << entry.line << ")";
         }
         std::cout << std::endl;
-        return ok();
+        return kcenon::common::ok();
     }
 
     bool is_enabled(interfaces::log_level level) const override {
@@ -131,7 +131,7 @@ public:
 
     VoidResult set_level(interfaces::log_level level) override {
         level_ = level;
-        return ok();
+        return kcenon::common::ok();
     }
 
     interfaces::log_level get_level() const override {
@@ -140,7 +140,7 @@ public:
 
     VoidResult flush() override {
         std::cout.flush();
-        return ok();
+        return kcenon::common::ok();
     }
 
 private:
