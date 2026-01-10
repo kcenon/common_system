@@ -29,6 +29,7 @@ module;
 
 export module kcenon.common:logging;
 
+import :result.core;
 import :interfaces.core;
 
 export namespace kcenon::common::logging {
