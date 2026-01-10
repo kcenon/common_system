@@ -18,27 +18,11 @@
  * Part of the kcenon.common module.
  */
 
-module;
-
-#include <variant>
-
 export module kcenon.common:interfaces.core;
 
 // Import and re-export all interface partitions
 export import :interfaces.logger;
 export import :interfaces.executor;
 
-// Import result.core for VoidResult factory function
-import :result.core;
-
-export namespace kcenon::common {
-
-// Re-export types from result.core for use in interfaces namespace
-// (Types are already exported from result.core, just need VoidResult factory here)
-
-/**
- * @brief Factory function to create successful VoidResult.
- */
-inline VoidResult ok() { return VoidResult(std::monostate{}); }
-
-} // namespace kcenon::common
+// Re-export ok() from result.core for backward compatibility
+export import :result.core;

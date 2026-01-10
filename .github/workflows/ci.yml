@@ -208,6 +208,8 @@ jobs:
 
   # C++20 Module Build Verification
   # Note: AppleClang does not support C++20 modules, so macOS is excluded
+  # Note: GCC 14 excluded due to Internal Compiler Error (ICE) with virtual destructors in modules
+  #       GCC bug: segfault in ~IExecutor() when importing interface partitions
   # Note: Module builds may fail during stabilization phase - using continue-on-error
   module-build:
     name: Module Build / ${{ matrix.os }} / ${{ matrix.compiler }}
@@ -224,16 +226,16 @@ jobs:
             compiler: clang-16
             cc: clang-16
             cxx: clang++-16
-          # GCC 14+ on Ubuntu (modules supported)
-          - os: ubuntu-24.04
-            compiler: gcc-14
-            cc: gcc-14
-            cxx: g++-14
           # MSVC 2022 on Windows (modules supported)
           - os: windows-2022
             compiler: msvc
             cc: cl
             cxx: cl
+          # GCC 14 excluded: Internal Compiler Error with C++20 modules
+          # - os: ubuntu-24.04
+          #   compiler: gcc-14
+          #   cc: gcc-14
+          #   cxx: g++-14
 
     steps:
     - name: Checkout code
