@@ -56,6 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All code now compiles without warnings on GCC, Clang, and MSVC
 
 ### Fixed
+- **Fixed cross-compiler module build issues** (#279)
+  - Resolved MSVC C1117 symbol duplication by moving using declarations outside export namespace
+  - Fixed GCC-14 potential ICE by using explicit namespace qualification for `ok()` in logging module
+  - Fixed Clang-16 CMake configuration error by adding `COMMON_BUILD_INTEGRATION_TESTS=OFF`
+  - Added missing `<typeinfo>` header in patterns.cppm for `typeid()` operator
+
 - **Fixed MSVC module build symbol duplication error** (#283)
   - Resolved C1117 error "symbol 'error_info' has already been defined" in MSVC module builds
   - Changed `interfaces/core.cppm` to import `result.core` partition instead of redefining types

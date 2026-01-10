@@ -123,6 +123,12 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - `IServiceContainer`에 concepts 적용 (register_type, register_factory, register_simple_factory 메서드)
 
 ### Fixed
+- **크로스 컴파일러 모듈 빌드 문제 수정** (#279)
+  - using 선언을 export 네임스페이스 밖으로 이동하여 MSVC C1117 심볼 중복 해결
+  - logging 모듈에서 `ok()` 호출에 명시적 네임스페이스 지정으로 GCC-14 잠재적 ICE 수정
+  - `COMMON_BUILD_INTEGRATION_TESTS=OFF` 추가로 Clang-16 CMake 구성 오류 수정
+  - `typeid()` 연산자를 위해 patterns.cppm에 누락된 `<typeinfo>` 헤더 추가
+
 - **MSVC 모듈 빌드 심볼 중복 오류 수정** (#283)
   - MSVC 모듈 빌드에서 발생하던 C1117 오류 "symbol 'error_info' has already been defined" 해결
   - `interfaces/core.cppm`에서 타입을 재정의하는 대신 `result.core` 파티션을 import하도록 변경
