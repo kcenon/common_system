@@ -134,7 +134,7 @@ cd common_system
 sudo cmake --build build --target install
 ```
 
-#### Option 5: C++20 Modules (Experimental)
+#### Option 5: C++20 Modules
 
 ```bash
 # Build with C++20 module support (requires CMake 3.28+, Ninja, Clang 16+/GCC 14+)
@@ -155,7 +155,7 @@ int main() {
 }
 ```
 
-> **Note**: Module support requires Ninja generator and a C++20-capable compiler with module support (Clang 16+, GCC 14+, MSVC 2022 17.4+). AppleClang does not fully support modules yet.
+> **Note**: Module support requires Ninja generator and a C++20-capable compiler with module support (Clang 16+, GCC 14+, MSVC 2022 17.4+). AppleClang does not fully support modules yet. See [Module Migration Guide](docs/guides/MODULE_MIGRATION.md) for detailed instructions.
 
 ### Building from Source
 

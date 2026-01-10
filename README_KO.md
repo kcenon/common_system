@@ -18,6 +18,7 @@ Common System Project는 모듈식, 느슨하게 결합된 시스템 아키텍�
 - **Header-only 설계**: 라이브러리 링킹 불필요, 의존성 없음, 즉시 통합
 - **충분한 테스트**: 80%+ 테스트 커버리지, 제로 sanitizer 경고, 완전한 CI/CD
 - **범용 호환성**: C++20 표준, 현대적 언어 기능 지원
+- **C++20 모듈 지원**: 더 빠른 컴파일을 위한 선택적 모듈 기반 빌드
 - **생태계 기반**: thread_system, network_system, database_system 등을 지원
 
 > **최신 업데이트**: 개별 모듈과의 완전한 분리, 포괄적인 Result<T> 패턴 구현, ABI 버전 검사를 포함한 IExecutor 인터페이스 표준화, 통합된 `kcenon::common` 네임스페이스, 이벤트 버스 통합 테스트, 향상된 문서 구조
@@ -117,6 +118,29 @@ cd common_system
 ./scripts/build.sh --release --install-prefix=/usr/local
 sudo cmake --build build --target install
 ```
+
+#### 옵션 4: C++20 모듈
+
+```bash
+# C++20 모듈 지원으로 빌드 (CMake 3.28+, Ninja, Clang 16+/GCC 14+ 필요)
+cmake -G Ninja -B build -DCOMMON_BUILD_MODULES=ON
+cmake --build build
+```
+
+```cpp
+// 헤더 대신 모듈 사용
+import kcenon.common;
+
+int main() {
+    auto result = kcenon::common::ok(42);
+    if (result.is_ok()) {
+        std::cout << result.value() << std::endl;
+    }
+    return 0;
+}
+```
+
+> **참고**: 모듈 지원은 Ninja 생성기와 모듈을 지원하는 C++20 호환 컴파일러가 필요합니다 (Clang 16+, GCC 14+, MSVC 2022 17.4+). AppleClang은 아직 모듈을 완전히 지원하지 않습니다. 자세한 내용은 [모듈 마이그레이션 가이드](docs/guides/MODULE_MIGRATION_KO.md)를 참조하세요.
 
 ### 소스에서 빌드
 
@@ -412,6 +436,8 @@ void setup_network(std::shared_ptr<common::interfaces::IExecutor> executor) {
 - [x] C++20 source_location 통합
 - [x] C++20 Concepts 타입 검증
 - [x] 패키지 관리자 지원 (Conan)
+- [x] C++20 모듈 파일을 통한 빠른 컴파일
+- [x] 의존성 그래프 및 복구 핸들러를 포함한 상태 모니터링 시스템
 
 **계획:**
 - [ ] 비동기 패턴을 위한 Coroutine 지원
