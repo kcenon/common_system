@@ -23,6 +23,7 @@ module;
 #include <mutex>
 #include <shared_mutex>
 #include <typeindex>
+#include <typeinfo>
 #include <unordered_map>
 #include <vector>
 
