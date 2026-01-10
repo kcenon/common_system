@@ -287,6 +287,7 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
           -DCOMMON_BUILD_TESTS=OFF \
+          -DCOMMON_BUILD_INTEGRATION_TESTS=OFF \
           -DCOMMON_BUILD_EXAMPLES=OFF \
           -DCOMMON_BUILD_MODULES=ON
 
@@ -297,6 +298,7 @@ jobs:
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Release `
           -DCOMMON_BUILD_TESTS=OFF `
+          -DCOMMON_BUILD_INTEGRATION_TESTS=OFF `
           -DCOMMON_BUILD_EXAMPLES=OFF `
           -DCOMMON_BUILD_MODULES=ON
 
