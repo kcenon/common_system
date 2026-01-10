@@ -410,6 +410,63 @@ set_tests_properties(common_health_monitoring_test PROPERTIES
     LABELS "unit;interfaces;monitoring;health"
 )
 
+# =============================================================================
+# Module Verification Tests (Issue #277)
+# =============================================================================
+# These tests verify C++20 module functionality when modules are enabled.
+# The same test file runs in both header-only and module modes to ensure
+# API compatibility.
+# =============================================================================
+
+# Header-only mode verification test (always built)
+add_executable(common_module_verification_test
+    module_verification_test.cpp
+)
+
+target_link_libraries(common_module_verification_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_module_verification_test PRIVATE cxx_std_20)
+
+add_test(NAME common_module_verification_test COMMAND common_module_verification_test)
+
+set_tests_properties(common_module_verification_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;module"
+)
+
+# Module mode verification test (only when COMMON_BUILD_MODULES is ON)
+if(COMMON_BUILD_MODULES AND TARGET common_system_modules)
+    add_executable(common_module_mode_test
+        module_verification_test.cpp
+    )
+
+    target_link_libraries(common_module_mode_test PRIVATE
+        kcenon::common_modules
+        GTest::gtest
+        GTest::gtest_main
+        Threads::Threads
+    )
+
+    target_compile_features(common_module_mode_test PRIVATE cxx_std_20)
+
+    # Define KCENON_USE_MODULES to switch to module imports
+    target_compile_definitions(common_module_mode_test PRIVATE KCENON_USE_MODULES=1)
+
+    add_test(NAME common_module_mode_test COMMAND common_module_mode_test)
+
+    set_tests_properties(common_module_mode_test PROPERTIES
+        TIMEOUT 60
+        LABELS "unit;module;cpp20"
+    )
+
+    message(STATUS "Module verification test (module mode): enabled")
+endif()
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
@@ -475,6 +532,7 @@ set(COMMON_TEST_TARGETS
     common_metric_collector_interface_test
     common_concepts_test
     common_health_monitoring_test
+    common_module_verification_test
 )
 
 # Apply warning flags to all test targets
@@ -487,4 +545,9 @@ endforeach()
 # Apply to ABI version test if it exists
 if(TARGET common_abi_version_test)
     target_compile_options(common_abi_version_test PRIVATE ${COMMON_WARNING_FLAGS})
+endif()
+
+# Apply to module mode test if it exists
+if(TARGET common_module_mode_test)
+    target_compile_options(common_module_mode_test PRIVATE ${COMMON_WARNING_FLAGS})
 endif()
