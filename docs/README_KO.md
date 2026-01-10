@@ -62,6 +62,11 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
   - CMake 구성 패턴
   - 의존성 관리
 
+- **[C++20 모듈 마이그레이션](guides/MODULE_MIGRATION_KO.md)** / **[English](guides/MODULE_MIGRATION.md)**
+  - 헤더에서 모듈로 마이그레이션
+  - 모듈 빌드 설정
+  - 컴파일러 호환성
+
 - **[마이그레이션 가이드](MIGRATION_KO.md)** / **[English](MIGRATION.md)**
   - common_system 통합으로 마이그레이션
   - Result<T> 패턴 적용
