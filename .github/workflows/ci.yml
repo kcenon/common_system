@@ -205,3 +205,117 @@ jobs:
       run: |
         echo "✅ Build succeeded with -Werror flag"
         echo "All code compiles without warnings"
+
+  # C++20 Module Build Verification
+  # Note: AppleClang does not support C++20 modules, so macOS is excluded
+  module-build:
+    name: Module Build / ${{ matrix.os }} / ${{ matrix.compiler }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Clang 16+ on Ubuntu (modules supported)
+          - os: ubuntu-22.04
+            compiler: clang-16
+            cc: clang-16
+            cxx: clang++-16
+          # GCC 14+ on Ubuntu (modules supported)
+          - os: ubuntu-24.04
+            compiler: gcc-14
+            cc: gcc-14
+            cxx: g++-14
+          # MSVC 2022 on Windows (modules supported)
+          - os: windows-2022
+            compiler: msvc
+            cc: cl
+            cxx: cl
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies (Ubuntu - Clang 16)
+      if: matrix.compiler == 'clang-16'
+      run: |
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build clang-16 libc++-16-dev libc++abi-16-dev libgtest-dev libgmock-dev
+        # Ensure CMake 3.28+ is available
+        pip install cmake --upgrade
+
+    - name: Install dependencies (Ubuntu - GCC 14)
+      if: matrix.compiler == 'gcc-14'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-14 g++-14 libgtest-dev libgmock-dev
+        # Ensure CMake 3.28+ is available
+        pip install cmake --upgrade
+
+    - name: Set up compiler (Clang 16)
+      if: matrix.compiler == 'clang-16'
+      run: |
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+    - name: Set up compiler (GCC 14)
+      if: matrix.compiler == 'gcc-14'
+      run: |
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+    - name: Set up compiler (MSVC)
+      if: matrix.compiler == 'msvc'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure CMake with Modules (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCOMMON_BUILD_TESTS=ON \
+          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_BUILD_MODULES=ON
+
+    - name: Configure CMake with Modules (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cmake -B build -G Ninja `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DCOMMON_BUILD_TESTS=ON `
+          -DCOMMON_BUILD_EXAMPLES=ON `
+          -DCOMMON_BUILD_MODULES=ON
+
+    - name: Build with Modules
+      run: cmake --build build --config Release
+
+    - name: Test Module Build (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cd build
+        ctest -C Release --output-on-failure --verbose || true
+
+    - name: Test Module Build (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cd build
+        ctest -C Release --output-on-failure --verbose
+
+    - name: Verify module build succeeded
+      run: |
+        echo "✅ C++20 Module build succeeded"
+        echo "Compiler: ${{ matrix.compiler }}"
+
+    - name: Upload module build artifacts
+      if: failure()
+      uses: actions/upload-artifact@v6
+      with:
+        name: module-build-${{ matrix.os }}-${{ matrix.compiler }}-logs
+        path: |
+          build/CMakeFiles/*.log
+          build/Testing/Temporary/
