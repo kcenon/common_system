@@ -116,7 +116,7 @@ common_system/
 │   ├── config/                # Configuration implementation
 │   │   └── build_config.cpp   # Build configuration (if needed)
 │   │
-│   └── modules/               # C++20 Module files (experimental)
+│   └── modules/               # C++20 Module files
 │       ├── common.cppm        # Primary module interface
 │       ├── utils.cppm         # Utility partition
 │       ├── error.cppm         # Error codes partition
@@ -358,13 +358,13 @@ option(BUILD_WITH_MONITORING_SYSTEM "Enable monitoring_system integration" OFF)
 option(COMMON_ENABLE_CPP20 "Enable C++20 features" OFF)
 option(COMMON_ENABLE_COROUTINES "Enable coroutine support" OFF)
 
-# C++20 Module support (experimental)
+# C++20 Module support
 option(COMMON_BUILD_MODULES "Build C++20 module version" OFF)
 ```
 
 ### C++20 Module Support
 
-**Experimental Feature**: C++20 modules provide an alternative to header-only usage with potentially faster compilation.
+C++20 modules provide an alternative to header-only usage with potentially faster compilation.
 
 **Requirements:**
 - CMake 3.28+

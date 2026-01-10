@@ -18,7 +18,7 @@ The Common System Project is a foundational C++20 header-only library providing 
 - **Header-only design**: No library linking, no dependencies, instant integration
 - **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
 - **Universal compatibility**: C++20 standard with modern language features
-- **C++20 Module support**: Optional module-based build for faster compilation (experimental)
+- **C++20 Module support**: Optional module-based build for faster compilation
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
 > **Latest Updates**: Complete separation from individual modules, comprehensive Result<T> pattern implementation, IExecutor interface standardization with ABI version checking, unified `kcenon::common` namespace, event bus integration tests, and enhanced documentation structure.
@@ -505,7 +505,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 - [x] C++20 source_location integration
 - [x] C++20 Concepts for type validation
 - [x] Package manager support (Conan)
-- [x] C++20 Module files for faster compilation (experimental)
+- [x] C++20 Module files for faster compilation
 - [x] Health monitoring system with dependency graph and recovery handlers
 
 **Planned:**

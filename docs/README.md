@@ -59,6 +59,7 @@ Step-by-step guides for users:
 | [ERROR_CODE_GUIDELINES.md](guides/ERROR_CODE_GUIDELINES.md) | Error code ranges, allocation, compile-time validation | - | 200+ |
 | [INTEGRATION.md](guides/INTEGRATION.md) | System integration patterns and examples | [🇰🇷](guides/INTEGRATION_KO.md) | 500+ |
 | [INTEGRATION_POLICY.md](guides/INTEGRATION_POLICY.md) | Official integration policy and CMake patterns | [🇰🇷](guides/INTEGRATION_POLICY_KO.md) | 300+ |
+| [MODULE_MIGRATION.md](guides/MODULE_MIGRATION.md) | C++20 module migration guide | [🇰🇷](guides/MODULE_MIGRATION_KO.md) | 200+ |
 
 ### 📙 Advanced Topics
 
