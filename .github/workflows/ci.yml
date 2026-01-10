@@ -282,21 +282,22 @@ jobs:
     - name: Configure CMake with Modules (Unix)
       if: runner.os != 'Windows'
       run: |
-        # Module build focuses on compilation, not tests (tests require pthreads/GTest)
+        # Module build focuses on verifying module compilation only
+        # Tests and examples are disabled as they require pthreads/GTest
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
           -DCOMMON_BUILD_TESTS=OFF \
-          -DCOMMON_BUILD_EXAMPLES=ON \
+          -DCOMMON_BUILD_EXAMPLES=OFF \
           -DCOMMON_BUILD_MODULES=ON
 
     - name: Configure CMake with Modules (Windows)
       if: runner.os == 'Windows'
       run: |
-        # Module build focuses on compilation, not tests
+        # Module build focuses on verifying module compilation only
         cmake -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=Release `
           -DCOMMON_BUILD_TESTS=OFF `
-          -DCOMMON_BUILD_EXAMPLES=ON `
+          -DCOMMON_BUILD_EXAMPLES=OFF `
           -DCOMMON_BUILD_MODULES=ON
 
     - name: Build with Modules
