@@ -68,6 +68,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed duplicate definitions of `error_info`, `Result<T>`, `source_location` from interfaces module
   - Added using declarations for proper type access in interfaces namespace
 
+- **Fixed Clang-16 module build VoidResult visibility error** (#283)
+  - Added missing `import :result.core;` to `logging.cppm` for VoidResult type visibility
+  - Resolved Clang module build error: "declaration of 'VoidResult' must be imported from module 'kcenon.common:result.core'"
+
 - **Fixed all compiler warnings in test code** (#245)
   - Fixed member initialization order warning in `config_watcher.h`
   - Fixed unused parameter warnings with `[[maybe_unused]]` attribute

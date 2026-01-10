@@ -135,6 +135,10 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - interfaces 모듈에서 `error_info`, `Result<T>`, `source_location`의 중복 정의 제거
   - interfaces 네임스페이스에서 적절한 타입 접근을 위한 using 선언 추가
 
+- **Clang-16 모듈 빌드 VoidResult 가시성 오류 수정** (#283)
+  - VoidResult 타입 가시성을 위해 `logging.cppm`에 누락된 `import :result.core;` 추가
+  - Clang 모듈 빌드 오류 해결: "declaration of 'VoidResult' must be imported from module 'kcenon.common:result.core'"
+
 - **테스트 코드의 모든 컴파일러 경고 수정** (#245)
   - `config_watcher.h`의 멤버 초기화 순서 경고 수정
   - `[[maybe_unused]]` 속성으로 미사용 매개변수 경고 수정
