@@ -247,8 +247,8 @@ jobs:
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
         sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
         sudo apt-get update
-        # Use libstdc++ instead of libc++ for better pthread compatibility
-        sudo apt-get install -y ninja-build clang-16 libstdc++-12-dev libgtest-dev libgmock-dev
+        # Install clang-16 with clang-tools-16 (contains clang-scan-deps for module support)
+        sudo apt-get install -y ninja-build clang-16 clang-tools-16 libstdc++-12-dev
         # Ensure CMake 3.28+ is available
         pip install cmake --upgrade
 
