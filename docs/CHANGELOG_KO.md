@@ -19,6 +19,15 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
 
 ### Added
+- **C++20 모듈 마이그레이션 Phase 3 시작** (#275)
+  - 전체 8개 시스템에서 Phase 1, 1.5, Phase 2 이슈 모두 완료
+  - Phase 3 (안정화) 이슈 생성:
+    - 모듈 빌드 테스트 검증
+    - 성능 벤치마킹
+    - 문서 업데이트
+    - 컴파일러 호환성 검증
+  - 전체 마이그레이션 추적은 EPIC #256 참조
+
 - **통합 Metric Collection 인터페이스** (#234)
   - 메트릭 추상화를 위한 새로운 `include/kcenon/common/interfaces/monitoring/` 디렉토리
   - `IMetricCollector`: monitoring_system 직접 의존성 없이 크로스 모듈 메트릭 리포팅을 위한 인터페이스
