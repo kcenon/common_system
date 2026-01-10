@@ -65,21 +65,20 @@ namespace error_codes {
 // ============================================================================
 
 /**
- * @brief Create a successful result.
+ * @brief Create a successful result with a value.
  * @param value The value to wrap
  * @return Result<T> containing the value
+ *
+ * @note For VoidResult (successful void result), use the ok() function
+ *       exported from :result.core partition.
  */
 template<typename T>
 inline Result<T> ok(T value) {
     return Result<T>(std::move(value));
 }
 
-/**
- * @brief Create a successful void result.
- */
-inline VoidResult ok() {
-    return VoidResult(std::monostate{});
-}
+// Note: VoidResult ok() is defined in :result.core partition to avoid circular
+// dependencies and ensure availability in modules that only import :result.core.
 
 /**
  * @brief Create an error result with code and message.

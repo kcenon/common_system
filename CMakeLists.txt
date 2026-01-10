@@ -209,6 +209,8 @@ if(COMMON_BUILD_MODULES)
                 src/modules/concepts.cppm
                 # Tier 3: Infrastructure partitions
                 src/modules/interfaces.cppm
+                src/modules/interfaces/logger.cppm
+                src/modules/interfaces/executor.cppm
                 src/modules/interfaces/core.cppm
                 src/modules/config.cppm
                 src/modules/di.cppm

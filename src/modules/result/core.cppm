@@ -416,4 +416,36 @@ inline Optional<T> None() {
     return Optional<T>(std::nullopt);
 }
 
+// ============================================================================
+// VoidResult Factory Functions
+// ============================================================================
+
+/**
+ * @brief Factory function to create successful VoidResult.
+ * @return VoidResult containing std::monostate (success indicator)
+ */
+inline VoidResult ok() {
+    return VoidResult(std::monostate{});
+}
+
+/**
+ * @brief Factory function to create error VoidResult.
+ * @param error The error information
+ * @return VoidResult containing the error
+ */
+inline VoidResult err(const error_info& error) {
+    return VoidResult(error);
+}
+
+/**
+ * @brief Factory function to create error VoidResult.
+ * @param code Error code
+ * @param message Error message
+ * @param module Module name (optional)
+ * @return VoidResult containing the error
+ */
+inline VoidResult err(int code, const std::string& message, const std::string& module = "") {
+    return VoidResult(error_info{code, message, module});
+}
+
 } // namespace kcenon::common

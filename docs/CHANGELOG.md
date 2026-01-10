@@ -56,6 +56,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All code now compiles without warnings on GCC, Clang, and MSVC
 
 ### Fixed
+- **Fixed cross-compiler module build issues** (#279)
+  - Resolved MSVC C1117 symbol duplication by moving using declarations outside export namespace
+  - Fixed GCC-14 potential ICE by using explicit namespace qualification for `ok()` in logging module
+  - Fixed Clang-16 CMake configuration error by adding `COMMON_BUILD_INTEGRATION_TESTS=OFF`
+  - Added missing `<typeinfo>` header in patterns.cppm for `typeid()` operator
+
+- **Fixed MSVC module build symbol duplication error** (#283)
+  - Resolved C1117 error "symbol 'error_info' has already been defined" in MSVC module builds
+  - Changed `interfaces/core.cppm` to import `result.core` partition instead of redefining types
+  - Removed duplicate definitions of `error_info`, `Result<T>`, `source_location` from interfaces module
+  - Added using declarations for proper type access in interfaces namespace
+
+- **Fixed Clang-16 module build VoidResult visibility error** (#283)
+  - Added missing `import :result.core;` to `logging.cppm` for VoidResult type visibility
+  - Resolved Clang module build error: "declaration of 'VoidResult' must be imported from module 'kcenon.common:result.core'"
+
+- **Fixed GCC-14 Internal Compiler Error in module builds** (#283)
+  - Split `interfaces/core.cppm` into separate partitions: `interfaces/logger.cppm` and `interfaces/executor.cppm`
+  - GCC 14 ICE was triggered by virtual destructor handling when `logging.cppm` imported `IExecutor` through `interfaces.core`
+  - `logging.cppm` now imports only `interfaces.logger` partition, avoiding the problematic `IExecutor` code path
+  - Backward compatibility maintained: `interfaces.core` re-exports both `logger` and `executor` partitions
+
 - **Fixed all compiler warnings in test code** (#245)
   - Fixed member initialization order warning in `config_watcher.h`
   - Fixed unused parameter warnings with `[[maybe_unused]]` attribute
