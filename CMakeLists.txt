@@ -168,6 +168,16 @@ if(COMMON_BUILD_MODULES)
     if(CMAKE_VERSION VERSION_LESS "3.28")
         message(WARNING "C++20 modules require CMake 3.28+. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
+    # Check for AppleClang (does not support module dependency scanning)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+        message(WARNING "AppleClang does not support C++20 module dependency scanning. "
+                        "Use Clang 16+, GCC 14+, or MSVC 2022. Disabling module build.")
+        set(COMMON_BUILD_MODULES OFF)
+    # Check generator (modules require Ninja or Visual Studio 17.4+)
+    elseif(NOT CMAKE_GENERATOR MATCHES "Ninja" AND NOT CMAKE_GENERATOR MATCHES "Visual Studio")
+        message(WARNING "C++20 modules require Ninja or Visual Studio generator. "
+                        "Current generator: ${CMAKE_GENERATOR}. Disabling module build.")
+        set(COMMON_BUILD_MODULES OFF)
     else()
         message(STATUS "C++20 module build enabled")
 
