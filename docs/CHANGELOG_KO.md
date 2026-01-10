@@ -122,6 +122,19 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
   - `simple_event_bus`에 concepts 적용 (publish, subscribe, subscribe_filtered 메서드)
   - `IServiceContainer`에 concepts 적용 (register_type, register_factory, register_simple_factory 메서드)
 
+### Fixed
+- **MSVC 모듈 빌드 심볼 중복 오류 수정** (#283)
+  - MSVC 모듈 빌드에서 발생하던 C1117 오류 "symbol 'error_info' has already been defined" 해결
+  - `interfaces/core.cppm`에서 타입을 재정의하는 대신 `result.core` 파티션을 import하도록 변경
+  - interfaces 모듈에서 `error_info`, `Result<T>`, `source_location`의 중복 정의 제거
+  - interfaces 네임스페이스에서 적절한 타입 접근을 위한 using 선언 추가
+
+- **테스트 코드의 모든 컴파일러 경고 수정** (#245)
+  - `config_watcher.h`의 멤버 초기화 순서 경고 수정
+  - `[[maybe_unused]]` 속성으로 미사용 매개변수 경고 수정
+  - const 변수에 대한 불필요한 람다 캡처 제거
+  - 테스트 코드의 미사용 변수 제거
+
 ### Benefits
 - **더 명확한 컴파일 타임 에러**: 템플릿 에러가 SFINAE 실패 대신 concept 위반을 표시
 - **자체 문서화 코드**: concepts가 타입 요구사항을 명시적으로 표현

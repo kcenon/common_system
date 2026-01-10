@@ -56,6 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - All code now compiles without warnings on GCC, Clang, and MSVC
 
 ### Fixed
+- **Fixed MSVC module build symbol duplication error** (#283)
+  - Resolved C1117 error "symbol 'error_info' has already been defined" in MSVC module builds
+  - Changed `interfaces/core.cppm` to import `result.core` partition instead of redefining types
+  - Removed duplicate definitions of `error_info`, `Result<T>`, `source_location` from interfaces module
+  - Added using declarations for proper type access in interfaces namespace
+
 - **Fixed all compiler warnings in test code** (#245)
   - Fixed member initialization order warning in `config_watcher.h`
   - Fixed unused parameter warnings with `[[maybe_unused]]` attribute
