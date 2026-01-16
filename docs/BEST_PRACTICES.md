@@ -15,6 +15,37 @@ include/kcenon/common/patterns/
     └── compat.h                  # Backward compatibility aliases
 ```
 
+### Design Rationale: Why Three Headers?
+
+The current three-header structure is intentional and follows Kent Beck's "Fewest Elements" principle while balancing practical concerns:
+
+| Header | Purpose | When to Include Separately |
+|--------|---------|---------------------------|
+| `core.h` | Core types (`Result<T>`, `error_info`, `Optional<T>`) | Header-only code with minimal dependencies |
+| `utilities.h` | Factory functions, exception conversion, macros | Implementation files needing full functionality |
+| `compat.h` | Legacy error code aliases | Migrating from old API |
+
+**Benefits of this structure:**
+
+1. **Compile-time optimization**: Include only what you need
+   - Header files: Often only need `core.h`
+   - Implementation files: Include full `result.h`
+
+2. **C++20 module preparation**: Each header maps to a logical module partition
+   - `core.h` → `result:core`
+   - `utilities.h` → `result:utilities`
+   - `compat.h` → `result:compat`
+
+3. **Dependency isolation**: `utilities.h` includes `<system_error>` which `core.h` doesn't need
+
+**Why NOT consolidate into a single header:**
+
+- Increased compile times for header-only libraries
+- Pulls in unnecessary dependencies (e.g., `<system_error>`)
+- Makes future C++20 module migration harder
+
+**Recommendation**: Use `#include <kcenon/common/patterns/result.h>` for most cases. The umbrella header provides the full API and is the recommended default.
+
 ### Include Strategies
 
 **Full Include (Recommended for most cases):**

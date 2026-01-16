@@ -51,6 +51,12 @@
   - [Pattern: Resource Acquisition](#pattern-resource-acquisition)
   - [Pattern: Validation Chain](#pattern-validation-chain)
   - [Pattern: Error Recovery](#pattern-error-recovery)
+- [Result vs Event Bus: When to Use Each](#result-vs-event-bus-when-to-use-each)
+  - [Quick Decision Guide](#quick-decision-guide)
+  - [Result<T>: Synchronous Error Handling](#resultt-synchronous-error-handling)
+  - [Event Bus: Asynchronous Error Notification](#event-bus-asynchronous-error-notification)
+  - [Combined Pattern: Result + Event](#combined-pattern-result--event)
+  - [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
 - [References](#references)
 
 **Version**: 1.0
@@ -701,13 +707,144 @@ Result<Config> load_config() {
 
 ---
 
+## Result vs Event Bus: When to Use Each
+
+The Common System provides two primary mechanisms for error propagation and inter-module communication. Understanding when to use each is critical for consistent, maintainable code.
+
+### Quick Decision Guide
+
+| Scenario | Use | Reason |
+|----------|-----|--------|
+| Function returning success/failure | `Result<T>` | Synchronous, type-safe return value |
+| Operation that may fail | `Result<T>` | Explicit error handling required |
+| Broadcasting state changes | `event_bus` | Multiple listeners may need notification |
+| Logging errors for monitoring | `event_bus` | Decoupled from call stack |
+| Cross-module error notification | Both | `Result<T>` for caller, event for observers |
+
+### Result<T>: Synchronous Error Handling
+
+**Use `Result<T>` when:**
+
+1. **The caller must handle the error** - The function returns a value that may be an error
+2. **Error handling is part of control flow** - The caller needs to decide what to do next
+3. **Type safety is important** - Compile-time guarantees about error handling
+4. **Performance is critical** - No virtual dispatch or memory allocation
+
+```cpp
+// Good: Caller explicitly handles the error
+Result<Connection> connect(const std::string& url) {
+    if (url.empty()) {
+        return make_error<Connection>(
+            error_codes::INVALID_ARGUMENT,
+            "URL cannot be empty",
+            "connection_pool"
+        );
+    }
+    // ... connection logic
+    return ok(connection);
+}
+
+void process() {
+    auto result = connect(url);
+    if (result.is_err()) {
+        // Caller decides: retry, fallback, or propagate
+        handle_connection_error(result.error());
+        return;
+    }
+    use_connection(result.value());
+}
+```
+
+### Event Bus: Asynchronous Error Notification
+
+**Use `event_bus` when:**
+
+1. **Multiple components need to know** - Broadcasting to unknown number of listeners
+2. **Decoupled notification** - Sender doesn't need to know who receives
+3. **Audit/monitoring purposes** - Logging, metrics, alerting
+4. **Cross-module communication** - Loose coupling between systems
+
+```cpp
+// Good: Notify monitoring systems about the error
+void handle_critical_error(const error_info& err) {
+    // Publish error event for monitoring, alerting, metrics
+    get_event_bus().publish(events::error_event{
+        "database_system",
+        err.message,
+        err.code
+    });
+}
+```
+
+### Combined Pattern: Result + Event
+
+For critical operations, combine both patterns:
+
+```cpp
+Result<void> critical_operation() {
+    auto result = perform_operation();
+
+    if (result.is_err()) {
+        // 1. Publish event for monitoring/logging (fire-and-forget)
+        get_event_bus().publish(events::error_event{
+            "critical_system",
+            result.error().message,
+            result.error().code
+        });
+
+        // 2. Return error for caller to handle (synchronous)
+        return result;
+    }
+
+    return ok();
+}
+```
+
+### Anti-Patterns to Avoid
+
+**Don't use `event_bus` for:**
+- Returning errors to callers (use `Result<T>`)
+- Control flow decisions (use `Result<T>`)
+- Required error handling (use `Result<T>`)
+
+**Don't use `Result<T>` for:**
+- Fire-and-forget notifications (use `event_bus`)
+- Broadcasting to multiple unknown receivers (use `event_bus`)
+- Metrics and telemetry (use `event_bus`)
+
+```cpp
+// BAD: Using event_bus for error that caller must handle
+void bad_connect(const std::string& url) {
+    if (url.empty()) {
+        get_event_bus().publish(events::error_event{"conn", "empty url", -1});
+        return;  // Caller has no way to know about the error!
+    }
+}
+
+// BAD: Using Result for fire-and-forget notification
+Result<void> bad_log_metric(const std::string& name, double value) {
+    // Caller doesn't need to handle metric logging errors
+    return ok();  // Should use event_bus instead
+}
+```
+
+### Summary
+
+| Pattern | Error Handling | Communication | Coupling |
+|---------|---------------|---------------|----------|
+| `Result<T>` | Synchronous, required | 1:1 (caller) | Tight (function signature) |
+| `event_bus` | Async, optional | 1:N (broadcast) | Loose (decoupled) |
+
+---
+
 ## References
 
 - [Result<T> Implementation](../include/kcenon/common/patterns/result.h)
+- [Event Bus Implementation](../include/kcenon/common/patterns/event_bus.h)
 - [Error Codes Registry](../include/kcenon/common/error/error_codes.h)
 - [RAII Guidelines](RAII_GUIDELINES.md)
 - [Smart Pointer Guidelines](SMART_POINTER_GUIDELINES.md)
 
 ---
 
-*Last Updated: 2025-10-20*
+*Last Updated: 2026-01-16*
