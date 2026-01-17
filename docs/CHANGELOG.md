@@ -11,6 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **Deprecated Result<T> free functions** (#288)
+  - Removed deprecated free functions that were replaced by member methods:
+    - `is_ok(result)` → Use `result.is_ok()` instead
+    - `is_error(result)` → Use `result.is_err()` instead
+    - `get_value(result)` → Use `result.value()` instead
+    - `get_error(result)` → Use `result.error()` instead
+    - `value_or(result, default)` → Use `result.value_or(default)` or `result.unwrap_or(default)` instead
+    - `get_if_ok(result)` → Use `result.is_ok()` with `result.value()` instead
+    - `get_if_error(result)` → Use `result.is_err()` with `result.error()` instead
+    - `map(result, func)` → Use `result.map(func)` instead
+    - `and_then(result, func)` → Use `result.and_then(func)` instead
+    - `or_else(result, func)` → Use `result.or_else(func)` instead
+  - **BREAKING CHANGE**: Migrate to member methods before upgrading
+  - See `docs/guides/RESULT_MIGRATION_GUIDE.md` for migration instructions
+  - Removed `result_test.cpp` (deprecated API test file)
+
 ### Added
 - **C++20 Module Migration Phase 3 Started** (#275)
   - All Phase 1, 1.5, and Phase 2 issues completed across all 8 systems
