@@ -165,7 +165,6 @@ message(STATUS "Linked libraries: ${LINKED_LIBS}")
 **Symptoms:**
 ```
 warning: 'log_level' is deprecated: Use kcenon::common::interfaces::log_level
-warning: 'THREAD_LOG_INFO' is deprecated: Use LOG_INFO
 ```
 
 **Cause:** Using legacy compatibility aliases.
@@ -177,8 +176,9 @@ Update code to use new types and macros:
 | Old | New |
 |-----|-----|
 | `kcenon::logger::log_level` | `kcenon::common::interfaces::log_level` |
-| `THREAD_LOG_INFO(msg)` | `LOG_INFO(msg)` |
 | `logger_interface` | `ILogger` |
+
+> **Note:** `THREAD_LOG_*` macros have been removed in v3.0.0. Use `LOG_*` macros instead.
 
 See [Migration Guide](MIGRATION_RUNTIME_BINDING.md) for complete mapping.
 

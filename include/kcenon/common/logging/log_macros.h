@@ -13,7 +13,6 @@
  * The macros support:
  * - Standard LOG_* macros for each log level
  * - Conditional logging based on log level
- * - Legacy THREAD_LOG_* compatibility (redirects to LOG_*)
  *
  * Thread Safety:
  * - All macros are thread-safe as they delegate to thread-safe functions.
@@ -26,14 +25,9 @@
  *
  * // Conditional logging (avoids message construction when disabled)
  * LOG_IF(log_level::debug, expensive_to_string(data));
- *
- * // Legacy macros (deprecated, prefer LOG_* versions)
- * THREAD_LOG_INFO("Still works for compatibility");
  * @endcode
  *
  * @note Prefer using LOG_* macros over direct function calls for consistency.
- * @note Legacy THREAD_LOG_* macros are provided for backward compatibility
- *       but are marked as deprecated.
  *
  * @see Issue #175 for implementation requirements.
  * @see log_functions.h for the underlying function implementations.
@@ -234,52 +228,6 @@
     ::kcenon::common::logging::is_enabled(level, logger_name)
 
 // =============================================================================
-// Legacy THREAD_LOG_* Macros (Deprecated)
-// =============================================================================
-//
-// These macros are provided for backward compatibility with thread_system code.
-// New code should use the LOG_* macros instead.
-//
-// @deprecated Use LOG_* macros instead. Will be removed in v3.0.0.
-// @see docs/DEPRECATION.md for migration guide.
-
-/**
- * @def THREAD_LOG_TRACE(msg)
- * @deprecated Use LOG_TRACE(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_TRACE(msg) LOG_TRACE(msg)
-
-/**
- * @def THREAD_LOG_DEBUG(msg)
- * @deprecated Use LOG_DEBUG(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_DEBUG(msg) LOG_DEBUG(msg)
-
-/**
- * @def THREAD_LOG_INFO(msg)
- * @deprecated Use LOG_INFO(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_INFO(msg) LOG_INFO(msg)
-
-/**
- * @def THREAD_LOG_WARNING(msg)
- * @deprecated Use LOG_WARNING(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_WARNING(msg) LOG_WARNING(msg)
-
-/**
- * @def THREAD_LOG_ERROR(msg)
- * @deprecated Use LOG_ERROR(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_ERROR(msg) LOG_ERROR(msg)
-
-/**
- * @def THREAD_LOG_CRITICAL(msg)
- * @deprecated Use LOG_CRITICAL(msg) instead. Will be removed in v3.0.0.
- */
-#define THREAD_LOG_CRITICAL(msg) LOG_CRITICAL(msg)
-
-// =============================================================================
 // Compile-time Log Level Control (Optional)
 // =============================================================================
 
@@ -316,8 +264,6 @@
     #define LOG_TRACE(msg) ((void)0)
     #undef LOG_TRACE_TO
     #define LOG_TRACE_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_TRACE
-    #define THREAD_LOG_TRACE(msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 1
@@ -325,8 +271,6 @@
     #define LOG_DEBUG(msg) ((void)0)
     #undef LOG_DEBUG_TO
     #define LOG_DEBUG_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_DEBUG
-    #define THREAD_LOG_DEBUG(msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 2
@@ -334,8 +278,6 @@
     #define LOG_INFO(msg) ((void)0)
     #undef LOG_INFO_TO
     #define LOG_INFO_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_INFO
-    #define THREAD_LOG_INFO(msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 3
@@ -343,8 +285,6 @@
     #define LOG_WARNING(msg) ((void)0)
     #undef LOG_WARNING_TO
     #define LOG_WARNING_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_WARNING
-    #define THREAD_LOG_WARNING(msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 4
@@ -352,8 +292,6 @@
     #define LOG_ERROR(msg) ((void)0)
     #undef LOG_ERROR_TO
     #define LOG_ERROR_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_ERROR
-    #define THREAD_LOG_ERROR(msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 5
@@ -361,6 +299,4 @@
     #define LOG_CRITICAL(msg) ((void)0)
     #undef LOG_CRITICAL_TO
     #define LOG_CRITICAL_TO(logger_name, msg) ((void)0)
-    #undef THREAD_LOG_CRITICAL
-    #define THREAD_LOG_CRITICAL(msg) ((void)0)
 #endif
