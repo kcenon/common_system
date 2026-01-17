@@ -152,19 +152,18 @@ if (result.is_uninitialized()) { ... }
 if (!result.is_ok()) { ... }
 ```
 
-### 2. THREAD_LOG_* 매크로 (Deprecated로 재추가됨)
+### 2. THREAD_LOG_* 매크로 (제거됨)
 
-**상태:** v2.x에서 하위 호환성을 위해 재추가됨, deprecated, v3.0.0에서 제거 예정
+**상태:** ~~v3.0.0에서 제거됨~~
 
-**참고:** 이 매크로들은 v2.0.0에서 제거되었지만 마이그레이션을 돕기 위해 재추가되었습니다.
-현재 표준 LOG_* 매크로로 리디렉션되지만 deprecated로 표시되어 있습니다.
+**참고:** 이 매크로들은 영구적으로 제거되었습니다. 모든 코드는 표준 LOG_* 매크로를 사용해야 합니다.
 
 **마이그레이션:**
 ```cpp
-// Before (deprecated)
-THREAD_LOG_INFO("메시지");
+// Before (더 이상 사용 불가)
+// THREAD_LOG_INFO("메시지");
 
-// After (권장)
+// After (필수)
 LOG_INFO("메시지");
 ```
 
