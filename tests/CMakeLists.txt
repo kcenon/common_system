@@ -29,7 +29,6 @@ find_package(Threads REQUIRED)
 
 # Create test executable
 add_executable(common_system_tests
-    result_test.cpp
     improved_result_test.cpp
     executor_test.cpp
     improved_event_bus_test.cpp

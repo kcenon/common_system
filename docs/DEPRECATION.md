@@ -274,7 +274,81 @@ public:
 
 The following APIs were deprecated in earlier versions and have been removed in v2.0.0:
 
-### 1. Result::is_uninitialized()
+### 1. Result<T> Free Functions
+
+**Removed in:** v2.0.0 (Issue #288)
+
+**Description:**
+The deprecated free functions for Result<T> operations have been removed. These functions were replaced by member methods as part of the API modernization effort.
+
+**Removed Functions:**
+
+| Removed Function | Replacement |
+|------------------|-------------|
+| `is_ok(result)` | `result.is_ok()` |
+| `is_error(result)` | `result.is_err()` |
+| `get_value(result)` | `result.value()` |
+| `get_error(result)` | `result.error()` |
+| `value_or(result, default)` | `result.value_or(default)` or `result.unwrap_or(default)` |
+| `get_if_ok(result)` | `result.is_ok()` with `result.value()` |
+| `get_if_error(result)` | `result.is_err()` with `result.error()` |
+| `map(result, func)` | `result.map(func)` |
+| `and_then(result, func)` | `result.and_then(func)` |
+| `or_else(result, func)` | `result.or_else(func)` |
+
+**Reason for Removal:**
+- Member methods provide more intuitive and discoverable API
+- Consistent with modern C++ standards (std::expected, std::optional)
+- Improved code readability with method chaining
+- Better IDE support for auto-completion
+
+**Migration Guide:**
+
+<details>
+<summary>Before (Removed)</summary>
+
+```cpp
+auto result = ok(42);
+
+if (is_ok(result)) {
+    auto value = get_value(result);
+    // use value
+}
+
+auto mapped = map(result, [](int x) { return x * 2; });
+auto chained = and_then(result, [](int x) -> Result<std::string> {
+    return ok(std::to_string(x));
+});
+auto recovered = or_else(result, [](const error_info&) {
+    return ok(0);
+});
+```
+</details>
+
+<details>
+<summary>After (Current)</summary>
+
+```cpp
+auto result = ok(42);
+
+if (result.is_ok()) {
+    auto value = result.value();
+    // use value
+}
+
+auto mapped = result.map([](int x) { return x * 2; });
+auto chained = result.and_then([](int x) -> Result<std::string> {
+    return ok(std::to_string(x));
+});
+auto recovered = result.or_else([](const error_info&) {
+    return ok(0);
+});
+```
+</details>
+
+See `docs/guides/RESULT_MIGRATION_GUIDE.md` for complete migration instructions.
+
+### 2. Result::is_uninitialized()
 
 **Removed in:** v2.0.0
 

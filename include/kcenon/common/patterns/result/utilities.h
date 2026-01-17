@@ -4,16 +4,18 @@
 
 /**
  * @file utilities.h
- * @brief Consolidated utility functions and macros for Result<T> pattern.
+ * @brief Utility functions and macros for Result<T> pattern.
  *
- * This header consolidates Result pattern utilities:
+ * This header provides Result pattern utilities:
  * - Factory functions (ok, make_error)
- * - Helper functions for working with Results
  * - Exception to Result conversion utilities
  * - Convenience macros for common patterns
  *
- * This consolidation reduces header count from 3 to 1, preparing for
- * C++20 module migration while following Kent Beck's "Fewest Elements" principle.
+ * For working with Result values, use member methods directly:
+ * - result.is_ok(), result.is_err()
+ * - result.value(), result.error()
+ * - result.value_or(), result.unwrap_or()
+ * - result.map(), result.and_then(), result.or_else()
  */
 
 #pragma once
@@ -29,101 +31,8 @@
 namespace kcenon::common {
 
 // ============================================================================
-// Factory and Helper Functions (from result_funcs.h)
+// Factory Functions
 // ============================================================================
-
-// Helper functions for working with Results
-// NOTE: Free functions are deprecated in favor of member methods.
-// See docs/guides/RESULT_MIGRATION_GUIDE.md for migration instructions.
-
-/**
- * @brief Check if result contains a successful value
- * @deprecated Use result.is_ok() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.is_ok() instead. Will be removed in v2.0.0.")]]
-inline bool is_ok(const Result<T>& result) {
-    return result.is_ok();
-}
-
-/**
- * @brief Check if result contains an error
- * @deprecated Use result.is_err() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.is_err() instead. Will be removed in v2.0.0.")]]
-inline bool is_error(const Result<T>& result) {
-    return result.is_err();
-}
-
-/**
- * @brief Get value from result
- * @throws std::bad_variant_access if result contains error
- * @deprecated Use result.value() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.value() instead. Will be removed in v2.0.0.")]]
-inline const T& get_value(const Result<T>& result) {
-    return result.value();
-}
-
-/**
- * @brief Get mutable value from result
- * @throws std::bad_variant_access if result contains error
- * @deprecated Use result.value() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.value() instead. Will be removed in v2.0.0.")]]
-inline T& get_value(Result<T>& result) {
-    return result.value();
-}
-
-/**
- * @brief Get error from result
- * @throws std::bad_variant_access if result contains value
- * @deprecated Use result.error() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.error() instead. Will be removed in v2.0.0.")]]
-inline const error_info& get_error(const Result<T>& result) {
-    return result.error();
-}
-
-/**
- * @brief Get value or return default
- * @deprecated Use result.value_or(default) or result.unwrap_or(default) instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.value_or(default) or result.unwrap_or(default) instead. Will be removed in v2.0.0.")]]
-inline T value_or(const Result<T>& result, T default_value) {
-    return result.unwrap_or(default_value);
-}
-
-/**
- * @brief Get value pointer if ok, nullptr if error
- * @deprecated Use result.is_ok() with result.value() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.is_ok() with result.value() instead. Will be removed in v2.0.0.")]]
-inline const T* get_if_ok(const Result<T>& result) {
-    if (result.is_ok()) {
-        return &result.value();
-    }
-    return nullptr;
-}
-
-/**
- * @brief Get error pointer if error, nullptr if ok
- * @deprecated Use result.is_err() with result.error() instead. Will be removed in v2.0.0.
- */
-template<typename T>
-[[deprecated("Use result.is_err() with result.error() instead. Will be removed in v2.0.0.")]]
-inline const error_info* get_if_error(const Result<T>& result) {
-    if (result.is_err()) {
-        return &result.error();
-    }
-    return nullptr;
-}
 
 // Factory functions for creating Results
 // See docs/BEST_PRACTICES.md for detailed usage patterns
@@ -202,43 +111,8 @@ inline Result<T> make_error(const error_info& err) {
     return Result<T>(err);
 }
 
-// Monadic operations (for free functions)
-// NOTE: These are deprecated in favor of member methods.
-
-/**
- * @brief Map a function over a successful result
- * @deprecated Use result.map(func) instead. Will be removed in v2.0.0.
- */
-template<typename T, typename F>
-[[deprecated("Use result.map(func) instead. Will be removed in v2.0.0.")]]
-auto map(const Result<T>& result, F&& func)
-    -> Result<decltype(func(std::declval<T>()))> {
-    return result.map(std::forward<F>(func));
-}
-
-/**
- * @brief Map a function that returns a Result
- * @deprecated Use result.and_then(func) instead. Will be removed in v2.0.0.
- */
-template<typename T, typename F>
-[[deprecated("Use result.and_then(func) instead. Will be removed in v2.0.0.")]]
-auto and_then(const Result<T>& result, F&& func)
-    -> decltype(func(std::declval<T>())) {
-    return result.and_then(std::forward<F>(func));
-}
-
-/**
- * @brief Provide alternative value if error
- * @deprecated Use result.or_else(func) instead. Will be removed in v2.0.0.
- */
-template<typename T, typename F>
-[[deprecated("Use result.or_else(func) instead. Will be removed in v2.0.0.")]]
-Result<T> or_else(const Result<T>& result, F&& func) {
-    return result.or_else(std::forward<F>(func));
-}
-
 // ============================================================================
-// Exception Conversion (from exception_conversion.h)
+// Exception Conversion
 // ============================================================================
 
 /**
@@ -414,7 +288,7 @@ VoidResult try_catch_void(F&& func, const std::string& module = "") {
  * @brief Assign value or return error
  *
  * Usage:
- *   COMMON_ASSIGN_OR_RETURN(auto value, get_value());
+ *   COMMON_ASSIGN_OR_RETURN(auto value, some_operation());
  *   // Use 'value' here
  */
 #define COMMON_ASSIGN_OR_RETURN(decl, expr) \
