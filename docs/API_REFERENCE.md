@@ -626,18 +626,6 @@ LOG_IS_ENABLED(level)                // Check if level is enabled
 LOG_IS_ENABLED_FOR(level, logger_name)
 ```
 
-#### Legacy Compatibility
-
-```cpp
-// These macros redirect to LOG_* equivalents (deprecated)
-THREAD_LOG_TRACE(msg)
-THREAD_LOG_DEBUG(msg)
-THREAD_LOG_INFO(msg)
-THREAD_LOG_WARNING(msg)
-THREAD_LOG_ERROR(msg)
-THREAD_LOG_CRITICAL(msg)
-```
-
 #### Compile-Time Level Filtering
 
 Define `KCENON_MIN_LOG_LEVEL` before including the header to disable lower log levels at compile time:

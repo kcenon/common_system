@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Removed
+- **Deprecated THREAD_LOG_* macros** (#289)
+  - Removed deprecated logging macros that were scheduled for removal in v3.0.0:
+    - `THREAD_LOG_TRACE(msg)` → Use `LOG_TRACE(msg)` instead
+    - `THREAD_LOG_DEBUG(msg)` → Use `LOG_DEBUG(msg)` instead
+    - `THREAD_LOG_INFO(msg)` → Use `LOG_INFO(msg)` instead
+    - `THREAD_LOG_WARNING(msg)` → Use `LOG_WARNING(msg)` instead
+    - `THREAD_LOG_ERROR(msg)` → Use `LOG_ERROR(msg)` instead
+    - `THREAD_LOG_CRITICAL(msg)` → Use `LOG_CRITICAL(msg)` instead
+  - **BREAKING CHANGE**: Migrate to `LOG_*` macros before upgrading
+  - See `docs/DEPRECATION.md` for migration instructions
+
 - **Deprecated Result<T> free functions** (#288)
   - Removed deprecated free functions that were replaced by member methods:
     - `is_ok(result)` → Use `result.is_ok()` instead

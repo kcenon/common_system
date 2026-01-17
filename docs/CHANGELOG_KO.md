@@ -11,6 +11,18 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
 
 ## [Unreleased]
 
+### Removed
+- **Deprecated THREAD_LOG_* 매크로 제거** (#289)
+  - v3.0.0에서 제거 예정이었던 deprecated 로깅 매크로 제거:
+    - `THREAD_LOG_TRACE(msg)` → `LOG_TRACE(msg)` 사용
+    - `THREAD_LOG_DEBUG(msg)` → `LOG_DEBUG(msg)` 사용
+    - `THREAD_LOG_INFO(msg)` → `LOG_INFO(msg)` 사용
+    - `THREAD_LOG_WARNING(msg)` → `LOG_WARNING(msg)` 사용
+    - `THREAD_LOG_ERROR(msg)` → `LOG_ERROR(msg)` 사용
+    - `THREAD_LOG_CRITICAL(msg)` → `LOG_CRITICAL(msg)` 사용
+  - **BREAKING CHANGE**: 업그레이드 전 `LOG_*` 매크로로 마이그레이션 필요
+  - 마이그레이션 방법은 `docs/DEPRECATION_KO.md` 참조
+
 ### Breaking Changes
 - **ILogger 인터페이스에서 deprecated file/line/function log() 메서드 제거** (#217)
   - 제거됨: `virtual VoidResult log(log_level, const std::string&, const std::string& file, int line, const std::string& function)`

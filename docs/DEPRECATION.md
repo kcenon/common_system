@@ -363,19 +363,18 @@ if (result.is_uninitialized()) { ... }
 if (!result.is_ok()) { ... }
 ```
 
-### 2. THREAD_LOG_* Macros (Re-added as Deprecated)
+### 2. THREAD_LOG_* Macros (Removed)
 
-**Status:** Re-added in v2.x for backward compatibility, deprecated, removal planned for v3.0.0
+**Status:** ~~Removed in v3.0.0~~
 
-**Note:** These macros were removed in v2.0.0 but have been re-added to ease migration.
-They now redirect to the standard LOG_* macros but are marked as deprecated.
+**Note:** These macros have been permanently removed. All code must use the standard LOG_* macros.
 
 **Migration:**
 ```cpp
-// Before (deprecated)
-THREAD_LOG_INFO("Message");
+// Before (no longer available)
+// THREAD_LOG_INFO("Message");
 
-// After (recommended)
+// After (required)
 LOG_INFO("Message");
 ```
 
