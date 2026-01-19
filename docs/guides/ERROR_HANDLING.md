@@ -1,6 +1,6 @@
 # Error Handling Guidelines
 
-> **Language:** **English** | [한국어](ERROR_HANDLING_KO.md)
+> **Language:** **English** | [한국어](ERROR_HANDLING.kr.md)
 
 
 ## Table of Contents

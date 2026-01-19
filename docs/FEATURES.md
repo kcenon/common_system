@@ -1,6 +1,6 @@
 # Common System - Detailed Features
 
-**Language:** **English** | [한국어](FEATURES_KO.md)
+**Language:** **English** | [한국어](FEATURES.kr.md)
 
 This document provides comprehensive details about all features available in the Common System project.
 

@@ -694,7 +694,7 @@ call  use
 
 **Language Support**:
 - English (primary)
-- Korean (`*_KO.md` files)
+- Korean (`*.kr.md` files)
 
 ## Production Readiness Checklist
 

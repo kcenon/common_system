@@ -1,6 +1,6 @@
 # Common System - Performance Benchmarks
 
-**Language:** **English** | [한국어](BENCHMARKS_KO.md)
+**Language:** **English** | [한국어](BENCHMARKS.kr.md)
 
 This document provides comprehensive performance benchmarks and analysis for the Common System project.
 

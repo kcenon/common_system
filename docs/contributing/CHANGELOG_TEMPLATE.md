@@ -19,7 +19,7 @@ All notable changes to the [SYSTEM_NAME] project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-> **Language:** **English** | [한국어](CHANGELOG_KO.md)
+> **Language:** **English** | [한국어](CHANGELOG.kr.md)
 
 ---
 
@@ -168,7 +168,7 @@ Tools like `conventional-changelog` can generate changelogs from these commits.
 
 ## Korean Version
 
-For Korean translations, create `CHANGELOG_KO.md` with:
+For Korean translations, create `CHANGELOG.kr.md` with:
 - Same structure and version numbers
 - Translated descriptions
 - Link to English version at top

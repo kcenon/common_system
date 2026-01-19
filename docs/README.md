@@ -1,6 +1,6 @@
 # Common System Documentation
 
-> **Language:** **English** | [한국어](README_KO.md)
+> **Language:** **English** | [한국어](README.kr.md)
 
 **Version:** 0.2.0
 **Last Updated:** 2025-11-11
@@ -41,7 +41,7 @@ Essential documents for understanding the system:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | Layer 0 foundation architecture, standard interfaces, system dependencies | [🇰🇷](01-ARCHITECTURE_KO.md) | 800+ |
+| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | Layer 0 foundation architecture, standard interfaces, system dependencies | [🇰🇷](01-ARCHITECTURE.kr.md) | 800+ |
 
 ### 📗 User Guides
 
@@ -53,13 +53,13 @@ Step-by-step guides for users:
 | [FAQ.md](guides/FAQ.md) | 23 frequently asked questions with examples | - | 1020 |
 | [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) | Common problems, template errors, IDE configuration | - | 1221 |
 | [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) | Recommended patterns for Result<T>, RAII, error handling | - | 1272 |
-| [ERROR_HANDLING.md](guides/ERROR_HANDLING.md) | Result<T> pattern usage and monadic operations | [🇰🇷](guides/ERROR_HANDLING_KO.md) | 600+ |
-| [RAII_GUIDELINES.md](guides/RAII_GUIDELINES.md) | Resource Acquisition Is Initialization patterns | [🇰🇷](guides/RAII_GUIDELINES_KO.md) | 400+ |
-| [SMART_POINTER_GUIDELINES.md](guides/SMART_POINTER_GUIDELINES.md) | unique_ptr and shared_ptr usage patterns | [🇰🇷](guides/SMART_POINTER_GUIDELINES_KO.md) | 300+ |
+| [ERROR_HANDLING.md](guides/ERROR_HANDLING.md) | Result<T> pattern usage and monadic operations | [🇰🇷](guides/ERROR_HANDLING.kr.md) | 600+ |
+| [RAII_GUIDELINES.md](guides/RAII_GUIDELINES.md) | Resource Acquisition Is Initialization patterns | [🇰🇷](guides/RAII_GUIDELINES.kr.md) | 400+ |
+| [SMART_POINTER_GUIDELINES.md](guides/SMART_POINTER_GUIDELINES.md) | unique_ptr and shared_ptr usage patterns | [🇰🇷](guides/SMART_POINTER_GUIDELINES.kr.md) | 300+ |
 | [ERROR_CODE_GUIDELINES.md](guides/ERROR_CODE_GUIDELINES.md) | Error code ranges, allocation, compile-time validation | - | 200+ |
-| [INTEGRATION.md](guides/INTEGRATION.md) | System integration patterns and examples | [🇰🇷](guides/INTEGRATION_KO.md) | 500+ |
-| [INTEGRATION_POLICY.md](guides/INTEGRATION_POLICY.md) | Official integration policy and CMake patterns | [🇰🇷](guides/INTEGRATION_POLICY_KO.md) | 300+ |
-| [MODULE_MIGRATION.md](guides/MODULE_MIGRATION.md) | C++20 module migration guide | [🇰🇷](guides/MODULE_MIGRATION_KO.md) | 200+ |
+| [INTEGRATION.md](guides/INTEGRATION.md) | System integration patterns and examples | [🇰🇷](guides/INTEGRATION.kr.md) | 500+ |
+| [INTEGRATION_POLICY.md](guides/INTEGRATION_POLICY.md) | Official integration policy and CMake patterns | [🇰🇷](guides/INTEGRATION_POLICY.kr.md) | 300+ |
+| [MODULE_MIGRATION.md](guides/MODULE_MIGRATION.md) | C++20 module migration guide | [🇰🇷](guides/MODULE_MIGRATION.kr.md) | 200+ |
 
 ### 📙 Advanced Topics
 
@@ -67,13 +67,13 @@ For experienced users and contributors:
 
 | Document | Description | Korean | Lines |
 |----------|-------------|--------|-------|
-| [COMPATIBILITY.md](COMPATIBILITY.md) | Version compatibility matrix for KCENON ecosystem | [🇰🇷](COMPATIBILITY_KO.md) | 300+ |
-| [MIGRATION.md](advanced/MIGRATION.md) | Migration guide to common_system integration | [🇰🇷](advanced/MIGRATION_KO.md) | 400+ |
+| [COMPATIBILITY.md](COMPATIBILITY.md) | Version compatibility matrix for KCENON ecosystem | [🇰🇷](COMPATIBILITY.kr.md) | 300+ |
+| [MIGRATION.md](advanced/MIGRATION.md) | Migration guide to common_system integration | [🇰🇷](advanced/MIGRATION.kr.md) | 400+ |
 | [IEXECUTOR_MIGRATION_GUIDE.md](advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Function-based to job-based API migration | - | 200+ |
 | [NAMESPACE_MIGRATION.md](advanced/NAMESPACE_MIGRATION.md) | Namespace migration strategy and patterns | - | 150+ |
-| [DEPENDENCY_MATRIX.md](advanced/DEPENDENCY_MATRIX.md) | System dependency relationships and integration status | [🇰🇷](advanced/DEPENDENCY_MATRIX_KO.md) | 200+ |
+| [DEPENDENCY_MATRIX.md](advanced/DEPENDENCY_MATRIX.md) | System dependency relationships and integration status | [🇰🇷](advanced/DEPENDENCY_MATRIX.kr.md) | 200+ |
 | [STRUCTURE.md](advanced/STRUCTURE.md) | Project directory layout and organization | - | 150+ |
-| [SINGLETON_GUIDELINES.md](SINGLETON_GUIDELINES.md) | Singleton pattern guidelines for SDOF prevention | [🇰🇷](SINGLETON_GUIDELINES_KO.md) | 300+ |
+| [SINGLETON_GUIDELINES.md](SINGLETON_GUIDELINES.md) | Singleton pattern guidelines for SDOF prevention | [🇰🇷](SINGLETON_GUIDELINES.kr.md) | 300+ |
 
 ### 🤝 Contributing
 

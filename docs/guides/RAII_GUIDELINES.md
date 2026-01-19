@@ -1,6 +1,6 @@
 # RAII Pattern Guidelines for Common System
 
-> **Language:** **English** | [한국어](RAII_GUIDELINES_KO.md)
+> **Language:** **English** | [한국어](RAII_GUIDELINES.kr.md)
 
 
 **Document Version**: 1.0

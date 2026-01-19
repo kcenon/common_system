@@ -302,7 +302,7 @@ bool is_valid(const T& obj) {
 }
 ```
 
-상세 문서 및 마이그레이션 가이드는 [Concepts 가이드](guides/CONCEPTS_GUIDE_KO.md)를 참조하세요.
+상세 문서 및 마이그레이션 가이드는 [Concepts 가이드](guides/CONCEPTS_GUIDE.kr.md)를 참조하세요.
 
 ---
 

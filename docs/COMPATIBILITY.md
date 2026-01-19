@@ -2,7 +2,7 @@
 
 This document defines version compatibility and dependency requirements across all KCENON ecosystem components.
 
-> **Language:** **English** | [한국어](COMPATIBILITY_KO.md)
+> **Language:** **English** | [한국어](COMPATIBILITY.kr.md)
 
 ---
 

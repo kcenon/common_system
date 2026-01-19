@@ -619,9 +619,9 @@ TEST(CrossSystem, ResultCompatibility) {
 
 ## 참고 자료
 
-- [에러 처리 가이드라인](ERROR_HANDLING_KO.md) - 포괄적인 에러 처리 패턴
-- [API 레퍼런스](../API_REFERENCE_KO.md) - 전체 API 문서
-- [에러 코드 레지스트리](../ERROR_CODE_REGISTRY_KO.md) - 중앙화된 에러 코드
+- [에러 처리 가이드라인](ERROR_HANDLING.kr.md) - 포괄적인 에러 처리 패턴
+- [API 레퍼런스](../API_REFERENCE.kr.md) - 전체 API 문서
+- [에러 코드 레지스트리](../ERROR_CODE_REGISTRY.kr.md) - 중앙화된 에러 코드
 - [모범 사례](BEST_PRACTICES.md) - 일반 모범 사례
 
 ---

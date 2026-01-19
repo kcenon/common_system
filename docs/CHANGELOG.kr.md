@@ -21,14 +21,14 @@ Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문�
     - `THREAD_LOG_ERROR(msg)` → `LOG_ERROR(msg)` 사용
     - `THREAD_LOG_CRITICAL(msg)` → `LOG_CRITICAL(msg)` 사용
   - **BREAKING CHANGE**: 업그레이드 전 `LOG_*` 매크로로 마이그레이션 필요
-  - 마이그레이션 방법은 `docs/DEPRECATION_KO.md` 참조
+  - 마이그레이션 방법은 `docs/DEPRECATION.kr.md` 참조
 
 ### Breaking Changes
 - **ILogger 인터페이스에서 deprecated file/line/function log() 메서드 제거** (#217)
   - 제거됨: `virtual VoidResult log(log_level, const std::string&, const std::string& file, int line, const std::string& function)`
   - 대신 `log(log_level, std::string_view, const source_location&)` 사용
   - 커스텀 ILogger 구현은 이 메서드 오버라이드를 제거해야 함
-  - 마이그레이션 가이드는 `docs/DEPRECATION_KO.md` 참조
+  - 마이그레이션 가이드는 `docs/DEPRECATION.kr.md` 참조
 
 ### Added
 - **C++20 모듈 마이그레이션 Phase 3 시작** (#275)

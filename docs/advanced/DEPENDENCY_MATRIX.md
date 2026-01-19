@@ -1,6 +1,6 @@
 # Dependency Matrix - Detailed Analysis
 
-> **Language:** **English** | [한국어](DEPENDENCY_MATRIX_KO.md)
+> **Language:** **English** | [한국어](DEPENDENCY_MATRIX.kr.md)
 
 
 ## Table of Contents
