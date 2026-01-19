@@ -31,14 +31,19 @@ namespace interfaces {
 /**
  * @enum log_level
  * @brief Standard log levels
+ *
+ * @note v3.0.0: Added 'warn' and 'fatal' as aliases for 'warning' and 'critical'
+ *       respectively, for backward compatibility with logger_system::log_level.
  */
 enum class log_level {
     trace = 0,
     debug = 1,
     info = 2,
     warning = 3,
+    warn = 3,       ///< Alias for warning (backward compatibility)
     error = 4,
     critical = 5,
+    fatal = 5,      ///< Alias for critical (backward compatibility)
     off = 6
 };
 
