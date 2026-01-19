@@ -1,6 +1,6 @@
 # Common System - Project Structure
 
-**English | [한국어](STRUCTURE_KO.md)**
+**English | [한국어](STRUCTURE.kr.md)**
 
 ---
 

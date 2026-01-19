@@ -233,9 +233,9 @@ make 2>&1 | grep -i deprecated
 
 ## 관련 문서
 
-- [CHANGELOG](CHANGELOG_KO.md) - deprecation 공지가 포함된 버전 히스토리
-- [API Reference](API_REFERENCE_KO.md) - 전체 API 문서
-- [Migration Guide](advanced/MIGRATION_KO.md) - 일반 마이그레이션 가이드
+- [CHANGELOG](CHANGELOG.kr.md) - deprecation 공지가 포함된 버전 히스토리
+- [API Reference](API_REFERENCE.kr.md) - 전체 API 문서
+- [Migration Guide](advanced/MIGRATION.kr.md) - 일반 마이그레이션 가이드
 - [Logging Best Practices](guides/LOGGING_BEST_PRACTICES.md) - 권장 로깅 패턴
 
 ---

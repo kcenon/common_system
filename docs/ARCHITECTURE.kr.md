@@ -506,11 +506,11 @@ target_link_libraries(your_app PRIVATE kcenon::common_modules)
 | MSVC | 17.4 (2022) | ✅ 지원 |
 | AppleClang | - | ❌ 미지원 |
 
-자세한 마이그레이션 지침은 [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION_KO.md)를 참조하세요.
+자세한 마이그레이션 지침은 [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION.kr.md)를 참조하세요.
 
 ## 참고 자료
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
 - [INTEGRATION.md](./INTEGRATION.md) - 통합 예제
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 개선 추적
-- [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION_KO.md) - C++20 모듈 마이그레이션
+- [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION.kr.md) - C++20 모듈 마이그레이션

@@ -312,7 +312,7 @@ container.register_type<NonPolymorphic, Impl>();  // 오류!
 
 ## 관련 문서
 
-- [API 레퍼런스](../API_REFERENCE_KO.md)
+- [API 레퍼런스](../API_REFERENCE.kr.md)
 - [Result 패턴 가이드](result_pattern_ko.md)
 - [Event Bus 가이드](event_bus_ko.md)
 - [의존성 주입 가이드](dependency_injection_ko.md)

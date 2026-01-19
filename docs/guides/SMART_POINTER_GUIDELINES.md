@@ -1,6 +1,6 @@
 # Smart Pointer Usage Guidelines
 
-> **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES_KO.md)
+> **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES.kr.md)
 
 
 ## Table of Contents

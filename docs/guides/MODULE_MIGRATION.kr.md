@@ -186,7 +186,7 @@ cmake -G Ninja -DCMAKE_CXX_COMPILER=clang++ -B build
 
 ## 관련 문서
 
-- [아키텍처 개요](../ARCHITECTURE_KO.md)
-- [프로젝트 구조](../PROJECT_STRUCTURE_KO.md)
+- [아키텍처 개요](../ARCHITECTURE.kr.md)
+- [프로젝트 구조](../PROJECT_STRUCTURE.kr.md)
 - [빠른 시작 가이드](QUICK_START.md)
-- [통합 가이드](INTEGRATION_KO.md)
+- [통합 가이드](INTEGRATION.kr.md)

@@ -2,7 +2,7 @@
 
 **Guide for using C++20 modules** with common_system instead of traditional header includes.
 
-> **Language:** **English** | [한국어](MODULE_MIGRATION_KO.md)
+> **Language:** **English** | [한국어](MODULE_MIGRATION.kr.md)
 
 ## Overview
 

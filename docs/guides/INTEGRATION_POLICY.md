@@ -1,6 +1,6 @@
 # common_system Integration Policy
 
-> **Language:** **English** | [한국어](INTEGRATION_POLICY_KO.md)
+> **Language:** **English** | [한국어](INTEGRATION_POLICY.kr.md)
 
 ## Overview
 

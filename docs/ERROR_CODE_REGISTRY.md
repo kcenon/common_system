@@ -1,4 +1,4 @@
-> **Language:** **English** | [한국어](ERROR_CODE_REGISTRY_KO.md)
+> **Language:** **English** | [한국어](ERROR_CODE_REGISTRY.kr.md)
 
 # Error Code Registry
 

@@ -8,12 +8,12 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
 
 ### 🏗️ 아키텍처 및 설계
 
-- **[아키텍처](ARCHITECTURE_KO.md)** / **[English](ARCHITECTURE.md)**
+- **[아키텍처](ARCHITECTURE.kr.md)** / **[English](ARCHITECTURE.md)**
   - 완전한 시스템 아키텍처 개요
   - 레이어 아키텍처 및 모듈 의존성
   - 통합 패턴 및 모범 사례
 
-- **[아키텍처 이슈](ARCHITECTURE_ISSUES_KO.md)** / **[English](ARCHITECTURE_ISSUES.md)**
+- **[아키텍처 이슈](ARCHITECTURE_ISSUES.kr.md)** / **[English](ARCHITECTURE_ISSUES.md)**
   - 알려진 아키텍처 이슈 및 추적
   - 해결 단계 및 우선순위
   - 위험 평가 및 완화
@@ -23,14 +23,14 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
   - 네임스페이스 구성
   - 컴포넌트 아키텍처
 
-- **[현재 상태](CURRENT_STATE_KO.md)** / **[English](CURRENT_STATE.md)**
+- **[현재 상태](CURRENT_STATE.kr.md)** / **[English](CURRENT_STATE.md)**
   - 시스템 베이스라인 및 상태
   - 빌드 구성
   - 알려진 이슈 및 다음 단계
 
 ### ⚠️ 에러 처리
 
-- **[에러 처리 가이드라인](ERROR_HANDLING_KO.md)** / **[English](ERROR_HANDLING.md)**
+- **[에러 처리 가이드라인](ERROR_HANDLING.kr.md)** / **[English](ERROR_HANDLING.md)**
   - Result<T> 패턴 사용법
   - 모나딕 연산 (map, and_then, or_else)
   - 에러 전파 패턴
@@ -44,30 +44,30 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
 
 ### 🔗 통합 및 마이그레이션
 
-- **[호환성 매트릭스](COMPATIBILITY_KO.md)** / **[English](COMPATIBILITY.md)**
+- **[호환성 매트릭스](COMPATIBILITY.kr.md)** / **[English](COMPATIBILITY.md)**
   - KCENON 에코시스템 버전 호환성
   - 시스템 간 의존성 그래프
   - CMake 버전 검증 예제
   - 업그레이드 가이드라인
 
-- **[통합 가이드](INTEGRATION_KO.md)** / **[English](INTEGRATION.md)**
+- **[통합 가이드](INTEGRATION.kr.md)** / **[English](INTEGRATION.md)**
   - 시스템 통합 예제
   - 빠른 시작 가이드
   - 완전한 통합 패턴
   - 문제 해결
 
-- **[통합 정책](INTEGRATION_POLICY_KO.md)** / **[English](INTEGRATION_POLICY.md)**
+- **[통합 정책](INTEGRATION_POLICY.kr.md)** / **[English](INTEGRATION_POLICY.md)**
   - 공식 통합 정책
   - 통합 계층 (필수, 선택)
   - CMake 구성 패턴
   - 의존성 관리
 
-- **[C++20 모듈 마이그레이션](guides/MODULE_MIGRATION_KO.md)** / **[English](guides/MODULE_MIGRATION.md)**
+- **[C++20 모듈 마이그레이션](guides/MODULE_MIGRATION.kr.md)** / **[English](guides/MODULE_MIGRATION.md)**
   - 헤더에서 모듈로 마이그레이션
   - 모듈 빌드 설정
   - 컴파일러 호환성
 
-- **[마이그레이션 가이드](MIGRATION_KO.md)** / **[English](MIGRATION.md)**
+- **[마이그레이션 가이드](MIGRATION.kr.md)** / **[English](MIGRATION.md)**
   - common_system 통합으로 마이그레이션
   - Result<T> 패턴 적용
   - 표준 인터페이스 마이그레이션
@@ -85,17 +85,17 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
 
 ### 🔍 개발 가이드라인
 
-- **[RAII 가이드라인](RAII_GUIDELINES_KO.md)** / **[English](RAII_GUIDELINES.md)**
+- **[RAII 가이드라인](RAII_GUIDELINES.kr.md)** / **[English](RAII_GUIDELINES.md)**
   - Resource Acquisition Is Initialization 패턴
   - 생명주기 관리
   - 모범 사례
 
-- **[스마트 포인터 가이드라인](SMART_POINTER_GUIDELINES_KO.md)** / **[English](SMART_POINTER_GUIDELINES.md)**
+- **[스마트 포인터 가이드라인](SMART_POINTER_GUIDELINES.kr.md)** / **[English](SMART_POINTER_GUIDELINES.md)**
   - std::unique_ptr 및 std::shared_ptr 사용법
   - 소유권 의미
   - 성능 고려사항
 
-- **[싱글톤 패턴 가이드라인](SINGLETON_GUIDELINES_KO.md)** / **[English](SINGLETON_GUIDELINES.md)**
+- **[싱글톤 패턴 가이드라인](SINGLETON_GUIDELINES.kr.md)** / **[English](SINGLETON_GUIDELINES.md)**
   - SDOF(Static Destruction Order Fiasco) 방지
   - Meyer's 싱글톤 vs 의도적 누수 패턴
   - 시스템 간 싱글톤 관리
@@ -108,19 +108,19 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
   - 컴파일 타임 메트릭
   - 메모리 사용량
 
-- **[정적 분석 베이스라인](STATIC_ANALYSIS_BASELINE_KO.md)** / **[English](STATIC_ANALYSIS_BASELINE.md)**
+- **[정적 분석 베이스라인](STATIC_ANALYSIS_BASELINE.kr.md)** / **[English](STATIC_ANALYSIS_BASELINE.md)**
   - clang-tidy 베이스라인
   - cppcheck 베이스라인
   - 목표 설정 및 추적
 
-- **[의존성 매트릭스](DEPENDENCY_MATRIX_KO.md)** / **[English](DEPENDENCY_MATRIX.md)**
+- **[의존성 매트릭스](DEPENDENCY_MATRIX.kr.md)** / **[English](DEPENDENCY_MATRIX.md)**
   - 시스템 의존성 관계
   - 모듈 통합 상태
   - 의존성 그래프
 
 ### 📈 개선 사항
 
-- **[개선 사항](IMPROVEMENTS_KO.md)** / **[English](IMPROVEMENTS.md)**
+- **[개선 사항](IMPROVEMENTS.kr.md)** / **[English](IMPROVEMENTS.md)**
   - 완료된 개선 사항
   - 진행 중인 개선 사항
   - 향후 로드맵
@@ -128,18 +128,18 @@ common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 co
 ## 📖 빠른 링크
 
 ### 시작하기
-1. [아키텍처](ARCHITECTURE_KO.md)에서 시스템 개요 파악
-2. [통합 가이드](INTEGRATION_KO.md)에서 실용적인 예제 확인
-3. [에러 처리 가이드라인](ERROR_HANDLING_KO.md)에서 모범 사례 학습
+1. [아키텍처](ARCHITECTURE.kr.md)에서 시스템 개요 파악
+2. [통합 가이드](INTEGRATION.kr.md)에서 실용적인 예제 확인
+3. [에러 처리 가이드라인](ERROR_HANDLING.kr.md)에서 모범 사례 학습
 
 ### 개발자용
 - [구조](STRUCTURE.md) - 프로젝트 구성 이해
 - [에러 코드 가이드라인](ERROR_CODE_GUIDELINES.md) - 새로운 에러 코드 추가
-- [RAII 가이드라인](RAII_GUIDELINES_KO.md) - 리소스 관리 패턴
+- [RAII 가이드라인](RAII_GUIDELINES.kr.md) - 리소스 관리 패턴
 
 ### 통합용
-- [통합 정책](INTEGRATION_POLICY_KO.md) - 공식 통합 요구사항
-- [마이그레이션 가이드](MIGRATION_KO.md) - 기존 코드 마이그레이션
+- [통합 정책](INTEGRATION_POLICY.kr.md) - 공식 통합 요구사항
+- [마이그레이션 가이드](MIGRATION.kr.md) - 기존 코드 마이그레이션
 - [IExecutor 마이그레이션 가이드](IEXECUTOR_MIGRATION_GUIDE.md) - executor 사용법 업데이트
 
 ## 🔄 문서 업데이트

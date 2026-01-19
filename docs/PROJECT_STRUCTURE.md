@@ -1,6 +1,6 @@
 # Common System - Project Structure
 
-**Language:** **English** | [한국어](PROJECT_STRUCTURE_KO.md)
+**Language:** **English** | [한국어](PROJECT_STRUCTURE.kr.md)
 
 This document provides a comprehensive overview of the common_system project structure, explaining the purpose of each directory and key files.
 
@@ -179,7 +179,7 @@ common_system/
 ├── CMakeLists.txt              # Root CMake configuration
 ├── LICENSE                     # BSD 3-Clause License
 ├── README.md                   # Main project README
-├── README_KO.md                # Korean README
+├── README.kr.md                # Korean README
 ├── CONTRIBUTING.md             # Contribution guidelines
 ├── .gitignore                  # Git ignore rules
 ├── .clang-format              # Code formatting rules

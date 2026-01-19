@@ -162,7 +162,7 @@ common_system/
 ├── CMakeLists.txt              # 루트 CMake 설정
 ├── LICENSE                     # BSD 3-Clause 라이선스
 ├── README.md                   # 메인 프로젝트 README
-├── README_KO.md                # 한국어 README
+├── README.kr.md                # 한국어 README
 ├── CONTRIBUTING.md             # 기여 가이드라인
 ├── .gitignore                  # Git ignore 규칙
 ├── .clang-format              # 코드 포매팅 규칙

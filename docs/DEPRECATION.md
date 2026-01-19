@@ -2,7 +2,7 @@
 
 This document lists all deprecated APIs in the Common System library, their replacements, and migration guidance.
 
-> **Language:** **English** | [한국어](DEPRECATION_KO.md)
+> **Language:** **English** | [한국어](DEPRECATION.kr.md)
 
 ---
 

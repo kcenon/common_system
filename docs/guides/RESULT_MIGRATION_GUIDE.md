@@ -1,6 +1,6 @@
 # Result\<T\> Migration Guide
 
-> **Language:** **English** | [한국어](RESULT_MIGRATION_GUIDE_KO.md)
+> **Language:** **English** | [한국어](RESULT_MIGRATION_GUIDE.kr.md)
 
 ## Table of Contents
 
