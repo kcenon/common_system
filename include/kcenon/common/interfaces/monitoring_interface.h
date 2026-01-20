@@ -13,14 +13,18 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdint>
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include "../patterns/result.h"
+#include "../utils/enum_serialization.h"
 
 namespace kcenon::common {
 namespace interfaces {
@@ -36,33 +40,36 @@ enum class metric_type {
     summary     // Statistical summary (min, max, mean, percentiles)
 };
 
+}  // namespace interfaces
+
+/**
+ * @brief Specialization of enum_traits for metric_type
+ */
+template<>
+struct enum_traits<interfaces::metric_type> {
+    static constexpr auto values = std::array{
+        std::pair{interfaces::metric_type::gauge, std::string_view{"GAUGE"}},
+        std::pair{interfaces::metric_type::counter, std::string_view{"COUNTER"}},
+        std::pair{interfaces::metric_type::histogram, std::string_view{"HISTOGRAM"}},
+        std::pair{interfaces::metric_type::summary, std::string_view{"SUMMARY"}},
+    };
+    static constexpr std::string_view module_name = "monitoring_interface";
+};
+
+namespace interfaces {
+
 /**
  * @brief Convert metric type to string
  */
 inline std::string to_string(metric_type type) {
-    switch(type) {
-        case metric_type::gauge: return "GAUGE";
-        case metric_type::counter: return "COUNTER";
-        case metric_type::histogram: return "HISTOGRAM";
-        case metric_type::summary: return "SUMMARY";
-        default: return "UNKNOWN";
-    }
+    return enum_to_string(type);
 }
 
 /**
  * @brief Convert string to metric type
  */
 inline Result<metric_type> metric_type_from_string(const std::string& str) {
-    std::string upper = str;
-    std::transform(upper.begin(), upper.end(), upper.begin(),
-                   [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
-
-    if (upper == "GAUGE") return ok(metric_type::gauge);
-    if (upper == "COUNTER") return ok(metric_type::counter);
-    if (upper == "HISTOGRAM") return ok(metric_type::histogram);
-    if (upper == "SUMMARY") return ok(metric_type::summary);
-
-    return Result<metric_type>(error_info{1, "Invalid metric type: " + str, "monitoring_interface"});
+    return enum_from_string<metric_type>(str);
 }
 
 /**
@@ -204,6 +211,24 @@ enum class health_status {
     unknown = 3
 };
 
+}  // namespace interfaces
+
+/**
+ * @brief Specialization of enum_traits for health_status
+ */
+template<>
+struct enum_traits<interfaces::health_status> {
+    static constexpr auto values = std::array{
+        std::pair{interfaces::health_status::healthy, std::string_view{"HEALTHY"}},
+        std::pair{interfaces::health_status::degraded, std::string_view{"DEGRADED"}},
+        std::pair{interfaces::health_status::unhealthy, std::string_view{"UNHEALTHY"}},
+        std::pair{interfaces::health_status::unknown, std::string_view{"UNKNOWN"}},
+    };
+    static constexpr std::string_view module_name = "monitoring_interface";
+};
+
+namespace interfaces {
+
 /**
  * @struct health_check_result
  * @brief Result of a health check operation
@@ -339,14 +364,8 @@ public:
  * @brief Convert health status to string
  */
 inline std::string to_string(health_status status) {
-    switch(status) {
-        case health_status::healthy: return "HEALTHY";
-        case health_status::degraded: return "DEGRADED";
-        case health_status::unhealthy: return "UNHEALTHY";
-        case health_status::unknown: return "UNKNOWN";
-        default: return "UNKNOWN";
-    }
+    return enum_to_string(status);
 }
 
-} // namespace interfaces
-} // namespace kcenon::common
+}  // namespace interfaces
+}  // namespace kcenon::common

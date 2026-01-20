@@ -12,11 +12,15 @@
 
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <functional>
 #include <string>
+#include <string_view>
+#include <utility>
 
 #include "../monitoring_interface.h"
+#include "../../utils/enum_serialization.h"
 
 namespace kcenon::common::interfaces {
 
@@ -32,52 +36,41 @@ enum class health_check_type {
     custom      // User-defined health check type
 };
 
+}  // namespace kcenon::common::interfaces
+
+namespace kcenon::common {
+
+/**
+ * @brief Specialization of enum_traits for health_check_type
+ */
+template<>
+struct enum_traits<interfaces::health_check_type> {
+    static constexpr auto values = std::array{
+        std::pair{interfaces::health_check_type::liveness, std::string_view{"LIVENESS"}},
+        std::pair{interfaces::health_check_type::readiness, std::string_view{"READINESS"}},
+        std::pair{interfaces::health_check_type::startup, std::string_view{"STARTUP"}},
+        std::pair{interfaces::health_check_type::dependency, std::string_view{"DEPENDENCY"}},
+        std::pair{interfaces::health_check_type::custom, std::string_view{"CUSTOM"}},
+    };
+    static constexpr std::string_view module_name = "health_check";
+};
+
+}  // namespace kcenon::common
+
+namespace kcenon::common::interfaces {
+
 /**
  * @brief Convert health check type to string
  */
 inline std::string to_string(health_check_type type) {
-    switch (type) {
-        case health_check_type::liveness:
-            return "LIVENESS";
-        case health_check_type::readiness:
-            return "READINESS";
-        case health_check_type::startup:
-            return "STARTUP";
-        case health_check_type::dependency:
-            return "DEPENDENCY";
-        case health_check_type::custom:
-            return "CUSTOM";
-        default:
-            return "UNKNOWN";
-    }
+    return enum_to_string(type);
 }
 
 /**
  * @brief Convert string to health check type
  */
 inline Result<health_check_type> health_check_type_from_string(const std::string& str) {
-    std::string upper = str;
-    std::transform(upper.begin(), upper.end(), upper.begin(),
-                   [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
-
-    if (upper == "LIVENESS") {
-        return ok(health_check_type::liveness);
-    }
-    if (upper == "READINESS") {
-        return ok(health_check_type::readiness);
-    }
-    if (upper == "STARTUP") {
-        return ok(health_check_type::startup);
-    }
-    if (upper == "DEPENDENCY") {
-        return ok(health_check_type::dependency);
-    }
-    if (upper == "CUSTOM") {
-        return ok(health_check_type::custom);
-    }
-
-    return Result<health_check_type>(
-        error_info{1, "Invalid health check type: " + str, "health_check"});
+    return enum_from_string<health_check_type>(str);
 }
 
 /**

@@ -17,12 +17,15 @@
 #pragma once
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <functional>
 #include <memory>
 #include <string>
 #include <string_view>
+#include <utility>
 #include "../patterns/result.h"
+#include "../utils/enum_serialization.h"
 #include "../utils/source_location.h"
 
 namespace kcenon::common {
@@ -46,6 +49,30 @@ enum class log_level {
     fatal = 5,      ///< Alias for critical (backward compatibility)
     off = 6
 };
+
+}  // namespace interfaces
+
+/**
+ * @brief Specialization of enum_traits for log_level
+ *
+ * @note warn and fatal are aliases and share the same string representation
+ *       as warning and critical respectively.
+ */
+template<>
+struct enum_traits<interfaces::log_level> {
+    static constexpr auto values = std::array{
+        std::pair{interfaces::log_level::trace, std::string_view{"TRACE"}},
+        std::pair{interfaces::log_level::debug, std::string_view{"DEBUG"}},
+        std::pair{interfaces::log_level::info, std::string_view{"INFO"}},
+        std::pair{interfaces::log_level::warning, std::string_view{"WARNING"}},
+        std::pair{interfaces::log_level::error, std::string_view{"ERROR"}},
+        std::pair{interfaces::log_level::critical, std::string_view{"CRITICAL"}},
+        std::pair{interfaces::log_level::off, std::string_view{"OFF"}},
+    };
+    static constexpr std::string_view module_name = "logger_interface";
+};
+
+namespace interfaces {
 
 /**
  * @struct log_entry
@@ -296,35 +323,31 @@ public:
  * @brief Convert log level to string
  */
 inline std::string to_string(log_level level) {
-    switch(level) {
-        case log_level::trace: return "TRACE";
-        case log_level::debug: return "DEBUG";
-        case log_level::info: return "INFO";
-        case log_level::warning: return "WARNING";
-        case log_level::error: return "ERROR";
-        case log_level::critical: return "CRITICAL";
-        case log_level::off: return "OFF";
-        default: return "UNKNOWN";
-    }
+    return enum_to_string(level);
 }
 
 /**
  * @brief Parse log level from string (case-insensitive)
+ *
+ * Supports aliases: WARN -> warning, FATAL -> critical
  */
 inline log_level from_string(const std::string& str) {
-    std::string upper = str;
-    std::transform(upper.begin(), upper.end(), upper.begin(),
+    std::string upper(str.size(), '\0');
+    std::transform(str.begin(), str.end(), upper.begin(),
                    [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
 
-    if (upper == "TRACE") return log_level::trace;
-    if (upper == "DEBUG") return log_level::debug;
-    if (upper == "INFO") return log_level::info;
-    if (upper == "WARNING" || upper == "WARN") return log_level::warning;
-    if (upper == "ERROR") return log_level::error;
-    if (upper == "CRITICAL" || upper == "FATAL") return log_level::critical;
-    if (upper == "OFF") return log_level::off;
-    return log_level::info; // default
+    // Handle aliases first
+    if (upper == "WARN") {
+        return log_level::warning;
+    }
+    if (upper == "FATAL") {
+        return log_level::critical;
+    }
+
+    // Use generic template for standard values
+    auto result = enum_from_string<log_level>(str);
+    return result.is_ok() ? result.value() : log_level::info;  // default
 }
 
-} // namespace interfaces
-} // namespace kcenon::common
+}  // namespace interfaces
+}  // namespace kcenon::common
