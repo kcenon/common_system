@@ -466,6 +466,27 @@ if(COMMON_BUILD_MODULES AND TARGET common_system_modules)
     message(STATUS "Module verification test (module mode): enabled")
 endif()
 
+# Enum serialization tests (Issue #293)
+add_executable(common_enum_serialization_test
+    enum_serialization_test.cpp
+)
+
+target_link_libraries(common_enum_serialization_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_enum_serialization_test PRIVATE cxx_std_20)
+
+add_test(NAME common_enum_serialization_test COMMAND common_enum_serialization_test)
+
+set_tests_properties(common_enum_serialization_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;utils;serialization"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
@@ -532,6 +553,7 @@ set(COMMON_TEST_TARGETS
     common_concepts_test
     common_health_monitoring_test
     common_module_verification_test
+    common_enum_serialization_test
 )
 
 # Apply warning flags to all test targets
