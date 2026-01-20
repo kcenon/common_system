@@ -38,64 +38,146 @@
 #include "log_functions.h"
 
 // =============================================================================
-// Primary LOG_* Macros
+// Variadic Macro Dispatch Helpers
 // =============================================================================
 
 /**
- * @def LOG_TRACE(msg)
+ * @brief Helper macros for variadic argument dispatch.
+ *
+ * These macros enable LOG_* macros to accept either 1 or 2 arguments:
+ * - LOG_DEBUG(msg)              -> logs to default logger
+ * - LOG_DEBUG(logger_name, msg) -> logs to named logger
+ *
+ * Implementation uses argument counting and token pasting for dispatch.
+ */
+
+// Argument counter: returns 2 for 2+ args, 1 for 1 arg
+#define KCENON_LOG_ARG_COUNT(...) \
+    KCENON_LOG_ARG_COUNT_IMPL(__VA_ARGS__, 2, 1)
+#define KCENON_LOG_ARG_COUNT_IMPL(_1, _2, N, ...) N
+
+// Token paste helpers for macro dispatch
+#define KCENON_LOG_PASTE(a, b) KCENON_LOG_PASTE_IMPL(a, b)
+#define KCENON_LOG_PASTE_IMPL(a, b) a##b
+
+// Dispatch macro: calls LEVEL_1 or LEVEL_2 based on argument count
+#define KCENON_LOG_DISPATCH(LEVEL, ...) \
+    KCENON_LOG_PASTE(LEVEL##_, KCENON_LOG_ARG_COUNT(__VA_ARGS__))(__VA_ARGS__)
+
+// =============================================================================
+// Primary LOG_* Macros (Unified Variadic Interface)
+// =============================================================================
+
+/**
+ * @def LOG_TRACE(...)
  * @brief Log a trace-level message.
+ *
+ * Supports two forms:
+ * - LOG_TRACE(msg)              - Log to default logger
+ * - LOG_TRACE(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_TRACE(msg) \
+#define LOG_TRACE(...) KCENON_LOG_DISPATCH(LOG_TRACE, __VA_ARGS__)
+#define LOG_TRACE_1(msg) \
     ::kcenon::common::logging::log_trace(msg)
+#define LOG_TRACE_2(logger_name, msg) \
+    ::kcenon::common::logging::log_trace_to(logger_name, msg)
 
 /**
- * @def LOG_DEBUG(msg)
+ * @def LOG_DEBUG(...)
  * @brief Log a debug-level message.
+ *
+ * Supports two forms:
+ * - LOG_DEBUG(msg)              - Log to default logger
+ * - LOG_DEBUG(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_DEBUG(msg) \
+#define LOG_DEBUG(...) KCENON_LOG_DISPATCH(LOG_DEBUG, __VA_ARGS__)
+#define LOG_DEBUG_1(msg) \
     ::kcenon::common::logging::log_debug(msg)
+#define LOG_DEBUG_2(logger_name, msg) \
+    ::kcenon::common::logging::log_debug_to(logger_name, msg)
 
 /**
- * @def LOG_INFO(msg)
+ * @def LOG_INFO(...)
  * @brief Log an info-level message.
+ *
+ * Supports two forms:
+ * - LOG_INFO(msg)              - Log to default logger
+ * - LOG_INFO(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_INFO(msg) \
+#define LOG_INFO(...) KCENON_LOG_DISPATCH(LOG_INFO, __VA_ARGS__)
+#define LOG_INFO_1(msg) \
     ::kcenon::common::logging::log_info(msg)
+#define LOG_INFO_2(logger_name, msg) \
+    ::kcenon::common::logging::log_info_to(logger_name, msg)
 
 /**
- * @def LOG_WARNING(msg)
+ * @def LOG_WARNING(...)
  * @brief Log a warning-level message.
+ *
+ * Supports two forms:
+ * - LOG_WARNING(msg)              - Log to default logger
+ * - LOG_WARNING(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_WARNING(msg) \
+#define LOG_WARNING(...) KCENON_LOG_DISPATCH(LOG_WARNING, __VA_ARGS__)
+#define LOG_WARNING_1(msg) \
     ::kcenon::common::logging::log_warning(msg)
+#define LOG_WARNING_2(logger_name, msg) \
+    ::kcenon::common::logging::log_warning_to(logger_name, msg)
 
 /**
- * @def LOG_ERROR(msg)
+ * @def LOG_ERROR(...)
  * @brief Log an error-level message.
+ *
+ * Supports two forms:
+ * - LOG_ERROR(msg)              - Log to default logger
+ * - LOG_ERROR(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_ERROR(msg) \
+#define LOG_ERROR(...) KCENON_LOG_DISPATCH(LOG_ERROR, __VA_ARGS__)
+#define LOG_ERROR_1(msg) \
     ::kcenon::common::logging::log_error(msg)
+#define LOG_ERROR_2(logger_name, msg) \
+    ::kcenon::common::logging::log_error_to(logger_name, msg)
 
 /**
- * @def LOG_CRITICAL(msg)
+ * @def LOG_CRITICAL(...)
  * @brief Log a critical-level message.
+ *
+ * Supports two forms:
+ * - LOG_CRITICAL(msg)              - Log to default logger
+ * - LOG_CRITICAL(logger_name, msg) - Log to named logger
+ *
  * @param msg The message to log (string or string_view compatible)
+ * @param logger_name (optional) The name of the logger
  */
-#define LOG_CRITICAL(msg) \
+#define LOG_CRITICAL(...) KCENON_LOG_DISPATCH(LOG_CRITICAL, __VA_ARGS__)
+#define LOG_CRITICAL_1(msg) \
     ::kcenon::common::logging::log_critical(msg)
+#define LOG_CRITICAL_2(logger_name, msg) \
+    ::kcenon::common::logging::log_critical_to(logger_name, msg)
 
 // =============================================================================
-// Named Logger Macros
+// Named Logger Macros (Backward Compatibility)
 // =============================================================================
 
 /**
  * @def LOG_TRACE_TO(logger_name, msg)
  * @brief Log a trace-level message to a named logger.
+ * @deprecated Use LOG_TRACE(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -105,6 +187,7 @@
 /**
  * @def LOG_DEBUG_TO(logger_name, msg)
  * @brief Log a debug-level message to a named logger.
+ * @deprecated Use LOG_DEBUG(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -114,6 +197,7 @@
 /**
  * @def LOG_INFO_TO(logger_name, msg)
  * @brief Log an info-level message to a named logger.
+ * @deprecated Use LOG_INFO(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -123,6 +207,7 @@
 /**
  * @def LOG_WARNING_TO(logger_name, msg)
  * @brief Log a warning-level message to a named logger.
+ * @deprecated Use LOG_WARNING(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -132,6 +217,7 @@
 /**
  * @def LOG_ERROR_TO(logger_name, msg)
  * @brief Log an error-level message to a named logger.
+ * @deprecated Use LOG_ERROR(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -141,6 +227,7 @@
 /**
  * @def LOG_CRITICAL_TO(logger_name, msg)
  * @brief Log a critical-level message to a named logger.
+ * @deprecated Use LOG_CRITICAL(logger_name, msg) instead.
  * @param logger_name The name of the logger (string)
  * @param msg The message to log
  */
@@ -259,44 +346,46 @@
 #endif
 
 // Redefine macros if compile-time level filtering is enabled
-#if KCENON_MIN_LOG_LEVEL > 0
+// Each level is disabled when KCENON_MIN_LOG_LEVEL exceeds its threshold
+// Note: variadic LOG_* macros are replaced with no-op, _TO variants kept for backward compat
+#if KCENON_MIN_LOG_LEVEL > 0  // threshold: trace = 0
     #undef LOG_TRACE
-    #define LOG_TRACE(msg) ((void)0)
     #undef LOG_TRACE_TO
+    #define LOG_TRACE(...) ((void)0)
     #define LOG_TRACE_TO(logger_name, msg) ((void)0)
 #endif
 
-#if KCENON_MIN_LOG_LEVEL > 1
+#if KCENON_MIN_LOG_LEVEL > 1  // threshold: debug = 1
     #undef LOG_DEBUG
-    #define LOG_DEBUG(msg) ((void)0)
     #undef LOG_DEBUG_TO
+    #define LOG_DEBUG(...) ((void)0)
     #define LOG_DEBUG_TO(logger_name, msg) ((void)0)
 #endif
 
-#if KCENON_MIN_LOG_LEVEL > 2
+#if KCENON_MIN_LOG_LEVEL > 2  // threshold: info = 2
     #undef LOG_INFO
-    #define LOG_INFO(msg) ((void)0)
     #undef LOG_INFO_TO
+    #define LOG_INFO(...) ((void)0)
     #define LOG_INFO_TO(logger_name, msg) ((void)0)
 #endif
 
-#if KCENON_MIN_LOG_LEVEL > 3
+#if KCENON_MIN_LOG_LEVEL > 3  // threshold: warning = 3
     #undef LOG_WARNING
-    #define LOG_WARNING(msg) ((void)0)
     #undef LOG_WARNING_TO
+    #define LOG_WARNING(...) ((void)0)
     #define LOG_WARNING_TO(logger_name, msg) ((void)0)
 #endif
 
-#if KCENON_MIN_LOG_LEVEL > 4
+#if KCENON_MIN_LOG_LEVEL > 4  // threshold: error = 4
     #undef LOG_ERROR
-    #define LOG_ERROR(msg) ((void)0)
     #undef LOG_ERROR_TO
+    #define LOG_ERROR(...) ((void)0)
     #define LOG_ERROR_TO(logger_name, msg) ((void)0)
 #endif
 
-#if KCENON_MIN_LOG_LEVEL > 5
+#if KCENON_MIN_LOG_LEVEL > 5  // threshold: critical = 5
     #undef LOG_CRITICAL
-    #define LOG_CRITICAL(msg) ((void)0)
     #undef LOG_CRITICAL_TO
+    #define LOG_CRITICAL(...) ((void)0)
     #define LOG_CRITICAL_TO(logger_name, msg) ((void)0)
 #endif
