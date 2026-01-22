@@ -5,15 +5,30 @@
 
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <stdexcept>
 #include <string>
-#include <atomic>
+
+/**
+ * @file typed_adapter.h
+ * @brief Legacy adapter classes (deprecated)
+ *
+ * @deprecated Use adapter.h instead:
+ * - adapter_base -> kcenon::common::adapters::adapter_base (from adapter.h)
+ * - typed_adapter<I, T> -> interface_adapter<I, T> (from adapter.h)
+ * - safe_unwrap -> adapter_factory::try_unwrap (from adapter.h)
+ * - is_adapter -> kcenon::common::adapters::is_adapter (from adapter.h)
+ *
+ * This file is maintained for backward compatibility and will be
+ * removed in a future major version.
+ */
 
 namespace kcenon::common::adapters {
 
 /**
  * @brief Base class for adapter interface to eliminate RTTI dependency
+ * @note Consider using interface_adapter from adapter.h for new code
  */
 class adapter_base {
 public:
@@ -46,6 +61,8 @@ public:
  * - Wrapper depth tracking to prevent infinite chains
  * - Unwrap functionality to access underlying implementation
  * - Maximum depth limit (default: 2) to prevent performance issues
+ *
+ * @note Consider using interface_adapter from adapter.h for new code
  *
  * @tparam Interface The interface type being adapted to
  * @tparam Implementation The concrete implementation being wrapped
