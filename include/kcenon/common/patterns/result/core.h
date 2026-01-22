@@ -35,7 +35,13 @@
 // Import C++17-compatible source_location
 #include <kcenon/common/utils/source_location.h>
 
+// Import new error_code type for category-based error handling
+#include <kcenon/common/error/error_category.h>
+
 namespace kcenon::common {
+
+// Forward declaration to avoid circular dependency
+// error_code is defined in error_category.h
 
 // ============================================================================
 // Forward Declarations (from fwd.h)
@@ -115,13 +121,38 @@ struct error_info {
     bool operator!=(const error_info& other) const {
         return !(*this == other);
     }
+
+    /**
+     * @brief Construct from the new category-based typed_error_code type.
+     *
+     * This enables seamless integration with the decentralized error
+     * category system while maintaining backward compatibility.
+     *
+     * @param ec Category-based typed error code
+     * @see error_category.h for the decentralized error system
+     */
+    error_info(const typed_error_code& ec)
+        : code(ec.value()),
+          message(ec.message()),
+          module(std::string(ec.category_name())) {}
 };
 
 /**
- * @brief Alias for backward compatibility
+ * @brief Alias for backward compatibility (DEPRECATED)
  *
- * Some code may use error_code instead of error_info.
- * This alias ensures compatibility.
+ * Legacy code may use error_code instead of error_info.
+ * This alias ensures compatibility during migration.
+ *
+ * @note For new code, use either:
+ *       - error_info for Result<T> error handling
+ *       - kcenon::common::typed_error_code (from error_category.h) for
+ *         category-based error handling
+ *
+ * @deprecated This alias will be removed in a future version.
+ *             Migrate to error_info or the new typed_error_code type.
+ *
+ * @warning Do not confuse with std::error_code or typed_error_code.
+ *          This is purely a transitional alias for Result<T> error handling.
  */
 using error_code = error_info;
 
@@ -170,6 +201,16 @@ public:
     Result(T&& value) : value_(std::move(value)), error_(std::nullopt) {}
     Result(const error_info& error) : value_(std::nullopt), error_(error) {}
     Result(error_info&& error) : value_(std::nullopt), error_(std::move(error)) {}
+
+    /**
+     * @brief Construct from category-based typed_error_code.
+     *
+     * Enables seamless integration with the decentralized error category system.
+     * The typed_error_code is converted to error_info internally.
+     *
+     * @param ec Category-based typed error code
+     */
+    Result(const typed_error_code& ec) : value_(std::nullopt), error_(error_info(ec)) {}
     /**
      * @brief Default constructor is deleted to enforce explicit initialization
      *
@@ -228,6 +269,25 @@ public:
      */
     static Result<T> err(int code, const std::string& message, const std::string& module = "") {
         return Result<T>(error_info{code, message, module});
+    }
+
+    /**
+     * @brief Create an error result from category-based typed_error_code (static factory)
+     *
+     * Enables seamless integration with the decentralized error category system.
+     *
+     * @param ec Category-based typed error code
+     * @return Result<T> containing the error
+     *
+     * Example usage:
+     * @code
+     * Result<int> result = Result<int>::err(
+     *     make_typed_error_code(common_error_category::not_found)
+     * );
+     * @endcode
+     */
+    static Result<T> err(const typed_error_code& ec) {
+        return Result<T>(ec);
     }
 
     /**
