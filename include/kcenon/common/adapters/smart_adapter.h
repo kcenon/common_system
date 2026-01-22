@@ -5,6 +5,18 @@
 
 #pragma once
 
+/**
+ * @file smart_adapter.h
+ * @brief Smart adapter factory (legacy)
+ *
+ * @note Consider using adapter_factory from adapter.h for new code:
+ * - smart_adapter_factory -> adapter_factory
+ * - make_smart_adapter -> make_interface_adapter
+ * - unwrap_adapter -> adapter_factory::try_unwrap
+ *
+ * This file is maintained for backward compatibility.
+ */
+
 #include <memory>
 #include <type_traits>
 
@@ -29,6 +41,8 @@ inline constexpr bool implements_interface_v = std::is_base_of_v<Interface, T> |
  * - Otherwise, create a typed_adapter wrapper
  *
  * This provides zero-cost abstraction when possible.
+ *
+ * @note Consider using adapter_factory from adapter.h for new code
  */
 class smart_adapter_factory {
 public:
