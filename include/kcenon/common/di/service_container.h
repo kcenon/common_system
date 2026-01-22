@@ -210,6 +210,43 @@ private:
      */
     std::string get_resolution_stack_string() const;
 
+    // ===== Helper Methods for Reducing Code Duplication =====
+
+    /**
+     * @brief Check if container is frozen and log audit event if so.
+     *
+     * @param type_name The type name for audit logging
+     * @param action The registry action being performed
+     * @param error_message The error message to use if frozen
+     * @return VoidResult - error if frozen, ok otherwise
+     */
+    VoidResult check_frozen_for_registration(
+        const std::string& type_name,
+        interfaces::registry_action action,
+        const std::string& error_message) const;
+
+    /**
+     * @brief Check if a service is already registered and log audit event if so.
+     *
+     * @note Caller must hold the mutex lock before calling this method.
+     *
+     * @param interface_type The type to check
+     * @param type_name The type name for audit logging
+     * @return VoidResult - error if already registered, ok otherwise
+     */
+    VoidResult check_already_registered(
+        std::type_index interface_type,
+        const std::string& type_name) const;
+
+    /**
+     * @brief Safely invoke a factory function with exception handling.
+     *
+     * @param factory The factory function to invoke
+     * @return Result containing the created instance or a factory_error
+     */
+    Result<std::shared_ptr<void>> invoke_factory_safe(
+        const std::function<std::shared_ptr<void>(IServiceContainer&)>& factory);
+
     // Service registry
     mutable std::shared_mutex mutex_;
     std::unordered_map<std::type_index, service_entry> services_;
@@ -365,27 +402,34 @@ inline bool service_container::is_frozen() const {
     return frozen_.load(std::memory_order_acquire);
 }
 
-inline VoidResult service_container::register_factory_internal(
-    std::type_index interface_type,
+// ============================================================================
+// Helper Methods Implementation
+// ============================================================================
+
+inline VoidResult service_container::check_frozen_for_registration(
     const std::string& type_name,
-    std::function<std::shared_ptr<void>(IServiceContainer&)> factory,
-    service_lifetime lifetime) {
+    interfaces::registry_action action,
+    const std::string& error_message) const {
 
     if (is_frozen()) {
         interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
-            interfaces::registry_action::register_service, type_name,
+            action, type_name,
             interfaces::source_location::current(), false,
             "Container is frozen"));
         return make_error<std::monostate>(
             error_codes::REGISTRY_FROZEN,
-            "Cannot register service: container is frozen",
+            error_message,
             "di::service_container"
         );
     }
 
-    std::unique_lock lock(mutex_);
+    return VoidResult::ok({});
+}
 
-    // Check if already registered
+inline VoidResult service_container::check_already_registered(
+    std::type_index interface_type,
+    const std::string& type_name) const {
+
     if (services_.find(interface_type) != services_.end()) {
         interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
             interfaces::registry_action::register_service, type_name,
@@ -396,6 +440,46 @@ inline VoidResult service_container::register_factory_internal(
             "Service already registered: " + type_name,
             "di::service_container"
         );
+    }
+
+    return VoidResult::ok({});
+}
+
+inline Result<std::shared_ptr<void>> service_container::invoke_factory_safe(
+    const std::function<std::shared_ptr<void>(IServiceContainer&)>& factory) {
+
+    try {
+        return Result<std::shared_ptr<void>>::ok(factory(*this));
+    } catch (const std::exception& e) {
+        return make_error<std::shared_ptr<void>>(
+            di_error_codes::factory_error,
+            std::string("Factory threw exception: ") + e.what(),
+            "di::service_container"
+        );
+    }
+}
+
+inline VoidResult service_container::register_factory_internal(
+    std::type_index interface_type,
+    const std::string& type_name,
+    std::function<std::shared_ptr<void>(IServiceContainer&)> factory,
+    service_lifetime lifetime) {
+
+    // Check frozen state before acquiring lock
+    auto frozen_check = check_frozen_for_registration(
+        type_name,
+        interfaces::registry_action::register_service,
+        "Cannot register service: container is frozen");
+    if (!frozen_check.is_ok()) {
+        return frozen_check;
+    }
+
+    std::unique_lock lock(mutex_);
+
+    // Check if already registered (must hold lock)
+    auto registered_check = check_already_registered(interface_type, type_name);
+    if (!registered_check.is_ok()) {
+        return registered_check;
     }
 
     services_.emplace(
@@ -415,31 +499,21 @@ inline VoidResult service_container::register_instance_internal(
     const std::string& type_name,
     std::shared_ptr<void> instance) {
 
-    if (is_frozen()) {
-        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
-            interfaces::registry_action::register_service, type_name,
-            interfaces::source_location::current(), false,
-            "Container is frozen"));
-        return make_error<std::monostate>(
-            error_codes::REGISTRY_FROZEN,
-            "Cannot register instance: container is frozen",
-            "di::service_container"
-        );
+    // Check frozen state before acquiring lock
+    auto frozen_check = check_frozen_for_registration(
+        type_name,
+        interfaces::registry_action::register_service,
+        "Cannot register instance: container is frozen");
+    if (!frozen_check.is_ok()) {
+        return frozen_check;
     }
 
     std::unique_lock lock(mutex_);
 
-    // Check if already registered
-    if (services_.find(interface_type) != services_.end()) {
-        interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
-            interfaces::registry_action::register_service, type_name,
-            interfaces::source_location::current(), false,
-            "Service already registered"));
-        return make_error<std::monostate>(
-            di_error_codes::already_registered,
-            "Service already registered: " + type_name,
-            "di::service_container"
-        );
+    // Check if already registered (must hold lock)
+    auto registered_check = check_already_registered(interface_type, type_name);
+    if (!registered_check.is_ok()) {
+        return registered_check;
     }
 
     // Create entry with instance as singleton
@@ -523,15 +597,9 @@ inline Result<std::shared_ptr<void>> service_container::resolve_with_detection(
             read_lock.unlock();
 
             // Create instance outside of lock to avoid deadlock
-            std::shared_ptr<void> instance;
-            try {
-                instance = factory_copy(*this);
-            } catch (const std::exception& e) {
-                return make_error<std::shared_ptr<void>>(
-                    di_error_codes::factory_error,
-                    std::string("Factory threw exception: ") + e.what(),
-                    "di::service_container"
-                );
+            auto factory_result = invoke_factory_safe(factory_copy);
+            if (!factory_result.is_ok()) {
+                return factory_result;
             }
 
             // Now acquire write lock to store the instance
@@ -545,7 +613,7 @@ inline Result<std::shared_ptr<void>> service_container::resolve_with_detection(
                 return Result<std::shared_ptr<void>>::ok(entry2.singleton_instance);
             }
 
-            entry2.singleton_instance = std::move(instance);
+            entry2.singleton_instance = std::move(factory_result.value());
             entry2.is_instantiated = true;
             return Result<std::shared_ptr<void>>::ok(entry2.singleton_instance);
         }
@@ -553,16 +621,7 @@ inline Result<std::shared_ptr<void>> service_container::resolve_with_detection(
         case service_lifetime::transient: {
             // Create new instance each time - release lock before calling factory
             read_lock.unlock();
-            try {
-                auto instance = factory_copy(*this);
-                return Result<std::shared_ptr<void>>::ok(std::move(instance));
-            } catch (const std::exception& e) {
-                return make_error<std::shared_ptr<void>>(
-                    di_error_codes::factory_error,
-                    std::string("Factory threw exception: ") + e.what(),
-                    "di::service_container"
-                );
-            }
+            return invoke_factory_safe(factory_copy);
         }
 
         case service_lifetime::scoped: {
@@ -583,17 +642,14 @@ inline Result<std::shared_ptr<void>> service_container::resolve_with_detection(
 
             // Create new instance for scope - release lock before calling factory
             read_lock.unlock();
-            try {
-                auto instance = factory_copy(*this);
-                (*scoped_instances)[interface_type] = instance;
-                return Result<std::shared_ptr<void>>::ok(std::move(instance));
-            } catch (const std::exception& e) {
-                return make_error<std::shared_ptr<void>>(
-                    di_error_codes::factory_error,
-                    std::string("Factory threw exception: ") + e.what(),
-                    "di::service_container"
-                );
+            auto factory_result = invoke_factory_safe(factory_copy);
+            if (!factory_result.is_ok()) {
+                return factory_result;
             }
+
+            auto instance = std::move(factory_result.value());
+            (*scoped_instances)[interface_type] = instance;
+            return Result<std::shared_ptr<void>>::ok(std::move(instance));
         }
 
         default:
