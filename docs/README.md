@@ -84,6 +84,7 @@ For contributors and maintainers:
 | [CONTRIBUTING.md](contributing/CONTRIBUTING.md) | Contribution guidelines, header-only best practices, testing | - | 996 |
 | [CI_CD_GUIDE.md](contributing/CI_CD_GUIDE.md) | CI/CD pipeline, static analysis, header validation | - | 864 |
 | [CHANGELOG_TEMPLATE.md](contributing/CHANGELOG_TEMPLATE.md) | Standardized CHANGELOG format for ecosystem | - | 200+ |
+| [DOCUMENTATION_GUIDELINES.md](contributing/DOCUMENTATION_GUIDELINES.md) | Documentation structure standards for ecosystem | - | 400+ |
 
 ---
 
@@ -235,11 +236,18 @@ Common system serves as Layer 0 foundation for:
 ## Contributing to Documentation
 
 ### Documentation Standards
-Follow the [Documentation Standard](/Users/raphaelshin/Sources/template_document/DOCUMENTATION_STANDARD.md):
+Follow the [Documentation Structure Guidelines](contributing/DOCUMENTATION_GUIDELINES.md):
+- Standard folder structure for all ecosystem systems
+- Required documents and naming conventions
 - Front matter on all documents
 - Code examples must compile
 - Bilingual support (English/Korean)
 - Cross-references with relative links
+
+Use the provided templates in `docs/contributing/templates/`:
+- [ARCHITECTURE_TEMPLATE.md](contributing/templates/ARCHITECTURE_TEMPLATE.md)
+- [FEATURE_TEMPLATE.md](contributing/templates/FEATURE_TEMPLATE.md)
+- [GUIDE_TEMPLATE.md](contributing/templates/GUIDE_TEMPLATE.md)
 
 ### Areas for Improvement
 - [ ] Korean translations for new guides (FAQ, TROUBLESHOOTING, BEST_PRACTICES)
