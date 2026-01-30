@@ -276,7 +276,7 @@ TEST(CircuitBreakerTest, ThreadSafety)
 
     // Launch threads performing concurrent operations
     for (int i = 0; i < thread_count; ++i) {
-        threads.emplace_back([&breaker, operations_per_thread]() {
+        threads.emplace_back([&breaker]() {
             for (int j = 0; j < operations_per_thread; ++j) {
                 if (breaker.allow_request()) {
                     if (j % 2 == 0) {

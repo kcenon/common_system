@@ -99,6 +99,8 @@ public:
             // Check if timeout has elapsed to attempt recovery
             if (should_attempt_reset()) {
                 transition_to_half_open();
+                // First request in HALF_OPEN counts toward the limit
+                ++half_open_requests_;
                 return true;
             }
             return false;
