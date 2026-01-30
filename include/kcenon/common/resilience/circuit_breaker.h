@@ -23,6 +23,7 @@
 #include "circuit_breaker_config.h"
 #include "circuit_state.h"
 #include "failure_window.h"
+#include "../interfaces/stats.h"
 
 #include <atomic>
 #include <chrono>
@@ -64,7 +65,7 @@ namespace kcenon::common::resilience {
  * - Safe for concurrent access from multiple threads.
  * - State transitions are protected by internal synchronization.
  */
-class circuit_breaker {
+class circuit_breaker : public interfaces::IStats {
 public:
     using clock_type = std::chrono::steady_clock;
     using time_point = clock_type::time_point;
@@ -213,6 +214,48 @@ public:
      * @return Guard object that records failure unless success is called
      */
     [[nodiscard]] auto make_guard() -> guard { return guard(*this); }
+
+    // IStats interface implementation
+
+    /**
+     * @brief Get current statistics as key-value pairs.
+     * @return Map of metric names to values (state, counts, rates)
+     */
+    [[nodiscard]] auto get_stats() const -> std::unordered_map<std::string, interfaces::stats_value> override
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+
+        const auto current_state = state_.load(std::memory_order_acquire);
+        const auto failure_count = const_cast<failure_window&>(failure_window_).get_failure_count();
+
+        return {
+            {"current_state", to_string(current_state)},
+            {"failure_count", static_cast<std::int64_t>(failure_count)},
+            {"consecutive_successes", static_cast<std::int64_t>(consecutive_successes_)},
+            {"half_open_requests", static_cast<std::int64_t>(half_open_requests_)},
+            {"failure_threshold", static_cast<std::int64_t>(config_.failure_threshold)},
+            {"is_open", current_state == circuit_state::OPEN}
+        };
+    }
+
+    /**
+     * @brief Get statistics as JSON string.
+     * @return JSON representation of current statistics
+     */
+    [[nodiscard]] auto to_json() const -> std::string override
+    {
+        const auto snapshot = get_snapshot();
+        return snapshot.to_json();
+    }
+
+    /**
+     * @brief Get component name for identification.
+     * @return Component name "circuit_breaker"
+     */
+    [[nodiscard]] auto name() const -> std::string_view override
+    {
+        return "circuit_breaker";
+    }
 
 private:
     /**

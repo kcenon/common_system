@@ -550,6 +550,27 @@ set_tests_properties(common_circuit_breaker_test PROPERTIES
     LABELS "unit;resilience"
 )
 
+# Stats snapshot tests (Issue #316)
+add_executable(common_stats_snapshot_test
+    stats_snapshot_test.cpp
+)
+
+target_link_libraries(common_stats_snapshot_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_stats_snapshot_test PRIVATE cxx_std_17)
+
+add_test(NAME common_stats_snapshot_test COMMAND common_stats_snapshot_test)
+
+set_tests_properties(common_stats_snapshot_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;interfaces;stats"
+)
+
 # ABI version tests (Sprint 2 - Task 2.4)
 # Note: These tests require the static library build to test link-time checks
 if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
@@ -620,6 +641,7 @@ set(COMMON_TEST_TARGETS
     common_adapter_test
     common_error_category_test
     common_circuit_breaker_test
+    common_stats_snapshot_test
 )
 
 # Apply warning flags to all test targets
