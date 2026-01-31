@@ -26,6 +26,7 @@
 
 #include "service_container.h"
 #include "../interfaces/logger_interface.h"
+#include "../config/feature_system_deps.h"
 
 #include <atomic>
 #include <chrono>
@@ -443,9 +444,15 @@ inline bootstrapper_options unified_bootstrapper::get_options() {
 
 inline VoidResult unified_bootstrapper::register_core_services() {
     // Core services are minimal and always registered
-    // The actual service implementations come from subsystems via adapters
-
-    // For now, we just ensure the container is ready
+    // The service_container itself is already available via services()
+    // No additional core services are required at this time
+    //
+    // Future core services that might be registered here:
+    // - Default error handlers
+    // - Core diagnostics
+    // - System-level configuration providers
+    //
+    // For now, just ensure the container is initialized
     // Subsystems register their own services via their adapter modules
 
     return VoidResult::ok({});
@@ -455,30 +462,75 @@ inline VoidResult unified_bootstrapper::register_optional_services(
     const bootstrapper_options& opts) {
 
     // Optional services are registered based on configuration
-    // The actual implementations come from subsystem adapters
+    // Each subsystem provides registration functions via adapters
+    // The registration is conditional based on:
+    // 1. bootstrapper_options flags (enable_logging, etc.)
+    // 2. Feature detection macros (KCENON_WITH_*_SYSTEM)
+
+    // Service container for registering services
+    // Currently unused but will be needed when subsystem adapters are implemented
+    [[maybe_unused]] auto& container = service_container::global();
 
     // Logging services
     if (opts.enable_logging) {
-        // Placeholder: logger_system registers its services via adapter
-        // Example: logger::di::register_logger_services(services());
+#if KCENON_WITH_LOGGER_SYSTEM
+        // When logger_system is available, its adapter will provide:
+        // namespace kcenon::logger::di {
+        //     VoidResult register_logger_services(service_container& container);
+        // }
+        // Example call: logger::di::register_logger_services(container);
+
+        // For now, gracefully skip if adapter not yet implemented
+        // This allows bootstrapper to work without requiring all subsystems
+#else
+        // Logger system not available - gracefully skip
+        // No error returned, allowing system to run without logging
+#endif
     }
 
     // Monitoring services
     if (opts.enable_monitoring) {
-        // Placeholder: monitoring_system registers its services via adapter
-        // Example: monitoring::di::register_monitoring_services(services());
+#if KCENON_WITH_MONITORING_SYSTEM
+        // When monitoring_system is available, its adapter will provide:
+        // namespace kcenon::monitoring::di {
+        //     VoidResult register_monitoring_services(service_container& container);
+        // }
+        // Example call: monitoring::di::register_monitoring_services(container);
+
+        // For now, gracefully skip if adapter not yet implemented
+#else
+        // Monitoring system not available - gracefully skip
+#endif
     }
 
     // Database services
     if (opts.enable_database) {
-        // Placeholder: database_system registers its services via adapter
-        // Example: database::di::register_database_services(services());
+#if KCENON_WITH_DATABASE_SYSTEM
+        // When database_system is available, its adapter will provide:
+        // namespace kcenon::database::di {
+        //     VoidResult register_database_services(service_container& container);
+        // }
+        // Example call: database::di::register_database_services(container);
+
+        // For now, gracefully skip if adapter not yet implemented
+#else
+        // Database system not available - gracefully skip
+#endif
     }
 
     // Network services
     if (opts.enable_network) {
-        // Placeholder: network_system registers its services via adapter
-        // Example: network::di::register_network_services(services());
+#if KCENON_WITH_NETWORK_SYSTEM
+        // When network_system is available, its adapter will provide:
+        // namespace kcenon::network::di {
+        //     VoidResult register_network_services(service_container& container);
+        // }
+        // Example call: network::di::register_network_services(container);
+
+        // For now, gracefully skip if adapter not yet implemented
+#else
+        // Network system not available - gracefully skip
+#endif
     }
 
     return VoidResult::ok({});
