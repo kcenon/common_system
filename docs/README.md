@@ -199,7 +199,7 @@ For contributors and maintainers:
 ## Project Information
 
 ### Current Status
-- **Version**: 1.0 (Layer 0 Foundation)
+- **Version**: 0.1.0.0 (Layer 0 Foundation)
 - **Type**: Header-Only Library
 - **C++ Standard**: C++17 (C++20 for optional features)
 - **License**: BSD 3-Clause
