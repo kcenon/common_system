@@ -82,6 +82,22 @@ common_system (Foundation Layer - No Dependencies)
        └── database_system (uses Result<T> and IExecutor)
 ```
 
+### Ecosystem-Wide Compiler Requirements
+
+When using multiple systems together, use the **highest** requirement from your dependency chain:
+
+| Usage Scenario | GCC | Clang | MSVC | Notes |
+|----------------|-----|-------|------|-------|
+| common_system only | 11+ | 14+ | 2022+ | Baseline |
+| + thread_system | **13+** | **17+** | 2022+ | Higher requirements |
+| + logger_system | 11+ | 14+ | 2022+ | Optional thread_system |
+| + container_system | 11+ | 14+ | 2022+ | Uses common_system |
+| + monitoring_system | **13+** | **17+** | 2022+ | Requires thread_system |
+| + database_system | **13+** | **17+** | 2022+ | Full ecosystem |
+| + network_system | **13+** | **17+** | 2022+ | Requires thread_system |
+
+> **Note**: If using any system that depends on thread_system, you need GCC 13+ or Clang 17+.
+
 ---
 
 ## Installation
