@@ -59,7 +59,7 @@
   - [Anti-Patterns to Avoid](#anti-patterns-to-avoid)
 - [References](#references)
 
-**Version**: 1.0
+**Version**: 0.1.0.0
 **Last Updated**: 2025-10-09
 
 ---

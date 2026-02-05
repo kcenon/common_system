@@ -1,6 +1,6 @@
 # common_system API Reference
 
-> **Version**: 2.3
+> **Version**: 0.2.3.0
 > **Last Updated**: 2025-12-10
 > **Status**: Production Ready (Tier 0)
 
@@ -891,5 +891,5 @@ int val = res.value();
 ---
 
 **Created**: 2025-11-21
-**Version**: 2.3
+**Version**: 0.2.3.0
 **Author**: kcenon@naver.com

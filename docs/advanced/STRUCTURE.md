@@ -22,7 +22,7 @@ The Common System is a **header-only foundational library** providing essential 
 - **Zero Dependencies**: Pure C++20 with standard library only
 - **Interface-First**: Contracts without implementation
 - **Template-Based**: Compile-time optimization and type safety
-- **Version**: 1.0.0
+- **Version**: 0.1.0.0
 
 ## Directory Layout
 

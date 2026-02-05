@@ -28,7 +28,7 @@
 - [FAQ](#faq)
 - [References](#references)
 
-**Version**: 1.1
+**Version**: 0.1.1.0
 **Last Updated**: 2026-01-03
 
 ---
