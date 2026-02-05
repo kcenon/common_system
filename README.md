@@ -302,13 +302,13 @@ Centralized error code registry providing system-specific ranges:
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md) for guidelines.
 
 ### Quick Links
 
-- [Development Setup](CONTRIBUTING.md#development-workflow)
-- [Code Style](CONTRIBUTING.md#code-style)
-- [Pull Request Process](CONTRIBUTING.md#development-workflow)
+- [Development Setup](docs/contributing/CONTRIBUTING.md#development-workflow)
+- [Code Style](docs/contributing/CONTRIBUTING.md#code-style)
+- [Pull Request Process](docs/contributing/CONTRIBUTING.md#development-workflow)
 
 ---
 

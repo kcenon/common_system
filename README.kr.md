@@ -302,13 +302,13 @@ monitor.add_dependency("api", "database");
 
 ## 기여하기
 
-기여를 환영합니다! 가이드라인은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참조하세요.
+기여를 환영합니다! 가이드라인은 [CONTRIBUTING.md](docs/contributing/CONTRIBUTING.md)를 참조하세요.
 
 ### 빠른 링크
 
-- [개발 환경 설정](CONTRIBUTING.md#development-workflow)
-- [코드 스타일](CONTRIBUTING.md#code-style)
-- [Pull Request 프로세스](CONTRIBUTING.md#development-workflow)
+- [개발 환경 설정](docs/contributing/CONTRIBUTING.md#development-workflow)
+- [코드 스타일](docs/contributing/CONTRIBUTING.md#code-style)
+- [Pull Request 프로세스](docs/contributing/CONTRIBUTING.md#development-workflow)
 
 ---
 
