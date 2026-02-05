@@ -82,6 +82,22 @@ common_system (기반 계층 - 의존성 없음)
        └── database_system (Result<T> 및 IExecutor 사용)
 ```
 
+### 생태계 전체 컴파일러 요구사항
+
+여러 시스템을 함께 사용할 때는 의존성 체인에서 **가장 높은** 요구사항을 사용하세요:
+
+| 사용 시나리오 | GCC | Clang | MSVC | 비고 |
+|---------------|-----|-------|------|------|
+| common_system 단독 | 11+ | 14+ | 2022+ | 기준선 |
+| + thread_system | **13+** | **17+** | 2022+ | 더 높은 요구사항 |
+| + logger_system | 11+ | 14+ | 2022+ | thread_system 선택적 |
+| + container_system | 11+ | 14+ | 2022+ | common_system 사용 |
+| + monitoring_system | **13+** | **17+** | 2022+ | thread_system 필요 |
+| + database_system | **13+** | **17+** | 2022+ | 전체 생태계 |
+| + network_system | **13+** | **17+** | 2022+ | thread_system 필요 |
+
+> **참고**: thread_system에 의존하는 시스템을 사용하는 경우 GCC 13+ 또는 Clang 17+가 필요합니다.
+
 ---
 
 ## 설치
