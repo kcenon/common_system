@@ -2,9 +2,9 @@
 
 > **Language:** **English** | [한국어](RUST_PARITY.kr.md)
 
-**Part 1-2 of 3**: Overall Parity Status, API Mapping, and Feature Comparison
+**Complete (Parts 1-3)**: Overall Parity Status, API Mapping, Feature Comparison, Interop, and Roadmap
 
-**Status**: ✅ **Part 1 Complete** | ✅ **Part 2 Complete** | Part 3 Planned
+**Status**: ✅ **Part 1 Complete** | ✅ **Part 2 Complete** | ✅ **Part 3 Complete**
 
 This document provides a comprehensive comparison between the C++ implementations and Rust ports of the kcenon ecosystem systems. It helps developers choose the right language for their projects and understand migration paths.
 
@@ -22,13 +22,23 @@ This document provides a comprehensive comparison between the C++ implementation
   - [logger_system](#22-logger_system)
   - [container_system](#23-container_system)
   - [monitoring_system](#24-monitoring_system)
+  - [database_system](#25-database_system)
+  - [network_system](#26-network_system)
+  - [integrated_thread_system](#27-integrated_thread_system)
 - [API Mapping Guide](#3-api-mapping-guide)
   - [Naming Conventions](#naming-conventions)
   - [Type Mapping](#type-mapping)
   - [Error Handling Differences](#error-handling-differences)
   - [Memory Management](#memory-management)
   - [Async/Await Patterns](#asyncawait-patterns)
-- [Next Steps](#next-steps)
+- [Interoperability Considerations](#4-interoperability-considerations)
+  - [FFI Boundaries](#41-ffi-foreign-function-interface-boundaries)
+  - [Data Format Compatibility](#42-data-format-compatibility)
+  - [Protocol Compatibility](#43-protocol-compatibility)
+  - [Shared Configuration](#44-shared-configuration)
+- [Roadmap](#5-roadmap)
+  - [Feature Parity Goals](#51-feature-parity-goals)
+  - [Community Contributions](#52-community-contributions)
 
 ---
 
@@ -904,20 +914,537 @@ counter.inc();
 
 ---
 
+### 2.5 database_system
+
+The database system provides unified database access with support for multiple backends (SQLite, PostgreSQL, MySQL).
+
+**C++ Location**: `/include/kcenon/database/`
+**Rust Location**: `rust_database_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **SQLite Support** | ✅ Yes | ✅ Yes | **C++**: SQLite3 C API directly via `sqlite_backend.h`. **Rust**: rusqlite with bundled SQLite3, pooled variant with deadpool-sqlite. |
+| **PostgreSQL Support** | ✅ Yes | ✅ Yes | **C++**: libpq/pqxx via `postgresql_backend.h`. **Rust**: tokio-postgres for async operations with deadpool-postgres for connection pooling. |
+| **MySQL Support** | ✅ Yes | ✅ Yes | **C++**: MySQL C API via `mysql_backend.h`. **Rust**: mysql_async for async operations. |
+| **Connection Pooling** | ⚠️ Partial | ✅ Full | **C++**: Monitoring via `pool_metrics.h` but not explicit pool management. **Rust**: Full connection pooling with deadpool (deadpool-sqlite, deadpool-postgres) with configurable pool sizes and timeouts. |
+| **Query Builder** | ✅ Yes | ✅ Yes | **C++**: Universal builder with dialect adaptation (PostgreSQL, MySQL, SQLite, MongoDB, Redis). **Rust**: Separate type-safe builders (SelectBuilder, InsertBuilder, UpdateBuilder, DeleteBuilder). |
+| **Transaction Management** | ✅ Yes | ✅ Yes | **C++**: Result-based API integrated in backend interface. **Rust**: TransactionGuard with RAII-style automatic rollback on drop. |
+| **Async Queries** | ✅ Yes (C++20) | ✅ Yes (Tokio) | **C++**: C++20 coroutines support via async directory. **Rust**: Full Tokio async/await with async-trait for database abstraction. |
+| **Migration Tools** | ❌ No | ✅ Yes | **C++**: No schema migration utilities in core. **Rust**: Migration struct and MigrationManager with up/down SQL support. |
+| **Prepared Statements** | ✅ Yes | ✅ Yes | Both use parameterized queries with placeholders (?) to prevent SQL injection. **C++**: Via Query Builder. **Rust**: Via query builders and `execute_with_params()` methods. |
+| **ORM Features** | ✅ Yes | ❌ Planned | **C++**: `orm/entity.h` with type-safe entity framework, field metadata, constraints. **Rust**: ORM not yet implemented (planned). |
+| **MongoDB Support** | ✅ Yes | ⚠️ Optional | **C++**: `mongodb_backend.h` with NoSQL-style query builder. **Rust**: MongoDB dependency optional (planned feature). |
+| **Redis Support** | ✅ Yes | ⚠️ Optional | **C++**: `redis_backend.h` with key-value operations. **Rust**: Redis dependency optional (planned feature). |
+| **Thread Safety** | ✅ Yes | ✅ Yes | **C++**: Thread-safe with internal mutexes (std::recursive_mutex). **Rust**: Arc<Mutex<>> for interior mutability, all operations async-safe. |
+
+#### Key Differences
+
+**C++ Strengths**:
+- **ORM Framework**: Type-safe entity framework with metadata and constraints
+- **Multi-Backend**: Supports 5 databases (SQL + MongoDB + Redis)
+- **Direct C API**: Lower-level control with libpq, MySQL C API
+- **Strategy Pattern**: CRTP (Curiously Recurring Template Pattern) for backends
+
+**Rust Strengths**:
+- **Migration Tools**: Built-in schema migration with MigrationManager
+- **Connection Pooling**: Explicit, configurable connection pools (deadpool)
+- **RAII Transactions**: TransactionGuard with automatic rollback
+- **Full Async**: Native async/await throughout with Tokio
+- **Memory Safety**: Compile-time guarantees via ownership system
+
+**Parity Estimate**: ~70% (core SQL features well-covered, C++ has ORM, Rust has migrations)
+
+#### API Comparison Example
+
+**Database Connection**:
+
+```cpp
+// C++ - Backend strategy pattern
+#include <kcenon/database/backends/postgresql_backend.h>
+
+auto db = std::make_shared<postgresql_backend>("host=localhost dbname=mydb");
+auto result = db->connect();
+if (result.is_ok()) {
+    auto query_result = db->execute("SELECT * FROM users WHERE id = ?", user_id);
+}
+```
+
+```rust
+// Rust - Async with connection pooling
+use rust_database_system::backends::postgres::PostgresBackend;
+use rust_database_system::core::database::Database;
+
+let config = "host=localhost dbname=mydb";
+let pool_config = PoolConfig::new().with_max_size(10);
+let db = PostgresBackend::with_pool(config, pool_config).await?;
+
+let users = db.query_with_params("SELECT * FROM users WHERE id = $1", &[&user_id]).await?;
+```
+
+---
+
+### 2.6 network_system
+
+The network system provides networking infrastructure with support for multiple protocols and async I/O.
+
+**C++ Location**: `/include/kcenon/network/`
+**Rust Location**: `rust_network_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **TCP Server/Client** | ✅ Yes | ✅ Yes | **C++**: `messaging_client.cpp/server.cpp` using ASIO. **Rust**: `TcpClient`/`TcpServer` using Tokio with async/await. |
+| **UDP Support** | ✅ Yes | ❌ No | **C++**: Full UDP client/server with `messaging_udp_client.cpp` and `messaging_udp_server.cpp`. **Rust**: No UDP implementation; TCP-only. |
+| **HTTP Support** | ✅ Yes | ❌ No | **C++**: `http_client.cpp`, `http_server.h` with samples. **Rust**: No native HTTP support (would require external crates like hyper). |
+| **HTTP/2 Support** | ✅ Yes | ❌ No | **C++**: Full HTTP/2 implementation with `http2_server.cpp`, HPACK compression, frame handling. **Rust**: No HTTP/2. |
+| **WebSocket Support** | ✅ Yes | ❌ No | **C++**: RFC 6455 WebSocket protocol with `websocket_*.cpp/h` and server/client adapters. **Rust**: No WebSocket implementation. |
+| **QUIC Support** | ✅ Experimental | ❌ No | **C++**: Experimental QUIC protocol (RFC 9000) with congestion control, loss detection, stream management. **Rust**: No QUIC. |
+| **TLS/SSL Support** | ✅ Yes | ✅ Optional | **C++**: OpenSSL 3.x/1.1.1 support via `secure_tcp_socket.cpp`, DTLS via `dtls_socket.cpp`. **Rust**: Optional `tls` feature using tokio-rustls with certificate pinning. |
+| **gRPC Support** | ✅ Yes | ❌ No | **C++**: Both prototype and official gRPC via `src/protocols/grpc/` with service registry. **Rust**: No gRPC support. |
+| **Connection Management** | ✅ Yes | ✅ Yes | **C++**: `connection_pool.cpp` with configurable pooling. **Rust**: Generic `ConnectionPool<T>` with acquire timeout, idle timeout, max lifetime. |
+| **Keep-Alive Support** | ✅ Yes | ✅ Yes | **C++**: Configurable via messaging components. **Rust**: `ServerConfig::with_keep_alive()` and `ClientConfig::with_keep_alive()`. |
+| **Async I/O** | ✅ Yes (ASIO) | ✅ Yes (Tokio) | **C++**: ASIO-based asynchronous I/O with callbacks. **Rust**: Tokio-based async runtime with native async/await. |
+| **Load Balancing** | ❌ No | ✅ Yes | **C++**: No built-in load balancer. **Rust**: Full `LoadBalancer` with strategies (round-robin, weighted, least-connections), health checks, error rate tracking. |
+| **Circuit Breaker** | ❌ No | ✅ Yes | **C++**: No circuit breaker pattern. **Rust**: `CircuitBreaker` with configurable thresholds and state management (Closed/Open/Half-Open). |
+| **Rate Limiting** | ❌ No | ✅ Yes | **C++**: No rate limiting. **Rust**: `RateLimiter` (global) and `KeyedRateLimiter` (per-key) with configurable rate/capacity. |
+| **Graceful Shutdown** | ❌ No | ✅ Yes | **C++**: No graceful shutdown mechanism. **Rust**: `GracefulShutdown` with `ShutdownCoordinator` and async shutdown signals. |
+| **Auto-Reconnect** | ❌ No | ✅ Yes | **C++**: No auto-reconnect on client. **Rust**: Client supports `auto_reconnect` with configurable max reconnection attempts. |
+| **Message Compression** | ⚠️ HTTP/2 only | ✅ Yes | **C++**: HTTP/2 HPACK compression only. **Rust**: Optional compression support (example shows flate2). |
+| **Tracing/Observability** | ✅ Basic | ✅ Yes | **C++**: Logger system integration via bridge. **Rust**: `tracing` module with `SpanCollector` and distributed trace context. |
+| **Session Management** | ✅ Yes | ✅ Yes | **C++**: `unified_session_manager.cpp` for unified protocol handling. **Rust**: `Session` with lifecycle events and `SessionHandler` trait. |
+| **Serialization** | ✅ Basic | ✅ JSON | **C++**: Length-prefixed binary protocol. **Rust**: Length-prefixed protocol with JSON serialization via serde, optional compression. |
+| **Thread Pool Integration** | ✅ Yes | ✅ Yes | **C++**: Integrates with `thread_system` via bridge. **Rust**: Optional integration with `rust_thread_system`. |
+| **Monitoring Integration** | ✅ Yes | ✅ Yes | **C++**: EventBus-based metric publishing. **Rust**: Optional integration with `rust_monitoring_system`. |
+
+#### Key Differences
+
+**C++ Strengths**:
+- **Comprehensive Protocol Support**: 10 protocols (TCP, UDP, HTTP, HTTP/2, WebSocket, QUIC, DTLS, TLS, gRPC, custom)
+- **Mature Ecosystem**: Production-ready with extensive test coverage
+- **Full-Featured**: HTTP server/client, WebSocket, gRPC out of the box
+- **Experimental Features**: QUIC protocol with congestion control
+
+**Rust Strengths**:
+- **Stability Patterns**: Load balancing, circuit breaker, rate limiting, graceful shutdown, auto-reconnect
+- **Async Ergonomics**: Native async/await with Tokio runtime
+- **Resilience Focus**: Built-in fault tolerance and error recovery mechanisms
+- **Modern Observability**: Distributed tracing with span collection
+
+**Parity Estimate**: ~30% (fundamentally different design philosophies)
+
+**Design Philosophy**:
+- **C++**: "Everything network" - comprehensive protocol library
+- **Rust**: "TCP done right" - focused on reliability and observability for async TCP
+
+#### API Comparison Example
+
+**TCP Server Creation**:
+
+```cpp
+// C++ - Multi-protocol messaging server
+#include <kcenon/network/core/messaging_server.h>
+
+auto server = std::make_shared<kcenon::network::core::messaging_server>("MyServer");
+auto result = server->start_server(8080);
+if (result.is_ok()) {
+    // Server running
+}
+```
+
+```rust
+// Rust - Async TCP with circuit breaker
+use rust_network_system::{TcpServer, ServerConfig};
+use rust_network_system::resilience::CircuitBreaker;
+
+let config = ServerConfig::new("127.0.0.1:8080")
+    .with_keep_alive(true);
+let circuit_breaker = CircuitBreaker::new(5, Duration::from_secs(30));
+let mut server = TcpServer::with_config(config);
+server.start(handler).await?;
+```
+
+---
+
+### 2.7 integrated_thread_system
+
+**Status**: Rust-Only System
+
+The integrated_thread_system is a **Rust-exclusive convenience wrapper** that combines three separate systems into a single unified API with zero-configuration initialization.
+
+**Rust Location**: `rust_integrated_thread_system/src/`
+**C++ Equivalent**: None (C++ has separate `thread_system`, `logger_system`, `monitoring_system`)
+
+#### Purpose
+
+Provides a **zero-config thread system** by integrating:
+1. **rust_thread_system** - Thread pool management and task execution
+2. **rust_logger_system** - Async structured logging with file/console appenders
+3. **rust_monitoring_system** - Real-time metrics collection (Counter, Gauge, LatencyHistogram)
+
+#### Unique Features
+
+| Feature | Description |
+|---------|-------------|
+| **UnifiedThreadSystem** | Single API exposing all three systems with smart defaults |
+| **Zero-Config Init** | Works out of the box without complex setup |
+| **Automatic Logging** | All thread operations automatically logged with structured context |
+| **Built-in Monitoring** | Real-time metrics and health status without manual instrumentation |
+| **Latency Tracking** | LatencyHistogram for performance analysis |
+| **Health Checks** | HealthStatus reporting with automatic issue detection |
+| **Batch Processing** | Convenient `submit_batch()` for bulk job submissions |
+| **High Performance** | 1M+ operations/second capability |
+
+#### Why Rust-Only?
+
+The C++ ecosystem uses a **composition approach** where users manually combine:
+- `thread_system` for threading
+- `logger_system` for logging
+- `monitoring_system` for metrics
+
+This provides flexibility but requires explicit wiring. The Rust `integrated_thread_system` trades flexibility for convenience, targeting rapid prototyping and small-to-medium applications.
+
+#### API Example
+
+```rust
+// Rust - Unified system with all three integrated
+use rust_integrated_thread_system::UnifiedThreadSystem;
+
+// Zero-config initialization
+let system = UnifiedThreadSystem::new(4); // 4 worker threads
+
+// Submit job - automatically logged and monitored
+system.submit(|| {
+    println!("Task executed!");
+});
+
+// Access health status
+let health = system.health_status();
+println!("Status: {:?}, Issues: {:?}", health.status, health.issues);
+```
+
+**C++ Equivalent Pattern**:
+
+```cpp
+// C++ - Manual composition of three systems
+#include <kcenon/thread/core/thread_pool.h>
+#include <kcenon/logger/core/logger.h>
+#include <kcenon/monitoring/metrics/counter.h>
+
+auto pool = kcenon::thread::create_thread_pool(4);
+auto logger = kcenon::logger::create_logger("app");
+auto counter = metrics::Counter::builder().name("tasks_submitted").build();
+
+pool->submit([&logger, &counter]() {
+    logger->info("Task executed");
+    counter->inc();
+    // Task code
+});
+```
+
+---
+
+## 4. Interoperability Considerations
+
+This section documents how C++ and Rust versions can interact in heterogeneous deployments.
+
+### 4.1 FFI (Foreign Function Interface) Boundaries
+
+#### C ABI Compatibility
+
+Both C++ and Rust can export C-compatible APIs for cross-language calls.
+
+**C++ Exporting C API**:
+
+```cpp
+// C++ library exposing C API
+extern "C" {
+    void* create_thread_pool(size_t num_threads) {
+        return new kcenon::thread::thread_pool(num_threads);
+    }
+
+    void thread_pool_submit(void* pool, void (*task)(void*), void* data) {
+        auto* tp = static_cast<kcenon::thread::thread_pool*>(pool);
+        tp->submit([task, data]() { task(data); });
+    }
+
+    void destroy_thread_pool(void* pool) {
+        delete static_cast<kcenon::thread::thread_pool*>(pool);
+    }
+}
+```
+
+**Rust Calling C++ via FFI**:
+
+```rust
+// Rust FFI bindings to C++ library
+#[link(name = "kcenon_thread")]
+extern "C" {
+    fn create_thread_pool(num_threads: usize) -> *mut std::ffi::c_void;
+    fn thread_pool_submit(pool: *mut std::ffi::c_void,
+                         task: extern "C" fn(*mut std::ffi::c_void),
+                         data: *mut std::ffi::c_void);
+    fn destroy_thread_pool(pool: *mut std::ffi::c_void);
+}
+
+// Safe Rust wrapper
+pub struct CppThreadPool {
+    inner: *mut std::ffi::c_void,
+}
+
+impl CppThreadPool {
+    pub fn new(num_threads: usize) -> Self {
+        unsafe {
+            CppThreadPool {
+                inner: create_thread_pool(num_threads)
+            }
+        }
+    }
+}
+
+impl Drop for CppThreadPool {
+    fn drop(&mut self) {
+        unsafe { destroy_thread_pool(self.inner); }
+    }
+}
+```
+
+#### Memory Ownership Across Boundaries
+
+**Critical Rules**:
+1. **Single Owner**: Memory allocated in C++ must be freed in C++, and vice versa
+2. **No Shared Ownership**: std::shared_ptr and Arc<T> do not cross FFI boundaries safely
+3. **Transfer Ownership**: Use opaque pointers (void*) and explicit create/destroy functions
+4. **Borrowed Data**: Pass references (&T in Rust, const T* in C++) for temporary access without ownership transfer
+
+**Anti-Pattern (Unsafe)**:
+```cpp
+// ❌ DO NOT: Returning std::shared_ptr across FFI
+extern "C" std::shared_ptr<Logger>* create_logger(); // Unsafe!
+```
+
+**Correct Pattern**:
+```cpp
+// ✅ DO: Return opaque pointer, manage lifetime explicitly
+extern "C" void* create_logger();
+extern "C" void destroy_logger(void* logger);
+```
+
+### 4.2 Data Format Compatibility
+
+#### JSON Schema Compatibility
+
+Both implementations use **identical JSON schemas** for configuration and data interchange.
+
+**Unified Configuration Format**:
+
+```json
+{
+  "thread": {
+    "pool_size": 4,
+    "queue_size": 1000
+  },
+  "logger": {
+    "level": "INFO",
+    "file": "/var/log/app.log",
+    "rotation": "daily"
+  },
+  "monitoring": {
+    "enabled": true,
+    "port": 9090
+  }
+}
+```
+
+**C++ Parsing**:
+```cpp
+#include <kcenon/container/serializers/json_serializer.h>
+
+auto config = json_serializer::deserialize(json_string);
+auto pool_size = config->get_value<int>("thread.pool_size");
+```
+
+**Rust Parsing**:
+```rust
+use serde_json::Value;
+
+let config: Value = serde_json::from_str(&json_string)?;
+let pool_size = config["thread"]["pool_size"].as_u64().unwrap();
+```
+
+#### Binary Protocol Compatibility
+
+The **wire protocol** (@header{};@data{};) is byte-compatible across C++ and Rust.
+
+**Interop Verification**:
+- C++ `container_system` and Rust `rust_container_system` use identical binary serialization
+- Field ID mapping ensures consistent field ordering
+- Both handle endianness consistently (little-endian)
+- Verified with interop tests between C++, Rust, Python, Go, .NET
+
+### 4.3 Protocol Compatibility
+
+#### Network Protocol Versioning
+
+**Recommendation**: Use explicit version fields in all network messages.
+
+```json
+{
+  "version": "1.0",
+  "type": "request",
+  "payload": { ... }
+}
+```
+
+**C++ and Rust services can communicate** if both:
+1. Use the same wire protocol (TCP with length-prefixed messages)
+2. Agree on JSON/binary serialization format
+3. Handle version mismatches gracefully
+
+**Example: C++ Server, Rust Client**:
+- C++ `messaging_server` listens on TCP port
+- Rust `TcpClient` connects and sends length-prefixed JSON messages
+- Both parse JSON using their respective libraries (C++: container_system, Rust: serde_json)
+- Works seamlessly as long as message schemas match
+
+### 4.4 Shared Configuration
+
+#### Environment Variable Conventions
+
+Use **consistent naming** across C++ and Rust deployments:
+
+| Purpose | Variable Name | Format |
+|---------|--------------|--------|
+| Thread pool size | `KCENON_THREAD_POOL_SIZE` | Integer |
+| Log level | `KCENON_LOG_LEVEL` | DEBUG\|INFO\|WARN\|ERROR |
+| Log file path | `KCENON_LOG_FILE` | Path string |
+| Monitoring port | `KCENON_MONITORING_PORT` | Port number |
+| Database URL | `KCENON_DATABASE_URL` | Connection string |
+| Network bind address | `KCENON_BIND_ADDRESS` | host:port |
+
+#### Configuration File Formats
+
+**Preferred**: YAML or JSON (both parseable by C++ and Rust)
+
+**YAML Example** (`config.yaml`):
+```yaml
+thread:
+  pool_size: ${KCENON_THREAD_POOL_SIZE:-4}
+  queue_size: 1000
+
+logger:
+  level: ${KCENON_LOG_LEVEL:-INFO}
+  file: ${KCENON_LOG_FILE:-/var/log/app.log}
+
+database:
+  url: ${KCENON_DATABASE_URL}
+  pool_size: 10
+```
+
+Both C++ (`config_loader`) and Rust (serde_yaml) can parse this format with environment variable substitution.
+
+---
+
+## 5. Roadmap
+
+### 5.1 Feature Parity Goals
+
+#### Short-term (Q1-Q2 2026)
+
+**Rust thread_system**:
+- [ ] Work stealing implementation
+- [ ] Basic NUMA awareness (topology detection)
+- [ ] Pool policies (autoscaling, circuit breaker)
+
+**Rust logger_system**:
+- [ ] Real-time log analysis
+- [ ] Encryption support for secure logging
+- [ ] Global logger registry
+
+**Rust network_system**:
+- [ ] UDP support (client and server)
+- [ ] Basic HTTP/1.1 support (hyper integration)
+- [ ] WebSocket support
+
+**Rust monitoring_system**:
+- [ ] Event bus (pub/sub system)
+- [ ] Health checks framework
+- [ ] Circuit breaker pattern
+
+#### Medium-term (Q3-Q4 2026)
+
+**Rust thread_system**:
+- [ ] DAG scheduler for task dependencies
+- [ ] Lock-free queue implementations
+- [ ] Full NUMA support with work stealing
+
+**Rust database_system**:
+- [ ] ORM framework (type-safe entity mapping)
+- [ ] MongoDB support (via mongodb crate)
+- [ ] Redis support (via redis crate)
+
+**Rust network_system**:
+- [ ] HTTP/2 support (h2 crate integration)
+- [ ] gRPC support (tonic framework)
+- [ ] TLS 1.3 by default
+
+**Cross-System**:
+- [ ] Unified bootstrapper for Rust (like C++ `unified_bootstrapper`)
+- [ ] Service container with dependency injection
+- [ ] Cross-system configuration validation
+
+#### Long-term (2027+)
+
+**Feature Completeness**:
+- [ ] 80%+ parity across all systems
+- [ ] Production-ready Rust versions for all 7 systems
+- [ ] Performance benchmarks (Rust vs C++ comparison)
+
+**New Rust-Only Features**:
+- [ ] WASM support for browser deployments
+- [ ] Cloud-native integrations (Kubernetes CRDs, service mesh)
+- [ ] Native OpenTelemetry SDK integration
+
+**Deprecation Strategy**:
+- No plans to deprecate C++ versions
+- C++ and Rust coexist for different use cases
+- C++ remains recommended for HPC, complex protocols, legacy integration
+- Rust recommended for cloud-native, microservices, safety-critical applications
+
+### 5.2 Community Contributions
+
+#### How to Contribute Rust Ports
+
+1. **Choose a feature** from the roadmap or propose a new one
+2. **Open an issue** on GitHub (kcenon/rust_*_system repos)
+3. **Follow existing patterns**: Study completed Rust ports for API style
+4. **Write tests**: Unit tests and integration tests required
+5. **Document thoroughly**: API docs, examples, migration guides
+6. **Submit PR**: Include benchmarks if performance-sensitive
+
+#### Testing Requirements
+
+- **Unit tests**: >70% code coverage
+- **Integration tests**: Cross-system interaction tests
+- **Interop tests**: C++ ↔ Rust compatibility tests (for wire protocol, config formats)
+- **Benchmarks**: Performance comparison with C++ version (if applicable)
+- **Documentation tests**: Rustdoc tests for all public APIs
+
+#### Feature Request Process
+
+1. Open GitHub issue with `enhancement` label
+2. Describe **Why** (motivation), **What** (feature), **How** (implementation approach)
+3. Tag with priority (`priority:high`, `priority:medium`, `priority:low`)
+4. Maintainers will review and provide feedback
+5. If approved, add to roadmap with target quarter
+
+---
+
 ## Next Steps
 
-This completes **Part 2** of the Rust/C++ parity matrix. The following part will cover:
-
-### Part 3: Remaining Systems, Interop, and Roadmap (Planned)
-- Detailed feature tables for:
-  - thread_system (thread pool, policies, NUMA, autoscaler, DAG scheduler)
-  - logger_system (sinks, async logging, log rotation, structured logging)
-  - container_system (JSON/binary serialization, typed containers)
-  - monitoring_system (event bus, metrics, health checks, circuit breakers)
-- API comparison examples for each feature
-- Build verification for Rust ports
-
-### Part 3: Remaining Systems, Interop, and Roadmap (Planned)
+This completes **Parts 1-3** of the Rust/C++ parity matrix.
 - Feature tables for database_system, network_system, integrated_thread_system
 - FFI interoperability patterns (C ABI, unsafe Rust)
 - Data format and protocol compatibility
@@ -935,8 +1462,8 @@ This completes **Part 2** of the Rust/C++ parity matrix. The following part will
 
 ---
 
-**Document Version**: 2.0.0 (Parts 1-2)
+**Document Version**: 3.0.0 (Parts 1-3 Complete)
 **Last Updated**: 2026-02-08
 **Authors**: kcenon team
-**Related Issues**: kcenon/common_system#330, #338, #339
+**Related Issues**: kcenon/common_system#330, #338, #339, #340
 **Living Document**: This matrix is updated as Rust ports evolve. Check commit history for latest changes.
