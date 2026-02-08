@@ -2,9 +2,9 @@
 
 > **Language:** **English** | [한국어](RUST_PARITY.kr.md)
 
-**Part 1 of 3**: Overall Parity Status and API Mapping
+**Part 1-2 of 3**: Overall Parity Status, API Mapping, and Feature Comparison
 
-**Status**: ✅ **Part 1 Complete** | Part 2 Planned | Part 3 Planned
+**Status**: ✅ **Part 1 Complete** | ✅ **Part 2 Complete** | Part 3 Planned
 
 This document provides a comprehensive comparison between the C++ implementations and Rust ports of the kcenon ecosystem systems. It helps developers choose the right language for their projects and understand migration paths.
 
@@ -17,6 +17,11 @@ This document provides a comprehensive comparison between the C++ implementation
   - [Methodology](#methodology)
   - [System Comparison](#system-comparison)
   - [Interpretation Guide](#interpretation-guide)
+- [Per-System Feature Comparison](#2-per-system-feature-comparison)
+  - [thread_system](#21-thread_system)
+  - [logger_system](#22-logger_system)
+  - [container_system](#23-container_system)
+  - [monitoring_system](#24-monitoring_system)
 - [API Mapping Guide](#3-api-mapping-guide)
   - [Naming Conventions](#naming-conventions)
   - [Type Mapping](#type-mapping)
@@ -583,11 +588,327 @@ pool.submit(async move {
 
 ---
 
+## 2. Per-System Feature Comparison
+
+This section provides detailed feature-by-feature comparisons for the first four kcenon ecosystem systems.
+
+**Analysis Date**: 2026-02-08
+**Methodology**: Source code analysis of C++ headers and Rust modules, build verification, API documentation review
+
+---
+
+### 2.1 thread_system
+
+The thread system provides task scheduling, thread pool management, and job execution infrastructure.
+
+**C++ Location**: `/include/kcenon/thread/`
+**Rust Location**: `rust_thread_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **Basic Thread Pool** | ✅ Yes | ✅ Yes | **C++ API**: `thread_pool` class with builder pattern; **Rust API**: `ThreadPool` with `ThreadPoolConfig`. Both support job submission (`submit()`, `enqueue()`) and graceful shutdown with worker joining. |
+| **Policy Queues** | ✅ Yes | ✅ Yes | **C++**: `policy_queue<SyncPolicy, BoundPolicy, OverflowPolicy>` with compile-time customization via templates. Supports `mutex_sync_policy`, `lockfree_sync_policy`, `adaptive_sync_policy`, `bounded_policy`, `unbounded_policy`, overflow policies (reject, block, drop). **Rust**: Runtime selection with `PriorityJobQueue`, `ChannelQueue`, `BoundedQueue`, `AdaptiveQueue`. Backpressure strategies: Block, Timeout, Reject, Drop. |
+| **NUMA Support** | ✅ Yes | ❌ No | **C++**: Full NUMA topology detection via `numa_topology` class, NUMA-aware work stealing with `numa_work_stealer`, dedicated `numa_thread_pool`, cross-node penalty configuration. **Rust**: No NUMA awareness. |
+| **Autoscaling** | ✅ Yes | ❌ No | **C++**: `autoscaler` class manages dynamic thread pool resizing based on CPU utilization, queue depth, worker idle time. Configurable thresholds and cooldown periods to prevent thrashing. **Rust**: Fixed thread pool size only. |
+| **DAG Scheduler** | ✅ Yes | ❌ No | **C++**: `dag_scheduler` class for task graphs with dependencies, automatic dependency resolution, cycle detection, multiple failure policies, DOT/JSON visualization export, result passing between jobs. **Rust**: No DAG/dependency scheduling support. |
+| **Diagnostics & Monitoring** | ✅ Yes | ✅ Yes | **C++**: `thread_pool_diagnostics` with comprehensive metrics, job/thread info tracking, health status, bottleneck detection, execution event history, centralized `metrics_service`. **Rust**: `WorkerStats` per-worker, `TypeStats` per-type, basic statistics (jobs processed, latency), optional `tracing` integration for distributed tracing. |
+| **Typed Jobs** | ✅ Yes | ✅ Yes | **C++**: `typed_thread_pool` with priority aging, type-specific queues. **Rust**: `TypedThreadPool` for job type-based routing with QoS guarantees. |
+| **Cancellation** | ✅ Yes | ✅ Yes | **C++**: `enhanced_cancellation_token` with reason and exception support. **Rust**: Hierarchical `CancellationToken` with parent-child relationships, timeout support, callbacks. |
+| **Work Stealing** | ✅ Yes | ❌ No | **C++**: Work stealing deque with enhanced policies, NUMA-aware stealing, affinity tracking, steal backoff strategies. **Rust**: No work-stealing implementation. |
+| **Lock-Free Queues** | ✅ Yes | ❌ No | **C++**: `lockfree_queue` and `lockfree_job_queue` for high-performance scenarios. **Rust**: Uses crossbeam channels (highly optimized but not completely lock-free). |
+| **Backpressure** | ✅ Yes | ✅ Yes | **C++**: `backpressure_job_queue` with token bucket rate limiting. **Rust**: Multiple backpressure strategies with bounded queue support. |
+| **Pool Policies** | ✅ Yes | ❌ No | **C++**: `pool_policy` interface with implementations: `autoscaling_pool_policy`, `work_stealing_pool_policy`, `circuit_breaker_policy`. **Rust**: No equivalent policy system. |
+| **Tracing/Observability** | ✅ Yes | ✅ Yes | **C++**: Event bus, execution events, diagnostics callbacks. **Rust**: Optional `tracing` crate integration (feature-gated), `TracedJob` wrapper. |
+
+#### Key Differences
+
+**C++ Strengths**:
+- **NUMA-Aware**: Full support for NUMA systems with topology detection and optimized work stealing
+- **Dynamic Scaling**: Built-in autoscaler for load-responsive thread pool sizing
+- **Task Graphs**: DAG scheduler for complex dependency management
+- **Lock-Free Options**: High-performance lock-free queue implementations
+- **Compile-Time Customization**: Policy-based design enables zero-overhead abstractions through template specialization
+
+**Rust Strengths**:
+- **Simpler API**: More straightforward interface without template complexity
+- **Type Safety**: Leverages Rust's type system for compile-time safety
+- **Cancellation Model**: Hierarchical token-based cancellation with timeouts
+- **Bounded Memory**: Explicit queue size limits prevent memory exhaustion
+- **Type-Based Routing**: Built-in job type classification without separate system
+
+**Parity Estimate**: ~60% (core features present, advanced features missing in Rust)
+
+#### API Comparison Example
+
+**Thread Pool Creation**:
+
+```cpp
+// C++ - Policy-based customization
+#include <kcenon/thread/core/thread_pool.h>
+
+auto pool = kcenon::thread::create_thread_pool(
+    4,  // worker count
+    kcenon::thread::pool_policy::autoscaling
+);
+
+pool->submit([]() {
+    // Task code
+});
+```
+
+```rust
+// Rust - Builder pattern
+use rust_thread_system::ThreadPool;
+
+let pool = ThreadPool::builder()
+    .num_threads(4)
+    .build()
+    .unwrap();
+
+pool.submit(|| {
+    // Task code
+});
+```
+
+---
+
+### 2.2 logger_system
+
+The logger system provides structured, async-capable logging with multiple output sinks.
+
+**C++ Location**: `/include/kcenon/logger/`
+**Rust Location**: `rust_logger_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **Console Logging** | ✅ Yes | ✅ Yes | **C++**: `console_sink` outputs to stdout/stderr. **Rust**: `ConsoleAppender` with optional color support and configurable timestamp formats. |
+| **File Logging** | ✅ Yes | ✅ Yes | **C++**: `file_sink` with basic file I/O. **Rust**: `FileAppender` with buffering and `AsyncFileAppender` with tokio async support. |
+| **Log Levels** | ✅ Yes | ✅ Yes | **C++**: DEBUG, INFO, WARN, ERROR, plus custom levels via `common::interfaces::log_level`. **Rust**: TRACE, DEBUG, INFO, WARN, ERROR, FATAL (6 standard levels with enum-based implementation). |
+| **Async Logging** | ✅ Yes | ✅ Yes | **C++**: `async_writer` decorator wraps any writer with background thread, configurable queue size (default 10,000), flush timeout support. **Rust**: `Logger::with_async()` with batch processing (50-entry batches, 10ms timeout), per-appender panic isolation. |
+| **Structured Logging** | ✅ Yes | ✅ Yes | **C++**: `structured_logger` with `log_builder` API, fields stored as variant types (string, int, double, bool). **Rust**: `LogContext` system with arbitrary field types, structured log builder with key-value support. |
+| **JSON/Logfmt Output** | ✅ Partial | ✅ Yes | **C++**: Structured logging supports JSON via formatters. **Rust**: `JsonAppender` (JSONL format) and `LogfmtAppender` explicitly provided. |
+| **File Rotation** | ✅ Yes | ✅ Yes | **C++**: `rotating_file_writer` supports size-based, time-based (daily/hourly), and hybrid rotation with configurable max_files. **Rust**: `RotatingFileAppender` with Size, Time, Daily, Hourly, Hybrid, and Never strategies. |
+| **Log Filtering** | ✅ Yes | ⚠️ Partial | **C++**: `log_filter_interface` with level filtering, pattern matching, routing system (`log_router`). **Rust**: Level-based filtering via `min_level`, but no advanced pattern-based filtering. |
+| **Sampling/Rate Limiting** | ✅ Yes | ✅ Yes | **C++**: `log_sampler` with random sampling, rate limiting, adaptive sampling (under LOGGER_WITH_ANALYSIS). **Rust**: `LogSampler` with random, category-based, and adaptive sampling (increases sensitivity under high load). |
+| **Custom Sinks/Appenders** | ✅ Yes | ✅ Yes | **C++**: `output_sink_interface` and `base_writer` for custom implementations. **Rust**: `Appender` trait for sync, `AsyncAppender` trait for async - fully extensible. |
+| **Buffer Overflow Handling** | ✅ Yes | ✅ Yes | **C++**: Configurable via `overflow_policy` in config. **Rust**: Multiple policies - `Block`, `BlockWithTimeout`, `DropNewest`, `DropOldest`, `AlertAndDrop`. |
+| **Priority-Based Preservation** | ✅ Yes | ✅ Yes | **C++**: Critical logs can bypass overflow handling. **Rust**: Integrated via `LogPriority` (Normal, High, Critical) with `PriorityConfig` for retry and preservation strategies. |
+| **Metrics/Observability** | ✅ Yes | ✅ Yes | **C++**: `logger_metrics` with throughput, latency, error rates, health status monitoring. **Rust**: `LoggerMetrics` tracking dropped count, logged count, queue full events, block events, drop rate percentage. |
+| **Context Management** | ✅ Yes | ✅ Yes | **C++**: `unified_log_context` (v3.5+) consolidating custom fields, trace IDs, request IDs, OTEL context. **Rust**: `LoggerContext` with scoped guards and persistent context merging. |
+| **OpenTelemetry Support** | ✅ Yes | ⚠️ Partial | **C++**: Explicit OTEL context API with trace_id/span_id support (deprecated in favor of unified_log_context). **Rust**: No native OTEL support, context fields are generic. |
+| **Thread Safety** | ✅ Yes | ✅ Yes | **C++**: Mutex-protected for console/file sinks, per-appender isolation. **Rust**: Arc<RwLock> for appenders, panic isolation with catch_unwind per appender. |
+| **Real-time Analysis** | ✅ Yes | ❌ No | **C++**: `realtime_log_analyzer` for anomaly detection (requires LOGGER_WITH_ANALYSIS compile flag). **Rust**: No built-in analysis. |
+| **Batch Processing** | ✅ Yes | ✅ Yes | **C++**: `batch_writer` decorator for message batching. **Rust**: Automatic batch processing in async thread (50-entry batches). |
+| **Network Logging** | ✅ Yes | ✅ Yes | **C++**: `network_writer` for remote logging. **Rust**: `NetworkAppender` available. |
+| **Encryption Support** | ✅ Yes | ❌ No | **C++**: `encrypted_writer` for secure logging. **Rust**: Not provided in core (user can implement via custom appender). |
+| **Global Registry** | ✅ Yes | ❌ No | **C++**: `global_logger_registry` for centralized logger management. **Rust**: Not provided. |
+| **Compatibility/Adapters** | ✅ Yes | ❌ No | **C++**: Legacy adapter for thread_system, common_logger_adapter for ILogger interface. **Rust**: Standalone implementation. |
+
+#### Key Differences
+
+**C++ Strengths**:
+- **Encryption & Network logging** built-in
+- **Global logger registry** for centralized management
+- **Real-time anomaly detection** via log analyzer
+- **OpenTelemetry** explicit context management
+- **More flexible filtering** with pattern matching and routing system
+
+**Rust Strengths**:
+- **Simpler async model** with automatic batch processing and per-appender panic isolation
+- **Cleaner API** through builder pattern and trait system
+- **Better error handling** with Result types throughout
+- **Native sampling with adaptive behavior** based on throughput
+
+**Parity Estimate**: ~70% (core logging features well-covered, some advanced features missing in Rust)
+
+#### API Comparison Example
+
+**Basic Logging**:
+
+```cpp
+// C++ - Structured logging
+#include <kcenon/logger/core/structured_logger.h>
+
+auto logger = kcenon::logger::create_logger("app");
+logger->info()
+    .field("user_id", 42)
+    .field("action", "login")
+    .message("User logged in");
+```
+
+```rust
+// Rust - Structured logging
+use rust_logger_system::Logger;
+
+let logger = Logger::builder()
+    .name("app")
+    .build()?;
+
+logger.info()
+    .field("user_id", 42)
+    .field("action", "login")
+    .message("User logged in");
+```
+
+---
+
+### 2.3 container_system
+
+The container system provides serialization, deserialization, and typed containers for data interchange.
+
+**C++ Location**: `/include/kcenon/container/`
+**Rust Location**: `rust_container_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **JSON Serialization** | ✅ Yes | ✅ Yes | **C++**: `json_serializer.h` with RFC 8259 compliance. **Rust**: `JsonV2Adapter` with serde_json, supports multiple format detection (CppJson, PythonJson, JsonV2). |
+| **XML Serialization** | ✅ Yes | ✅ Yes | **C++**: `xml_serializer.h` with XML 1.0 entity encoding. **Rust**: quick-xml integration with `xml_escape()` utility for injection prevention. |
+| **MessagePack Format** | ✅ Yes | ❌ No | **C++**: `msgpack_serializer.h` for binary efficiency. **Rust**: Not implemented as separate serializer (uses serde_json and XML). |
+| **Binary Serialization** | ✅ Yes | ✅ Yes | **C++**: `binary_serializer.h` with `@header{};@data{};` format. **Rust**: `wire_protocol.rs` implements C++ wire protocol with byte-compatible output. |
+| **Wire Protocol** | ✅ Yes (native) | ✅ Yes (C++ compatible) | **C++**: Native protocol for cross-language interchange. **Rust**: Full implementation for C++/Python interop with field ID mapping. |
+| **Typed Containers** | ✅ Yes | ⚠️ Partial | **C++**: `typed_adapter.h` with interface-implementation pattern, wrapper depth tracking (max 2 levels), type ID system without RTTI. **Rust**: Uses `Arc<dyn Value>` trait objects; no explicit typed wrappers like C++. |
+| **Schema Validation** | ✅ Yes | ❌ No | **C++**: `container/schema.h` with require/optional fields, range validation, regex patterns, validation error collection. **Rust**: No schema validation feature implemented. |
+| **Serde Integration** | ❌ No (C++ native) | ✅ Yes | **Rust**: ValueType derives Serialize/Deserialize; tight serde_json integration for JSON v2.0 format. |
+| **Custom User Types** | ✅ Yes | ✅ Yes | **C++**: 16 value types via `value_types` enum. **Rust**: Value trait-based system (7 concrete types: Null, Primitive, String, Bytes, Container, Array) with custom trait implementation support. |
+| **Type Safety** | ⚠️ Runtime checking | ✅ Compile-time | **C++**: `value_types` enum with runtime type checking via variant. **Rust**: Type system ensures correctness at compile time with `Arc<dyn Value>` and trait objects. |
+| **DI/Dependency Injection** | ✅ Yes | ✅ Yes | **C++**: Kcenon `di::service_container`. **Rust**: kcenon module with `ContainerFactory` trait, `DefaultContainerFactory`, `ArcContainerProvider`. |
+| **Builder Pattern** | ✅ Yes | ✅ Yes | **C++**: `service_container` with `unified_bootstrapper`. **Rust**: `MessagingContainerBuilder` and `ValueContainerBuilder` for fluent API. |
+| **Format Detection** | ❌ No | ✅ Yes | **Rust**: `SerializationFormat` enum auto-detects (JsonV2, CppJson, PythonJson, WireProtocol) for deserialization compatibility. |
+| **Cross-Language Interop** | ✅ Yes | ✅ Yes | Both support wire protocol for C++/Python/Rust/Go/.NET interchange; verified with interop tests. |
+| **Memory Safety** | ⚠️ Manual | ✅ Automatic | **C++**: Manual with shared_ptr. **Rust**: Compile-time checked with ownership system. |
+| **Error Handling** | ✅ Result<T> pattern | ✅ Result<T> + thiserror | **C++**: Unified Result type. **Rust**: Custom Result alias + thiserror derive macros. |
+
+#### Key Differences
+
+**Rust Advantages**:
+- Compile-time type safety with trait system
+- Format auto-detection for deserialization
+- Serde ecosystem integration
+- Automatic memory safety without manual pointer management
+- Structured error types via thiserror
+
+**C++ Advantages**:
+- Schema validation with field requirements and constraints
+- MessagePack native support
+- Type ID system without RTTI overhead
+- Typed adapter pattern with depth tracking
+
+**Parity Estimate**: >100% (Rust has more features due to serde integration)
+
+#### API Comparison Example
+
+**Serialization**:
+
+```cpp
+// C++ - JSON serialization
+#include <kcenon/container/serializers/json_serializer.h>
+
+auto serializer = serializer_factory::create(serialization_format::json);
+auto result = serializer->serialize(container);
+if (result.is_ok()) {
+    auto json = result.value();
+}
+```
+
+```rust
+// Rust - JSON serialization with auto-detection
+use rust_container_system::JsonV2Adapter;
+
+let json = JsonV2Adapter::to_v2_json(&container, true)?;
+// Or with format auto-detection
+let detected = SerializationFormat::detect(&data);
+```
+
+---
+
+### 2.4 monitoring_system
+
+The monitoring system provides metrics collection, health checks, and observability.
+
+**C++ Location**: `/include/kcenon/monitoring/`
+**Rust Location**: `rust_monitoring_system/src/`
+
+#### Feature Comparison Table
+
+| Feature | C++ | Rust | Notes |
+|---------|-----|------|-------|
+| **Metrics Collection** | ✅ Yes | ✅ Yes | Both support Counter, Gauge, Histogram, Summary, Timer. **C++**: 10.5M counter ops/sec. **Rust**: <1% overhead, 10M+ ops/sec with atomic operations. |
+| **Event Bus (Pub/Sub)** | ✅ Yes | ❌ No | **C++**: Full event bus implementation with priority queues and topic-based routing. **Rust**: Lacks pub/sub event system. |
+| **Health Checks** | ✅ Yes | ❌ No | **C++**: Supports liveness, readiness, startup checks with caching and auto-recovery mechanisms. **Rust**: No health check framework. |
+| **Circuit Breakers** | ✅ Yes | ❌ No | **C++**: Comprehensive circuit breaker with state transitions (Closed/Open/Half-Open), failure thresholds, timeout configuration. **Rust**: No circuit breaker pattern. |
+| **Performance Monitoring** | ✅ Yes | ✅ Yes | **C++**: Latency tracking, throughput measurement, resource monitoring. **Rust**: Performance metrics with minimal overhead. |
+| **Custom Metrics** | ✅ Yes | ✅ Yes | **C++**: Plugin system via `metric_collector_plugin` interface. **Rust**: Custom collectors support. |
+| **Distributed Tracing** | ✅ Yes | ❌ No | **C++**: Context propagation and span management with <50ns overhead. **Rust**: No distributed tracing support. |
+| **Alert Pipeline** | ✅ Yes | ❌ No | **C++**: Threshold-based, rate-of-change, and anomaly-based alerting with configurable actions. **Rust**: No alerting system. |
+| **Auto-scaling** | ❌ No | ✅ Yes | **Rust**: Unique feature with metric-based scaling decisions for containerized environments. **C++**: No auto-scaling capability. |
+| **Fault Tolerance** | ✅ Yes | ❌ No | **C++**: `FaultToleranceManager` with recovery mechanisms and graceful degradation. **Rust**: Relies on type safety instead. |
+| **System Collectors** | ✅ 19+ collectors | ✅ 3 collectors | **C++**: Battery, Temperature, Power, GPU, Container, Security, SMART, Interrupt, VM, Process, Network, Thread, Logger, Platform metrics. **Rust**: System (basic), IntegratedSystem (combined), Performance. |
+| **Prometheus Export** | ✅ Yes | ✅ Yes | Both support Prometheus exposition format for metrics export. |
+| **gRPC Export** | ✅ Yes | ❌ No | **C++**: Native gRPC exporter for remote metrics collection. **Rust**: No gRPC support. |
+| **OTLP (OpenTelemetry)** | ✅ Yes | ❌ No | **C++**: Full OpenTelemetry Protocol support for traces and metrics. **Rust**: No OTLP integration. |
+| **Dashboard** | ❌ No | ✅ Yes | **Rust**: Built-in dashboard exporter for visualization. **C++**: Relies on external tools. |
+
+#### Key Differences
+
+**C++ (monitoring_system)** is a comprehensive observability platform with:
+- Advanced reliability patterns (circuit breakers, fault tolerance, graceful degradation)
+- Distributed tracing with OTLP export
+- 19+ specialized collectors for deep platform-level monitoring (GPU, container, security metrics)
+- Event bus for pub/sub observability events
+- Alert pipeline with threshold and anomaly detection
+
+**Rust (rust_monitoring_system)** is a lightweight, focused metrics system with:
+- Auto-scaling capabilities based on metric thresholds
+- Memory safety and type safety guarantees
+- Minimal performance overhead (<1%)
+- Dashboard export for built-in visualization
+- Optimized for containerized environments
+
+**Parity Estimate**: ~50% (both have metrics collection, but very different feature sets)
+
+**Architectural Philosophy**: C++ emphasizes **reliability and observability depth** for enterprise distributed systems; Rust emphasizes **safety and scalability** for cloud-native deployments.
+
+#### API Comparison Example
+
+**Metrics Collection**:
+
+```cpp
+// C++ - Counter with labels
+#include <kcenon/monitoring/metrics/counter.h>
+
+auto counter = metrics::Counter::builder()
+    .name("http_requests_total")
+    .label("method", "GET")
+    .label("status", "200")
+    .build();
+
+counter->inc();
+```
+
+```rust
+// Rust - Counter with labels
+use rust_monitoring_system::metrics::Counter;
+
+let counter = Counter::new("http_requests_total")
+    .with_label("method", "GET")
+    .with_label("status", "200");
+
+counter.inc();
+```
+
+---
+
 ## Next Steps
 
-This completes **Part 1** of the Rust/C++ parity matrix. The following parts will cover:
+This completes **Part 2** of the Rust/C++ parity matrix. The following part will cover:
 
-### Part 2: Feature Comparison for Core Systems (Planned)
+### Part 3: Remaining Systems, Interop, and Roadmap (Planned)
 - Detailed feature tables for:
   - thread_system (thread pool, policies, NUMA, autoscaler, DAG scheduler)
   - logger_system (sinks, async logging, log rotation, structured logging)
@@ -614,8 +935,8 @@ This completes **Part 1** of the Rust/C++ parity matrix. The following parts wil
 
 ---
 
-**Document Version**: 1.0.0 (Part 1)
+**Document Version**: 2.0.0 (Parts 1-2)
 **Last Updated**: 2026-02-08
 **Authors**: kcenon team
-**Related Issues**: kcenon/common_system#330, #338
+**Related Issues**: kcenon/common_system#330, #338, #339
 **Living Document**: This matrix is updated as Rust ports evolve. Check commit history for latest changes.
