@@ -10,6 +10,8 @@ This document provides comprehensive details about all features available in the
 
 - [Core Advantages & Benefits](#core-advantages--benefits)
 - [Core Components](#core-components)
+- [Resilience Patterns](#resilience-patterns)
+- [Dependency Injection & Bootstrap](#dependency-injection--bootstrap)
 - [Integration Features](#integration-features)
 - [Production Quality Features](#production-quality-features)
 - [Error Handling Foundation](#error-handling-foundation)
@@ -394,6 +396,474 @@ bus->subscribe<common::events::metric_event>(
     }
 );
 ```
+
+---
+
+## Resilience Patterns
+
+The `kcenon::common::resilience` namespace provides production-grade fault tolerance primitives for distributed systems. Include the umbrella header `<kcenon/common/resilience/resilience.h>` to access all resilience components.
+
+### Circuit Breaker
+
+The circuit breaker pattern prevents cascading failures by temporarily blocking requests to a failing service, allowing it time to recover.
+
+**State Machine:**
+
+```
+CLOSED ──(failure threshold exceeded)──► OPEN
+  ▲                                        │
+  │                                        │ (timeout expires)
+  │                                        ▼
+  └──(success threshold met)────── HALF_OPEN
+                                      │
+                                      └──(any failure)──► OPEN
+```
+
+| State | Behavior |
+|-------|----------|
+| `CLOSED` | Normal operation. Requests pass through, failures are tracked within a sliding time window. |
+| `OPEN` | Failure threshold exceeded. All requests are immediately rejected. Transitions to `HALF_OPEN` after timeout. |
+| `HALF_OPEN` | Recovery testing. A limited number of probe requests are allowed. Success closes the circuit; any failure reopens it. |
+
+**Configuration (`circuit_breaker_config`):**
+
+```cpp
+namespace kcenon::common::resilience {
+
+struct circuit_breaker_config {
+    // Number of failures to trip the circuit (CLOSED -> OPEN)
+    std::size_t failure_threshold = 5;
+
+    // Successes required to close the circuit (HALF_OPEN -> CLOSED)
+    std::size_t success_threshold = 2;
+
+    // Sliding time window for failure tracking (failures outside expire)
+    std::chrono::milliseconds failure_window = std::chrono::seconds(60);
+
+    // Cooldown before transitioning from OPEN to HALF_OPEN
+    std::chrono::milliseconds timeout = std::chrono::seconds(30);
+
+    // Maximum probe requests allowed in HALF_OPEN state
+    std::size_t half_open_max_requests = 3;
+};
+
+}
+```
+
+**Core API (`circuit_breaker`):**
+
+```cpp
+namespace kcenon::common::resilience {
+
+class circuit_breaker : public interfaces::IStats {
+public:
+    explicit circuit_breaker(circuit_breaker_config config = {});
+
+    // Check if a request should be allowed through
+    [[nodiscard]] auto allow_request() -> bool;
+
+    // Record operation outcomes
+    auto record_success() -> void;
+    auto record_failure(const std::exception* e = nullptr) -> void;
+
+    // Query current state
+    [[nodiscard]] auto get_state() const -> circuit_state;
+
+    // RAII guard for automatic success/failure recording
+    [[nodiscard]] auto make_guard() -> guard;
+
+    // IStats interface - observability
+    [[nodiscard]] auto get_stats() const
+        -> std::unordered_map<std::string, interfaces::stats_value> override;
+    [[nodiscard]] auto to_json() const -> std::string override;
+    [[nodiscard]] auto name() const -> std::string_view override;
+};
+
+}
+```
+
+**RAII Guard:**
+
+The `circuit_breaker::guard` class automatically records a failure when destroyed unless `record_success()` is explicitly called. This ensures operations that throw exceptions are correctly tracked.
+
+```cpp
+class circuit_breaker::guard {
+public:
+    explicit guard(circuit_breaker& breaker);
+    ~guard();  // Records failure if record_success() was not called
+
+    auto record_success() -> void;
+
+    // Non-copyable, non-movable
+    guard(const guard&) = delete;
+    guard& operator=(const guard&) = delete;
+};
+```
+
+**Usage Example:**
+
+```cpp
+#include <kcenon/common/resilience/resilience.h>
+
+using namespace kcenon::common::resilience;
+
+// Configure the breaker
+circuit_breaker_config config{
+    .failure_threshold = 5,
+    .success_threshold = 2,
+    .failure_window = std::chrono::seconds(60),
+    .timeout = std::chrono::seconds(30),
+    .half_open_max_requests = 3
+};
+circuit_breaker breaker(config);
+
+// Pattern 1: Manual check and record
+if (!breaker.allow_request()) {
+    return make_error("Service unavailable - circuit is open");
+}
+try {
+    auto result = call_remote_service();
+    breaker.record_success();
+    return result;
+} catch (const std::exception& e) {
+    breaker.record_failure(&e);
+    throw;
+}
+
+// Pattern 2: RAII guard (recommended)
+if (breaker.allow_request()) {
+    auto guard = breaker.make_guard();
+    auto result = call_remote_service();
+    guard.record_success();  // Prevents automatic failure recording
+    return result;
+}
+// If call_remote_service() throws, ~guard() records the failure automatically
+```
+
+**Observability:**
+
+The circuit breaker implements `IStats`, providing real-time metrics:
+
+```cpp
+auto stats = breaker.get_stats();
+// Returns: current_state, failure_count, consecutive_successes,
+//          half_open_requests, failure_threshold, is_open
+
+auto json = breaker.to_json();
+// Returns JSON representation of all statistics
+```
+
+**Failure Window:**
+
+The `failure_window` class provides a sliding time window for failure tracking. Failures older than the configured `failure_window` duration are automatically expired and not counted toward the threshold.
+
+**Thread Safety:**
+- All public methods on `circuit_breaker` and `failure_window` are thread-safe.
+- State transitions are protected by internal synchronization.
+- Safe for concurrent access from multiple threads.
+
+---
+
+## Dependency Injection & Bootstrap
+
+The common_system provides a dependency injection (DI) container and bootstrapping utilities for managing service lifetimes, wiring dependencies, and controlling application lifecycle.
+
+### Service Container
+
+The `service_container` (`kcenon::common::di`) is a thread-safe DI container supporting factory-based registration, multiple lifetime policies, scoped containers, and circular dependency detection.
+
+**Service Lifetimes (`service_lifetime`):**
+
+| Lifetime | Behavior | Use Case |
+|----------|----------|----------|
+| `singleton` | One instance shared globally; created on first resolution. | Loggers, configuration, stateless services. |
+| `transient` | New instance created for every resolution request. | Stateful per-consumer services. |
+| `scoped` | One instance per `IServiceScope`; shared within that scope. | Request-scoped services, unit-of-work patterns. |
+
+**Registration API:**
+
+```cpp
+auto& container = service_container::global();
+
+// Register implementation type (default-constructible)
+container.register_type<ILogger, ConsoleLogger>(service_lifetime::singleton);
+
+// Register factory with dependency resolution
+container.register_factory<IDatabase>(
+    [](IServiceContainer& c) {
+        auto logger = c.resolve<ILogger>().value();
+        return std::make_shared<PostgresDatabase>(logger);
+    },
+    service_lifetime::scoped
+);
+
+// Register simple factory (no container access needed)
+container.register_simple_factory<ICache>(
+    [] { return std::make_shared<InMemoryCache>(); },
+    service_lifetime::singleton
+);
+
+// Register pre-existing instance
+auto config = std::make_shared<AppConfig>("config.yaml");
+container.register_instance<IConfig>(config);
+```
+
+**Resolution API:**
+
+```cpp
+// Resolve with error handling
+auto result = container.resolve<ILogger>();
+if (result.is_ok()) {
+    auto logger = result.value();
+    logger->info("Resolved successfully");
+}
+
+// Resolve or nullptr (for optional services)
+auto cache = container.resolve_or_null<ICache>();
+if (cache) {
+    cache->set("key", "value");
+}
+
+// Introspection
+bool has_logger = container.is_registered<ILogger>();
+auto services = container.registered_services();
+```
+
+**Scoped Containers:**
+
+Scopes provide request-level isolation for scoped services while sharing singletons with the parent:
+
+```cpp
+auto& container = service_container::global();
+
+void handle_request() {
+    auto scope = container.create_scope();
+
+    // Each scope gets its own IDatabase instance
+    auto db = scope->resolve<IDatabase>().value();
+    auto db2 = scope->resolve<IDatabase>().value();
+    // db == db2 (same scoped instance within this scope)
+
+    // Singletons are shared with the parent
+    auto logger = scope->resolve<ILogger>().value();
+    // Same ILogger instance as parent container
+
+} // Scope destroyed, scoped instances disposed
+```
+
+**Security Controls:**
+
+```cpp
+// Freeze the container after initialization to prevent tampering
+container.freeze();
+
+// Subsequent registration attempts return an error
+auto result = container.register_type<IFoo, FooImpl>();
+// result.is_err() == true, error code: REGISTRY_FROZEN
+
+bool frozen = container.is_frozen();  // true
+```
+
+**Circular Dependency Detection:**
+
+The container uses a thread-local resolution stack to detect circular dependencies at runtime:
+
+```cpp
+// If A depends on B, and B depends on A:
+auto result = container.resolve<A>();
+// result.is_err() == true
+// Error: "Circular dependency detected: A -> B -> A"
+```
+
+**Thread Safety:**
+- All public methods are thread-safe using `std::shared_mutex` (read/write locking).
+- Singleton instantiation uses double-checked locking.
+- Circular dependency detection uses thread-local storage to avoid false positives.
+
+### System Bootstrapper
+
+The `SystemBootstrapper` (`kcenon::common::bootstrap`) provides a fluent API for application initialization, integrating logger registration with lifecycle management.
+
+**Key Features:**
+- Fluent method chaining for expressive configuration
+- Factory-based lazy initialization of loggers
+- RAII support with automatic shutdown on destruction
+- Prevention of duplicate initialization/shutdown
+- Integration with `GlobalLoggerRegistry` for thread-safe logger access
+
+**API:**
+
+```cpp
+namespace kcenon::common::bootstrap {
+
+class SystemBootstrapper {
+public:
+    SystemBootstrapper();
+    ~SystemBootstrapper();  // Calls shutdown() automatically
+
+    // Fluent configuration
+    SystemBootstrapper& with_default_logger(LoggerFactory factory);
+    SystemBootstrapper& with_logger(const std::string& name, LoggerFactory factory);
+    SystemBootstrapper& on_initialize(std::function<void()> callback);
+    SystemBootstrapper& on_shutdown(std::function<void()> callback);
+    SystemBootstrapper& with_auto_freeze(
+        bool freeze_logger_registry = true,
+        bool freeze_service_container = true);
+
+    // Lifecycle
+    VoidResult initialize();
+    void shutdown();
+    bool is_initialized() const noexcept;
+    void reset();
+};
+
+}
+```
+
+**Usage Example:**
+
+```cpp
+#include <kcenon/common/bootstrap/system_bootstrapper.h>
+
+using namespace kcenon::common::bootstrap;
+
+int main() {
+    SystemBootstrapper bootstrapper;
+    bootstrapper
+        .with_default_logger([] { return create_console_logger(); })
+        .with_logger("database", [] { return create_file_logger("db.log"); })
+        .with_auto_freeze()  // Freeze registries after init
+        .on_initialize([] { LOG_INFO("System started"); })
+        .on_shutdown([] { LOG_INFO("System stopping"); });
+
+    auto result = bootstrapper.initialize();
+    if (result.is_err()) {
+        std::cerr << "Init failed: " << result.error().message << "\n";
+        return 1;
+    }
+
+    // Application logic...
+
+    return 0;
+    // ~SystemBootstrapper calls shutdown() automatically
+}
+```
+
+**Initialization Order:**
+1. Create and register the default logger (if configured)
+2. Create and register all named loggers
+3. Execute initialization callbacks in registration order
+4. Freeze registries (if `with_auto_freeze()` was called)
+
+**Shutdown Order:**
+1. Execute shutdown callbacks in reverse registration order (LIFO)
+2. Clear all loggers from `GlobalLoggerRegistry`
+
+### Unified Bootstrapper
+
+The `unified_bootstrapper` (`kcenon::common::di`) is a static utility class that coordinates system-wide initialization and shutdown through the service container. It provides signal handling, shutdown hooks, and conditional subsystem registration.
+
+**Configuration (`bootstrapper_options`):**
+
+```cpp
+namespace kcenon::common::di {
+
+struct bootstrapper_options {
+    bool enable_logging = true;           // Enable logging services
+    bool enable_monitoring = true;        // Enable monitoring services
+    bool enable_database = false;         // Enable database services
+    bool enable_network = false;          // Enable network services
+    std::string config_path;              // Path to config file (optional)
+    std::chrono::milliseconds shutdown_timeout{30000};
+    bool register_signal_handlers = true; // Handle SIGTERM/SIGINT
+};
+
+}
+```
+
+**API:**
+
+```cpp
+namespace kcenon::common::di {
+
+class unified_bootstrapper {
+public:
+    // Lifecycle
+    static VoidResult initialize(const bootstrapper_options& opts = {});
+    static VoidResult shutdown(
+        std::chrono::milliseconds timeout = std::chrono::seconds(30));
+
+    // Service access
+    static service_container& services();
+
+    // State queries
+    static bool is_initialized();
+    static bool is_shutdown_requested();
+
+    // Shutdown hooks (called in LIFO order during shutdown)
+    static VoidResult register_shutdown_hook(
+        const std::string& name, shutdown_hook hook);
+    static VoidResult unregister_shutdown_hook(const std::string& name);
+
+    // Signal handling
+    static void request_shutdown(bool trigger_shutdown = false);
+
+    // Configuration
+    static bootstrapper_options get_options();
+};
+
+}
+```
+
+**Usage Example:**
+
+```cpp
+#include <kcenon/common/di/unified_bootstrapper.h>
+
+using namespace kcenon::common::di;
+
+int main() {
+    auto result = unified_bootstrapper::initialize({
+        .enable_logging = true,
+        .enable_monitoring = true,
+        .config_path = "config.yaml",
+        .register_signal_handlers = true
+    });
+
+    if (result.is_err()) {
+        std::cerr << "Init failed: " << result.error().message << "\n";
+        return 1;
+    }
+
+    // Register custom shutdown hook
+    unified_bootstrapper::register_shutdown_hook("flush_cache",
+        [](std::chrono::milliseconds remaining) {
+            flush_all_caches();
+        });
+
+    // Access services
+    auto& services = unified_bootstrapper::services();
+    auto logger = services.resolve<ILogger>();
+
+    // Main loop - check for shutdown signal
+    while (!unified_bootstrapper::is_shutdown_requested()) {
+        process_next_request();
+    }
+
+    unified_bootstrapper::shutdown();
+    return 0;
+}
+```
+
+**Signal Handling:**
+- Automatically registers handlers for `SIGTERM` and `SIGINT` (configurable).
+- On signal receipt, sets the shutdown flag (`is_shutdown_requested()` returns `true`).
+- Application code should poll `is_shutdown_requested()` for cooperative shutdown.
+
+**Shutdown Hooks:**
+- Hooks are executed in reverse registration order (LIFO) during shutdown.
+- Each hook receives the remaining timeout duration for budget-aware cleanup.
+- Exceptions in hooks are silently caught to ensure all hooks execute.
 
 ---
 
@@ -897,5 +1367,5 @@ namespace my_system::errors {
 
 ---
 
-**Last Updated**: 2024-11-15
-**Version**: 0.1.0.0
+**Last Updated**: 2026-02-08
+**Version**: 0.2.0
