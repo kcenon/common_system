@@ -10,6 +10,8 @@
 
 - [핵심 장점 및 이점](#핵심-장점-및-이점)
 - [핵심 컴포넌트](#핵심-컴포넌트)
+- [복원력 패턴](#복원력-패턴)
+- [의존성 주입 및 부트스트랩](#의존성-주입-및-부트스트랩)
 - [통합 기능](#통합-기능)
 - [프로덕션 품질 기능](#프로덕션-품질-기능)
 - [오류 처리 기반](#오류-처리-기반)
@@ -310,6 +312,474 @@ struct ErrorInfo {
         additional_context;      // 추가 컨텍스트
 };
 ```
+
+---
+
+## 복원력 패턴
+
+`kcenon::common::resilience` 네임스페이스는 분산 시스템을 위한 프로덕션 등급 장애 허용 프리미티브를 제공합니다. 모든 복원력 컴포넌트에 접근하려면 우산 헤더 `<kcenon/common/resilience/resilience.h>`를 포함하세요.
+
+### 서킷 브레이커
+
+서킷 브레이커 패턴은 장애가 발생한 서비스에 대한 요청을 일시적으로 차단하여 연쇄 장애를 방지하고, 서비스가 복구할 시간을 제공합니다.
+
+**상태 머신:**
+
+```
+CLOSED ──(실패 임계값 초과)──► OPEN
+  ▲                              │
+  │                              │ (타임아웃 만료)
+  │                              ▼
+  └──(성공 임계값 달성)──── HALF_OPEN
+                               │
+                               └──(실패 발생)──► OPEN
+```
+
+| 상태 | 동작 |
+|------|------|
+| `CLOSED` | 정상 작동. 요청이 통과하며, 실패가 슬라이딩 타임 윈도우 내에서 추적됨. |
+| `OPEN` | 실패 임계값 초과. 모든 요청이 즉시 거부됨. 타임아웃 후 `HALF_OPEN`으로 전환. |
+| `HALF_OPEN` | 복구 테스트. 제한된 수의 프로브 요청이 허용됨. 성공 시 회로를 닫고, 실패 시 다시 열림. |
+
+**설정 (`circuit_breaker_config`):**
+
+```cpp
+namespace kcenon::common::resilience {
+
+struct circuit_breaker_config {
+    // 회로를 트립하기 위한 실패 횟수 (CLOSED -> OPEN)
+    std::size_t failure_threshold = 5;
+
+    // 회로를 닫기 위한 성공 횟수 (HALF_OPEN -> CLOSED)
+    std::size_t success_threshold = 2;
+
+    // 실패 추적을 위한 슬라이딩 타임 윈도우 (윈도우 밖의 실패는 만료)
+    std::chrono::milliseconds failure_window = std::chrono::seconds(60);
+
+    // OPEN에서 HALF_OPEN으로 전환하기 전 쿨다운
+    std::chrono::milliseconds timeout = std::chrono::seconds(30);
+
+    // HALF_OPEN 상태에서 허용되는 최대 프로브 요청 수
+    std::size_t half_open_max_requests = 3;
+};
+
+}
+```
+
+**핵심 API (`circuit_breaker`):**
+
+```cpp
+namespace kcenon::common::resilience {
+
+class circuit_breaker : public interfaces::IStats {
+public:
+    explicit circuit_breaker(circuit_breaker_config config = {});
+
+    // 요청 허용 여부 확인
+    [[nodiscard]] auto allow_request() -> bool;
+
+    // 작업 결과 기록
+    auto record_success() -> void;
+    auto record_failure(const std::exception* e = nullptr) -> void;
+
+    // 현재 상태 조회
+    [[nodiscard]] auto get_state() const -> circuit_state;
+
+    // RAII 가드로 자동 성공/실패 기록
+    [[nodiscard]] auto make_guard() -> guard;
+
+    // IStats 인터페이스 - 관찰 가능성
+    [[nodiscard]] auto get_stats() const
+        -> std::unordered_map<std::string, interfaces::stats_value> override;
+    [[nodiscard]] auto to_json() const -> std::string override;
+    [[nodiscard]] auto name() const -> std::string_view override;
+};
+
+}
+```
+
+**RAII 가드:**
+
+`circuit_breaker::guard` 클래스는 `record_success()`가 명시적으로 호출되지 않으면 소멸 시 자동으로 실패를 기록합니다. 이를 통해 예외를 발생시키는 작업이 올바르게 추적됩니다.
+
+```cpp
+class circuit_breaker::guard {
+public:
+    explicit guard(circuit_breaker& breaker);
+    ~guard();  // record_success()가 호출되지 않았으면 실패 기록
+
+    auto record_success() -> void;
+
+    // 복사 불가, 이동 불가
+    guard(const guard&) = delete;
+    guard& operator=(const guard&) = delete;
+};
+```
+
+**사용 예제:**
+
+```cpp
+#include <kcenon/common/resilience/resilience.h>
+
+using namespace kcenon::common::resilience;
+
+// 브레이커 설정
+circuit_breaker_config config{
+    .failure_threshold = 5,
+    .success_threshold = 2,
+    .failure_window = std::chrono::seconds(60),
+    .timeout = std::chrono::seconds(30),
+    .half_open_max_requests = 3
+};
+circuit_breaker breaker(config);
+
+// 패턴 1: 수동 확인 및 기록
+if (!breaker.allow_request()) {
+    return make_error("Service unavailable - circuit is open");
+}
+try {
+    auto result = call_remote_service();
+    breaker.record_success();
+    return result;
+} catch (const std::exception& e) {
+    breaker.record_failure(&e);
+    throw;
+}
+
+// 패턴 2: RAII 가드 (권장)
+if (breaker.allow_request()) {
+    auto guard = breaker.make_guard();
+    auto result = call_remote_service();
+    guard.record_success();  // 자동 실패 기록 방지
+    return result;
+}
+// call_remote_service()가 예외를 발생시키면 ~guard()가 자동으로 실패 기록
+```
+
+**관찰 가능성:**
+
+서킷 브레이커는 `IStats`를 구현하여 실시간 메트릭을 제공합니다:
+
+```cpp
+auto stats = breaker.get_stats();
+// 반환: current_state, failure_count, consecutive_successes,
+//       half_open_requests, failure_threshold, is_open
+
+auto json = breaker.to_json();
+// 모든 통계의 JSON 표현 반환
+```
+
+**실패 윈도우:**
+
+`failure_window` 클래스는 실패 추적을 위한 슬라이딩 타임 윈도우를 제공합니다. 설정된 `failure_window` 기간보다 오래된 실패는 자동으로 만료되어 임계값 계산에 포함되지 않습니다.
+
+**스레드 안전성:**
+- `circuit_breaker`와 `failure_window`의 모든 public 메서드는 스레드 안전합니다.
+- 상태 전환은 내부 동기화로 보호됩니다.
+- 여러 스레드에서 동시 접근 안전합니다.
+
+---
+
+## 의존성 주입 및 부트스트랩
+
+common_system은 서비스 수명 관리, 의존성 연결, 애플리케이션 생명주기 제어를 위한 의존성 주입(DI) 컨테이너와 부트스트래핑 유틸리티를 제공합니다.
+
+### 서비스 컨테이너
+
+`service_container` (`kcenon::common::di`)는 팩토리 기반 등록, 다중 수명 정책, 스코프 컨테이너, 순환 의존성 감지를 지원하는 스레드 안전 DI 컨테이너입니다.
+
+**서비스 수명 (`service_lifetime`):**
+
+| 수명 | 동작 | 사용 사례 |
+|------|------|----------|
+| `singleton` | 전역적으로 공유되는 하나의 인스턴스; 첫 번째 해석 시 생성. | 로거, 설정, 상태 없는 서비스. |
+| `transient` | 모든 해석 요청마다 새 인스턴스 생성. | 소비자별 상태 보유 서비스. |
+| `scoped` | `IServiceScope`당 하나의 인스턴스; 해당 스코프 내에서 공유. | 요청 범위 서비스, 작업 단위 패턴. |
+
+**등록 API:**
+
+```cpp
+auto& container = service_container::global();
+
+// 구현 타입 등록 (기본 생성 가능)
+container.register_type<ILogger, ConsoleLogger>(service_lifetime::singleton);
+
+// 의존성 해석이 포함된 팩토리 등록
+container.register_factory<IDatabase>(
+    [](IServiceContainer& c) {
+        auto logger = c.resolve<ILogger>().value();
+        return std::make_shared<PostgresDatabase>(logger);
+    },
+    service_lifetime::scoped
+);
+
+// 단순 팩토리 등록 (컨테이너 접근 불필요)
+container.register_simple_factory<ICache>(
+    [] { return std::make_shared<InMemoryCache>(); },
+    service_lifetime::singleton
+);
+
+// 기존 인스턴스 등록
+auto config = std::make_shared<AppConfig>("config.yaml");
+container.register_instance<IConfig>(config);
+```
+
+**해석 API:**
+
+```cpp
+// 오류 처리와 함께 해석
+auto result = container.resolve<ILogger>();
+if (result.is_ok()) {
+    auto logger = result.value();
+    logger->info("Resolved successfully");
+}
+
+// nullptr 반환으로 해석 (선택적 서비스용)
+auto cache = container.resolve_or_null<ICache>();
+if (cache) {
+    cache->set("key", "value");
+}
+
+// 인트로스펙션
+bool has_logger = container.is_registered<ILogger>();
+auto services = container.registered_services();
+```
+
+**스코프 컨테이너:**
+
+스코프는 싱글톤을 부모와 공유하면서 스코프 서비스에 대한 요청 수준 격리를 제공합니다:
+
+```cpp
+auto& container = service_container::global();
+
+void handle_request() {
+    auto scope = container.create_scope();
+
+    // 각 스코프가 자체 IDatabase 인스턴스를 가짐
+    auto db = scope->resolve<IDatabase>().value();
+    auto db2 = scope->resolve<IDatabase>().value();
+    // db == db2 (이 스코프 내에서 동일한 스코프 인스턴스)
+
+    // 싱글톤은 부모와 공유
+    auto logger = scope->resolve<ILogger>().value();
+    // 부모 컨테이너와 동일한 ILogger 인스턴스
+
+} // 스코프 소멸, 스코프 인스턴스 해제
+```
+
+**보안 제어:**
+
+```cpp
+// 초기화 후 컨테이너를 동결하여 변조 방지
+container.freeze();
+
+// 이후 등록 시도는 오류 반환
+auto result = container.register_type<IFoo, FooImpl>();
+// result.is_err() == true, 오류 코드: REGISTRY_FROZEN
+
+bool frozen = container.is_frozen();  // true
+```
+
+**순환 의존성 감지:**
+
+컨테이너는 스레드 로컬 해석 스택을 사용하여 런타임에 순환 의존성을 감지합니다:
+
+```cpp
+// A가 B에 의존하고, B가 A에 의존하는 경우:
+auto result = container.resolve<A>();
+// result.is_err() == true
+// 오류: "Circular dependency detected: A -> B -> A"
+```
+
+**스레드 안전성:**
+- 모든 public 메서드는 `std::shared_mutex` (읽기/쓰기 잠금)을 사용하여 스레드 안전합니다.
+- 싱글톤 인스턴스화는 이중 확인 잠금을 사용합니다.
+- 순환 의존성 감지는 오탐을 방지하기 위해 스레드 로컬 저장소를 사용합니다.
+
+### 시스템 부트스트래퍼
+
+`SystemBootstrapper` (`kcenon::common::bootstrap`)는 로거 등록과 생명주기 관리를 통합하는 애플리케이션 초기화를 위한 플루언트 API를 제공합니다.
+
+**주요 기능:**
+- 표현력 있는 설정을 위한 플루언트 메서드 체이닝
+- 팩토리 기반 로거 지연 초기화
+- 소멸자에서 자동 종료하는 RAII 지원
+- 중복 초기화/종료 방지
+- 스레드 안전 로거 접근을 위한 `GlobalLoggerRegistry` 통합
+
+**API:**
+
+```cpp
+namespace kcenon::common::bootstrap {
+
+class SystemBootstrapper {
+public:
+    SystemBootstrapper();
+    ~SystemBootstrapper();  // 자동으로 shutdown() 호출
+
+    // 플루언트 설정
+    SystemBootstrapper& with_default_logger(LoggerFactory factory);
+    SystemBootstrapper& with_logger(const std::string& name, LoggerFactory factory);
+    SystemBootstrapper& on_initialize(std::function<void()> callback);
+    SystemBootstrapper& on_shutdown(std::function<void()> callback);
+    SystemBootstrapper& with_auto_freeze(
+        bool freeze_logger_registry = true,
+        bool freeze_service_container = true);
+
+    // 생명주기
+    VoidResult initialize();
+    void shutdown();
+    bool is_initialized() const noexcept;
+    void reset();
+};
+
+}
+```
+
+**사용 예제:**
+
+```cpp
+#include <kcenon/common/bootstrap/system_bootstrapper.h>
+
+using namespace kcenon::common::bootstrap;
+
+int main() {
+    SystemBootstrapper bootstrapper;
+    bootstrapper
+        .with_default_logger([] { return create_console_logger(); })
+        .with_logger("database", [] { return create_file_logger("db.log"); })
+        .with_auto_freeze()  // 초기화 후 레지스트리 동결
+        .on_initialize([] { LOG_INFO("System started"); })
+        .on_shutdown([] { LOG_INFO("System stopping"); });
+
+    auto result = bootstrapper.initialize();
+    if (result.is_err()) {
+        std::cerr << "Init failed: " << result.error().message << "\n";
+        return 1;
+    }
+
+    // 애플리케이션 로직...
+
+    return 0;
+    // ~SystemBootstrapper가 자동으로 shutdown() 호출
+}
+```
+
+**초기화 순서:**
+1. 기본 로거 생성 및 등록 (설정된 경우)
+2. 모든 명명된 로거 생성 및 등록
+3. 등록 순서대로 초기화 콜백 실행
+4. 레지스트리 동결 (`with_auto_freeze()` 호출 시)
+
+**종료 순서:**
+1. 역순으로 종료 콜백 실행 (LIFO)
+2. `GlobalLoggerRegistry`에서 모든 로거 제거
+
+### 통합 부트스트래퍼
+
+`unified_bootstrapper` (`kcenon::common::di`)는 서비스 컨테이너를 통해 시스템 전체 초기화와 종료를 조율하는 정적 유틸리티 클래스입니다. 시그널 처리, 종료 훅, 조건부 하위 시스템 등록을 제공합니다.
+
+**설정 (`bootstrapper_options`):**
+
+```cpp
+namespace kcenon::common::di {
+
+struct bootstrapper_options {
+    bool enable_logging = true;           // 로깅 서비스 활성화
+    bool enable_monitoring = true;        // 모니터링 서비스 활성화
+    bool enable_database = false;         // 데이터베이스 서비스 활성화
+    bool enable_network = false;          // 네트워크 서비스 활성화
+    std::string config_path;              // 설정 파일 경로 (선택 사항)
+    std::chrono::milliseconds shutdown_timeout{30000};
+    bool register_signal_handlers = true; // SIGTERM/SIGINT 처리
+};
+
+}
+```
+
+**API:**
+
+```cpp
+namespace kcenon::common::di {
+
+class unified_bootstrapper {
+public:
+    // 생명주기
+    static VoidResult initialize(const bootstrapper_options& opts = {});
+    static VoidResult shutdown(
+        std::chrono::milliseconds timeout = std::chrono::seconds(30));
+
+    // 서비스 접근
+    static service_container& services();
+
+    // 상태 조회
+    static bool is_initialized();
+    static bool is_shutdown_requested();
+
+    // 종료 훅 (종료 시 LIFO 순서로 호출)
+    static VoidResult register_shutdown_hook(
+        const std::string& name, shutdown_hook hook);
+    static VoidResult unregister_shutdown_hook(const std::string& name);
+
+    // 시그널 처리
+    static void request_shutdown(bool trigger_shutdown = false);
+
+    // 설정
+    static bootstrapper_options get_options();
+};
+
+}
+```
+
+**사용 예제:**
+
+```cpp
+#include <kcenon/common/di/unified_bootstrapper.h>
+
+using namespace kcenon::common::di;
+
+int main() {
+    auto result = unified_bootstrapper::initialize({
+        .enable_logging = true,
+        .enable_monitoring = true,
+        .config_path = "config.yaml",
+        .register_signal_handlers = true
+    });
+
+    if (result.is_err()) {
+        std::cerr << "Init failed: " << result.error().message << "\n";
+        return 1;
+    }
+
+    // 커스텀 종료 훅 등록
+    unified_bootstrapper::register_shutdown_hook("flush_cache",
+        [](std::chrono::milliseconds remaining) {
+            flush_all_caches();
+        });
+
+    // 서비스 접근
+    auto& services = unified_bootstrapper::services();
+    auto logger = services.resolve<ILogger>();
+
+    // 메인 루프 - 종료 시그널 확인
+    while (!unified_bootstrapper::is_shutdown_requested()) {
+        process_next_request();
+    }
+
+    unified_bootstrapper::shutdown();
+    return 0;
+}
+```
+
+**시그널 처리:**
+- `SIGTERM`과 `SIGINT`에 대한 핸들러를 자동으로 등록합니다 (설정 가능).
+- 시그널 수신 시 종료 플래그를 설정합니다 (`is_shutdown_requested()`가 `true` 반환).
+- 애플리케이션 코드는 협력적 종료를 위해 `is_shutdown_requested()`를 폴링해야 합니다.
+
+**종료 훅:**
+- 훅은 종료 시 역순으로 실행됩니다 (LIFO).
+- 각 훅은 남은 타임아웃 시간을 수신하여 시간 예산을 고려한 정리가 가능합니다.
+- 훅에서 발생한 예외는 조용히 포착되어 모든 훅이 실행되도록 합니다.
 
 ---
 
@@ -823,8 +1293,8 @@ Result<Config> load_and_validate_config(const std::string& path) {
 
 ---
 
-**최종 업데이트**: 2025-12-09
-**버전**: 0.1.1
+**최종 업데이트**: 2026-02-08
+**버전**: 0.2.0
 
 ---
 
