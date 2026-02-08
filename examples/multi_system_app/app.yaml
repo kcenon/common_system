@@ -1,0 +1,21 @@
+common:
+  log_level: info
+  shutdown_timeout_ms: 5000
+
+logging:
+  enabled: true
+  async: true
+  sinks:
+    - type: console
+      level: info
+    - type: file
+      path: logs/app.log
+      level: debug
+
+thread:
+  pool_size: 4
+
+database:
+  type: sqlite
+  path: users.db
+  timeout_sec: 5
