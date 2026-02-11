@@ -114,9 +114,9 @@ template<typename T>
  * @param module Module name
  * @return error_info object
  */
-[[nodiscard]] constexpr auto make_error(int code,
-                                        const std::string& message,
-                                        const std::string& module = "") noexcept
+[[nodiscard]] inline auto make_error(int code,
+                                     const std::string& message,
+                                     const std::string& module = "") noexcept
     -> error_info
 {
     return error_info{code, message, module};
@@ -130,7 +130,7 @@ template<typename T>
  * @param details Additional details
  * @return error_info object
  */
-[[nodiscard]] constexpr auto make_error_with_details(
+[[nodiscard]] inline auto make_error_with_details(
     int code,
     const std::string& message,
     const std::string& module,
