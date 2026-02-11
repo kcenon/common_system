@@ -40,7 +40,7 @@ namespace helpers {
  *   // Continue with result.value()
  */
 template<typename T>
-[[nodiscard]] constexpr auto return_if_error(const Result<T>& result)
+[[nodiscard]] auto return_if_error(const Result<T>& result)
     -> std::optional<error_info>
 {
     if (result.is_err()) {
@@ -81,7 +81,7 @@ template<typename T>
  * This is a safer alternative that works at function boundaries.
  */
 template<typename T>
-[[nodiscard]] constexpr auto try_extract(Result<T>&& result)
+[[nodiscard]] auto try_extract(Result<T>&& result)
     -> std::conditional_t<std::is_void_v<T>, Result<std::monostate>, Result<T>>
 {
     return std::forward<Result<T>>(result);
@@ -98,7 +98,7 @@ template<typename T>
  *       return *err;
  *   }
  */
-[[nodiscard]] constexpr auto error_if(bool condition, const error_info& error)
+[[nodiscard]] inline auto error_if(bool condition, const error_info& error)
     -> std::optional<error_info>
 {
     if (condition) {
@@ -114,9 +114,9 @@ template<typename T>
  * @param module Module name
  * @return error_info object
  */
-[[nodiscard]] constexpr auto make_error(int code,
-                                        const std::string& message,
-                                        const std::string& module = "") noexcept
+[[nodiscard]] inline auto make_error(int code,
+                                     const std::string& message,
+                                     const std::string& module = "") noexcept
     -> error_info
 {
     return error_info{code, message, module};
@@ -130,7 +130,7 @@ template<typename T>
  * @param details Additional details
  * @return error_info object
  */
-[[nodiscard]] constexpr auto make_error_with_details(
+[[nodiscard]] inline auto make_error_with_details(
     int code,
     const std::string& message,
     const std::string& module,
