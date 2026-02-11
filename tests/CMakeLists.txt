@@ -595,6 +595,69 @@ if(NOT COMMON_HEADER_ONLY AND TARGET common_system_static)
     )
 endif()
 
+# CircularBuffer tests
+add_executable(common_circular_buffer_test
+    circular_buffer_test.cpp
+)
+
+target_link_libraries(common_circular_buffer_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_circular_buffer_test PRIVATE cxx_std_17)
+
+add_test(NAME common_circular_buffer_test COMMAND common_circular_buffer_test)
+
+set_tests_properties(common_circular_buffer_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;utils"
+)
+
+# ObjectPool tests
+add_executable(common_object_pool_test
+    object_pool_test.cpp
+)
+
+target_link_libraries(common_object_pool_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_object_pool_test PRIVATE cxx_std_17)
+
+add_test(NAME common_object_pool_test COMMAND common_object_pool_test)
+
+set_tests_properties(common_object_pool_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;utils"
+)
+
+# Result helpers tests
+add_executable(common_result_helpers_test
+    result_helpers_test.cpp
+)
+
+target_link_libraries(common_result_helpers_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_result_helpers_test PRIVATE cxx_std_17)
+
+add_test(NAME common_result_helpers_test COMMAND common_result_helpers_test)
+
+set_tests_properties(common_result_helpers_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;patterns"
+)
+
 # Enable testing
 enable_testing()
 
@@ -642,6 +705,9 @@ set(COMMON_TEST_TARGETS
     common_error_category_test
     common_circuit_breaker_test
     common_stats_snapshot_test
+    common_circular_buffer_test
+    common_object_pool_test
+    common_result_helpers_test
 )
 
 # Apply warning flags to all test targets
