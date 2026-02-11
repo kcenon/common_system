@@ -79,6 +79,7 @@ graph TD
     common --> database
 
     thread --> logger
+    thread --> monitoring
     thread --> network
     container --> network
     logger --> network
@@ -101,159 +102,20 @@ graph TD
     style messaging fill:#fce4ec
 ```
 
-### Dependency Table
+### Dependency Details
 
-| System | Required Dependencies | Optional Dependencies |
-|--------|----------------------|----------------------|
-| common_system | None | None |
-| thread_system | common_system (opt) | fmt library |
-| container_system | common_system (opt) | None |
-| logger_system | common_system, thread_system | fmt library |
-| monitoring_system | common_system | logger_system |
-| database_system | common_system (opt), container_system | PostgreSQL, MySQL, MongoDB |
-| network_system | ASIO, container_system, thread_system, logger_system | common_system (ON by default) |
-
-## Component Architecture
-
-### common_system (Foundation)
-
-```
-common_system/
-├── interfaces/
-│   ├── logger_interface.h      # ILogger standard interface
-│   ├── monitoring_interface.h  # IMonitor standard interface
-│   └── executor_interface.h    # IExecutor standard interface
-├── patterns/
-│   ├── result.h                # Result<T> pattern
-│   ├── error.h                 # Error types
-│   └── factory.h               # Factory patterns
-└── utilities/
-    ├── type_traits.h           # Type utilities
-    └── concepts.h              # C++20 concepts
-```
-
-**Responsibilities**:
-- Define standard interfaces for cross-system communication
-- Provide type-safe error handling with Result<T>
-- Establish common patterns (factory, DI)
-
-### thread_system (Execution)
-
-```
-thread_system/
-├── core/
-│   ├── thread_pool.h           # Thread pool implementation
-│   ├── thread_worker.h         # Worker thread management
-│   ├── job.h                   # Job abstraction
-│   └── job_queue.h             # Lock-free job queue
-├── interfaces/
-│   ├── executor_interface.h    # IExecutor implementation
-│   └── logger_interface.h      # ILogger adapter
-└── utils/
-    └── thread_utils.h          # Thread utilities
-```
-
-**Responsibilities**:
-- Provide thread pool for concurrent execution
-- Implement IExecutor interface for task submission
-- Manage job queues and worker threads
-
-### container_system (Data Storage)
-
-```
-container_system/
-├── core/
-│   ├── container.h             # Generic key-value container
-│   ├── value.h                 # Type-safe value wrapper
-│   └── serializer.h            # Serialization support
-└── utilities/
-    └── type_converter.h        # Type conversion utilities
-```
-
-**Responsibilities**:
-- Provide generic data container
-- Support serialization/deserialization
-- Enable type-safe data storage
-
-### logger_system (Logging)
-
-```
-logger_system/
-├── core/
-│   ├── logger.h                # Main logger class
-│   ├── log_entry.h             # Log entry structure
-│   └── log_level.h             # Log level definitions
-├── writers/
-│   ├── console_writer.h        # Console output
-│   ├── file_writer.h           # File output
-│   └── rotating_file_writer.h  # Rotating file support
-└── impl/
-    └── async/
-        └── batch_processor.h   # Asynchronous batch processing
-```
-
-**Responsibilities**:
-- Implement ILogger interface
-- Provide asynchronous logging with batching
-- Support multiple output targets
-
-### monitoring_system (Metrics)
-
-```
-monitoring_system/
-├── core/
-│   ├── performance_monitor.h   # Performance monitoring
-│   ├── metrics_collector.h     # Metrics collection
-│   └── health_monitor.h        # Health checking
-└── interfaces/
-    └── monitoring_interface.h  # IMonitor implementation
-```
-
-**Responsibilities**:
-- Implement IMonitor interface
-- Collect and aggregate metrics
-- Provide health status monitoring
-
-### database_system (Persistence)
-
-```
-database_system/
-├── core/
-│   ├── database_manager.h      # Database connection management
-│   ├── query_builder.h         # SQL query builder
-│   └── transaction.h           # Transaction support
-└── adapters/
-    ├── postgresql_adapter.h    # PostgreSQL support
-    ├── mysql_adapter.h         # MySQL support
-    └── mongodb_adapter.h       # MongoDB support
-```
-
-**Responsibilities**:
-- Provide database abstraction layer
-- Support multiple database backends
-- Enable transaction management
-
-### network_system (Communication)
-
-```
-network_system/
-├── core/
-│   ├── messaging_server.h      # TCP server
-│   ├── messaging_client.h      # TCP client
-│   └── messaging_session.h     # Connection session
-├── integration/
-│   ├── logger_integration.h    # Logger integration
-│   ├── thread_integration.h    # Thread pool integration
-│   └── container_integration.h # Container integration
-└── internal/
-    ├── tcp_socket.h            # Socket abstraction
-    └── pipeline.h              # Data pipeline
-```
-
-**Responsibilities**:
-- Provide asynchronous TCP/IP communication
-- Integrate with thread_system for concurrent connections
-- Use logger_system for diagnostics
+> **Authoritative source**: Each system's `CMakeLists.txt` header comments define the
+> canonical dependency list. Refer to per-system documentation for current details:
+>
+> | System | Documentation |
+> |--------|--------------|
+> | [common_system](https://github.com/kcenon/common_system) | Foundation — no dependencies |
+> | [thread_system](https://github.com/kcenon/thread_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
+> | [container_system](https://github.com/kcenon/container_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
+> | [logger_system](https://github.com/kcenon/logger_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
+> | [monitoring_system](https://github.com/kcenon/monitoring_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
+> | [database_system](https://github.com/kcenon/database_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
+> | [network_system](https://github.com/kcenon/network_system) | See `CMakeLists.txt` and `docs/ARCHITECTURE.md` |
 
 ## Data Flow Examples
 
