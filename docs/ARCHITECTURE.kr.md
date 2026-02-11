@@ -79,6 +79,7 @@ graph TD
     common --> database
 
     thread --> logger
+    thread --> monitoring
     thread --> network
     container --> network
     logger --> network
@@ -101,159 +102,20 @@ graph TD
     style messaging fill:#fce4ec
 ```
 
-### 의존성 테이블
+### 의존성 상세
 
-| 시스템 | 필수 의존성 | 선택적 의존성 |
-|--------|------------|--------------|
-| common_system | None | None |
-| thread_system | common_system (opt) | fmt library |
-| container_system | common_system (opt) | None |
-| logger_system | common_system, thread_system | fmt library |
-| monitoring_system | common_system | logger_system |
-| database_system | common_system (opt), container_system | PostgreSQL, MySQL, MongoDB |
-| network_system | ASIO, container_system, thread_system, logger_system | common_system (기본값 ON) |
-
-## 컴포넌트 아키텍처
-
-### common_system (기반)
-
-```
-common_system/
-├── interfaces/
-│   ├── logger_interface.h      # ILogger 표준 인터페이스
-│   ├── monitoring_interface.h  # IMonitor 표준 인터페이스
-│   └── executor_interface.h    # IExecutor 표준 인터페이스
-├── patterns/
-│   ├── result.h                # Result<T> 패턴
-│   ├── error.h                 # Error 타입
-│   └── factory.h               # Factory 패턴
-└── utilities/
-    ├── type_traits.h           # Type 유틸리티
-    └── concepts.h              # C++20 concepts
-```
-
-**책임**:
-- 시스템 간 통신을 위한 표준 인터페이스 정의
-- Result<T>를 사용한 타입 안전 에러 처리 제공
-- 공통 패턴(factory, DI) 설정
-
-### thread_system (실행)
-
-```
-thread_system/
-├── core/
-│   ├── thread_pool.h           # Thread pool 구현
-│   ├── thread_worker.h         # Worker thread 관리
-│   ├── job.h                   # Job 추상화
-│   └── job_queue.h             # Lock-free job queue
-├── interfaces/
-│   ├── executor_interface.h    # IExecutor 구현
-│   └── logger_interface.h      # ILogger 어댑터
-└── utils/
-    └── thread_utils.h          # Thread 유틸리티
-```
-
-**책임**:
-- 동시 실행을 위한 thread pool 제공
-- 작업 제출을 위한 IExecutor 인터페이스 구현
-- Job queue와 worker thread 관리
-
-### container_system (데이터 저장)
-
-```
-container_system/
-├── core/
-│   ├── container.h             # Generic key-value container
-│   ├── value.h                 # Type-safe value wrapper
-│   └── serializer.h            # Serialization 지원
-└── utilities/
-    └── type_converter.h        # Type 변환 유틸리티
-```
-
-**책임**:
-- Generic 데이터 container 제공
-- Serialization/deserialization 지원
-- 타입 안전 데이터 저장 활성화
-
-### logger_system (로깅)
-
-```
-logger_system/
-├── core/
-│   ├── logger.h                # Main logger 클래스
-│   ├── log_entry.h             # Log entry 구조
-│   └── log_level.h             # Log level 정의
-├── writers/
-│   ├── console_writer.h        # Console 출력
-│   ├── file_writer.h           # File 출력
-│   └── rotating_file_writer.h  # Rotating file 지원
-└── impl/
-    └── async/
-        └── batch_processor.h   # 비동기 배치 처리
-```
-
-**책임**:
-- ILogger 인터페이스 구현
-- 배치를 사용한 비동기 로깅 제공
-- 다중 출력 대상 지원
-
-### monitoring_system (메트릭)
-
-```
-monitoring_system/
-├── core/
-│   ├── performance_monitor.h   # Performance 모니터링
-│   ├── metrics_collector.h     # Metrics 수집
-│   └── health_monitor.h        # Health 체크
-└── interfaces/
-    └── monitoring_interface.h  # IMonitor 구현
-```
-
-**책임**:
-- IMonitor 인터페이스 구현
-- Metrics 수집 및 집계
-- Health 상태 모니터링 제공
-
-### database_system (영속성)
-
-```
-database_system/
-├── core/
-│   ├── database_manager.h      # Database 연결 관리
-│   ├── query_builder.h         # SQL query builder
-│   └── transaction.h           # Transaction 지원
-└── adapters/
-    ├── postgresql_adapter.h    # PostgreSQL 지원
-    ├── mysql_adapter.h         # MySQL 지원
-    └── mongodb_adapter.h       # MongoDB 지원
-```
-
-**책임**:
-- Database 추상화 레이어 제공
-- 다중 database 백엔드 지원
-- Transaction 관리 활성화
-
-### network_system (통신)
-
-```
-network_system/
-├── core/
-│   ├── messaging_server.h      # TCP server
-│   ├── messaging_client.h      # TCP client
-│   └── messaging_session.h     # Connection session
-├── integration/
-│   ├── logger_integration.h    # Logger 통합
-│   ├── thread_integration.h    # Thread pool 통합
-│   └── container_integration.h # Container 통합
-└── internal/
-    ├── tcp_socket.h            # Socket 추상화
-    └── pipeline.h              # Data pipeline
-```
-
-**책임**:
-- 비동기 TCP/IP 통신 제공
-- 동시 연결을 위한 thread_system 통합
-- 진단을 위한 logger_system 사용
+> **정식 출처**: 각 시스템의 `CMakeLists.txt` 헤더 코멘트가 정식 의존성 목록을 정의합니다.
+> 현재 세부 사항은 각 시스템 문서를 참조하세요:
+>
+> | 시스템 | 문서 |
+> |--------|------|
+> | [common_system](https://github.com/kcenon/common_system) | 기반 — 의존성 없음 |
+> | [thread_system](https://github.com/kcenon/thread_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
+> | [container_system](https://github.com/kcenon/container_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
+> | [logger_system](https://github.com/kcenon/logger_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
+> | [monitoring_system](https://github.com/kcenon/monitoring_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
+> | [database_system](https://github.com/kcenon/database_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
+> | [network_system](https://github.com/kcenon/network_system) | `CMakeLists.txt` 및 `docs/ARCHITECTURE.md` 참조 |
 
 ## 데이터 흐름 예제
 
