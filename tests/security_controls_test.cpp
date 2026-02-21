@@ -329,6 +329,230 @@ TEST_F(SystemBootstrapperAutoFreezeTest, AutoFreezeCanBeDisabled) {
 }
 
 // ============================================================================
+// registry_action to_string Tests (Issue #359)
+// ============================================================================
+
+TEST_F(RegistryAuditLogTest, ToStringAllRegistryActions) {
+    EXPECT_STREQ(to_string(registry_action::register_logger), "register_logger");
+    EXPECT_STREQ(to_string(registry_action::unregister_logger), "unregister_logger");
+    EXPECT_STREQ(to_string(registry_action::set_default_logger), "set_default_logger");
+    EXPECT_STREQ(to_string(registry_action::register_factory), "register_factory");
+    EXPECT_STREQ(to_string(registry_action::set_default_factory), "set_default_factory");
+    EXPECT_STREQ(to_string(registry_action::clear_loggers), "clear_loggers");
+    EXPECT_STREQ(to_string(registry_action::freeze_logger_registry), "freeze_logger_registry");
+    EXPECT_STREQ(to_string(registry_action::register_service), "register_service");
+    EXPECT_STREQ(to_string(registry_action::unregister_service), "unregister_service");
+    EXPECT_STREQ(to_string(registry_action::clear_services), "clear_services");
+    EXPECT_STREQ(to_string(registry_action::freeze_service_container), "freeze_service_container");
+}
+
+// ============================================================================
+// log_event Move Overload Tests (Issue #359)
+// ============================================================================
+
+TEST_F(RegistryAuditLogTest, LogEventMoveOverload) {
+    registry_event event(
+        registry_action::register_service,
+        "move-test-service",
+        interfaces::source_location::current(),
+        true
+    );
+
+    RegistryAuditLog::log_event(std::move(event));
+
+    auto events = RegistryAuditLog::get_events();
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].action, registry_action::register_service);
+    EXPECT_EQ(events[0].target_name, "move-test-service");
+    EXPECT_TRUE(events[0].success);
+}
+
+// ============================================================================
+// event_count Direct Verification Tests (Issue #359)
+// ============================================================================
+
+TEST_F(RegistryAuditLogTest, EventCountEmpty) {
+    EXPECT_EQ(RegistryAuditLog::event_count(), 0u);
+}
+
+TEST_F(RegistryAuditLogTest, EventCountAfterLogging) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "logger1"));
+    EXPECT_EQ(RegistryAuditLog::event_count(), 1u);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_service, "service1"));
+    EXPECT_EQ(RegistryAuditLog::event_count(), 2u);
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::clear_loggers, ""));
+    EXPECT_EQ(RegistryAuditLog::event_count(), 3u);
+}
+
+TEST_F(RegistryAuditLogTest, EventCountAfterClear) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "logger1"));
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "logger2"));
+    EXPECT_EQ(RegistryAuditLog::event_count(), 2u);
+
+    RegistryAuditLog::clear();
+    EXPECT_EQ(RegistryAuditLog::event_count(), 0u);
+}
+
+// ============================================================================
+// get_events_by_action for All Untested Action Types (Issue #359)
+// ============================================================================
+
+TEST_F(RegistryAuditLogTest, FilterByActionUnregisterLogger) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::unregister_logger, "old-logger"));
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "new-logger"));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::unregister_logger);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].target_name, "old-logger");
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionSetDefaultLogger) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::set_default_logger, "main-logger"));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::set_default_logger);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].target_name, "main-logger");
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionRegisterFactory) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_factory, "console-factory"));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::register_factory);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].target_name, "console-factory");
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionSetDefaultFactory) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::set_default_factory, "file-factory"));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::set_default_factory);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].target_name, "file-factory");
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionClearLoggers) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::clear_loggers, ""));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::clear_loggers);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_TRUE(events[0].target_name.empty());
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionFreezeLoggerRegistry) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::freeze_logger_registry, ""));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::freeze_logger_registry);
+    ASSERT_EQ(events.size(), 1);
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionUnregisterService) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::unregister_service, "old-service"));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::unregister_service);
+    ASSERT_EQ(events.size(), 1);
+    EXPECT_EQ(events[0].target_name, "old-service");
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionClearServices) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::clear_services, ""));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::clear_services);
+    ASSERT_EQ(events.size(), 1);
+}
+
+TEST_F(RegistryAuditLogTest, FilterByActionFreezeServiceContainer) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::freeze_service_container, ""));
+
+    auto events = RegistryAuditLog::get_events_by_action(
+        registry_action::freeze_service_container);
+    ASSERT_EQ(events.size(), 1);
+}
+
+// ============================================================================
+// get_events_in_range with Various Time Windows (Issue #359)
+// ============================================================================
+
+TEST_F(RegistryAuditLogTest, TimeRangeEmptyWindow) {
+    auto now = std::chrono::system_clock::now();
+    auto past = now - std::chrono::hours(1);
+
+    // Log event at current time
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "test"));
+
+    // Query a window entirely in the past
+    auto events = RegistryAuditLog::get_events_in_range(
+        past - std::chrono::hours(2), past);
+    EXPECT_TRUE(events.empty());
+}
+
+TEST_F(RegistryAuditLogTest, TimeRangeFutureWindow) {
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "test"));
+
+    auto future = std::chrono::system_clock::now() + std::chrono::hours(1);
+    auto far_future = future + std::chrono::hours(1);
+
+    auto events = RegistryAuditLog::get_events_in_range(future, far_future);
+    EXPECT_TRUE(events.empty());
+}
+
+TEST_F(RegistryAuditLogTest, TimeRangeMultipleEvents) {
+    auto before = std::chrono::system_clock::now();
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_logger, "first"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+    auto mid1 = std::chrono::system_clock::now();
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::register_service, "second"));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+    auto mid2 = std::chrono::system_clock::now();
+
+    RegistryAuditLog::log_event(registry_event(
+        registry_action::clear_loggers, "third"));
+
+    auto after = std::chrono::system_clock::now();
+
+    // Full window should capture all 3
+    auto all = RegistryAuditLog::get_events_in_range(before, after);
+    EXPECT_EQ(all.size(), 3u);
+
+    // Middle window should capture only the second event
+    auto middle = RegistryAuditLog::get_events_in_range(mid1, mid2);
+    ASSERT_EQ(middle.size(), 1u);
+    EXPECT_EQ(middle[0].target_name, "second");
+}
+
+// ============================================================================
 // Error Code Tests
 // ============================================================================
 
