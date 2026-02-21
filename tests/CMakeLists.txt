@@ -721,6 +721,27 @@ set_tests_properties(common_error_codes_test PROPERTIES
     LABELS "unit;error"
 )
 
+# Source location tests (Issue #359)
+add_executable(common_source_location_test
+    source_location_test.cpp
+)
+
+target_link_libraries(common_source_location_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_source_location_test PRIVATE cxx_std_17)
+
+add_test(NAME common_source_location_test COMMAND common_source_location_test)
+
+set_tests_properties(common_source_location_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;utils"
+)
+
 # Enable testing
 enable_testing()
 
@@ -774,6 +795,7 @@ set(COMMON_TEST_TARGETS
     common_database_interface_test
     common_failure_window_test
     common_error_codes_test
+    common_source_location_test
 )
 
 # Apply warning flags to all test targets

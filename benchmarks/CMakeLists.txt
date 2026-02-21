@@ -10,6 +10,10 @@ set(BENCHMARK_SOURCES
     result_benchmark.cpp
     event_bus_benchmark.cpp
     object_pool_benchmark.cpp
+    circular_buffer_benchmark.cpp
+    circuit_breaker_benchmark.cpp
+    service_container_benchmark.cpp
+    global_logger_registry_benchmark.cpp
 )
 
 # Create benchmark executable
