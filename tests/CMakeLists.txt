@@ -658,6 +658,69 @@ set_tests_properties(common_result_helpers_test PROPERTIES
     LABELS "unit;patterns"
 )
 
+# Database interface tests (Issue #358)
+add_executable(common_database_interface_test
+    database_interface_test.cpp
+)
+
+target_link_libraries(common_database_interface_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_database_interface_test PRIVATE cxx_std_17)
+
+add_test(NAME common_database_interface_test COMMAND common_database_interface_test)
+
+set_tests_properties(common_database_interface_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;interfaces;database"
+)
+
+# Failure window tests (Issue #358)
+add_executable(common_failure_window_test
+    failure_window_test.cpp
+)
+
+target_link_libraries(common_failure_window_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_failure_window_test PRIVATE cxx_std_17)
+
+add_test(NAME common_failure_window_test COMMAND common_failure_window_test)
+
+set_tests_properties(common_failure_window_test PROPERTIES
+    TIMEOUT 120
+    LABELS "unit;resilience"
+)
+
+# Error codes tests (Issue #358)
+add_executable(common_error_codes_test
+    error_codes_test.cpp
+)
+
+target_link_libraries(common_error_codes_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_error_codes_test PRIVATE cxx_std_17)
+
+add_test(NAME common_error_codes_test COMMAND common_error_codes_test)
+
+set_tests_properties(common_error_codes_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;error"
+)
+
 # Enable testing
 enable_testing()
 
@@ -708,6 +771,9 @@ set(COMMON_TEST_TARGETS
     common_circular_buffer_test
     common_object_pool_test
     common_result_helpers_test
+    common_database_interface_test
+    common_failure_window_test
+    common_error_codes_test
 )
 
 # Apply warning flags to all test targets
