@@ -2,41 +2,12 @@ name: Generate-Documentation
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  generate_docs:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v5
-      with:
-        submodules: false
-
-    - name: Install Doxygen and Graphviz
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y doxygen graphviz
-
-    - name: Build docs
-      run: doxygen Doxyfile
-
-    - name: Upload documentation
-      uses: actions/upload-artifact@v6
-      with:
-        name: documentation
-        path: documents/html/
-
-    - name: Deploy to GitHub Pages
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./documents/html
-        enable_jekyll: false
-        commit_message: "docs(gh-pages): update API docs via CI"
+  docs:
+    uses: kcenon/common_system/.github/workflows/doxygen.yml@main
+    secrets: inherit

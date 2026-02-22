@@ -1,0 +1,62 @@
+name: Doxygen Documentation
+
+on:
+  workflow_call:
+    inputs:
+      checkout-submodules:
+        description: 'Submodule checkout mode: false, true, or recursive'
+        required: false
+        type: string
+        default: 'false'
+      checkout-common-system:
+        description: 'Explicitly checkout kcenon/common_system as a dependency'
+        required: false
+        type: boolean
+        default: false
+      publish-dir:
+        description: 'Path to generated HTML output'
+        required: false
+        type: string
+        default: './documents/html'
+
+jobs:
+  generate-and-deploy:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: ${{ inputs.checkout-submodules }}
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout common_system dependency
+        if: ${{ inputs.checkout-common-system }}
+        uses: actions/checkout@v5
+        with:
+          repository: kcenon/common_system
+          path: common_system
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Doxygen and Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Generate documentation
+        run: doxygen Doxyfile
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ inputs.publish-dir }}
+          force_orphan: true
+          enable_jekyll: false
+          commit_message: 'docs(gh-pages): update API documentation [skip ci]'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
