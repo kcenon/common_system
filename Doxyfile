@@ -3,7 +3,7 @@
 PROJECT_NAME           = "common_system"
 PROJECT_NUMBER         = "1.0.0"
 PROJECT_BRIEF          = "Common interfaces and patterns for system integration"
-OUTPUT_DIRECTORY       = docs/api
+OUTPUT_DIRECTORY       = documents
 INPUT                  = include/kcenon/common
 FILE_PATTERNS          = *.h *.hpp *.cpp
 RECURSIVE              = YES
