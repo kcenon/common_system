@@ -247,7 +247,8 @@
 // Static Assertions for Minimum Requirements
 //==============================================================================
 
-// Ensure C++17 minimum
-static_assert(KCENON_HAS_CPP17,
-    "common_system requires C++17 or later. "
-    "Please compile with -std=c++17 or higher.");
+// Ensure C++20 minimum (required since v0.2.0 for concepts support)
+static_assert(KCENON_HAS_CPP20,
+    "common_system requires C++20 or later. "
+    "Please compile with -std=c++20 or higher. "
+    "Minimum compilers: GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+.");

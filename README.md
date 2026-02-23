@@ -64,8 +64,19 @@ auto result = load_config("app.conf")
 
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
-| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features required |
-| CMake | 3.20+ | Yes | Build system |
+| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features (concepts) |
+| CMake | 3.28+ | Yes | Build system |
+
+### Compiler Requirements
+
+common_system enforces minimum compiler versions at CMake configure time via
+`KcenonCompilerRequirements.cmake`. Downstream systems can include this module
+for consistent enforcement.
+
+| Build Mode | GCC | Clang | MSVC | Apple Clang |
+|------------|-----|-------|------|-------------|
+| **Header-only** (default) | 11+ | 14+ | 2022 (19.30+) | 14+ |
+| **C++20 Modules** (optional) | 14+ | 16+ | 2022 17.4 (19.34+) | Not supported |
 
 ### Dependency Flow
 
@@ -86,17 +97,19 @@ common_system (Foundation Layer - No Dependencies)
 
 When using multiple systems together, use the **highest** requirement from your dependency chain:
 
-| Usage Scenario | GCC | Clang | MSVC | Notes |
-|----------------|-----|-------|------|-------|
-| common_system only | 11+ | 14+ | 2022+ | Baseline |
-| + thread_system | **13+** | **17+** | 2022+ | Higher requirements |
-| + logger_system | 11+ | 14+ | 2022+ | Optional thread_system |
-| + container_system | 11+ | 14+ | 2022+ | Uses common_system |
-| + monitoring_system | **13+** | **17+** | 2022+ | Requires thread_system |
-| + database_system | **13+** | **17+** | 2022+ | Full ecosystem |
-| + network_system | **13+** | **17+** | 2022+ | Requires thread_system |
+| Usage Scenario | GCC | Clang | MSVC | Apple Clang | Notes |
+|----------------|-----|-------|------|-------------|-------|
+| common_system only | 11+ | 14+ | 2022+ | 14+ | Baseline |
+| + thread_system | **13+** | **17+** | 2022+ | 14+ | Higher requirements |
+| + logger_system | 11+ | 14+ | 2022+ | 14+ | Optional thread_system |
+| + container_system | 11+ | 14+ | 2022+ | 14+ | Uses common_system |
+| + monitoring_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
+| + database_system | **13+** | **17+** | 2022+ | 14+ | Full ecosystem |
+| + network_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
 
 > **Note**: If using any system that depends on thread_system, you need GCC 13+ or Clang 17+.
+> All systems can include `KcenonCompilerRequirements.cmake` from common_system for
+> automated version enforcement at configure time.
 
 ---
 
