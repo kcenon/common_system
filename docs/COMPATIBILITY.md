@@ -83,8 +83,8 @@ The foundation library with no external KCENON dependencies. All other systems d
 - C++20 concepts for type validation
 
 **External Dependencies:**
-- C++20 compiler (GCC 10+, Clang 12+, MSVC 19.29+)
-- CMake 3.16+
+- C++20 compiler (GCC 11+, Clang 14+, MSVC 19.30+ / VS 2022, Apple Clang 14+)
+- CMake 3.28+
 - (Optional) yaml-cpp for YAML configuration support
 - (Optional) GTest for testing
 

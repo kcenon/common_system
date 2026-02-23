@@ -44,6 +44,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Include feature flags configuration module
 include(cmake/features.cmake)
 
+# Include compiler requirements check
+include(cmake/KcenonCompilerRequirements.cmake)
+kcenon_check_compiler_requirements()
+
 # Options
 option(COMMON_BUILD_TESTS "Build unit tests for common_system" ON)
 option(COMMON_BUILD_INTEGRATION_TESTS "Build integration tests for common_system" ON)
@@ -168,10 +172,12 @@ if(COMMON_BUILD_MODULES)
     if(CMAKE_VERSION VERSION_LESS "3.28")
         message(WARNING "C++20 modules require CMake 3.28+. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
-    # Check for AppleClang (does not support module dependency scanning)
+    # Check compiler version requirements for modules
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
         message(WARNING "AppleClang does not support C++20 module dependency scanning. "
-                        "Use Clang 16+, GCC 14+, or MSVC 2022. Disabling module build.")
+                        "Use Clang ${KCENON_MIN_CLANG_MODULE_VERSION}+, "
+                        "GCC ${KCENON_MIN_GCC_MODULE_VERSION}+, or "
+                        "MSVC ${KCENON_MIN_MSVC_MODULE_VERSION}+. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
     # Check generator (modules require Ninja or Visual Studio 17.4+)
     elseif(NOT CMAKE_GENERATOR MATCHES "Ninja" AND NOT CMAKE_GENERATOR MATCHES "Visual Studio")
@@ -179,6 +185,8 @@ if(COMMON_BUILD_MODULES)
                         "Current generator: ${CMAKE_GENERATOR}. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
     else()
+        # Verify module-capable compiler version
+        kcenon_check_compiler_requirements(MODULES)
         message(STATUS "C++20 module build enabled")
 
         # Create module library target
@@ -280,6 +288,7 @@ install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/features.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KcenonCompilerRequirements.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
 )
 
