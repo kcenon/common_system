@@ -26,6 +26,7 @@
 
 #include "service_container.h"
 #include "../interfaces/logger_interface.h"
+#include "../concepts/service.h"
 #include "../config/feature_system_deps.h"
 
 #include <atomic>
@@ -34,6 +35,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <string_view>
 #include <vector>
 
 namespace kcenon::common {
@@ -75,6 +77,17 @@ struct bootstrapper_options {
  * Each hook receives the remaining timeout duration.
  */
 using shutdown_hook = std::function<void(std::chrono::milliseconds remaining_timeout)>;
+
+/**
+ * @brief Module registration callback type.
+ *
+ * Each subsystem module provides a registration function that registers
+ * its services with the service container. This replaces compile-time
+ * #ifdef guards with runtime module registration.
+ *
+ * @see ModuleRegistrar concept for class-based registrars.
+ */
+using module_registration_fn = std::function<VoidResult(IServiceContainer&)>;
 
 /**
  * @class unified_bootstrapper
@@ -233,6 +246,71 @@ public:
      */
     static bootstrapper_options get_options();
 
+    // ===== Module Registration =====
+
+    /**
+     * @brief Register a module's service registration function.
+     *
+     * Modules can be registered before or after initialization:
+     * - Before initialize(): stored and called during initialization
+     * - After initialize(): called immediately with the service container
+     *
+     * @param name Unique module name (e.g., "logger", "monitoring")
+     * @param fn Registration function that registers services with the container
+     * @return VoidResult indicating success or error
+     *
+     * Possible errors:
+     * - ALREADY_EXISTS: Module with this name already registered
+     */
+    static VoidResult register_module(
+        const std::string& name,
+        module_registration_fn fn);
+
+    /**
+     * @brief Register a class-based module registrar.
+     *
+     * Convenience overload that accepts any type satisfying the
+     * ModuleRegistrar concept.
+     *
+     * @tparam M Type satisfying concepts::ModuleRegistrar
+     * @param registrar Module registrar instance
+     * @return VoidResult indicating success or error
+     *
+     * @see concepts::ModuleRegistrar
+     */
+    template<typename M>
+        requires concepts::ModuleRegistrar<M>
+    static VoidResult register_module(M registrar);
+
+    /**
+     * @brief Unregister a module.
+     *
+     * Removes a module registration. Does not unregister services
+     * that were already registered with the container.
+     *
+     * @param name Name of the module to unregister
+     * @return VoidResult indicating success or error
+     *
+     * Possible errors:
+     * - NOT_FOUND: Module with this name not found
+     */
+    static VoidResult unregister_module(const std::string& name);
+
+    /**
+     * @brief Get list of registered module names.
+     *
+     * @return Vector of module names
+     */
+    static std::vector<std::string> registered_modules();
+
+    /**
+     * @brief Check if a module is registered.
+     *
+     * @param name Module name to check
+     * @return true if the module is registered
+     */
+    static bool is_module_registered(const std::string& name);
+
 private:
     /**
      * @brief Register core services that are always required.
@@ -276,6 +354,14 @@ private:
         shutdown_hook hook;
     };
     static std::vector<shutdown_hook_entry> shutdown_hooks_;
+
+    // Module registrations
+    struct module_entry {
+        std::string name;
+        module_registration_fn registration_fn;
+        bool services_registered = false;
+    };
+    static std::vector<module_entry> modules_;
 };
 
 // ============================================================================
@@ -288,6 +374,8 @@ inline std::mutex unified_bootstrapper::mutex_;
 inline bootstrapper_options unified_bootstrapper::options_;
 inline std::vector<unified_bootstrapper::shutdown_hook_entry>
     unified_bootstrapper::shutdown_hooks_;
+inline std::vector<unified_bootstrapper::module_entry>
+    unified_bootstrapper::modules_;
 
 inline VoidResult unified_bootstrapper::initialize(const bootstrapper_options& opts) {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -311,6 +399,10 @@ inline VoidResult unified_bootstrapper::initialize(const bootstrapper_options& o
     if (optional_result.is_err()) {
         // Cleanup on failure
         service_container::global().clear();
+        // Reset module registration flags so they can be retried
+        for (auto& module : modules_) {
+            module.services_registered = false;
+        }
         return optional_result;
     }
 
@@ -349,8 +441,9 @@ inline VoidResult unified_bootstrapper::shutdown(std::chrono::milliseconds timeo
     // Clear all services
     service_container::global().clear();
 
-    // Clear shutdown hooks
+    // Clear shutdown hooks and modules
     shutdown_hooks_.clear();
+    modules_.clear();
 
     // Reset state
     initialized_.store(false);
@@ -442,6 +535,94 @@ inline bootstrapper_options unified_bootstrapper::get_options() {
     return options_;
 }
 
+// ============================================================================
+// Module Registration Implementation
+// ============================================================================
+
+inline VoidResult unified_bootstrapper::register_module(
+    const std::string& name,
+    module_registration_fn fn) {
+
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    // Check for duplicate
+    for (const auto& entry : modules_) {
+        if (entry.name == name) {
+            return make_error<std::monostate>(
+                error_codes::ALREADY_EXISTS,
+                "Module already registered: " + name,
+                "di::unified_bootstrapper"
+            );
+        }
+    }
+
+    // If already initialized, register services immediately
+    if (initialized_.load()) {
+        auto& container = service_container::global();
+        auto result = fn(container);
+        if (!result.is_ok()) {
+            return result;
+        }
+        modules_.push_back({name, std::move(fn), true});
+    } else {
+        // Store for deferred registration during initialize()
+        modules_.push_back({name, std::move(fn), false});
+    }
+
+    return VoidResult::ok({});
+}
+
+template<typename M>
+    requires concepts::ModuleRegistrar<M>
+VoidResult unified_bootstrapper::register_module(M registrar) {
+    return register_module(
+        std::string(M::module_name()),
+        [r = std::move(registrar)](IServiceContainer& container) mutable {
+            return r.register_services(container);
+        }
+    );
+}
+
+inline VoidResult unified_bootstrapper::unregister_module(const std::string& name) {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto it = std::find_if(modules_.begin(), modules_.end(),
+        [&name](const module_entry& entry) {
+            return entry.name == name;
+        });
+
+    if (it == modules_.end()) {
+        return make_error<std::monostate>(
+            error_codes::NOT_FOUND,
+            "Module not found: " + name,
+            "di::unified_bootstrapper"
+        );
+    }
+
+    modules_.erase(it);
+    return VoidResult::ok({});
+}
+
+inline std::vector<std::string> unified_bootstrapper::registered_modules() {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    std::vector<std::string> names;
+    names.reserve(modules_.size());
+    for (const auto& entry : modules_) {
+        names.push_back(entry.name);
+    }
+    return names;
+}
+
+inline bool unified_bootstrapper::is_module_registered(const std::string& name) {
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    return std::find_if(modules_.begin(), modules_.end(),
+        [&name](const module_entry& entry) {
+            return entry.name == name;
+        }) != modules_.end();
+}
+
 inline VoidResult unified_bootstrapper::register_core_services() {
     // Core services are minimal and always registered
     // The service_container itself is already available via services()
@@ -466,71 +647,57 @@ inline VoidResult unified_bootstrapper::register_optional_services(
     // The registration is conditional based on:
     // 1. bootstrapper_options flags (enable_logging, etc.)
     // 2. Feature detection macros (KCENON_WITH_*_SYSTEM)
+    // 3. Dynamically registered modules via register_module()
 
-    // Service container for registering services
-    // Currently unused but will be needed when subsystem adapters are implemented
-    [[maybe_unused]] auto& container = service_container::global();
+    auto& container = service_container::global();
+
+    // --- Compile-time subsystem integration (legacy) ---
 
     // Logging services
     if (opts.enable_logging) {
 #if KCENON_WITH_LOGGER_SYSTEM
-        // When logger_system is available, its adapter will provide:
-        // namespace kcenon::logger::di {
-        //     VoidResult register_logger_services(service_container& container);
-        // }
-        // Example call: logger::di::register_logger_services(container);
-
-        // For now, gracefully skip if adapter not yet implemented
-        // This allows bootstrapper to work without requiring all subsystems
-#else
-        // Logger system not available - gracefully skip
-        // No error returned, allowing system to run without logging
+        // When logger_system is available and registered via register_module(),
+        // it will be handled below. The #ifdef path is kept for backward
+        // compatibility until all subsystems migrate to register_module().
 #endif
     }
 
     // Monitoring services
     if (opts.enable_monitoring) {
 #if KCENON_WITH_MONITORING_SYSTEM
-        // When monitoring_system is available, its adapter will provide:
-        // namespace kcenon::monitoring::di {
-        //     VoidResult register_monitoring_services(service_container& container);
-        // }
-        // Example call: monitoring::di::register_monitoring_services(container);
-
-        // For now, gracefully skip if adapter not yet implemented
-#else
-        // Monitoring system not available - gracefully skip
+        // Same as above - handled by register_module() when available.
 #endif
     }
 
     // Database services
     if (opts.enable_database) {
 #if KCENON_WITH_DATABASE_SYSTEM
-        // When database_system is available, its adapter will provide:
-        // namespace kcenon::database::di {
-        //     VoidResult register_database_services(service_container& container);
-        // }
-        // Example call: database::di::register_database_services(container);
-
-        // For now, gracefully skip if adapter not yet implemented
-#else
-        // Database system not available - gracefully skip
+        // Same as above - handled by register_module() when available.
 #endif
     }
 
     // Network services
     if (opts.enable_network) {
 #if KCENON_WITH_NETWORK_SYSTEM
-        // When network_system is available, its adapter will provide:
-        // namespace kcenon::network::di {
-        //     VoidResult register_network_services(service_container& container);
-        // }
-        // Example call: network::di::register_network_services(container);
-
-        // For now, gracefully skip if adapter not yet implemented
-#else
-        // Network system not available - gracefully skip
+        // Same as above - handled by register_module() when available.
 #endif
+    }
+
+    // --- Dynamic module registration ---
+    // Call registration functions for all modules registered before initialize()
+    for (auto& module : modules_) {
+        if (!module.services_registered) {
+            auto result = module.registration_fn(container);
+            if (!result.is_ok()) {
+                return make_error<std::monostate>(
+                    result.error().code,
+                    "Module '" + module.name + "' registration failed: "
+                        + result.error().message,
+                    "di::unified_bootstrapper"
+                );
+            }
+            module.services_registered = true;
+        }
     }
 
     return VoidResult::ok({});

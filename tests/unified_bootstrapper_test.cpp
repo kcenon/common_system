@@ -48,6 +48,10 @@ protected:
         if (unified_bootstrapper::is_initialized()) {
             unified_bootstrapper::shutdown();
         }
+        // Clean up any modules registered before initialization
+        for (const auto& name : unified_bootstrapper::registered_modules()) {
+            unified_bootstrapper::unregister_module(name);
+        }
     }
 };
 
@@ -454,4 +458,219 @@ TEST_F(UnifiedBootstrapperTest, IsShutdownRequested_ThreadSafe) {
     }
 
     EXPECT_TRUE(unified_bootstrapper::is_shutdown_requested());
+}
+
+// ============================================================================
+// Module Registration Tests
+// ============================================================================
+
+// Test module interface for concept verification
+class ITestModule {
+public:
+    virtual ~ITestModule() = default;
+    virtual std::string name() const = 0;
+};
+
+class TestModuleImpl : public ITestModule {
+public:
+    std::string name() const override { return "test_module"; }
+};
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_BeforeInitialize_Succeeds) {
+    bool registration_called = false;
+
+    auto result = unified_bootstrapper::register_module(
+        "test_module",
+        [&registration_called](di::IServiceContainer& container) -> VoidResult {
+            registration_called = true;
+            return container.register_type<ITestModule, TestModuleImpl>(
+                di::service_lifetime::singleton);
+        }
+    );
+
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_FALSE(registration_called);  // Not called yet
+
+    // Initialize triggers module registration
+    unified_bootstrapper::initialize();
+
+    EXPECT_TRUE(registration_called);
+    EXPECT_TRUE(unified_bootstrapper::services().is_registered<ITestModule>());
+}
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_AfterInitialize_RegistersImmediately) {
+    unified_bootstrapper::initialize();
+
+    bool registration_called = false;
+    auto result = unified_bootstrapper::register_module(
+        "late_module",
+        [&registration_called](di::IServiceContainer& container) -> VoidResult {
+            registration_called = true;
+            return container.register_type<ITestModule, TestModuleImpl>(
+                di::service_lifetime::singleton);
+        }
+    );
+
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_TRUE(registration_called);  // Called immediately
+    EXPECT_TRUE(unified_bootstrapper::services().is_registered<ITestModule>());
+}
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_Duplicate_Fails) {
+    auto result1 = unified_bootstrapper::register_module(
+        "my_module",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    auto result2 = unified_bootstrapper::register_module(
+        "my_module",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    EXPECT_TRUE(result1.is_ok());
+    EXPECT_TRUE(result2.is_err());
+    EXPECT_EQ(result2.error().code, error_codes::ALREADY_EXISTS);
+}
+
+TEST_F(UnifiedBootstrapperTest, UnregisterModule_Succeeds) {
+    unified_bootstrapper::register_module(
+        "removable_module",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    auto result = unified_bootstrapper::unregister_module("removable_module");
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_FALSE(unified_bootstrapper::is_module_registered("removable_module"));
+}
+
+TEST_F(UnifiedBootstrapperTest, UnregisterModule_NotFound_Fails) {
+    auto result = unified_bootstrapper::unregister_module("nonexistent");
+
+    EXPECT_TRUE(result.is_err());
+    EXPECT_EQ(result.error().code, error_codes::NOT_FOUND);
+}
+
+TEST_F(UnifiedBootstrapperTest, RegisteredModules_ReturnsNames) {
+    unified_bootstrapper::register_module(
+        "alpha",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    unified_bootstrapper::register_module(
+        "beta",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    auto modules = unified_bootstrapper::registered_modules();
+    ASSERT_EQ(modules.size(), 2u);
+    EXPECT_EQ(modules[0], "alpha");
+    EXPECT_EQ(modules[1], "beta");
+}
+
+TEST_F(UnifiedBootstrapperTest, IsModuleRegistered_ReturnsCorrectly) {
+    EXPECT_FALSE(unified_bootstrapper::is_module_registered("test"));
+
+    unified_bootstrapper::register_module(
+        "test",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    EXPECT_TRUE(unified_bootstrapper::is_module_registered("test"));
+}
+
+TEST_F(UnifiedBootstrapperTest, Shutdown_ClearsModules) {
+    unified_bootstrapper::register_module(
+        "temp_module",
+        [](di::IServiceContainer&) -> VoidResult { return VoidResult::ok({}); }
+    );
+
+    unified_bootstrapper::initialize();
+    unified_bootstrapper::shutdown();
+
+    EXPECT_FALSE(unified_bootstrapper::is_module_registered("temp_module"));
+    EXPECT_TRUE(unified_bootstrapper::registered_modules().empty());
+}
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_FailingRegistration_PropagatesError) {
+    unified_bootstrapper::register_module(
+        "failing_module",
+        [](di::IServiceContainer&) -> VoidResult {
+            return make_error<std::monostate>(
+                error_codes::INTERNAL_ERROR,
+                "Module init failed",
+                "test"
+            );
+        }
+    );
+
+    auto result = unified_bootstrapper::initialize();
+
+    EXPECT_TRUE(result.is_err());
+    EXPECT_NE(result.error().message.find("failing_module"), std::string::npos);
+}
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_MultipleModulesRegisteredInOrder) {
+    std::vector<std::string> order;
+
+    unified_bootstrapper::register_module(
+        "first",
+        [&order](di::IServiceContainer&) -> VoidResult {
+            order.push_back("first");
+            return VoidResult::ok({});
+        }
+    );
+
+    unified_bootstrapper::register_module(
+        "second",
+        [&order](di::IServiceContainer&) -> VoidResult {
+            order.push_back("second");
+            return VoidResult::ok({});
+        }
+    );
+
+    unified_bootstrapper::register_module(
+        "third",
+        [&order](di::IServiceContainer&) -> VoidResult {
+            order.push_back("third");
+            return VoidResult::ok({});
+        }
+    );
+
+    unified_bootstrapper::initialize();
+
+    ASSERT_EQ(order.size(), 3u);
+    EXPECT_EQ(order[0], "first");
+    EXPECT_EQ(order[1], "second");
+    EXPECT_EQ(order[2], "third");
+}
+
+// ============================================================================
+// ModuleRegistrar Concept Tests
+// ============================================================================
+
+// Class-based module registrar for concept testing
+class TestClassModule {
+public:
+    static constexpr std::string_view module_name() { return "class_module"; }
+
+    VoidResult register_services(di::IServiceContainer& container) {
+        return container.register_type<ITestModule, TestModuleImpl>(
+            di::service_lifetime::singleton);
+    }
+};
+
+// Compile-time concept verification
+static_assert(kcenon::common::concepts::ModuleRegistrar<TestClassModule>,
+              "TestClassModule should satisfy ModuleRegistrar concept");
+
+TEST_F(UnifiedBootstrapperTest, RegisterModule_ClassBased_Succeeds) {
+    TestClassModule module;
+    auto result = unified_bootstrapper::register_module(std::move(module));
+
+    EXPECT_TRUE(result.is_ok());
+    EXPECT_TRUE(unified_bootstrapper::is_module_registered("class_module"));
+
+    unified_bootstrapper::initialize();
+
+    EXPECT_TRUE(unified_bootstrapper::services().is_registered<ITestModule>());
 }

@@ -307,5 +307,42 @@ concept DisposableService = requires(T t) {
     { t.dispose() } -> std::same_as<void>;
 };
 
+/**
+ * @concept ModuleRegistrar
+ * @brief A class-based module registrar for ecosystem DI integration.
+ *
+ * Module registrars provide a standardized way for subsystem modules
+ * (logger_system, monitoring_system, etc.) to register their services
+ * with the service container.
+ *
+ * Registrars must provide:
+ * - A static module_name() returning the module identifier
+ * - A register_services() method that registers services with the container
+ *
+ * Example usage:
+ * @code
+ * class LoggerModule {
+ * public:
+ *     static constexpr std::string_view module_name() { return "logger"; }
+ *
+ *     VoidResult register_services(IServiceContainer& container) {
+ *         return container.register_factory<ILogger>(
+ *             [](IServiceContainer&) { return std::make_shared<ConsoleLogger>(); },
+ *             service_lifetime::singleton
+ *         );
+ *     }
+ * };
+ *
+ * static_assert(ModuleRegistrar<LoggerModule>);
+ * @endcode
+ *
+ * @see unified_bootstrapper.h for registration with the bootstrapper
+ */
+template<typename T>
+concept ModuleRegistrar = requires(T registrar, di::IServiceContainer& container) {
+    { T::module_name() } -> std::convertible_to<std::string_view>;
+    { registrar.register_services(container) };
+};
+
 } // namespace concepts
 } // namespace kcenon::common
