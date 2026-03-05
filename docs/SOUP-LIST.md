@@ -97,6 +97,7 @@ features.
 |-------|-------|
 | Name | MongoDB C++ Driver |
 | SPDX License | Apache-2.0 |
+| Minimum Version | 3.8.0 |
 | Projects | database_system (mongodb feature) |
 | Purpose | MongoDB database connectivity |
 | Linking | Dynamic |
@@ -110,7 +111,7 @@ features.
 |-------|-------|
 | Name | gRPC C++ |
 | SPDX License | Apache-2.0 |
-| Minimum Version | 1.50.0 (recommended) |
+| Minimum Version | 1.51.1 |
 | Projects | logger_system (otlp feature), monitoring_system (grpc feature) |
 | Purpose | High-performance RPC framework for telemetry export and monitoring |
 | Linking | Dynamic |
@@ -129,7 +130,7 @@ core operations.
 |-------|-------|
 | Name | {fmt} formatting library |
 | SPDX License | MIT |
-| Minimum Version | 10.0.0 (network, logger), 10.2.1 (database) |
+| Minimum Version | 10.0.0 (network, logger, container), 10.2.1 (database) |
 | Projects | network_system (core), database_system (core), logger_system (core), container_system (fmt-support feature) |
 | Purpose | String formatting |
 | Linking | Header-only or shared |
@@ -143,6 +144,7 @@ core operations.
 |-------|-------|
 | Name | zlib compression library |
 | SPDX License | Zlib |
+| Minimum Version | 1.3 (CVE-2023-45853 fix) |
 | Projects | network_system (core) |
 | Purpose | HTTP compression support |
 | Linking | Dynamic |
@@ -156,7 +158,7 @@ core operations.
 |-------|-------|
 | Name | Protocol Buffers |
 | SPDX License | BSD-3-Clause |
-| Minimum Version | 3.21.0 (recommended) |
+| Minimum Version | 3.21.0 |
 | Projects | logger_system (otlp feature), monitoring_system (grpc feature) |
 | Purpose | Serialization format for gRPC and telemetry |
 | Linking | Dynamic |
@@ -170,6 +172,7 @@ core operations.
 |-------|-------|
 | Name | SQLite |
 | SPDX License | Public Domain |
+| Minimum Version | 3.45.0 |
 | Projects | database_system (sqlite feature) |
 | Purpose | Embedded SQL database |
 | Linking | Static or dynamic |
@@ -183,6 +186,7 @@ core operations.
 |-------|-------|
 | Name | Hiredis |
 | SPDX License | BSD-3-Clause |
+| Minimum Version | 1.2.0 |
 | Projects | database_system (redis feature) |
 | Purpose | Redis client library |
 | Linking | Dynamic |
@@ -196,6 +200,7 @@ core operations.
 |-------|-------|
 | Name | OpenTelemetry C++ SDK |
 | SPDX License | Apache-2.0 |
+| Minimum Version | 1.14.0 |
 | Projects | logger_system (otlp feature) |
 | Purpose | Distributed tracing and metrics export via OTLP |
 | Linking | Dynamic |
@@ -268,7 +273,7 @@ Two SOUP items use LGPL-2.1 and require dynamic linking:
 | SOUP | Project | Compliance Mechanism |
 |------|---------|---------------------|
 | libiconv | thread_system | CMake build-time `get_target_property(TYPE)` check warns on static linking. macOS/glibc provide natively. Windows excluded. |
-| libmariadb | database_system | vcpkg default is shared library. Replaced GPL-2.0 libmysql in 2026-03. |
+| libmariadb | database_system | vcpkg triplet overlay forces dynamic linking. CMake build-time check + CI `ldd`/`otool -L` verification. Replaced GPL-2.0 libmysql in 2026-03. |
 
 **Policy**: LGPL-2.1 components must always be dynamically linked to preserve
 BSD-3-Clause licensing of kcenon code. Static linking would impose copyleft
