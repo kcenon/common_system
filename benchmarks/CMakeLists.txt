@@ -38,3 +38,12 @@ endif()
 
 # Register benchmark as a test (optional, for CI integration)
 add_test(NAME common_benchmarks COMMAND common_benchmarks --benchmark_format=console)
+
+# Ecosystem cross-system pipeline benchmarks (Phase 1-4, issue #365)
+# Requires Threads package; benchmarks all common_system interface boundaries
+find_package(Threads QUIET)
+if(Threads_FOUND)
+    add_subdirectory(ecosystem)
+else()
+    message(STATUS "Threads package not found, skipping ecosystem benchmarks")
+endif()

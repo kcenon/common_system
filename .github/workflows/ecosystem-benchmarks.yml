@@ -1,0 +1,163 @@
+name: Ecosystem Pipeline Benchmarks
+
+# Manual trigger only — ecosystem benchmarks are CPU-intensive (~5-10 min).
+# Run on demand to measure integration overhead and detect regressions > 10%.
+on:
+  workflow_dispatch:
+    inputs:
+      filter:
+        description: 'Benchmark filter (regex, default: all)'
+        required: false
+        default: 'BM_'
+      repetitions:
+        description: 'Number of repetitions per benchmark'
+        required: false
+        default: '3'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ecosystem-benchmark:
+    name: Run Ecosystem Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build g++ libbenchmark-dev
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+          -DCOMMON_BUILD_TESTS=OFF \
+          -DCOMMON_BUILD_EXAMPLES=OFF \
+          -DCOMMON_BUILD_BENCHMARKS=ON \
+          -DCOMMON_HEADER_ONLY=ON
+
+    - name: Build ecosystem benchmarks
+      run: cmake --build build --config Release --target ecosystem_benchmarks
+
+    - name: Run ecosystem benchmarks
+      run: |
+        ./build/benchmarks/ecosystem/ecosystem_benchmarks \
+          --benchmark_format=json \
+          --benchmark_out=ecosystem_benchmark_results.json \
+          --benchmark_filter="${{ github.event.inputs.filter || 'BM_' }}" \
+          --benchmark_repetitions=${{ github.event.inputs.repetitions || 3 }} \
+          --benchmark_report_aggregates_only=true \
+          --benchmark_counters_tabular=true
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v7
+      with:
+        name: ecosystem-benchmark-results-${{ github.run_number }}
+        path: ecosystem_benchmark_results.json
+        retention-days: 90
+
+    - name: Download baseline (if exists)
+      uses: dawidd6/action-download-artifact@v16
+      with:
+        workflow: ecosystem-benchmarks.yml
+        branch: main
+        name: ecosystem-benchmark-baseline
+        path: baseline
+      continue-on-error: true
+
+    - name: Compare with baseline and detect regressions
+      continue-on-error: true
+      run: |
+        if [ -f baseline/ecosystem_benchmark_results.json ]; then
+          echo "## Ecosystem Benchmark Comparison" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          python3 << 'EOF'
+        import json
+        import sys
+
+        REGRESSION_THRESHOLD = 0.10  # 10% regression threshold
+
+        try:
+            with open('baseline/ecosystem_benchmark_results.json', 'r') as f:
+                baseline = json.load(f)
+            with open('ecosystem_benchmark_results.json', 'r') as f:
+                current = json.load(f)
+
+            baseline_map = {b['name']: b for b in baseline.get('benchmarks', [])}
+            current_map  = {b['name']: b for b in current.get('benchmarks', [])}
+
+            skip_suffixes = ('_stddev', '_cv', '_median', '_min', '_max')
+            regressions, improvements, unchanged = [], [], []
+
+            for name, cur in current_map.items():
+                if any(name.endswith(s) for s in skip_suffixes):
+                    continue
+                if name not in baseline_map:
+                    continue
+
+                base_time = baseline_map[name].get('real_time', 0)
+                cur_time  = cur.get('real_time', 0)
+
+                if base_time <= 0:
+                    continue
+
+                pct = (cur_time - base_time) / base_time
+
+                entry = (name, base_time, cur_time, pct * 100)
+                if pct > REGRESSION_THRESHOLD:
+                    regressions.append(entry)
+                elif pct < -REGRESSION_THRESHOLD:
+                    improvements.append(entry)
+                else:
+                    unchanged.append(entry)
+
+            print("| Benchmark | Baseline (ns) | Current (ns) | Change |")
+            print("|-----------|---------------|--------------|--------|")
+
+            for name, bt, ct, pct in sorted(regressions, key=lambda x: -x[3]):
+                print(f"| `{name}` | {bt:.1f} | {ct:.1f} | :red_circle: +{pct:.1f}% |")
+
+            for name, bt, ct, pct in sorted(improvements, key=lambda x: x[3]):
+                print(f"| `{name}` | {bt:.1f} | {ct:.1f} | :green_circle: {pct:.1f}% |")
+
+            shown = 0
+            for name, bt, ct, pct in unchanged:
+                if shown >= 15:
+                    print(f"| *(and {len(unchanged) - shown} more within ±10%)* | | | |")
+                    break
+                print(f"| `{name}` | {bt:.1f} | {ct:.1f} | {pct:+.1f}% |")
+                shown += 1
+
+            print()
+            if regressions:
+                print(f":warning: **{len(regressions)} benchmark(s) regressed > 10%**")
+                print("Note: CI environment variance may cause false positives.")
+                sys.exit(1)
+            else:
+                print(f":white_check_mark: No regressions detected "
+                      f"({len(improvements)} improved, {len(unchanged)} stable)")
+        except FileNotFoundError:
+            print("Baseline not found, skipping comparison")
+        except json.JSONDecodeError as e:
+            print(f"JSON parse error: {e}")
+        EOF
+        else
+          echo "No baseline found — storing current results as new baseline." >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Store results as new baseline
+      uses: actions/upload-artifact@v7
+      with:
+        name: ecosystem-benchmark-baseline
+        path: ecosystem_benchmark_results.json
+        retention-days: 90
