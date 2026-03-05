@@ -3,5 +3,12 @@
   "default-registry": {
     "kind": "builtin",
     "baseline": "c4af3593e1f1aa9e14a560a09e45ea2cb0dfd74d"
-  }
+  },
+  "overrides": [
+    {
+      "name": "gtest",
+      "version": "1.14.0",
+      "port-version": 1
+    }
+  ]
 }
