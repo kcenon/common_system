@@ -47,6 +47,7 @@
 
 // Platform-specific includes
 #if defined(__linux__)
+#include <sys/eventfd.h>
 #include <sys/inotify.h>
 #include <unistd.h>
 #include <poll.h>
@@ -161,6 +162,7 @@ public:
 #if defined(__linux__)
         , inotify_fd_(-1)
         , watch_fd_(-1)
+        , shutdown_fd_(-1)
 #elif defined(__APPLE__) || defined(__FreeBSD__)
         , kqueue_fd_(-1)
         , file_fd_(-1)
@@ -228,11 +230,15 @@ public:
         running_.store(false);
 
         // Signal the watch thread to wake up
-        cleanup_platform_watcher();
+        signal_watcher_shutdown();
 
+        // Wait for the thread to exit before closing file descriptors
         if (watch_thread_.joinable()) {
             watch_thread_.join();
         }
+
+        // Thread has exited; safe to close platform resources
+        cleanup_platform_watcher();
     }
 
     /**
@@ -394,7 +400,26 @@ private:
     }
 
     /**
-     * @brief Cleanup platform-specific resources.
+     * @brief Signal the watch thread to wake up and exit.
+     */
+    void signal_watcher_shutdown() {
+#if defined(__linux__)
+        signal_eventfd();
+#elif defined(__APPLE__) || defined(__FreeBSD__)
+        // Closing kqueue wakes up kevent() with an error
+        int kq = kqueue_fd_.exchange(-1);
+        if (kq >= 0) {
+            close(kq);
+        }
+#elif defined(_WIN32)
+        if (dir_handle_ != INVALID_HANDLE_VALUE) {
+            CancelIo(dir_handle_);
+        }
+#endif
+    }
+
+    /**
+     * @brief Cleanup platform-specific resources (call after thread join).
      */
     void cleanup_platform_watcher() {
 #if defined(__linux__)
@@ -411,8 +436,19 @@ private:
      * @brief Initialize inotify for Linux.
      */
     VoidResult init_inotify() {
+        shutdown_fd_ = eventfd(0, EFD_NONBLOCK);
+        if (shutdown_fd_ < 0) {
+            return make_error<std::monostate>(
+                watcher_error_codes::watch_failed,
+                "Failed to create eventfd: " + std::string(strerror(errno)),
+                "config_watcher"
+            );
+        }
+
         int ifd = inotify_init1(IN_NONBLOCK);
         if (ifd < 0) {
+            close(shutdown_fd_);
+            shutdown_fd_ = -1;
             return make_error<std::monostate>(
                 watcher_error_codes::watch_failed,
                 "Failed to initialize inotify: " + std::string(strerror(errno)),
@@ -431,6 +467,8 @@ private:
                                     IN_MODIFY | IN_CREATE | IN_MOVED_TO | IN_CLOSE_WRITE);
         if (wfd < 0) {
             close(ifd);
+            close(shutdown_fd_);
+            shutdown_fd_ = -1;
             return make_error<std::monostate>(
                 watcher_error_codes::watch_failed,
                 "Failed to add inotify watch: " + std::string(strerror(errno)),
@@ -443,6 +481,13 @@ private:
         return VoidResult::ok({});
     }
 
+    void signal_eventfd() {
+        if (shutdown_fd_ >= 0) {
+            uint64_t val = 1;
+            [[maybe_unused]] auto unused = write(shutdown_fd_, &val, sizeof(val));
+        }
+    }
+
     void cleanup_inotify() {
         int wfd = watch_fd_.exchange(-1);
         int ifd = inotify_fd_.exchange(-1);
@@ -451,6 +496,10 @@ private:
         }
         if (ifd >= 0) {
             close(ifd);
+        }
+        if (shutdown_fd_ >= 0) {
+            close(shutdown_fd_);
+            shutdown_fd_ = -1;
         }
     }
 
@@ -465,8 +514,11 @@ private:
             int ifd = inotify_fd_.load();
             if (ifd < 0) break;
 
-            struct pollfd pfd = {ifd, POLLIN, 0};
-            int ret = poll(&pfd, 1, 500);  // 500ms timeout
+            struct pollfd pfds[2] = {
+                {ifd, POLLIN, 0},
+                {shutdown_fd_, POLLIN, 0}
+            };
+            int ret = poll(pfds, 2, 500);  // 500ms timeout
 
             if (ret < 0) {
                 if (errno == EINTR) continue;
@@ -474,6 +526,11 @@ private:
             }
 
             if (ret == 0) continue;  // Timeout
+
+            // Check shutdown signal first
+            if (pfds[1].revents & POLLIN) break;
+
+            if (!(pfds[0].revents & POLLIN)) continue;
 
             ssize_t len = read(ifd, buffer, EVENT_BUF_LEN);
             if (len < 0) {
@@ -564,12 +621,12 @@ private:
     }
 
     void cleanup_kqueue() {
-        // Only close kqueue to signal the watch thread to exit
-        // The watch thread will handle file_fd_ cleanup
+        // Close kqueue fd if not already closed by signal_watcher_shutdown()
         int kq = kqueue_fd_.exchange(-1);
         if (kq >= 0) {
             close(kq);
         }
+        // file_fd_ is cleaned up by watch_loop_kqueue() on exit
     }
 
     void watch_loop_kqueue() {
@@ -982,6 +1039,7 @@ private:
 #if defined(__linux__)
     std::atomic<int> inotify_fd_;
     std::atomic<int> watch_fd_;
+    int shutdown_fd_;
 #elif defined(__APPLE__) || defined(__FreeBSD__)
     std::atomic<int> kqueue_fd_;
     int file_fd_;
