@@ -411,8 +411,8 @@ private:
      * @brief Initialize inotify for Linux.
      */
     VoidResult init_inotify() {
-        inotify_fd_ = inotify_init1(IN_NONBLOCK);
-        if (inotify_fd_ < 0) {
+        int ifd = inotify_init1(IN_NONBLOCK);
+        if (ifd < 0) {
             return make_error<std::monostate>(
                 watcher_error_codes::watch_failed,
                 "Failed to initialize inotify: " + std::string(strerror(errno)),
@@ -427,11 +427,10 @@ private:
             dir_path = ".";
         }
 
-        watch_fd_ = inotify_add_watch(inotify_fd_, dir_path.c_str(),
-                                      IN_MODIFY | IN_CREATE | IN_MOVED_TO | IN_CLOSE_WRITE);
-        if (watch_fd_ < 0) {
-            close(inotify_fd_);
-            inotify_fd_ = -1;
+        int wfd = inotify_add_watch(ifd, dir_path.c_str(),
+                                    IN_MODIFY | IN_CREATE | IN_MOVED_TO | IN_CLOSE_WRITE);
+        if (wfd < 0) {
+            close(ifd);
             return make_error<std::monostate>(
                 watcher_error_codes::watch_failed,
                 "Failed to add inotify watch: " + std::string(strerror(errno)),
@@ -439,17 +438,19 @@ private:
             );
         }
 
+        inotify_fd_.store(ifd);
+        watch_fd_.store(wfd);
         return VoidResult::ok({});
     }
 
     void cleanup_inotify() {
-        if (watch_fd_ >= 0) {
-            inotify_rm_watch(inotify_fd_, watch_fd_);
-            watch_fd_ = -1;
+        int wfd = watch_fd_.exchange(-1);
+        int ifd = inotify_fd_.exchange(-1);
+        if (wfd >= 0 && ifd >= 0) {
+            inotify_rm_watch(ifd, wfd);
         }
-        if (inotify_fd_ >= 0) {
-            close(inotify_fd_);
-            inotify_fd_ = -1;
+        if (ifd >= 0) {
+            close(ifd);
         }
     }
 
@@ -461,7 +462,10 @@ private:
         alignas(struct inotify_event) char buffer[EVENT_BUF_LEN];
 
         while (running_.load()) {
-            struct pollfd pfd = {inotify_fd_, POLLIN, 0};
+            int ifd = inotify_fd_.load();
+            if (ifd < 0) break;
+
+            struct pollfd pfd = {ifd, POLLIN, 0};
             int ret = poll(&pfd, 1, 500);  // 500ms timeout
 
             if (ret < 0) {
@@ -471,7 +475,7 @@ private:
 
             if (ret == 0) continue;  // Timeout
 
-            ssize_t len = read(inotify_fd_, buffer, EVENT_BUF_LEN);
+            ssize_t len = read(ifd, buffer, EVENT_BUF_LEN);
             if (len < 0) {
                 if (errno == EAGAIN || errno == EINTR) continue;
                 break;
@@ -976,8 +980,8 @@ private:
 
     // Platform-specific handles
 #if defined(__linux__)
-    int inotify_fd_;
-    int watch_fd_;
+    std::atomic<int> inotify_fd_;
+    std::atomic<int> watch_fd_;
 #elif defined(__APPLE__) || defined(__FreeBSD__)
     std::atomic<int> kqueue_fd_;
     int file_fd_;
