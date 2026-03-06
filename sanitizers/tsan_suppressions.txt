@@ -1,0 +1,12 @@
+# ThreadSanitizer suppression file for common_system
+# See: https://clang.llvm.org/docs/ThreadSanitizer.html#has-tsan-suppressions
+#
+# Each entry suppresses a known pre-existing data race.
+# These should be removed as the underlying issues are fixed.
+
+# Data race in config_watcher inotify fd access between
+# cleanup_inotify() (main thread) and watch_loop_linux() (watcher thread).
+# The inotify_fd_ member is accessed without synchronization.
+# Follow-up: https://github.com/kcenon/common_system/issues/397
+race:kcenon::common::config::config_watcher::cleanup_inotify
+race:kcenon::common::config::config_watcher::watch_loop_linux
