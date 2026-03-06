@@ -8,6 +8,10 @@
   "license": "BSD-3-Clause",
   "supports": "!(uwp | xbox)",
   "dependencies": [],
+  "overrides": [
+    { "name": "gtest", "version": "1.14.0" },
+    { "name": "benchmark", "version": "1.8.3" }
+  ],
   "features": {
     "testing": {
       "description": "Build unit tests and benchmarks",
