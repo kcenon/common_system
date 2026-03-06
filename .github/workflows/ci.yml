@@ -100,7 +100,7 @@ jobs:
           build/CMakeFiles/*.log
           build/Testing/Temporary/
 
-  # Phase 0: Sanitizer builds (warnings allowed at this phase)
+  # Phase 1: Sanitizer builds (failures block merge)
   sanitizer:
     name: Sanitizer / ${{ matrix.sanitizer }}
     runs-on: ubuntu-22.04
@@ -139,10 +139,9 @@ jobs:
     - name: Run tests with sanitizer
       run: |
         cd build
-        # Phase 0: Allow failures, just collect data
         ASAN_OPTIONS=detect_leaks=1 \
         UBSAN_OPTIONS=print_stacktrace=1 \
-        ctest -C Debug --output-on-failure --verbose || true
+        ctest -C Debug --output-on-failure --verbose
 
     - name: Upload sanitizer results
       if: always()
