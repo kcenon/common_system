@@ -1,0 +1,156 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: Validate / ${{ matrix.os }} / ${{ matrix.compiler }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            compiler: gcc
+          - os: macos-latest
+            compiler: clang
+          - os: windows-2022
+            compiler: msvc
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++ clang libgtest-dev libgmock-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja googletest
+
+      - name: Set up compiler (GCC)
+        if: matrix.compiler == 'gcc'
+        run: |
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
+
+      - name: Set up compiler (Clang - macOS)
+        if: matrix.compiler == 'clang'
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+
+      - name: Set up compiler (MSVC)
+        if: matrix.compiler == 'msvc'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Verify version consistency
+        shell: bash
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          CMAKE_VERSION=$(grep -m1 'project(common_system VERSION' CMakeLists.txt | \
+            sed -E 's/.*VERSION ([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          VCPKG_VERSION=$(grep '"version"' vcpkg.json | head -1 | \
+            sed -E 's/.*"version": "([^"]+)".*/\1/')
+
+          echo "Tag version:    $TAG_VERSION"
+          echo "CMake version:  $CMAKE_VERSION"
+          echo "vcpkg version:  $VCPKG_VERSION"
+
+          if [[ "$TAG_VERSION" != "$CMAKE_VERSION" ]]; then
+            echo "ERROR: Tag version ($TAG_VERSION) does not match CMakeLists.txt ($CMAKE_VERSION)"
+            exit 1
+          fi
+          if [[ "$TAG_VERSION" != "$VCPKG_VERSION" ]]; then
+            echo "ERROR: Tag version ($TAG_VERSION) does not match vcpkg.json ($VCPKG_VERSION)"
+            exit 1
+          fi
+          echo "Version consistency check passed: $TAG_VERSION"
+
+      - name: Configure CMake (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCOMMON_BUILD_TESTS=ON \
+            -DCOMMON_BUILD_EXAMPLES=ON \
+            -DCOMMON_HEADER_ONLY=ON
+
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cmake -B build -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCOMMON_BUILD_TESTS=ON `
+            -DCOMMON_BUILD_EXAMPLES=ON `
+            -DCOMMON_HEADER_ONLY=ON
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd build
+          ctest -C Release --output-on-failure --verbose
+
+  publish:
+    name: Publish Release
+    needs: validate
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "common_system ${{ github.ref_name }}"
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          body: |
+            ## common_system ${{ github.ref_name }}
+
+            Foundation library for the unified_system ecosystem.
+
+            ### Installation
+
+            **vcpkg overlay port** — reference this tag in your overlay:
+            ```
+            "version": "${{ steps.version.outputs.version }}"
+            ```
+
+            **CMake FetchContent** — pin to this release:
+            ```cmake
+            FetchContent_Declare(
+              common_system
+              GIT_REPOSITORY https://github.com/kcenon/common_system.git
+              GIT_TAG        ${{ github.ref_name }}
+            )
+            ```
+
+            ---
+            *Full changelog generated below from conventional commits.*
