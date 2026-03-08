@@ -34,7 +34,8 @@ include(FetchContent)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG main
+    GIT_TAG v0.1.0  # Pin to a specific release tag; do NOT use main
+    GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(common_system)
 
