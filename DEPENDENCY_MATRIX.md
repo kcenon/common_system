@@ -150,12 +150,31 @@ All dependencies are compatible with the project's BSD-3-Clause license.
 | Public Domain | sqlite3 | Yes | No restrictions |
 | PostgreSQL | libpq | Yes | BSD-family |
 
+## Internal Ecosystem Version Pinning
+
+Pinned versions of internal ecosystem libraries used by downstream consumers.
+All references must use tagged versions — never `main` branch. See [VERSIONING.md](./VERSIONING.md).
+
+| Library | Latest Release | FetchContent GIT_TAG | vcpkg REF |
+|---------|---------------|----------------------|-----------|
+| common_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| thread_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| container_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| logger_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| monitoring_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| database_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| network_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+
+> Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
+> Tracking issue: [#401](https://github.com/kcenon/common_system/issues/401)
+
 ## Maintenance
 
 This matrix should be updated when:
 - A dependency version is added, changed, or removed in any system's `vcpkg.json`
 - A new system is added to the ecosystem
 - A version discrepancy is resolved
+- An internal ecosystem library publishes a new tagged release
 
 ---
 
