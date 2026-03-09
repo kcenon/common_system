@@ -106,22 +106,25 @@ TEST(FailureWindowTest, ExpiryDiscardsOldFailures)
 }
 
 // Test partial expiry: only old failures are removed
+// Uses wide timing margins to avoid flaky failures on CI runners
+// where sleep_for() can overshoot by 100-200ms due to scheduling.
 TEST(FailureWindowTest, PartialExpiry)
 {
-    failure_window window(std::chrono::milliseconds(200));
+    failure_window window(std::chrono::milliseconds(800));
 
-    // Record initial failures
+    // Record initial failures (at T=0)
     window.record_failure();
     window.record_failure();
 
-    // Wait for partial expiry
-    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    // Wait 500ms so initial failures age significantly (T≈500)
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    // Record new failure (within window)
+    // Record new failure within the 800ms window (at T≈500)
     window.record_failure();
 
-    // Wait for initial failures to expire but new one to remain
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    // Wait 400ms more (T≈900): initial failures are ~900ms old (> 800ms window),
+    // but the recent failure is only ~400ms old (< 800ms window)
+    std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
     // Only the recent failure should remain
     EXPECT_EQ(window.get_failure_count(), 1u);
