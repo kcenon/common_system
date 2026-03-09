@@ -122,14 +122,10 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/kcenon/common_system.git
   GIT_TAG        v0.1.0
 )
-
-# Avoid — non-reproducible
-FetchContent_Declare(
-  common_system
-  GIT_REPOSITORY https://github.com/kcenon/common_system.git
-  GIT_TAG        main
-)
 ```
+
+Avoid floating refs such as branch names in production or CI configurations,
+because they make builds non-reproducible.
 
 ### vcpkg Overlay Port
 
