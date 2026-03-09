@@ -16,7 +16,7 @@ does not use that dependency.
 |-----------|---------|:------:|:------:|:------:|:---------:|:----------:|:--------:|:-------:|:------------------:|
 | GTest | BSD-3-Clause | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | **1.14.0** |
 | Benchmark | Apache-2.0 | 1.8.3 | 1.8.3 | 1.8.3 | 1.8.3 | — | 1.8.3 | 1.8.3 | **1.8.3** |
-| fmt | MIT | — | — | 10.2.1 | 10.2.1 | — | 10.2.1 | 10.2.1 | **10.2.1** (migrate to std::format) |
+| fmt | MIT | — | — | 10.2.1 | 10.2.1 | — | 10.2.1 | 10.2.1 | ~~**10.2.1**~~ (removing — see [#406](https://github.com/kcenon/common_system/issues/406)) |
 | ASIO | BSL-1.0 | — | — | — | — | — | 1.30.2 | 1.30.2 | **1.30.2** |
 | OpenSSL | Apache-2.0 | — | — | 3.3.0 | — | — | 3.3.0 | 3.3.0 | **3.3.0** |
 | zlib | zlib | — | — | — | — | — | — | 1.3.1 | **1.3.1** |
@@ -98,7 +98,7 @@ Issues identified during SBOM analysis that require resolution.
 | gRPC minimum differs in network_system | network_system requires >= 1.50.0, ecosystem standard is 1.51.1 | [network_system#792](https://github.com/kcenon/network_system/issues/792) |
 | ASIO minimum differs in database_system | database_system requires >= 1.29.0, override is 1.30.2 | [database_system#400](https://github.com/kcenon/database_system/issues/400) |
 | OpenSSL minimum differs in database_system | database_system requires >= 3.0.0, ecosystem standard is 3.3.0 | [database_system#402](https://github.com/kcenon/database_system/issues/402) |
-| fmt planned for removal | thread_system completed migration to std::format; 3 systems remain | [logger#457](https://github.com/kcenon/logger_system/issues/457), [database#399](https://github.com/kcenon/database_system/issues/399), [network#791](https://github.com/kcenon/network_system/issues/791) |
+| fmt planned for removal | thread_system completed migration to std::format; 3 systems remain | Epic: [#406](https://github.com/kcenon/common_system/issues/406) · [logger#457](https://github.com/kcenon/logger_system/issues/457) · [database#399](https://github.com/kcenon/database_system/issues/399) · [network#791](https://github.com/kcenon/network_system/issues/791) |
 | vcpkg baseline differs in thread_system | thread_system uses different vcpkg-configuration.json baseline | — |
 
 ## Ecosystem Internal Dependencies
