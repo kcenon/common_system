@@ -15,9 +15,9 @@ must be license-compatible with BSD-3-Clause.
 |---------|-----------|-----------|---------------|
 | common_system | kcenon/common_system | None | gtest, benchmark |
 | thread_system | kcenon/thread_system | libiconv | spdlog, gtest, benchmark |
-| network_system | kcenon/network_system | asio, ~~fmt~~†, zlib | openssl, gtest, benchmark |
+| network_system | kcenon/network_system | asio, ~~fmt~~†, zlib | openssl, grpc, protobuf, gtest, benchmark |
 | logger_system | kcenon/logger_system | ~~fmt~~† | openssl, spdlog, opentelemetry-cpp, protobuf, grpc, gtest, benchmark |
-| container_system | kcenon/container_system | None | ~~fmt~~†, gtest, benchmark |
+| container_system | kcenon/container_system | None | grpc, protobuf, ~~fmt~~†, gtest, benchmark |
 | database_system | kcenon/database_system | ~~fmt~~†, asio | libmariadb, libpq, libpqxx, sqlite3, mongo-cxx-driver, hiredis, openssl, spdlog, gtest, benchmark |
 | monitoring_system | kcenon/monitoring_system | None | grpc, protobuf, gtest |
 
@@ -107,6 +107,7 @@ features.
 | BSD-3 Compatible | Yes |
 | Risk Classification | **High** |
 | Anomaly Impact | Database connection failure → data unavailability |
+| Notes | Pulls in libbson 1.26.2 and mongo-c-driver 1.26.2 transitively. mongo-c-driver further depends on zlib and OpenSSL on non-Windows/non-Apple builds. |
 
 #### gRPC
 
@@ -115,12 +116,13 @@ features.
 | Name | gRPC C++ |
 | SPDX License | Apache-2.0 |
 | Minimum Version | 1.51.1 |
-| Projects | logger_system (otlp feature), monitoring_system (grpc feature) |
-| Purpose | High-performance RPC framework for telemetry export and monitoring |
+| Projects | container_system (grpc module), logger_system (otlp feature), monitoring_system (grpc feature), network_system (network-grpc / official gRPC mode) |
+| Purpose | High-performance RPC framework for container RPC, telemetry export, and monitoring |
 | Linking | Dynamic |
 | BSD-3 Compatible | Yes |
 | Risk Classification | **High** |
 | Anomaly Impact | Telemetry/monitoring data loss; observability degradation |
+| Notes | Pulls in protobuf, OpenSSL, and zlib directly plus abseil 20240116.1, c-ares 1.28.1, re2 2024-04-01, and upb 2022-06-21 transitively from the pinned vcpkg baseline. |
 
 ### Medium Risk
 
@@ -166,8 +168,8 @@ core operations.
 | Name | Protocol Buffers |
 | SPDX License | BSD-3-Clause |
 | Minimum Version | 3.21.0 |
-| Projects | logger_system (otlp feature), monitoring_system (grpc feature) |
-| Purpose | Serialization format for gRPC and telemetry |
+| Projects | container_system (grpc module), logger_system (otlp feature), monitoring_system (grpc feature), network_system (network-grpc / official gRPC mode) |
+| Purpose | Serialization format for container RPC, gRPC, and telemetry |
 | Linking | Dynamic |
 | BSD-3 Compatible | Yes |
 | Risk Classification | **Medium** |
@@ -214,6 +216,31 @@ core operations.
 | BSD-3 Compatible | Yes |
 | Risk Classification | **Medium** |
 | Anomaly Impact | Observability data loss; no impact on core functionality |
+| Notes | Base port depends on abseil 20240116.1 and nlohmann-json 3.11.3. The logger_system otlp-http feature also pulls in curl 8.7.1, while otlp-grpc reuses the gRPC dependency chain documented above. |
+
+### Verified Transitive Dependencies
+
+These packages are not declared directly in the affected ecosystem manifests, but
+they are pulled in through pinned third-party ports at the shared vcpkg baseline
+`c4af3593e1f1aa9e14a560a09e45ea2cb0dfd74d`. Direct SOUP entries already cataloged
+above (for example `protobuf`, `openssl`, and `zlib`) are not duplicated here.
+
+| Dependency | Resolved Version | SPDX License | Transitive Source | Projects | Purpose | BSD-3 Compatible |
+|------------|------------------|--------------|-------------------|----------|---------|------------------|
+| abseil | 20240116.1 | Apache-2.0 | gRPC 1.51.1; opentelemetry-cpp 1.14.2 | container_system, logger_system, monitoring_system, network_system | Common utility layer used by gRPC and OpenTelemetry C++ | Yes |
+| c-ares | 1.28.1 | MIT-CMU | gRPC 1.51.1 | container_system, logger_system, monitoring_system, network_system | Async DNS resolver used by gRPC | Yes |
+| re2 | 2024-04-01 | BSD-3-Clause | gRPC 1.51.1 | container_system, logger_system, monitoring_system, network_system | Regular expression engine used by gRPC | Yes |
+| upb | 2022-06-21 | BSD-2-Clause | gRPC 1.51.1 | container_system, logger_system, monitoring_system, network_system | Lightweight protobuf runtime/code generator used by gRPC | Yes |
+| nlohmann-json | 3.11.3 | MIT | opentelemetry-cpp 1.14.2 | logger_system | JSON serialization support for OTLP exporters | Yes |
+| curl | 8.7.1 | curl AND ISC AND BSD-3-Clause | opentelemetry-cpp 1.14.2 (`otlp-http`) | logger_system | HTTP transport for OTLP export | Yes |
+| mongo-c-driver | 1.26.2 | Apache-2.0 | mongo-cxx-driver 3.10.1 | database_system | C driver layer underlying mongocxx | Yes |
+| libbson | 1.26.2 | Apache-2.0 | mongo-cxx-driver 3.10.1; mongo-c-driver 1.26.2 | database_system | BSON parsing and encoding layer used by the MongoDB drivers | Yes |
+
+Compatibility notes:
+
+- `curl` uses a permissive composite license expression and remains BSD-3-Clause compatible.
+- `mongo-c-driver` and `libbson` use the upstream Apache-2.0 `COPYING` file in the MongoDB C driver repository.
+- `upb` resolves to BSD-2-Clause at the pinned baseline, which is permissive and BSD-3-Clause compatible.
 
 ### Low Risk
 
@@ -307,14 +334,15 @@ obligations on the entire project.
 
 | Field | Value |
 |-------|-------|
-| Last Review | 2026-03-06 |
-| Next Review | 2026-06-06 |
+| Last Review | 2026-03-09 |
+| Next Review | 2026-06-09 |
 | Review Cadence | Quarterly |
 | Responsible | Backend Developer |
 
 ### Review Checklist
 
 - [ ] Verify all vcpkg.json dependencies are listed
+- [ ] Verify transitive chains for gRPC, OpenTelemetry OTLP, and mongo-cxx-driver against the pinned vcpkg baseline
 - [ ] Confirm version constraints match actual vcpkg.json contents
 - [ ] Check for new CVEs against listed SOUP versions
 - [ ] Validate LGPL dynamic linking compliance
@@ -322,4 +350,4 @@ obligations on the entire project.
 
 ---
 
-*Last Updated: 2026-03-06*
+*Last Updated: 2026-03-09*
