@@ -123,34 +123,68 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
+      - name: Find previous tag
+        id: previous_tag
+        shell: bash
+        run: |
+          previous_tag=$(git describe --tags --abbrev=0 "${GITHUB_SHA}^" 2>/dev/null || true)
+          echo "tag=$previous_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog from conventional commits
+        id: changelog
+        if: steps.previous_tag.outputs.tag != ''
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          fromTag: ${{ github.ref_name }}
+          toTag: ${{ steps.previous_tag.outputs.tag }}
+          writeToFile: false
+          useGitmojis: false
+
+      - name: Build release notes
+        shell: bash
+        env:
+          PREVIOUS_TAG: ${{ steps.previous_tag.outputs.tag }}
+          CHANGELOG: ${{ steps.changelog.outputs.changes }}
+        run: |
+          cat <<EOF > RELEASE_NOTES.md
+          ## common_system ${GITHUB_REF_NAME}
+
+          Foundation library for the unified_system ecosystem.
+
+          ### Installation
+
+          **vcpkg overlay port** — reference this tag in your overlay:
+          ```
+          "version": "${{ steps.version.outputs.version }}"
+          ```
+
+          **CMake FetchContent** — pin to this release:
+          ```cmake
+          FetchContent_Declare(
+            common_system
+            GIT_REPOSITORY https://github.com/kcenon/common_system.git
+            GIT_TAG        ${GITHUB_REF_NAME}
+          )
+          ```
+          EOF
+
+          {
+            echo
+            echo "## Changelog"
+            echo
+            if [[ -n "$PREVIOUS_TAG" ]]; then
+              printf '%s\n' "$CHANGELOG"
+            else
+              echo "Initial release."
+            fi
+          } >> RELEASE_NOTES.md
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: "common_system ${{ github.ref_name }}"
-          generate_release_notes: true
+          body_path: RELEASE_NOTES.md
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
-          body: |
-            ## common_system ${{ github.ref_name }}
-
-            Foundation library for the unified_system ecosystem.
-
-            ### Installation
-
-            **vcpkg overlay port** — reference this tag in your overlay:
-            ```
-            "version": "${{ steps.version.outputs.version }}"
-            ```
-
-            **CMake FetchContent** — pin to this release:
-            ```cmake
-            FetchContent_Declare(
-              common_system
-              GIT_REPOSITORY https://github.com/kcenon/common_system.git
-              GIT_TAG        ${{ github.ref_name }}
-            )
-            ```
-
-            ---
-            *Full changelog generated below from conventional commits.*
