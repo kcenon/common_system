@@ -157,16 +157,17 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 
 | Library | Latest Release | FetchContent GIT_TAG | vcpkg REF |
 |---------|---------------|----------------------|-----------|
-| common_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| thread_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| container_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| logger_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| monitoring_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| database_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
-| network_system | — (pre-release) | `v0.1.0` (pending) | `v0.1.0` (pending) |
+| common_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
+| thread_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| container_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| logger_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| monitoring_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| database_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| network_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 
 > Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
 > Tracking issue: [#401](https://github.com/kcenon/common_system/issues/401)
+> Verified against GitHub releases/tags on 2026-03-09 (Asia/Seoul).
 
 ## Maintenance
 
