@@ -85,9 +85,31 @@ git push origin vX.Y.Z
 
 Pushing the tag automatically triggers the `release.yml` workflow, which:
 
-1. Validates version consistency across all three locations
+1. Validates version consistency across CMakeLists.txt, vcpkg.json, and Git tag
 2. Builds and tests on Ubuntu, macOS, and Windows
 3. Publishes a GitHub Release with auto-generated changelog from conventional commits
+
+### Reusable Release Workflow
+
+Ecosystem repositories can use the shared release workflow template instead of
+maintaining their own:
+
+```yaml
+# .github/workflows/release.yml
+name: Release
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+jobs:
+  release:
+    uses: kcenon/common_system/.github/workflows/release-template.yml@main
+    with:
+      project-name: <your_project_name>
+    permissions:
+      contents: write
+```
+
+See `.github/workflows/release-template.yml` for all available inputs.
 
 ### Step 4 — Verify the release
 
