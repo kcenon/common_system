@@ -142,7 +142,7 @@ Pin to a specific release tag rather than a branch:
 FetchContent_Declare(
   common_system
   GIT_REPOSITORY https://github.com/kcenon/common_system.git
-  GIT_TAG        v0.1.0
+  GIT_TAG        v0.2.0
 )
 ```
 
@@ -157,7 +157,7 @@ Update your overlay port's `portfile.cmake` to reference the tagged commit:
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO kcenon/common_system
-    REF v0.1.0
+    REF v0.2.0
     SHA512 <sha512-of-the-tag-archive>
     HEAD_REF main
 )
@@ -168,7 +168,7 @@ Regenerate the SHA512 hash after each version bump:
 ```bash
 vcpkg install --overlay-ports=./overlay-ports kcenon-common-system
 # Or compute manually:
-curl -sL https://github.com/kcenon/common_system/archive/refs/tags/v0.1.0.tar.gz | sha512sum
+curl -sL https://github.com/kcenon/common_system/archive/refs/tags/v0.2.0.tar.gz | sha512sum
 ```
 
 And update `vcpkg.json`:
@@ -176,7 +176,7 @@ And update `vcpkg.json`:
 ```json
 {
   "name": "kcenon-common-system",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
 ```
 
@@ -187,12 +187,12 @@ not permitted in production builds or CI release workflows.
 
 | Consumer | Depends on | Minimum Version |
 |----------|-----------|-----------------|
-| thread_system | common_system | v0.1.0 |
-| container_system | common_system | v0.1.0 |
-| logger_system | common_system | v0.1.0 |
-| monitoring_system | common_system | v0.1.0 |
-| database_system | common_system | v0.1.0 |
-| network_system | common_system | v0.1.0 |
+| thread_system | common_system | v0.2.0 |
+| container_system | common_system | v0.2.0 |
+| logger_system | common_system | v0.2.0 |
+| monitoring_system | common_system | v0.2.0 |
+| database_system | common_system | v0.2.0 |
+| network_system | common_system | v0.2.0 |
 
 Update this table in `DEPENDENCY_MATRIX.md` after each release that downstream projects
 adopt.

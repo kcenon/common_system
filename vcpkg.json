@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "kcenon-common-system",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "port-version": 0,
   "description": "High-performance C++20 foundation library providing Result<T> pattern, interfaces, and common utilities",
   "homepage": "https://github.com/kcenon/common_system",
