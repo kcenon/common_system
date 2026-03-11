@@ -2,7 +2,7 @@
 
 > **Tracking**: [common_system#406](https://github.com/kcenon/common_system/issues/406)
 >
-> **Status**: thread_system completed; logger_system, database_system, network_system in progress
+> **Status**: Migration complete — all ecosystem projects now use C++20 `std::format`
 
 This guide documents the standard approach for removing the `fmt` library
 from kcenon ecosystem projects in favour of C++20 `std::format`.
@@ -136,10 +136,12 @@ thread_system completed this migration successfully. Key commit patterns:
 4. Remove `fmt::fmt` from CMake `target_link_libraries`
 5. Update LICENSE-THIRD-PARTY
 
-## Remaining Projects
+## Migration Status
 
 | Project | Tracking Issue | Status |
 |---------|---------------|--------|
-| logger_system | [logger_system#457](https://github.com/kcenon/logger_system/issues/457) | Pending |
-| database_system | [database_system#399](https://github.com/kcenon/database_system/issues/399) | Pending |
-| network_system | [network_system#791](https://github.com/kcenon/network_system/issues/791) | Pending |
+| thread_system | — | Completed |
+| logger_system | [logger_system#457](https://github.com/kcenon/logger_system/issues/457) | Completed |
+| database_system | [database_system#399](https://github.com/kcenon/database_system/issues/399) | Completed |
+| network_system | [network_system#791](https://github.com/kcenon/network_system/issues/791) | Completed |
+| container_system | — | Completed (fmt-support feature removed) |

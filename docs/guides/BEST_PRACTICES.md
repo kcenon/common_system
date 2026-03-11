@@ -172,7 +172,7 @@ Result<Connection> connect(const std::string& host, int port) {
             error::codes::network_system::connection_failed,
             "Failed to connect to database",
             "connection_pool",
-            fmt::format("host: {}:{}, timeout: 30s", host, port)
+            std::format("host: {}:{}, timeout: 30s", host, port)
         );
     }
     return ok(std::move(conn));

@@ -16,7 +16,6 @@ does not use that dependency.
 |-----------|---------|:------:|:------:|:------:|:---------:|:----------:|:--------:|:-------:|:------------------:|
 | GTest | BSD-3-Clause | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | 1.14.0 | **1.14.0** |
 | Benchmark | Apache-2.0 | 1.8.3 | 1.8.3 | 1.8.3 | 1.8.3 | — | 1.8.3 | 1.8.3 | **1.8.3** |
-| fmt | MIT | — | — | 10.2.1 | 10.2.1 | — | 10.2.1 | 10.2.1 | ~~**10.2.1**~~ (removing — see [#406](https://github.com/kcenon/common_system/issues/406)) |
 | ASIO | BSL-1.0 | — | — | — | — | — | 1.30.2 | 1.30.2 | **1.30.2** |
 | OpenSSL | Apache-2.0 | — | — | 3.3.0 | — | — | 3.3.0 | 3.3.0 | **3.3.0** |
 | zlib | zlib | — | — | — | — | — | — | 1.3.1 | **1.3.1** |
@@ -40,7 +39,6 @@ Version requirements from `vcpkg.json` dependencies and `CMakeLists.txt` find_pa
 |-----------|:------:|:------:|:------:|:---------:|:----------:|:--------:|:-------:|
 | CMake | >= 3.28 | >= 3.16 | >= 3.16 | >= 3.16 | >= 3.20 | >= 3.16 | >= 3.16 |
 | C++ Standard | C++20 | C++20 | C++20 | C++20 | C++20 | C++20 | C++20 |
-| fmt | — | — | >= 10.0.0 | >= 10.0.0 | — | >= 10.2.1 | >= 10.0.0 |
 | ASIO | — | — | — | — | — | >= 1.29.0 | >= 1.30.2 |
 | OpenSSL | — | — | >= 3.0 | — | — | >= 3.0.0 | >= 3.0.0 |
 | GTest | >= 1.14.0 | — | — | — | — | — | — |
@@ -62,7 +60,6 @@ How each dependency is used across the ecosystem.
 |-----------|------|---------------|
 | GTest | Test | All 7 systems |
 | Benchmark | Test | common, thread, logger, container, database, network |
-| fmt | Core | logger, database, network; Optional: container |
 | ASIO | Core | database, network |
 | OpenSSL | Core/Optional | network (core); logger, database (optional) |
 | zlib | Core | network |
@@ -98,7 +95,7 @@ Issues identified during SBOM analysis that require resolution.
 | gRPC minimum differs in network_system | network_system requires >= 1.50.0, ecosystem standard is 1.51.1 | [network_system#792](https://github.com/kcenon/network_system/issues/792) |
 | ASIO minimum differs in database_system | database_system requires >= 1.29.0, override is 1.30.2 | [database_system#400](https://github.com/kcenon/database_system/issues/400) |
 | OpenSSL minimum differs in database_system | database_system requires >= 3.0.0, ecosystem standard is 3.3.0 | [database_system#402](https://github.com/kcenon/database_system/issues/402) |
-| fmt planned for removal | thread_system completed migration to std::format; 3 systems remain | Epic: [#406](https://github.com/kcenon/common_system/issues/406) · [logger#457](https://github.com/kcenon/logger_system/issues/457) · [database#399](https://github.com/kcenon/database_system/issues/399) · [network#791](https://github.com/kcenon/network_system/issues/791) |
+| fmt removed from ecosystem | All systems migrated to C++20 std::format | Completed: [#406](https://github.com/kcenon/common_system/issues/406) |
 | vcpkg baseline differs in thread_system | thread_system uses different vcpkg-configuration.json baseline | — |
 
 ## Ecosystem Internal Dependencies
@@ -143,7 +140,7 @@ All dependencies are compatible with the project's BSD-3-Clause license.
 | License | Dependencies | Compatible | Notes |
 |---------|-------------|:----------:|-------|
 | BSD-3-Clause | GTest, Protobuf, libpqxx, hiredis | Yes | Same license family |
-| MIT | fmt, spdlog, yaml-cpp | Yes | Permissive |
+| MIT | spdlog, yaml-cpp | Yes | Permissive |
 | Apache-2.0 | Benchmark, OpenSSL, gRPC, OTel C++, mongo-cxx-driver | Yes | Patent clause applies |
 | BSL-1.0 | ASIO | Yes | Boost Software License |
 | zlib | zlib | Yes | Permissive |
