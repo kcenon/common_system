@@ -161,12 +161,6 @@ int main() {
 }
 ```
 
-### Option 4: Conan Package Manager
-
-```bash
-conan create . --build=missing
-```
-
 ---
 
 ## Architecture
