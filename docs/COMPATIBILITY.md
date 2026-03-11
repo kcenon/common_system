@@ -116,7 +116,6 @@ The foundation library with no external KCENON dependencies. All other systems d
 | Dependency | Version | Purpose |
 |------------|---------|---------|
 | spdlog | 1.12.0+ | High-performance logging backend |
-| fmt | 10.0.0+ | String formatting |
 
 ---
 

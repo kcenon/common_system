@@ -15,14 +15,14 @@ must be license-compatible with BSD-3-Clause.
 |---------|-----------|-----------|---------------|
 | common_system | kcenon/common_system | None | yaml-cpp, gtest, benchmark |
 | thread_system | kcenon/thread_system | libiconv | spdlog, gtest, benchmark |
-| network_system | kcenon/network_system | asio, ~~fmt~~†, zlib | openssl, grpc, protobuf, gtest, benchmark |
-| logger_system | kcenon/logger_system | ~~fmt~~† | openssl, spdlog, opentelemetry-cpp, protobuf, grpc, gtest, benchmark |
-| container_system | kcenon/container_system | None | grpc, protobuf, ~~fmt~~†, gtest, benchmark |
-| database_system | kcenon/database_system | ~~fmt~~†, asio | libmariadb, libpq, libpqxx, sqlite3, mongo-cxx-driver, hiredis, openssl, spdlog, gtest, benchmark |
+| network_system | kcenon/network_system | asio, zlib | openssl, grpc, protobuf, gtest, benchmark |
+| logger_system | kcenon/logger_system | None | openssl, spdlog, opentelemetry-cpp, protobuf, grpc, gtest, benchmark |
+| container_system | kcenon/container_system | None | grpc, protobuf, gtest, benchmark |
+| database_system | kcenon/database_system | asio | libmariadb, libpq, libpqxx, sqlite3, mongo-cxx-driver, hiredis, openssl, spdlog, gtest, benchmark |
 | monitoring_system | kcenon/monitoring_system | None | grpc, protobuf, gtest |
 
-> † **fmt** is being removed from the ecosystem in favour of C++20 `std::format`.
-> thread_system has completed migration. Remaining projects tracked in [#406](https://github.com/kcenon/common_system/issues/406).
+> **fmt** has been fully removed from the ecosystem. All projects now use C++20 `std::format`.
+> Migration completed per [#406](https://github.com/kcenon/common_system/issues/406).
 
 ## SOUP Catalog
 
@@ -128,24 +128,6 @@ features.
 
 Components whose failure causes reduced functionality but does not compromise
 core operations.
-
-#### fmt *(Deprecated — removal in progress)*
-
-> **Migration Status**: thread_system completed. logger_system, database_system, and network_system
-> migration is in progress. Replacement: C++20 `std::format`. Tracking: [#406](https://github.com/kcenon/common_system/issues/406).
-
-| Field | Value |
-|-------|-------|
-| Name | {fmt} formatting library |
-| SPDX License | MIT |
-| Minimum Version | 10.0.0 (network, logger, container), 10.2.1 (database) |
-| Projects | network_system (core), database_system (core), logger_system (core), container_system (fmt-support feature) |
-| Purpose | String formatting (being replaced by C++20 `std::format`) |
-| Linking | Header-only or shared |
-| BSD-3 Compatible | Yes |
-| Risk Classification | **Medium** |
-| Anomaly Impact | Formatting errors → log corruption, display issues |
-| Deprecation | Scheduled for removal upon completion of [#406](https://github.com/kcenon/common_system/issues/406) |
 
 #### zlib
 
