@@ -12,6 +12,7 @@ on:
     paths:
       - 'vcpkg.json'
       - 'vcpkg-configuration.json'
+      - '.github/workflows/osv-scanner.yml'
   schedule:
     # Run every Sunday at 3:17 AM UTC (offset from Trivy daily scan at 2 AM)
     - cron: '17 3 * * 0'
