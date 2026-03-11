@@ -29,7 +29,7 @@ common_system is a header-only/compiled C++20 foundation library with **no requi
 
 | ID | Name | Manufacturer | Version | License | Usage | Safety Class | Known Anomalies |
 |----|------|-------------|---------|---------|-------|-------------|-----------------|
-| SOUP-001 | [yaml-cpp](https://github.com/jbeder/yaml-cpp) | Jesse Beder | Latest | MIT | YAML configuration file parsing (optional feature, detected at build time) | A | None |
+| SOUP-001 | [yaml-cpp](https://github.com/jbeder/yaml-cpp) | Jesse Beder | 0.9.0 | MIT | YAML configuration file parsing (optional feature, detected at build time) | A | None |
 
 ---
 
@@ -39,7 +39,7 @@ common_system is a header-only/compiled C++20 foundation library with **no requi
 |----|------|-------------|---------|---------|-------|--------------|
 | SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.14.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
 | SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.8.3 | Apache-2.0 | Performance benchmarking framework | Not required |
-| SOUP-T03 | [Doxygen](https://www.doxygen.nl/) | Dimitri van Heesch | Latest | GPL-2.0 | API documentation generation (build tool only) | Not required |
+| SOUP-T03 | [Doxygen](https://www.doxygen.nl/) | Dimitri van Heesch | 1.16.1 | GPL-2.0 | API documentation generation (build tool only) | Not required |
 
 ---
 
@@ -69,6 +69,20 @@ All SOUP versions are pinned in `vcpkg.json` via the `overrides` field:
 The vcpkg baseline is locked in `vcpkg-configuration.json` to ensure reproducible builds.
 
 ---
+
+## Optional/Unpinned SOUP Policy
+
+All SOUP entries — including optional dependencies — **must** have a uniquely
+identifiable version. Using `Latest` or a branch name is not acceptable for
+IEC 62304 compliance.
+
+| Situation | Required Action |
+|-----------|-----------------|
+| Dependency pinned in `vcpkg.json` overrides | Use the pinned version string |
+| Dependency resolved via `find_package(... QUIET)` | Document the minimum tested version and the version used in CI |
+| Dependency not yet pinned | Mark as **"unresolved — not for production"** and create a tracking issue |
+
+Optional SOUP that cannot be version-pinned must not be enabled in production builds.
 
 ## Version Update Process
 
