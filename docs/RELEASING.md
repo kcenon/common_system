@@ -32,7 +32,6 @@ All version numbers **must** be consistent across these files:
 |------|-------|--------|---------|
 | `CMakeLists.txt` | `project(... VERSION x.y.z.0)` | 4-part (CMake standard, tweak=0) | `VERSION 0.1.0.0` |
 | `vcpkg.json` | `"version": "x.y.z"` | 3-part semver | `"version": "0.1.0"` |
-| `conanfile.py` | `version = "x.y.z"` | 3-part semver | `version = "0.1.0"` |
 | Git tag | `vx.y.z` | `v`-prefixed semver | `v0.1.0` |
 
 The `abi_version.h.in` template automatically picks up `PROJECT_VERSION_MAJOR`,
@@ -50,19 +49,17 @@ git checkout main && git pull origin main
 # Verify version consistency
 grep "VERSION" CMakeLists.txt | head -1
 grep '"version"' vcpkg.json
-grep "version =" conanfile.py
 ```
 
 ### 2. Update Version Numbers
 
-When bumping the version, update all three files:
+When bumping the version, update both files:
 
 ```bash
 # Example: bumping from 0.1.0 to 0.2.0
 
 # CMakeLists.txt: project(common_system VERSION 0.2.0.0 LANGUAGES CXX)
 # vcpkg.json:     "version": "0.2.0"
-# conanfile.py:   version = "0.2.0"
 ```
 
 ### 3. Update CHANGELOG.md
@@ -82,7 +79,7 @@ Move items from `[Unreleased]` to a versioned section:
 ### 4. Create the Release Commit
 
 ```bash
-git add CMakeLists.txt vcpkg.json conanfile.py docs/CHANGELOG.md
+git add CMakeLists.txt vcpkg.json docs/CHANGELOG.md
 git commit -m "chore(release): prepare v0.2.0"
 git push origin main
 ```
@@ -128,12 +125,6 @@ find_package(common_system 0.1.0 REQUIRED)
 ### vcpkg
 
 Reference via vcpkg registry with version constraints.
-
-### Conan
-
-```
-common_system/0.1.0
-```
 
 ## ABI Compatibility
 

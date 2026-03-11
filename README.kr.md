@@ -148,12 +148,6 @@ int main() {
 }
 ```
 
-### 옵션 4: Conan 패키지 관리자
-
-```bash
-conan create . --build=missing
-```
-
 ---
 
 ## 아키텍처
