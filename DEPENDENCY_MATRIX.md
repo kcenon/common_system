@@ -117,6 +117,8 @@ Tier 3: monitoring_system       -> common_system, thread_system
          database_system        -> common_system + DB backends
    |
 Tier 4: network_system          -> common_system, thread_system, container_system
+   |
+Tier 5: pacs_system             -> common_system, container_system, network_system
 ```
 
 ## vcpkg Baseline Tracking
@@ -164,6 +166,7 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 | monitoring_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 | database_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 | network_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| pacs_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 
 > Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
 > Tracking issue: [#401](https://github.com/kcenon/common_system/issues/401)

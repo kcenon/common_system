@@ -13,7 +13,7 @@ must be license-compatible with BSD-3-Clause.
 
 | Project | Repository | Core SOUP | Optional SOUP |
 |---------|-----------|-----------|---------------|
-| common_system | kcenon/common_system | None | gtest, benchmark |
+| common_system | kcenon/common_system | None | yaml-cpp, gtest, benchmark |
 | thread_system | kcenon/thread_system | libiconv | spdlog, gtest, benchmark |
 | network_system | kcenon/network_system | asio, ~~fmt~~†, zlib | openssl, grpc, protobuf, gtest, benchmark |
 | logger_system | kcenon/logger_system | ~~fmt~~† | openssl, spdlog, opentelemetry-cpp, protobuf, grpc, gtest, benchmark |
@@ -245,6 +245,21 @@ Compatibility notes:
 ### Low Risk
 
 Components whose failure has minimal operational impact.
+
+#### yaml-cpp
+
+| Field | Value |
+|-------|-------|
+| Name | yaml-cpp |
+| SPDX License | MIT |
+| Minimum Version | 0.9.0 |
+| Projects | common_system (yaml config feature, optional) |
+| Purpose | YAML configuration file parsing |
+| Linking | Static or dynamic |
+| BSD-3 Compatible | Yes |
+| Risk Classification | **Low** |
+| Anomaly Impact | YAML config unavailable; fallback to other config methods |
+| Notes | Optional feature, gated by `BUILD_WITH_YAML_CPP` CMake option. Detected at build time via `find_package(yaml-cpp QUIET)`. |
 
 #### libiconv
 
