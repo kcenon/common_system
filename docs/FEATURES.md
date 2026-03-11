@@ -119,7 +119,6 @@ Designed to work across all modern C++ environments:
 
 - **Package manager ready**: Easy integration with modern C++ package managers
   - vcpkg integration available
-  - Conan support included
   - FetchContent compatible
   - git submodule friendly
 

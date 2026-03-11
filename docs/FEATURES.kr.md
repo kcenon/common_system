@@ -1151,22 +1151,9 @@ enum class DatabaseError {
 auto err = error_info{DatabaseError::connection_failed, "연결 실패"};
 ```
 
-### vcpkg 및 Conan 지원
+### vcpkg 및 FetchContent 지원
 
 패키지 관리자를 통한 간편한 통합:
-
-**Conan 사용**:
-```bash
-# 소스에서 패키지 생성
-conan create . --build=missing
-
-# conanfile.txt에 추가
-[requires]
-common_system/1.0.0
-
-# 설치
-conan install . --build=missing
-```
 
 **CMake FetchContent 사용 (권장)**:
 ```cmake
