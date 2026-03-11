@@ -210,6 +210,38 @@ SQLite is in the public domain. No license restrictions apply.
 
 - SQLite: authored by D. Richard Hipp
 
+## Transitive Dependencies
+
+The following components are not declared directly in ecosystem `vcpkg.json`
+manifests but are pulled in transitively through pinned third-party ports at
+the shared vcpkg baseline `c4af3593e1f1aa9e14a560a09e45ea2cb0dfd74d`.
+
+### Via gRPC 1.51.1
+
+| Dependency | Version | License | Used By |
+|------------|---------|---------|---------|
+| abseil (absl) | 20240116.1 | Apache-2.0 | container_system, logger_system, monitoring_system, network_system |
+| c-ares | 1.28.1 | MIT-CMU | container_system, logger_system, monitoring_system, network_system |
+| re2 | 2024-04-01 | BSD-3-Clause | container_system, logger_system, monitoring_system, network_system |
+| upb | 2022-06-21 | BSD-2-Clause | container_system, logger_system, monitoring_system, network_system |
+
+### Via opentelemetry-cpp 1.14.2
+
+| Dependency | Version | License | Used By |
+|------------|---------|---------|---------|
+| nlohmann-json | 3.11.3 | MIT | logger_system |
+| curl | 8.7.1 | curl AND ISC AND BSD-3-Clause | logger_system (otlp-http feature) |
+
+### Via mongo-cxx-driver 3.10.1
+
+| Dependency | Version | License | Used By |
+|------------|---------|---------|---------|
+| mongo-c-driver | 1.26.2 | Apache-2.0 | database_system |
+| libbson | 1.26.2 | Apache-2.0 | database_system |
+
+All transitive dependencies use licenses compatible with BSD-3-Clause.
+For detailed risk classification, see `docs/SOUP-LIST.md`.
+
 ## All Dependencies (Summary)
 
 | Dependency | License | Type | BSD-3 Compatible | LGPL Dynamic |
@@ -231,3 +263,11 @@ SQLite is in the public domain. No license restrictions apply.
 | spdlog | MIT | Optional | Yes | - |
 | gtest/gmock | BSD-3-Clause | Testing | Yes | - |
 | benchmark | Apache-2.0 | Testing | Yes | - |
+| abseil | Apache-2.0 | Transitive (gRPC) | Yes | - |
+| c-ares | MIT-CMU | Transitive (gRPC) | Yes | - |
+| re2 | BSD-3-Clause | Transitive (gRPC) | Yes | - |
+| upb | BSD-2-Clause | Transitive (gRPC) | Yes | - |
+| nlohmann-json | MIT | Transitive (otel) | Yes | - |
+| curl | curl/ISC/BSD-3 | Transitive (otel) | Yes | - |
+| mongo-c-driver | Apache-2.0 | Transitive (mongocxx) | Yes | - |
+| libbson | Apache-2.0 | Transitive (mongocxx) | Yes | - |
