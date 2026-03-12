@@ -36,6 +36,10 @@ class ObjectPool {
 public:
     using value_type = T;
 
+    /**
+     * @brief Construct an object pool with the specified growth factor.
+     * @param growth Number of objects to pre-allocate per expansion (minimum 1).
+     */
     explicit ObjectPool(std::size_t growth = 32)
         : growth_(growth == 0 ? 1 : growth) {}
 
