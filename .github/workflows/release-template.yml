@@ -15,6 +15,8 @@
 #       uses: kcenon/common_system/.github/workflows/release-template.yml@main
 #       with:
 #         project-name: thread_system
+#         cmake-configure-options: >-
+#           -DTHREAD_BUILD_TESTS=ON
 #       permissions:
 #         contents: write
 #
@@ -35,7 +37,7 @@ on:
         type: string
         default: 'Release'
       build-tests:
-        description: 'Whether to build and run tests'
+        description: 'Whether to build and run tests during validation'
         required: false
         type: boolean
         default: true
@@ -44,6 +46,11 @@ on:
         required: false
         type: boolean
         default: true
+      cmake-configure-options:
+        description: 'Additional CMake configure options (e.g., -DFOO_BUILD_TESTS=ON)'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -90,6 +97,52 @@ jobs:
             exit 1
           fi
           echo "Version consistency check passed: $TAG_VERSION"
+
+      - name: Install Ninja (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
+
+      - name: Set up MSVC
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Set up vcpkg
+        if: inputs.vcpkg-enabled
+        uses: lukka/run-vcpkg@v11
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          cmake_args=(-B build -G Ninja)
+          cmake_args+=(-DCMAKE_BUILD_TYPE=${{ inputs.cmake-build-type }})
+          if [[ "${{ inputs.vcpkg-enabled }}" == "true" ]]; then
+            cmake_args+=(-DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake")
+          fi
+          cmake "${cmake_args[@]}" ${{ inputs.cmake-configure-options }}
+
+      - name: Build
+        shell: bash
+        run: cmake --build build --config ${{ inputs.cmake-build-type }}
+
+      - name: Test
+        if: inputs.build-tests
+        shell: bash
+        run: |
+          cd build
+          ctest -C ${{ inputs.cmake-build-type }} --output-on-failure
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-validate-${{ matrix.os }}-logs
+          path: |
+            build/CMakeFiles/*.log
+            build/Testing/Temporary/
 
   publish:
     name: Publish Release

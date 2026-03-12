@@ -105,11 +105,25 @@ jobs:
     uses: kcenon/common_system/.github/workflows/release-template.yml@main
     with:
       project-name: <your_project_name>
+      cmake-configure-options: >-
+        -D<YOUR_PROJECT>_BUILD_TESTS=ON
     permissions:
       contents: write
 ```
 
-See `.github/workflows/release-template.yml` for all available inputs.
+#### Available Inputs
+
+| Input | Default | Description |
+|-------|---------|-------------|
+| `project-name` | *(required)* | Name matching `project()` in CMakeLists.txt |
+| `cmake-build-type` | `Release` | CMake build type |
+| `build-tests` | `true` | Run tests during release validation |
+| `vcpkg-enabled` | `true` | Use vcpkg for dependency management |
+| `cmake-configure-options` | `''` | Additional CMake flags (e.g., `-DFOO=ON`) |
+
+The template validates version consistency, builds on Ubuntu/macOS/Windows, runs
+tests, and publishes a GitHub Release with auto-generated changelog — all controlled
+by the inputs above.
 
 ### Step 4 — Verify the release
 
