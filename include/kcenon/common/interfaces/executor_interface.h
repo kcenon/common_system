@@ -59,12 +59,8 @@ public:
  * This interface defines the contract for any task executor implementation,
  * allowing modules to work with different threading backends without
  * direct dependencies.
- */
-/**
- * @class IExecutor
- * @brief Abstract interface for task execution systems.
  *
- * Phase 2: Extended with job-based execution support
+ * Extended with job-based execution support for better control and testability.
  */
 class IExecutor {
 public:
@@ -119,20 +115,13 @@ public:
 };
 
 /**
- * @brief Factory function type for creating executor instances
- */
-/**
- * @brief Factory function to create executor instances.
+ * @brief Factory function type for creating executor instances.
  */
 using ExecutorFactory = std::function<std::shared_ptr<IExecutor>()>;
 
 /**
  * @interface IExecutorProvider
- * @brief Interface for modules that provide executor implementations
- */
-/**
- * @class IExecutorProvider
- * @brief Provider for obtaining executor implementations.
+ * @brief Interface for modules that provide executor implementations.
  */
 class IExecutorProvider {
 public:
