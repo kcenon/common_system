@@ -157,17 +157,17 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 | Library | Latest Release | FetchContent GIT_TAG | vcpkg REF |
 |---------|---------------|----------------------|-----------|
 | common_system | `v0.2.0` | `v0.2.0` | `v0.2.0` |
-| thread_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| thread_system | `v0.3.0` | `v0.3.0` | `v0.3.0` |
 | container_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
-| logger_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
-| monitoring_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| logger_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
+| monitoring_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | database_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 | network_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 | pacs_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 
 > Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
 > Tracking issue: [#401](https://github.com/kcenon/common_system/issues/401)
-> Verified against GitHub releases/tags on 2026-03-11 (Asia/Seoul).
+> Verified against GitHub releases/tags on 2026-03-13 (Asia/Seoul).
 
 ## Maintenance
 
