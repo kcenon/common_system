@@ -254,6 +254,12 @@ install(DIRECTORY include/
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
 )
 
+# Install generated abi_version.h (produced by configure_file, lives in build tree)
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h"
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/kcenon/common/config
+)
+
 # Install CMake config files
 install(TARGETS common_system
     EXPORT common_systemTargets
