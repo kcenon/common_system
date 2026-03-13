@@ -161,7 +161,7 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 | container_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | logger_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | monitoring_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| database_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| database_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | network_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 | pacs_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 
