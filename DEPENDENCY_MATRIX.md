@@ -162,7 +162,7 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 | logger_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | monitoring_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | database_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| network_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| network_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 | pacs_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
 
 > Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
