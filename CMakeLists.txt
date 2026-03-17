@@ -99,6 +99,7 @@ endif()
 # Create interface library (header-only by default)
 add_library(common_system INTERFACE)
 add_library(kcenon::common ALIAS common_system)
+add_library(common_system::common_system ALIAS common_system)
 
 # Set include directories
 target_include_directories(common_system INTERFACE
@@ -262,16 +263,16 @@ install(FILES
 
 # Install CMake config files
 install(TARGETS common_system
-    EXPORT common_systemTargets
+    EXPORT common_system-targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(EXPORT common_systemTargets
-    FILE common_systemTargets.cmake
-    NAMESPACE kcenon::
+install(EXPORT common_system-targets
+    FILE common_system-targets.cmake
+    NAMESPACE common_system::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
 )
 
@@ -299,9 +300,9 @@ install(FILES
 )
 
 # Export for build tree
-export(EXPORT common_systemTargets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/common_systemTargets.cmake"
-    NAMESPACE kcenon::
+export(EXPORT common_system-targets
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/common_system-targets.cmake"
+    NAMESPACE common_system::
 )
 
 # Tests

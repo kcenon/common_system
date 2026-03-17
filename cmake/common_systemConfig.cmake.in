@@ -1,9 +1,26 @@
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/common_systemTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/common_system-targets.cmake")
 
 # Include feature flags configuration module
 include("${CMAKE_CURRENT_LIST_DIR}/features.cmake")
+
+# Backward compatibility: provide kcenon:: namespace targets for existing consumers.
+# Installed targets are IMPORTED, so we use INTERFACE libraries to forward properties.
+if(TARGET common_system::common_system AND NOT TARGET kcenon::common_system)
+    add_library(kcenon::common_system INTERFACE IMPORTED)
+    set_target_properties(kcenon::common_system PROPERTIES
+        INTERFACE_LINK_LIBRARIES common_system::common_system
+    )
+endif()
+
+# Legacy short alias (kcenon::common) used by some downstream projects
+if(TARGET common_system::common_system AND NOT TARGET kcenon::common)
+    add_library(kcenon::common INTERFACE IMPORTED)
+    set_target_properties(kcenon::common PROPERTIES
+        INTERFACE_LINK_LIBRARIES common_system::common_system
+    )
+endif()
 
 # Provide old-style variables for compatibility
 set(common_system_FOUND TRUE)
