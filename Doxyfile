@@ -1,7 +1,7 @@
 # Doxyfile for common_system
 
-PROJECT_NAME           = "common_system"
-PROJECT_NUMBER         = "1.0.0"
+PROJECT_NAME           = "Common System"
+PROJECT_NUMBER         = "0.2.0"
 PROJECT_BRIEF          = "Common interfaces and patterns for system integration"
 OUTPUT_DIRECTORY       = documents
 CREATE_SUBDIRS         = YES
