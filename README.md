@@ -115,6 +115,18 @@ When using multiple systems together, use the **highest** requirement from your 
 
 ## Installation
 
+### Installation via vcpkg
+
+```bash
+vcpkg install kcenon-common-system
+```
+
+In your `CMakeLists.txt`:
+```cmake
+find_package(common_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::common_system)
+```
+
 ### Option 1: Header-Only Usage (Simplest)
 
 ```bash
