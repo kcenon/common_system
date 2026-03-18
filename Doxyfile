@@ -156,6 +156,9 @@ PREDEFINED             = BUILD_WITH_COMMON_SYSTEM \
                          COMMON_SYSTEM_API=
 SKIP_FUNCTION_MACROS   = YES
 
+ALIASES                = "thread_safety=@par Thread Safety:^^" \
+                         "performance=@par Performance:^^"
+
 # External references
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
