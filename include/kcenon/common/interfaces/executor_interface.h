@@ -61,6 +61,16 @@ public:
  * direct dependencies.
  *
  * Extended with job-based execution support for better control and testability.
+ *
+ * @code
+ * // Submit a task to an executor
+ * std::shared_ptr<IExecutor> executor = provider->get_executor();
+ * executor->execute([] { std::cout << "Hello from thread pool\n"; });
+ *
+ * // Submit a delayed task
+ * executor->execute_delayed(std::chrono::seconds(5),
+ *     [] { std::cout << "Delayed task\n"; });
+ * @endcode
  */
 class IExecutor {
 public:

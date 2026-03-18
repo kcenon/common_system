@@ -158,6 +158,22 @@ namespace detail {
      * subscription management and event dispatch.
      *
      * Note: This implementation avoids RTTI by using template-based type IDs.
+     *
+     * @code
+     * simple_event_bus bus;
+     *
+     * // Subscribe to an event type
+     * auto id = bus.subscribe<events::module_started_event>(
+     *     [](const events::module_started_event& e) {
+     *         std::cout << "Module started: " << e.module_name << "\n";
+     *     });
+     *
+     * // Publish an event
+     * bus.publish(events::module_started_event{"network_system"});
+     *
+     * // Unsubscribe when done
+     * bus.unsubscribe(id);
+     * @endcode
      */
     class simple_event_bus {
     public:
