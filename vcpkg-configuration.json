@@ -13,12 +13,5 @@
         "kcenon-*"
       ]
     }
-  ],
-  "overrides": [
-    {
-      "name": "gtest",
-      "version": "1.14.0",
-      "port-version": 1
-    }
   ]
 }
