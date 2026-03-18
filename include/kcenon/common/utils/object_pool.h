@@ -5,7 +5,6 @@
 #pragma once
 
 #include <cstddef>
-#include <functional>
 #include <memory>
 #include <mutex>
 #include <stack>
@@ -32,9 +31,30 @@ struct RawDelete {
  * storage is retained for fast reuse.
  */
 template<typename T>
+class ObjectPool;
+
+/**
+ * @brief Zero-overhead deleter for ObjectPool-managed objects.
+ *
+ * Replaces std::function<void(T*)> to avoid the heap allocation
+ * that std::function requires for type-erased callables.
+ */
+template<typename T>
+struct PoolDeleter {
+    ObjectPool<T>* pool = nullptr;
+    void operator()(T* ptr) const noexcept {
+        if (pool) {
+            pool->release(ptr);
+        }
+    }
+};
+
+template<typename T>
 class ObjectPool {
 public:
     using value_type = T;
+    using deleter_type = PoolDeleter<T>;
+    using pointer_type = std::unique_ptr<T, deleter_type>;
 
     /**
      * @brief Construct an object pool with the specified growth factor.
@@ -50,7 +70,7 @@ public:
      * @return A unique_ptr to the acquired object with a custom deleter that returns it to the pool.
      */
     template<typename... Args>
-    std::unique_ptr<T, std::function<void(T*)>> acquire(bool* reused, Args&&... args) {
+    pointer_type acquire(bool* reused, Args&&... args) {
         T* raw = nullptr;
         bool reused_local = false;
         {
@@ -70,13 +90,11 @@ public:
         }
 
         new (raw) T(std::forward<Args>(args)...);
-        return std::unique_ptr<T, std::function<void(T*)>>(raw, [this](T* ptr) {
-            this->release(ptr);
-        });
+        return pointer_type(raw, deleter_type{this});
     }
 
     template<typename... Args>
-    std::unique_ptr<T, std::function<void(T*)>> acquire(Args&&... args) {
+    pointer_type acquire(Args&&... args) {
         return acquire(static_cast<bool*>(nullptr), std::forward<Args>(args)...);
     }
 

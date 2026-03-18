@@ -134,7 +134,7 @@ static void BM_ObjectPoolBatchAcquire(benchmark::State& state) {
     const int batch_size = state.range(0);
 
     for (auto _ : state) {
-        std::vector<std::unique_ptr<SimpleObject, std::function<void(SimpleObject*)>>> objects;
+        std::vector<ObjectPool<SimpleObject>::pointer_type> objects;
         objects.reserve(batch_size);
 
         for (int i = 0; i < batch_size; ++i) {
@@ -169,7 +169,7 @@ static void BM_ObjectPoolGrowth(benchmark::State& state) {
 
     const int total_acquires = 1000;
     for (auto _ : state) {
-        std::vector<std::unique_ptr<SimpleObject, std::function<void(SimpleObject*)>>> objects;
+        std::vector<ObjectPool<SimpleObject>::pointer_type> objects;
         objects.reserve(total_acquires);
 
         for (int i = 0; i < total_acquires; ++i) {
