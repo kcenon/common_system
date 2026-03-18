@@ -347,7 +347,7 @@ TEST_F(SustainedLoadTest, MemoryStabilityOverTime) {
     const int batch_size = 100;
 
     for (int i = 0; i < iterations; ++i) {
-        std::vector<std::unique_ptr<StressEvent, std::function<void(StressEvent*)>>> batch;
+        std::vector<ObjectPool<StressEvent>::pointer_type> batch;
 
         // Acquire batch
         for (int j = 0; j < batch_size; ++j) {
@@ -498,7 +498,7 @@ TEST_F(BurstTrafficTest, ObjectPoolBurst) {
     const int burst_count = 20;
 
     for (int burst = 0; burst < burst_count; ++burst) {
-        std::vector<std::unique_ptr<StressEvent, std::function<void(StressEvent*)>>> batch;
+        std::vector<ObjectPool<StressEvent>::pointer_type> batch;
 
         // Acquire burst
         for (int i = 0; i < burst_size; ++i) {

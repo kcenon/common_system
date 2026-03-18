@@ -64,7 +64,7 @@ TEST_F(MemoryPressureTest, ObjectPoolExhaustion) {
     ObjectPool<ExpensiveObject> pool(4);
 
     // Acquire all pre-allocated objects
-    std::vector<std::unique_ptr<ExpensiveObject, std::function<void(ExpensiveObject*)>>> acquired;
+    std::vector<ObjectPool<ExpensiveObject>::pointer_type> acquired;
 
     // Acquire more than initial capacity to trigger growth
     const size_t acquire_count = 20;
@@ -92,7 +92,7 @@ TEST_F(MemoryPressureTest, ObjectPoolRecovery) {
     const size_t objects_per_cycle = 10;
 
     for (int cycle = 0; cycle < cycles; ++cycle) {
-        std::vector<std::unique_ptr<ExpensiveObject, std::function<void(ExpensiveObject*)>>> batch;
+        std::vector<ObjectPool<ExpensiveObject>::pointer_type> batch;
 
         for (size_t i = 0; i < objects_per_cycle; ++i) {
             bool reused = false;
@@ -119,7 +119,7 @@ TEST_F(MemoryPressureTest, ObjectPoolFragmentation) {
     ObjectPool<ExpensiveObject> pool(16);
 
     // Simulate fragmentation: acquire/release in random patterns
-    std::vector<std::unique_ptr<ExpensiveObject, std::function<void(ExpensiveObject*)>>> held;
+    std::vector<ObjectPool<ExpensiveObject>::pointer_type> held;
 
     for (int i = 0; i < 100; ++i) {
         // Acquire some
