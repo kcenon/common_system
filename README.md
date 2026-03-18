@@ -268,6 +268,28 @@ monitor.add_dependency("api", "database");
 
 ---
 
+## Examples
+
+### Sample Applications
+
+| Example | Description |
+|---------|-------------|
+| [result_example](examples/result_example.cpp) | `Result<T>` error handling patterns |
+| [executor_example](examples/executor_example.cpp) | Executor interface and thread management |
+| [abi_version_example](examples/abi_version_example.cpp) | ABI version checking and compatibility |
+| [unwrap_demo](examples/unwrap_demo.cpp) | Result unwrapping and chaining |
+| [multi_system_app](examples/multi_system_app/) | Multi-system integration example |
+
+### Running Examples
+
+```bash
+cmake -B build -DCOMMON_BUILD_EXAMPLES=ON
+cmake --build build
+./build/examples/result_example
+```
+
+---
+
 ## Documentation
 
 | Category | Document | Description |
