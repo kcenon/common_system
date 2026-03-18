@@ -188,7 +188,7 @@ TEST(ObjectPoolTest, ClearRemovesAll) {
 
 TEST(ObjectPoolTest, AcquireMultipleObjects) {
     ObjectPool<SimpleObj> pool(4);
-    std::vector<std::unique_ptr<SimpleObj, std::function<void(SimpleObj*)>>> objects;
+    std::vector<ObjectPool<SimpleObj>::pointer_type> objects;
 
     for (int i = 0; i < 10; ++i) {
         objects.push_back(pool.acquire(i));
@@ -202,7 +202,7 @@ TEST(ObjectPoolTest, UniqueAddressesForConcurrentObjects) {
     ObjectPool<SimpleObj> pool(8);
     std::set<SimpleObj*> addresses;
 
-    std::vector<std::unique_ptr<SimpleObj, std::function<void(SimpleObj*)>>> objects;
+    std::vector<ObjectPool<SimpleObj>::pointer_type> objects;
     for (int i = 0; i < 8; ++i) {
         auto obj = pool.acquire(i);
         addresses.insert(obj.get());
