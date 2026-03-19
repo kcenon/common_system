@@ -259,3 +259,112 @@ TEST(CircularBufferTest, WithStrings) {
     EXPECT_EQ(buf.size(), 3u);
     EXPECT_EQ(buf.pop().value(), "alpha");
 }
+
+// =============================================================================
+// SPSCCircularBuffer tests
+// =============================================================================
+
+TEST(SPSCCircularBufferTest, DefaultConstructionIsEmpty) {
+    SPSCCircularBuffer<int, 8> buf;
+    EXPECT_TRUE(buf.empty());
+    EXPECT_FALSE(buf.full());
+    EXPECT_EQ(buf.size(), 0u);
+    EXPECT_EQ(buf.capacity(), 8u);
+}
+
+TEST(SPSCCircularBufferTest, PushPopFifo) {
+    SPSCCircularBuffer<int, 4> buf;
+    EXPECT_TRUE(buf.push(1));
+    EXPECT_TRUE(buf.push(2));
+    EXPECT_TRUE(buf.push(3));
+    EXPECT_EQ(buf.size(), 3u);
+
+    EXPECT_EQ(buf.pop().value(), 1);
+    EXPECT_EQ(buf.pop().value(), 2);
+    EXPECT_EQ(buf.pop().value(), 3);
+    EXPECT_TRUE(buf.empty());
+}
+
+TEST(SPSCCircularBufferTest, PopOnEmptyReturnsNullopt) {
+    SPSCCircularBuffer<int, 4> buf;
+    EXPECT_FALSE(buf.pop().has_value());
+}
+
+TEST(SPSCCircularBufferTest, FillToCapacity) {
+    SPSCCircularBuffer<int, 3> buf;
+    EXPECT_TRUE(buf.push(1));
+    EXPECT_TRUE(buf.push(2));
+    EXPECT_TRUE(buf.push(3));
+    EXPECT_TRUE(buf.full());
+    EXPECT_FALSE(buf.push(4)); // full, no overwrite
+}
+
+TEST(SPSCCircularBufferTest, WraparoundMaintainsFifo) {
+    SPSCCircularBuffer<int, 3> buf;
+    buf.push(1);
+    buf.push(2);
+    buf.push(3);
+    EXPECT_EQ(buf.pop().value(), 1);
+    EXPECT_EQ(buf.pop().value(), 2);
+    buf.push(4);
+    buf.push(5);
+    EXPECT_EQ(buf.pop().value(), 3);
+    EXPECT_EQ(buf.pop().value(), 4);
+    EXPECT_EQ(buf.pop().value(), 5);
+    EXPECT_TRUE(buf.empty());
+}
+
+TEST(SPSCCircularBufferTest, MoveSemantics) {
+    SPSCCircularBuffer<std::string, 4> buf;
+    std::string s = "hello";
+    buf.push(std::move(s));
+    EXPECT_EQ(buf.pop().value(), "hello");
+}
+
+TEST(SPSCCircularBufferTest, CopyPush) {
+    SPSCCircularBuffer<std::string, 4> buf;
+    const std::string s = "world";
+    buf.push(s);
+    EXPECT_EQ(buf.pop().value(), "world");
+    EXPECT_EQ(s, "world");
+}
+
+TEST(SPSCCircularBufferTest, CapacityOfOne) {
+    SPSCCircularBuffer<int, 1> buf;
+    EXPECT_EQ(buf.capacity(), 1u);
+    EXPECT_TRUE(buf.push(42));
+    EXPECT_TRUE(buf.full());
+    EXPECT_FALSE(buf.push(99));
+    EXPECT_EQ(buf.pop().value(), 42);
+    EXPECT_TRUE(buf.empty());
+}
+
+TEST(SPSCCircularBufferTest, ConcurrentProducerConsumer) {
+    SPSCCircularBuffer<int, 256> buf;
+    const int count = 100000;
+    std::atomic<bool> done{false};
+
+    std::thread producer([&]() {
+        for (int i = 0; i < count; ++i) {
+            while (!buf.push(i)) {
+                // spin until space available
+            }
+        }
+        done.store(true, std::memory_order_release);
+    });
+
+    std::thread consumer([&]() {
+        int expected = 0;
+        while (expected < count) {
+            auto val = buf.pop();
+            if (val.has_value()) {
+                EXPECT_EQ(val.value(), expected);
+                ++expected;
+            }
+        }
+    });
+
+    producer.join();
+    consumer.join();
+    EXPECT_TRUE(buf.empty());
+}
