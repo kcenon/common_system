@@ -59,7 +59,7 @@ public:
      * Removes expired failures before counting.
      * @return Number of failures within the time window
      */
-    [[nodiscard]] auto get_failure_count() -> std::size_t
+    [[nodiscard]] auto get_failure_count() const -> std::size_t
     {
         std::lock_guard<std::mutex> lock(mutex_);
         cleanup_expired_failures();
@@ -91,7 +91,7 @@ private:
      * @brief Remove failures outside the time window.
      * Must be called with mutex locked.
      */
-    auto cleanup_expired_failures() -> void
+    auto cleanup_expired_failures() const -> void
     {
         const auto now = clock_type::now();
         const auto cutoff = now - window_duration_;
@@ -104,8 +104,8 @@ private:
     }
 
     duration window_duration_;
-    std::deque<time_point> failures_;
-    std::mutex mutex_;
+    mutable std::deque<time_point> failures_;
+    mutable std::mutex mutex_;
 };
 
 } // namespace kcenon::common::resilience
