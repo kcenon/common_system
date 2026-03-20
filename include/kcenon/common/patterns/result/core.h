@@ -137,23 +137,6 @@ struct error_info {
           module(std::string(ec.category_name())) {}
 };
 
-/**
- * @brief Alias for backward compatibility (DEPRECATED)
- *
- * Legacy code may use error_code instead of error_info.
- * This alias ensures compatibility during migration.
- *
- * @note For new code, use either:
- *       - error_info for Result<T> error handling
- *       - kcenon::common::typed_error_code (from error_category.h) for
- *         category-based error handling
- *
- * @deprecated Use error_info directly. Will be removed in v1.0.0.
- *
- * @warning Do not confuse with std::error_code or typed_error_code.
- *          This is purely a transitional alias for Result<T> error handling.
- */
-using error_code [[deprecated("Use error_info directly. Will be removed in v1.0.0")]] = error_info;
 
 // ============================================================================
 // Result<T> Class (from result_core.h)

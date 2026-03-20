@@ -20,7 +20,7 @@
 #include <memory>
 #include <type_traits>
 
-#include "typed_adapter.h"
+#include "adapter.h"
 
 namespace kcenon::common::adapters {
 
@@ -38,7 +38,7 @@ inline constexpr bool implements_interface_v = std::is_base_of_v<Interface, T> |
  *
  * This factory uses compile-time checks to determine if adaptation is needed:
  * - If the implementation already implements the interface, direct cast (zero-cost)
- * - Otherwise, create a typed_adapter wrapper
+ * - Otherwise, create an interface_adapter wrapper
  *
  * This provides zero-cost abstraction when possible.
  *
@@ -64,7 +64,7 @@ public:
             return std::static_pointer_cast<Interface>(impl);
         } else {
             // Create adapter wrapper
-            return std::make_shared<typed_adapter<Interface, Impl>>(impl);
+            return std::make_shared<interface_adapter<Interface, Impl>>(impl);
         }
     }
 
@@ -87,7 +87,7 @@ public:
     /**
      * @brief Try to unwrap an interface to get underlying implementation
      *
-     * If the interface is a typed_adapter, unwraps it.
+     * If the interface is a interface_adapter, unwraps it.
      * Otherwise, returns nullptr (strict type safety without RTTI).
      *
      * @tparam T The expected underlying type
@@ -101,7 +101,7 @@ public:
             return nullptr;
         }
 
-        // Try safe_unwrap (for typed_adapter)
+        // Try safe_unwrap (for interface_adapter)
         if (auto unwrapped = safe_unwrap<T>(ptr)) {
             return unwrapped;
         }
@@ -134,7 +134,7 @@ public:
  * @code
  * auto executor = make_smart_adapter<IExecutor>(thread_pool);
  * // If thread_pool implements IExecutor: zero-cost cast
- * // Otherwise: creates typed_adapter<IExecutor, thread_pool>
+ * // Otherwise: creates interface_adapter<IExecutor, thread_pool>
  * @endcode
  */
 template<typename Interface, typename Impl>
