@@ -47,7 +47,7 @@ class ErrorHandlingTest : public SystemFixture {};
 TEST_F(ErrorHandlingTest, ResultErrorPropagation) {
   // Test error propagation through function chain
   auto step1 = []() -> Result<int> {
-    return Result<int>::err(error_code{1, "step1 failed"});
+    return Result<int>::err(error_info{1, "step1 failed"});
   };
 
   auto step2 = [](int value) -> Result<std::string> {
@@ -64,10 +64,10 @@ TEST_F(ErrorHandlingTest, ResultErrorPropagation) {
 TEST_F(ErrorHandlingTest, ErrorRecoveryWithOrElse) {
   // Test error recovery
   auto failing_operation = []() -> Result<int> {
-    return Result<int>::err(error_code{1, "operation failed"});
+    return Result<int>::err(error_info{1, "operation failed"});
   };
 
-  auto fallback = []([[maybe_unused]] const error_code &err) -> Result<int> {
+  auto fallback = []([[maybe_unused]] const error_info &err) -> Result<int> {
     // Log error and return default value
     return Result<int>::ok(0);
   };
@@ -85,7 +85,7 @@ TEST_F(ErrorHandlingTest, MultipleErrorRecoveryAttempts) {
   auto failing_operation = [&]() -> Result<int> {
     recovery_attempts++;
     if (recovery_attempts < 3) {
-      return Result<int>::err(error_code{1, "temporary failure"});
+      return Result<int>::err(error_info{1, "temporary failure"});
     }
     return Result<int>::ok(42);
   };
@@ -97,12 +97,12 @@ TEST_F(ErrorHandlingTest, MultipleErrorRecoveryAttempts) {
 
   // Second attempt fails
   result =
-      result.or_else([&](const error_code &) { return failing_operation(); });
+      result.or_else([&](const error_info &) { return failing_operation(); });
   EXPECT_TRUE(result.is_err());
 
   // Third attempt succeeds
   result =
-      result.or_else([&](const error_code &) { return failing_operation(); });
+      result.or_else([&](const error_info &) { return failing_operation(); });
   EXPECT_TRUE(result.is_ok());
   EXPECT_EQ(result.value(), 42);
   EXPECT_EQ(recovery_attempts, 3);
@@ -111,7 +111,7 @@ TEST_F(ErrorHandlingTest, MultipleErrorRecoveryAttempts) {
 TEST_F(ErrorHandlingTest, ErrorCodeChaining) {
   // Test error code propagation through multiple layers
   auto layer1 = []() -> Result<int> {
-    return Result<int>::err(error_code{1, "layer1 error"});
+    return Result<int>::err(error_info{1, "layer1 error"});
   };
 
   auto layer2 = [&]() -> Result<std::string> {
@@ -181,7 +181,7 @@ TEST_F(ErrorHandlingTest, ResourceCleanupOnError) {
   auto cleanup = helpers::make_scoped_cleanup([&]() { cleanup_called = true; });
 
   // Simulate error condition
-  auto result = Result<int>::err(error_code{1, "error"});
+  auto result = Result<int>::err(error_info{1, "error"});
 
   EXPECT_TRUE(result.is_err());
   // cleanup hasn't run yet
@@ -207,7 +207,7 @@ TEST_F(ErrorHandlingTest, NullPointerHandling) {
 
   auto access_value = [](std::unique_ptr<int> &ptr) -> Result<int> {
     if (!ptr) {
-      return Result<int>::err(error_code{1, "null pointer"});
+      return Result<int>::err(error_info{1, "null pointer"});
     }
     return Result<int>::ok(*ptr);
   };
@@ -222,7 +222,7 @@ TEST_F(ErrorHandlingTest, InvalidOperationHandling) {
   // Test handling of invalid operations
   auto divide = [](int a, int b) -> Result<double> {
     if (b == 0) {
-      return Result<double>::err(error_code{1, "division by zero"});
+      return Result<double>::err(error_info{1, "division by zero"});
     }
     return Result<double>::ok(static_cast<double>(a) / b);
   };
@@ -238,30 +238,30 @@ TEST_F(ErrorHandlingTest, InvalidOperationHandling) {
 
 TEST_F(ErrorHandlingTest, CascadingFailures) {
   // Test multiple failures in sequence
-  std::vector<error_code> errors;
+  std::vector<error_info> errors;
 
   auto operation1 = [&]() -> Result<int> {
-    auto err = error_code{1, "operation1 failed"};
+    auto err = error_info{1, "operation1 failed"};
     errors.push_back(err);
     return Result<int>::err(err);
   };
 
   auto operation2 = [&]() -> Result<int> {
-    auto err = error_code{2, "operation2 failed"};
+    auto err = error_info{2, "operation2 failed"};
     errors.push_back(err);
     return Result<int>::err(err);
   };
 
   auto operation3 = [&]() -> Result<int> {
-    auto err = error_code{3, "operation3 failed"};
+    auto err = error_info{3, "operation3 failed"};
     errors.push_back(err);
     return Result<int>::err(err);
   };
 
   // Try operations in sequence, stopping at first success
   auto result = operation1()
-                    .or_else([&](const error_code &) { return operation2(); })
-                    .or_else([&](const error_code &) { return operation3(); });
+                    .or_else([&](const error_info &) { return operation2(); })
+                    .or_else([&](const error_info &) { return operation3(); });
 
   EXPECT_TRUE(result.is_err());
   EXPECT_EQ(errors.size(), 3);
@@ -276,8 +276,8 @@ TEST_F(ErrorHandlingTest, ErrorContextPreservation) {
     std::string context;
   };
 
-  auto create_error = [](const std::string &ctx) -> error_code {
-    return error_code{500, "error in " + ctx};
+  auto create_error = [](const std::string &ctx) -> error_info {
+    return error_info{500, "error in " + ctx};
   };
 
   std::string context = "database operation";

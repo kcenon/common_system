@@ -412,7 +412,7 @@ TEST_F(MemoryPressureTest, LargeErrorMessage) {
     const size_t message_size = 10000;
     std::string large_message(message_size, 'E');
 
-    auto result = Result<int>::err(error_code{-1, large_message});
+    auto result = Result<int>::err(error_info{-1, large_message});
 
     ASSERT_TRUE(result.is_err());
     EXPECT_EQ(result.error().message.size(), message_size);
@@ -420,8 +420,8 @@ TEST_F(MemoryPressureTest, LargeErrorMessage) {
     // Chain operations on error result
     auto chained = result
         .map([](int x) { return x * 2; })
-        .or_else([](const error_code& err) -> Result<int> {
-            return Result<int>::err(error_code{err.code, "recovered: " + err.message});
+        .or_else([](const error_info& err) -> Result<int> {
+            return Result<int>::err(error_info{err.code, "recovered: " + err.message});
         });
 
     ASSERT_TRUE(chained.is_err());
@@ -470,7 +470,7 @@ TEST_F(MemoryPressureTest, ResultMemoryReuse) {
     }
 
     // Reassign with error
-    result = Result<std::vector<int>>::err(error_code{-1, "test error"});
+    result = Result<std::vector<int>>::err(error_info{-1, "test error"});
     ASSERT_TRUE(result.is_err());
 }
 

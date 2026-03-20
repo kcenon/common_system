@@ -159,7 +159,7 @@ TEST_F(FullSystemIntegrationTest, ErrorHandlingAcrossComponents) {
   std::atomic<int> error_events{0};
 
   struct ErrorEvent {
-    error_code error;
+    error_info error;
     std::string source;
   };
 
@@ -169,7 +169,7 @@ TEST_F(FullSystemIntegrationTest, ErrorHandlingAcrossComponents) {
   // Component with error handling
   auto component_operation = [](int value) -> Result<int> {
     if (value < 0) {
-      return Result<int>::err(error_code{1, "negative value"});
+      return Result<int>::err(error_info{1, "negative value"});
     }
     return Result<int>::ok(value * 2);
   };

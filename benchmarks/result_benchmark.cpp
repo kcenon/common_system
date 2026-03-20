@@ -20,7 +20,7 @@ BENCHMARK(BM_ResultOkCreation);
 
 static void BM_ResultErrorCreation(benchmark::State& state) {
     for (auto _ : state) {
-        auto result = Result<int>::err(error_code{1, "test error"});
+        auto result = Result<int>::err(error_info{1, "test error"});
         benchmark::DoNotOptimize(result);
     }
 }
@@ -80,9 +80,9 @@ BENCHMARK(BM_ResultAndThenChain);
 
 // Error path benchmarks
 static void BM_ResultOrElse(benchmark::State& state) {
-    auto error = Result<int>::err(error_code{1, "error"});
+    auto error = Result<int>::err(error_info{1, "error"});
     for (auto _ : state) {
-        auto recovered = error.or_else([](const error_code&) {
+        auto recovered = error.or_else([](const error_info&) {
             return Result<int>::ok(99);
         });
         benchmark::DoNotOptimize(recovered);
