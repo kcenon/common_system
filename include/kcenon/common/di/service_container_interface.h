@@ -397,8 +397,10 @@ public:
      *
      * Removes all service registrations. Existing resolved instances remain
      * valid but no services can be resolved after this call.
+     *
+     * @return VoidResult - error if the container is frozen, ok otherwise
      */
-    virtual void clear() = 0;
+    virtual VoidResult clear() = 0;
 
 protected:
     // Internal type-erased methods for implementation
