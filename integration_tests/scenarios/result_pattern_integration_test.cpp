@@ -51,7 +51,7 @@ TEST_F(ResultPatternIntegrationTest, BasicResultCreationAndAccess) {
 
 TEST_F(ResultPatternIntegrationTest, ErrorResultCreation) {
     // Create error result
-    auto error = Result<int>::err(error_code{100, "test error"});
+    auto error = Result<int>::err(error_info{100, "test error"});
     EXPECT_FALSE(error.is_ok());
     EXPECT_TRUE(error.is_err());
     EXPECT_EQ(error.error().code, 100);
@@ -69,7 +69,7 @@ TEST_F(ResultPatternIntegrationTest, MapTransformation) {
 
 TEST_F(ResultPatternIntegrationTest, MapOnError) {
     // Map should not execute on error
-    auto result = Result<int>::err(error_code{1, "error"});
+    auto result = Result<int>::err(error_info{1, "error"});
     bool map_executed = false;
 
     auto mapped = result.map([&map_executed](int x) {
@@ -94,7 +94,7 @@ TEST_F(ResultPatternIntegrationTest, AndThenChaining) {
 
 TEST_F(ResultPatternIntegrationTest, AndThenErrorPropagation) {
     // and_then should propagate errors
-    auto result = Result<int>::err(error_code{1, "initial error"});
+    auto result = Result<int>::err(error_info{1, "initial error"});
     bool and_then_executed = false;
 
     auto chained = result.and_then([&and_then_executed](int x) -> Result<std::string> {
@@ -109,8 +109,8 @@ TEST_F(ResultPatternIntegrationTest, AndThenErrorPropagation) {
 
 TEST_F(ResultPatternIntegrationTest, OrElseRecovery) {
     // Test or_else for error recovery
-    auto result = Result<int>::err(error_code{1, "error"});
-    auto recovered = result.or_else([](const error_code&) {
+    auto result = Result<int>::err(error_info{1, "error"});
+    auto recovered = result.or_else([](const error_info&) {
         return Result<int>::ok(99);
     });
 
@@ -123,7 +123,7 @@ TEST_F(ResultPatternIntegrationTest, OrElseNoRecoveryNeeded) {
     auto result = Result<int>::ok(42);
     bool or_else_executed = false;
 
-    auto unchanged = result.or_else([&or_else_executed](const error_code&) {
+    auto unchanged = result.or_else([&or_else_executed](const error_info&) {
         or_else_executed = true;
         return Result<int>::ok(0);
     });
@@ -141,7 +141,7 @@ TEST_F(ResultPatternIntegrationTest, ComplexChaining) {
             if (x > 10) {
                 return Result<int>::ok(x * 2);
             }
-            return Result<int>::err(error_code{1, "value too small"});
+            return Result<int>::err(error_info{1, "value too small"});
         })
         .map([](int x) { return x - 10; });
 
@@ -157,7 +157,7 @@ TEST_F(ResultPatternIntegrationTest, ErrorInChain) {
             if (x > 10) {
                 return Result<int>::ok(x * 2);
             }
-            return Result<int>::err(error_code{1, "value too small"});
+            return Result<int>::err(error_info{1, "value too small"});
         })
         .map([](int x) { return x - 10; });
 
@@ -168,7 +168,7 @@ TEST_F(ResultPatternIntegrationTest, ErrorInChain) {
 TEST_F(ResultPatternIntegrationTest, ValueOrDefault) {
     // Test value_or for default values
     auto success = Result<int>::ok(42);
-    auto error = Result<int>::err(error_code{1, "error"});
+    auto error = Result<int>::err(error_info{1, "error"});
 
     EXPECT_EQ(success.value_or(0), 42);
     EXPECT_EQ(error.value_or(99), 99);
@@ -210,9 +210,9 @@ TEST_F(ResultPatternIntegrationTest, ResultWithComplexTypes) {
 
 TEST_F(ResultPatternIntegrationTest, ErrorCodeComparison) {
     // Test error code comparison
-    error_code err1{100, "error 1"};
-    error_code err2{100, "error 2"};
-    error_code err3{200, "error 3"};
+    error_info err1{100, "error 1"};
+    error_info err2{100, "error 2"};
+    error_info err3{200, "error 3"};
 
     EXPECT_EQ(err1.code, err2.code);
     EXPECT_NE(err1.code, err3.code);
