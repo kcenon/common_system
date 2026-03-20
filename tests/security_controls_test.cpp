@@ -271,8 +271,10 @@ TEST_F(ServiceContainerFreezeTest, FreezePreventsClear) {
 
     container_->freeze();
 
-    // Clear should silently fail when frozen
-    container_->clear();
+    // Clear should return error when frozen
+    auto result = container_->clear();
+    EXPECT_TRUE(result.is_err());
+    EXPECT_EQ(result.error().code, error_codes::REGISTRY_FROZEN);
 
     // Service should still be registered
     EXPECT_TRUE(container_->is_registered<ITestService>());

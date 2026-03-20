@@ -107,8 +107,9 @@ public:
 
     /**
      * @brief Clear all registrations.
+     * @return VoidResult - error if the container is frozen, ok otherwise
      */
-    void clear() override;
+    VoidResult clear() override;
 
     // ===== Security Controls =====
 
@@ -313,7 +314,7 @@ public:
 
     std::unique_ptr<IServiceScope> create_scope() override;
     std::vector<service_descriptor> registered_services() const override;
-    void clear() override;
+    VoidResult clear() override;
 
 protected:
     VoidResult register_factory_internal(
@@ -372,14 +373,17 @@ inline std::vector<service_descriptor> service_container::registered_services() 
     return result;
 }
 
-inline void service_container::clear() {
+inline VoidResult service_container::clear() {
     if (is_frozen()) {
         interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
             interfaces::registry_action::clear_services, "",
             interfaces::source_location::current(), false,
             "Container is frozen"));
-        // Silently ignore clear when frozen to maintain API compatibility
-        return;
+        return make_error<std::monostate>(
+            error_codes::REGISTRY_FROZEN,
+            "Cannot clear services: container is frozen",
+            "di::service_container"
+        );
     }
 
     std::unique_lock lock(mutex_);
@@ -388,6 +392,8 @@ inline void service_container::clear() {
     interfaces::RegistryAuditLog::log_event(interfaces::registry_event(
         interfaces::registry_action::clear_services, "",
         interfaces::source_location::current(), true));
+
+    return VoidResult::ok({});
 }
 
 inline void service_container::freeze() {
@@ -757,9 +763,10 @@ inline std::vector<service_descriptor> service_scope::registered_services() cons
     return parent_.registered_services();
 }
 
-inline void service_scope::clear() {
+inline VoidResult service_scope::clear() {
     std::unique_lock lock(mutex_);
     scoped_instances_.clear();
+    return VoidResult::ok({});
 }
 
 inline VoidResult service_scope::register_factory_internal(

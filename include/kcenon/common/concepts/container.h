@@ -155,7 +155,7 @@ concept ResizableContainer = Container<T> && requires(T t, std::size_t n) {
  */
 template<typename T>
 concept ClearableContainer = Container<T> && requires(T t) {
-    { t.clear() } -> std::same_as<void>;
+    { t.clear() };
 };
 
 /**

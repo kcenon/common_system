@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Remove `const_cast` in `circuit_breaker::get_stats()` by making `failure_window` methods const-correct ([#492](https://github.com/kcenon/common_system/issues/492))
+- Return error from `service_container::clear()` when container is frozen ([#494](https://github.com/kcenon/common_system/issues/494))
 
 ### Changed
 

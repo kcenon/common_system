@@ -137,7 +137,7 @@ template<typename T>
 concept ServiceContainerLike = requires(T t) {
     { t.create_scope() };
     { t.registered_services() };
-    { t.clear() } -> std::same_as<void>;
+    { t.clear() };
 };
 
 /**
