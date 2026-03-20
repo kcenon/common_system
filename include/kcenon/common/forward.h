@@ -30,7 +30,6 @@ namespace interfaces {
 
 // Error handling
 class error_info;
-enum class error_code : int;
 
 // Utility classes
 namespace utils {

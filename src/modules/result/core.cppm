@@ -146,10 +146,6 @@ struct error_info {
     }
 };
 
-/**
- * @brief Alias for backward compatibility.
- */
-using error_code = error_info;
 
 // ============================================================================
 // Result<T> Class

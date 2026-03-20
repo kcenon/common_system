@@ -36,11 +36,9 @@
  * @endcode
  *
  * Migration Guide:
- * - typed_adapter<I, T> -> interface_adapter<I, T>
  * - make_smart_adapter<I>(impl) -> make_interface_adapter<I>(impl)
  * - smart_adapter_factory::make_adapter -> adapter_factory::create
  */
 
 #include "adapter.h"
-#include "typed_adapter.h"
 #include "smart_adapter.h"

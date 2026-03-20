@@ -378,12 +378,12 @@ TEST_F(LogFunctionsTest, Macro_AllLevels) {
     EXPECT_EQ(test_logger_->get_entry(5).level, log_level::critical);
 }
 
-TEST_F(LogFunctionsTest, Macro_LOG_TO_NamedLogger) {
+TEST_F(LogFunctionsTest, Macro_LOG_NamedLogger) {
     auto api_logger = std::make_shared<CaptureLogger>();
     GlobalLoggerRegistry::instance().register_logger("api", api_logger);
 
-    LOG_INFO_TO("api", "API message");
-    LOG_ERROR_TO("api", "API error");
+    LOG_INFO("api", "API message");
+    LOG_ERROR("api", "API error");
 
     EXPECT_EQ(test_logger_->entry_count(), 0);
     EXPECT_EQ(api_logger->entry_count(), 2);
