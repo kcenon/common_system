@@ -226,7 +226,7 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
 
         const auto current_state = state_.load(std::memory_order_acquire);
-        const auto failure_count = const_cast<failure_window&>(failure_window_).get_failure_count();
+        const auto failure_count = failure_window_.get_failure_count();
 
         return {
             {"current_state", to_string(current_state)},
