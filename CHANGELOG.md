@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove `const_cast` in `circuit_breaker::get_stats()` by making `failure_window` methods const-correct ([#492](https://github.com/kcenon/common_system/issues/492))
+
+### Changed
+
+- Add v1.0.0 removal timeline to deprecated `error_code` type alias ([#493](https://github.com/kcenon/common_system/issues/493))
+
 ## [0.2.0] - 2026-03-11
 
 ### Added

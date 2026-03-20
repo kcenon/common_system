@@ -300,17 +300,17 @@ struct serialized_payload {
         const serialized_payload& p) {
         if (p.bytes.size() < header_size) {
             return common::Result<std::vector<uint8_t>>::err(
-                common::error_code{1, "payload too small"});
+                common::error_info{1, "payload too small"});
         }
         if (p.bytes[0] != 0xAB || p.bytes[1] != 0xCD) {
             return common::Result<std::vector<uint8_t>>::err(
-                common::error_code{2, "invalid magic"});
+                common::error_info{2, "invalid magic"});
         }
         uint32_t len = 0;
         std::memcpy(&len, p.bytes.data() + 6, sizeof(len));
         if (p.bytes.size() < header_size + len) {
             return common::Result<std::vector<uint8_t>>::err(
-                common::error_code{3, "truncated payload"});
+                common::error_info{3, "truncated payload"});
         }
         return common::Result<std::vector<uint8_t>>::ok(
             std::vector<uint8_t>(p.bytes.begin() + header_size,

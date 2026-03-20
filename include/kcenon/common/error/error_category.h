@@ -258,8 +258,8 @@ private:
  *
  * @note This class is named typed_error_code to avoid conflicts with the
  *       existing error_code alias (error_code = error_info) in result/core.h.
- *       A future migration will deprecate the alias and rename this class
- *       to error_code.
+ *       The alias is deprecated and will be removed in v1.0.0, at which point
+ *       this class may be renamed to error_code.
  *
  * Example usage:
  * @code

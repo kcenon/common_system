@@ -148,13 +148,12 @@ struct error_info {
  *       - kcenon::common::typed_error_code (from error_category.h) for
  *         category-based error handling
  *
- * @deprecated This alias will be removed in a future version.
- *             Migrate to error_info or the new typed_error_code type.
+ * @deprecated Use error_info directly. Will be removed in v1.0.0.
  *
  * @warning Do not confuse with std::error_code or typed_error_code.
  *          This is purely a transitional alias for Result<T> error handling.
  */
-using error_code = error_info;
+using error_code [[deprecated("Use error_info directly. Will be removed in v1.0.0")]] = error_info;
 
 // ============================================================================
 // Result<T> Class (from result_core.h)

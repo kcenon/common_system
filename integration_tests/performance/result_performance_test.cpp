@@ -167,11 +167,11 @@ TEST_F(ResultPerformanceTest, ErrorPathPerformance) {
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
 
-    auto error = Result<int>::err(error_code{1, "test error"});
+    auto error = Result<int>::err(error_info{1, "test error"});
 
     for (int i = 0; i < iterations; ++i) {
         auto latency = measure_execution_time([&]() {
-            auto recovered = error.or_else([](const error_code&) {
+            auto recovered = error.or_else([](const error_info&) {
                 return Result<int>::ok(99);
             });
             (void)recovered;
