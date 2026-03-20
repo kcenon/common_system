@@ -171,70 +171,6 @@
     ::kcenon::common::logging::log_critical_to(logger_name, msg)
 
 // =============================================================================
-// Named Logger Macros (Backward Compatibility)
-// =============================================================================
-
-/**
- * @def LOG_TRACE_TO(logger_name, msg)
- * @brief Log a trace-level message to a named logger.
- * @deprecated Use LOG_TRACE(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_TRACE_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_trace_to(logger_name, msg)
-
-/**
- * @def LOG_DEBUG_TO(logger_name, msg)
- * @brief Log a debug-level message to a named logger.
- * @deprecated Use LOG_DEBUG(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_DEBUG_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_debug_to(logger_name, msg)
-
-/**
- * @def LOG_INFO_TO(logger_name, msg)
- * @brief Log an info-level message to a named logger.
- * @deprecated Use LOG_INFO(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_INFO_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_info_to(logger_name, msg)
-
-/**
- * @def LOG_WARNING_TO(logger_name, msg)
- * @brief Log a warning-level message to a named logger.
- * @deprecated Use LOG_WARNING(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_WARNING_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_warning_to(logger_name, msg)
-
-/**
- * @def LOG_ERROR_TO(logger_name, msg)
- * @brief Log an error-level message to a named logger.
- * @deprecated Use LOG_ERROR(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_ERROR_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_error_to(logger_name, msg)
-
-/**
- * @def LOG_CRITICAL_TO(logger_name, msg)
- * @brief Log a critical-level message to a named logger.
- * @deprecated Use LOG_CRITICAL(logger_name, msg) instead.
- * @param logger_name The name of the logger (string)
- * @param msg The message to log
- */
-#define LOG_CRITICAL_TO(logger_name, msg) \
-    ::kcenon::common::logging::log_critical_to(logger_name, msg)
-
-// =============================================================================
 // Conditional Logging Macros
 // =============================================================================
 
@@ -347,45 +283,33 @@
 
 // Redefine macros if compile-time level filtering is enabled
 // Each level is disabled when KCENON_MIN_LOG_LEVEL exceeds its threshold
-// Note: variadic LOG_* macros are replaced with no-op, _TO variants kept for backward compat
+// Note: variadic LOG_* macros are replaced with no-op when compile-time level filtering is enabled
 #if KCENON_MIN_LOG_LEVEL > 0  // threshold: trace = 0
     #undef LOG_TRACE
-    #undef LOG_TRACE_TO
     #define LOG_TRACE(...) ((void)0)
-    #define LOG_TRACE_TO(logger_name, msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 1  // threshold: debug = 1
     #undef LOG_DEBUG
-    #undef LOG_DEBUG_TO
     #define LOG_DEBUG(...) ((void)0)
-    #define LOG_DEBUG_TO(logger_name, msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 2  // threshold: info = 2
     #undef LOG_INFO
-    #undef LOG_INFO_TO
     #define LOG_INFO(...) ((void)0)
-    #define LOG_INFO_TO(logger_name, msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 3  // threshold: warning = 3
     #undef LOG_WARNING
-    #undef LOG_WARNING_TO
     #define LOG_WARNING(...) ((void)0)
-    #define LOG_WARNING_TO(logger_name, msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 4  // threshold: error = 4
     #undef LOG_ERROR
-    #undef LOG_ERROR_TO
     #define LOG_ERROR(...) ((void)0)
-    #define LOG_ERROR_TO(logger_name, msg) ((void)0)
 #endif
 
 #if KCENON_MIN_LOG_LEVEL > 5  // threshold: critical = 5
     #undef LOG_CRITICAL
-    #undef LOG_CRITICAL_TO
     #define LOG_CRITICAL(...) ((void)0)
-    #define LOG_CRITICAL_TO(logger_name, msg) ((void)0)
 #endif
