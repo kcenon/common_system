@@ -1,5 +1,14 @@
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
+
+# Optional dependency: yaml-cpp (when built with BUILD_WITH_YAML_CPP=ON)
+set(_COMMON_WITH_YAML_CPP @BUILD_WITH_YAML_CPP@)
+if(_COMMON_WITH_YAML_CPP)
+    find_dependency(yaml-cpp CONFIG REQUIRED)
+endif()
+unset(_COMMON_WITH_YAML_CPP)
+
 include("${CMAKE_CURRENT_LIST_DIR}/common_system-targets.cmake")
 
 # Include feature flags configuration module
