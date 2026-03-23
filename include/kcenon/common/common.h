@@ -113,7 +113,7 @@ struct version_info {
     /// Major version - incremented for breaking changes
     static constexpr int major = 0;
     /// Minor version - incremented for new features
-    static constexpr int minor = 1;
+    static constexpr int minor = 2;
     /// Patch version - incremented for bug fixes
     static constexpr int patch = 0;
     /**
@@ -129,7 +129,7 @@ struct version_info {
      */
     static constexpr int tweak = 0;
     /// Version as human-readable string (MAJOR.MINOR.PATCH.TWEAK format)
-    static constexpr const char* string = "0.1.0.0";
+    static constexpr const char* string = "0.2.0.0";
 };
 
 } // namespace kcenon::common
