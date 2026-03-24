@@ -1,0 +1,82 @@
+name: 'Setup vcpkg'
+description: 'Bootstrap vcpkg pinned to ecosystem baseline with caching'
+
+inputs:
+  vcpkg-commit:
+    description: 'vcpkg commit SHA to checkout (default: ecosystem baseline)'
+    required: false
+    default: 'd90a9b159c08169f39adcd1b0f1ac0ca12c4b96c'
+  manifest-dir:
+    description: 'Directory containing vcpkg.json and vcpkg-configuration.json'
+    required: false
+    default: '.'
+  extra-cache-key:
+    description: 'Additional cache key suffix for project differentiation'
+    required: false
+    default: ''
+
+outputs:
+  vcpkg-root:
+    description: 'Path to the vcpkg installation directory'
+    value: ${{ steps.setup.outputs.vcpkg-root }}
+  toolchain-file:
+    description: 'Path to vcpkg.cmake toolchain file'
+    value: ${{ steps.setup.outputs.toolchain-file }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Determine vcpkg path
+      id: paths
+      shell: bash
+      run: |
+        VCPKG_DIR="${{ github.workspace }}/vcpkg"
+        echo "vcpkg-dir=${VCPKG_DIR}" >> $GITHUB_OUTPUT
+
+    - name: Cache vcpkg
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ steps.paths.outputs.vcpkg-dir }}
+          !${{ steps.paths.outputs.vcpkg-dir }}/buildtrees
+          !${{ steps.paths.outputs.vcpkg-dir }}/packages
+          !${{ steps.paths.outputs.vcpkg-dir }}/downloads
+        key: vcpkg-${{ runner.os }}-${{ inputs.vcpkg-commit }}-${{ hashFiles(format('{0}/vcpkg.json', inputs.manifest-dir), format('{0}/vcpkg-configuration.json', inputs.manifest-dir)) }}${{ inputs.extra-cache-key && format('-{0}', inputs.extra-cache-key) || '' }}
+        restore-keys: |
+          vcpkg-${{ runner.os }}-${{ inputs.vcpkg-commit }}-
+
+    - name: Checkout vcpkg
+      shell: bash
+      run: |
+        if [ ! -d "${{ steps.paths.outputs.vcpkg-dir }}/.git" ]; then
+          git clone https://github.com/microsoft/vcpkg.git "${{ steps.paths.outputs.vcpkg-dir }}"
+        fi
+        cd "${{ steps.paths.outputs.vcpkg-dir }}"
+        git fetch origin "${{ inputs.vcpkg-commit }}" --depth=1 2>/dev/null || git fetch origin --depth=50
+        git checkout "${{ inputs.vcpkg-commit }}"
+
+    - name: Bootstrap vcpkg
+      shell: bash
+      run: |
+        cd "${{ steps.paths.outputs.vcpkg-dir }}"
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          ./bootstrap-vcpkg.bat -disableMetrics
+        else
+          ./bootstrap-vcpkg.sh -disableMetrics
+        fi
+
+    - name: Set environment variables
+      id: setup
+      shell: bash
+      run: |
+        VCPKG_DIR="${{ steps.paths.outputs.vcpkg-dir }}"
+        TOOLCHAIN="${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake"
+
+        echo "VCPKG_ROOT=${VCPKG_DIR}" >> $GITHUB_ENV
+        echo "CMAKE_TOOLCHAIN_FILE=${TOOLCHAIN}" >> $GITHUB_ENV
+
+        echo "vcpkg-root=${VCPKG_DIR}" >> $GITHUB_OUTPUT
+        echo "toolchain-file=${TOOLCHAIN}" >> $GITHUB_OUTPUT
+
+        echo "vcpkg setup complete: ${VCPKG_DIR}"
+        "${VCPKG_DIR}/vcpkg" version
