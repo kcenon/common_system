@@ -1,0 +1,110 @@
+name: Port Sync Check
+
+on:
+  schedule:
+    # Weekly Monday 7am UTC
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-port-sync:
+    name: Detect port drift between projects and vcpkg-registry
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+    - name: Check port sync status
+      run: |
+        declare -A PROJECTS=(
+          ["common_system"]="kcenon-common-system"
+          ["thread_system"]="kcenon-thread-system"
+          ["logger_system"]="kcenon-logger-system"
+          ["container_system"]="kcenon-container-system"
+          ["monitoring_system"]="kcenon-monitoring-system"
+          ["database_system"]="kcenon-database-system"
+          ["network_system"]="kcenon-network-system"
+          ["pacs_system"]="kcenon-pacs-system"
+        )
+
+        DRIFT_COUNT=0
+        SYNC_COUNT=0
+        ERROR_COUNT=0
+
+        echo "## Port Sync Check Results" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        echo "| Project | Port | portfile.cmake | vcpkg.json | Status |" >> "$GITHUB_STEP_SUMMARY"
+        echo "|---------|------|----------------|------------|--------|" >> "$GITHUB_STEP_SUMMARY"
+
+        for PROJECT in "${!PROJECTS[@]}"; do
+          PORT="${PROJECTS[$PROJECT]}"
+
+          # Get SHAs from project repo (source of truth: vcpkg-ports/)
+          PROJECT_PORTFILE_SHA=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/portfile.cmake" \
+            --jq '.sha' 2>/dev/null) || PROJECT_PORTFILE_SHA="NOT_FOUND"
+          PROJECT_VCPKG_JSON_SHA=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/vcpkg.json" \
+            --jq '.sha' 2>/dev/null) || PROJECT_VCPKG_JSON_SHA="NOT_FOUND"
+
+          # Get SHAs from vcpkg-registry
+          REGISTRY_PORTFILE_SHA=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/portfile.cmake" \
+            --jq '.sha' 2>/dev/null) || REGISTRY_PORTFILE_SHA="NOT_FOUND"
+          REGISTRY_VCPKG_JSON_SHA=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/vcpkg.json" \
+            --jq '.sha' 2>/dev/null) || REGISTRY_VCPKG_JSON_SHA="NOT_FOUND"
+
+          # Compare
+          PORTFILE_STATUS="--"
+          VCPKG_JSON_STATUS="--"
+          ROW_STATUS=""
+
+          if [ "$PROJECT_PORTFILE_SHA" = "NOT_FOUND" ] || [ "$REGISTRY_PORTFILE_SHA" = "NOT_FOUND" ]; then
+            PORTFILE_STATUS="missing"
+          elif [ "$PROJECT_PORTFILE_SHA" = "$REGISTRY_PORTFILE_SHA" ]; then
+            PORTFILE_STATUS="synced"
+          else
+            PORTFILE_STATUS="**DRIFT**"
+          fi
+
+          if [ "$PROJECT_VCPKG_JSON_SHA" = "NOT_FOUND" ] || [ "$REGISTRY_VCPKG_JSON_SHA" = "NOT_FOUND" ]; then
+            VCPKG_JSON_STATUS="missing"
+          elif [ "$PROJECT_VCPKG_JSON_SHA" = "$REGISTRY_VCPKG_JSON_SHA" ]; then
+            VCPKG_JSON_STATUS="synced"
+          else
+            VCPKG_JSON_STATUS="**DRIFT**"
+          fi
+
+          if [ "$PORTFILE_STATUS" = "missing" ] || [ "$VCPKG_JSON_STATUS" = "missing" ]; then
+            ROW_STATUS="Error"
+            ERROR_COUNT=$((ERROR_COUNT + 1))
+          elif [ "$PORTFILE_STATUS" = "**DRIFT**" ] || [ "$VCPKG_JSON_STATUS" = "**DRIFT**" ]; then
+            ROW_STATUS="Drift detected"
+            DRIFT_COUNT=$((DRIFT_COUNT + 1))
+          else
+            ROW_STATUS="In sync"
+            SYNC_COUNT=$((SYNC_COUNT + 1))
+          fi
+
+          echo "| ${PROJECT} | ${PORT} | ${PORTFILE_STATUS} | ${VCPKG_JSON_STATUS} | ${ROW_STATUS} |" >> "$GITHUB_STEP_SUMMARY"
+        done
+
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+        echo "### Summary" >> "$GITHUB_STEP_SUMMARY"
+        echo "- **In sync**: ${SYNC_COUNT}" >> "$GITHUB_STEP_SUMMARY"
+        echo "- **Drift detected**: ${DRIFT_COUNT}" >> "$GITHUB_STEP_SUMMARY"
+        echo "- **Errors**: ${ERROR_COUNT}" >> "$GITHUB_STEP_SUMMARY"
+        echo "" >> "$GITHUB_STEP_SUMMARY"
+
+        if [ "$DRIFT_COUNT" -gt 0 ]; then
+          echo "> **Note**: Port drift detected. Run the sync workflow or manually update the vcpkg-registry." >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        if [ "$ERROR_COUNT" -gt 0 ]; then
+          echo "> **Warning**: Some ports could not be found. Verify repository and path names." >> "$GITHUB_STEP_SUMMARY"
+        fi
+
+        # Informational only - do not fail the workflow on drift
+        echo "Port sync check complete: ${SYNC_COUNT} synced, ${DRIFT_COUNT} drifted, ${ERROR_COUNT} errors"
