@@ -1,0 +1,113 @@
+name: vcpkg Registry Consumption Test
+
+on:
+  schedule:
+    # Weekly Monday 6am UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+jobs:
+  consume-test:
+    name: Consume kcenon-common-system from registry
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout common_system
+      uses: actions/checkout@v4
+
+    - name: Setup vcpkg
+      uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+
+    - name: Create test project with vcpkg manifest
+      run: |
+        mkdir -p /tmp/consume-test
+
+        # vcpkg manifest that depends on kcenon-common-system from registry
+        cat > /tmp/consume-test/vcpkg.json << 'MANIFEST'
+        {
+          "name": "consume-test",
+          "version-string": "0.0.0",
+          "dependencies": ["kcenon-common-system"]
+        }
+        MANIFEST
+
+        # Registry configuration pointing to kcenon vcpkg-registry
+        cat > /tmp/consume-test/vcpkg-configuration.json << 'REGISTRY'
+        {
+          "default-registry": {
+            "kind": "builtin",
+            "baseline": "d90a9b159c08169f39adcd1b0f1ac0ca12c4b96c"
+          },
+          "registries": [
+            {
+              "kind": "git",
+              "repository": "https://github.com/kcenon/vcpkg-registry.git",
+              "baseline": "77cc46d5ba5e2aef1581f2ec674f83e1ac906b43",
+              "packages": ["kcenon-*"]
+            }
+          ]
+        }
+        REGISTRY
+
+        cat > /tmp/consume-test/CMakeLists.txt << 'CMAKE'
+        cmake_minimum_required(VERSION 3.20)
+        project(consume_test LANGUAGES CXX)
+
+        set(CMAKE_CXX_STANDARD 20)
+        set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+        find_package(common_system CONFIG REQUIRED)
+
+        add_executable(consume_test main.cpp)
+        target_link_libraries(consume_test PRIVATE common_system::common_system)
+        CMAKE
+
+        cat > /tmp/consume-test/main.cpp << 'CPPEOF'
+        #include <kcenon/common/patterns/result.h>
+
+        #include <iostream>
+
+        int main()
+        {
+            std::cout << "vcpkg registry consumption test passed" << std::endl;
+            return 0;
+        }
+        CPPEOF
+
+    - name: Install dependencies via vcpkg
+      run: |
+        echo "Installing kcenon-common-system from vcpkg registry..."
+        "${{ env.VCPKG_ROOT }}/vcpkg" install \
+          --x-manifest-root=/tmp/consume-test \
+          --x-install-root=/tmp/consume-test/vcpkg_installed 2>&1 || {
+          echo "::error::Failed to install kcenon-common-system from vcpkg registry"
+          exit 1
+        }
+        echo "kcenon-common-system installed successfully"
+
+    - name: Configure test project
+      run: |
+        cmake -B /tmp/consume-test/build \
+          -S /tmp/consume-test \
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.CMAKE_TOOLCHAIN_FILE }}" \
+          -DVCPKG_MANIFEST_DIR=/tmp/consume-test \
+          -DVCPKG_INSTALLED_DIR=/tmp/consume-test/vcpkg_installed \
+          -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+          echo "::error::CMake configure failed - find_package(common_system) may not work"
+          exit 1
+        }
+
+    - name: Build test project
+      run: |
+        cmake --build /tmp/consume-test/build --config Release 2>&1 || {
+          echo "::error::Build failed - linking against common_system::common_system may be broken"
+          exit 1
+        }
+
+    - name: Run test binary
+      run: |
+        /tmp/consume-test/build/consume_test || {
+          echo "::error::Test binary failed to execute"
+          exit 1
+        }
