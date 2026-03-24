@@ -151,6 +151,26 @@ All projects MUST share the same two baselines:
 
 Mismatched baselines across projects will cause version conflicts in CI and local builds.
 
+### Port-Version Convention
+
+Each ecosystem project has two `vcpkg.json` files with **intentionally different**
+`port-version` values:
+
+| Location | File | `port-version` Role |
+|----------|------|---------------------|
+| Project root | `vcpkg.json` | Local manifest rebuild hint. Reset to **0** on every version bump. Used by local and CI builds. |
+| `vcpkg-ports/<pkg>/` | `vcpkg.json` | Registry port iteration counter. Incremented when the portfile, dependencies, or packaging change **without** a library version bump. |
+
+These values diverge by design -- root serves local builds, port serves registry
+consumers. For example, a root `port-version` of **0** alongside a port
+`port-version` of **3** means the library version has not changed, but the port
+packaging was updated three times (e.g., portfile fixes, dependency adjustments).
+
+**Rules:**
+- Reset root `port-version` to 0 whenever `version` is bumped.
+- Increment port `port-version` independently for each registry-only change.
+- Never synchronize the two values -- they track different concerns.
+
 ---
 
 ## 3. Version Matrix
