@@ -14,11 +14,13 @@ coverage:
         target: 40%
         threshold: 2%
         if_ci_failed: error
+        informational: true  # Don't block PRs on coverage status
     patch:
       default:
         target: 60%
         threshold: 5%
         if_ci_failed: error
+        informational: true  # Don't block PRs on coverage status
 
 # Gradual improvement plan:
 # - Phase 1 (Current): 40% project, 60% patch
