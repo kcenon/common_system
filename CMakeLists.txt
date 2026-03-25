@@ -280,20 +280,20 @@ install(EXPORT common_system-targets
 include(CMakePackageConfigHelpers)
 
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common_systemConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common_system-config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config.cmake"
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
 )
 
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config-version.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/common_systemConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config-version.cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/features.cmake"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KcenonCompilerRequirements.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
