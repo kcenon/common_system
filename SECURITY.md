@@ -13,7 +13,10 @@ upgrade to the most recent version.
 ## Reporting a Vulnerability
 
 If you discover a security vulnerability in Common System, please report it
-responsibly using [GitHub Security Advisories](https://github.com/kcenon/common_system/security/advisories/new).
+responsibly through one of the following channels:
+
+- **Email**: [kcenon@naver.com](mailto:kcenon@naver.com)
+- **GitHub Security Advisories**: [Report here](https://github.com/kcenon/common_system/security/advisories/new)
 
 **Please do NOT report security vulnerabilities through public GitHub issues.**
 
