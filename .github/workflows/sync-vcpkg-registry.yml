@@ -1,0 +1,294 @@
+name: Sync vcpkg Registry
+
+on:
+  workflow_call:
+    inputs:
+      port-name:
+        description: 'vcpkg port name (e.g., kcenon-common-system)'
+        required: true
+        type: string
+      version:
+        description: 'Release version (e.g., v0.2.0 or 0.2.0)'
+        required: true
+        type: string
+    secrets:
+      REGISTRY_PAT:
+        description: 'PAT with write access to kcenon/vcpkg-registry'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Sync ${{ inputs.port-name }} to vcpkg-registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+    - name: Validate inputs
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+        VERSION: ${{ inputs.version }}
+      run: |
+        if [[ -z "${PORT_NAME}" ]]; then
+          echo "::error::port-name input is required"
+          exit 1
+        fi
+        if [[ -z "${VERSION}" ]]; then
+          echo "::error::version input is required"
+          exit 1
+        fi
+
+    - name: Derive version and repo metadata
+      id: meta
+      env:
+        RAW_VERSION: ${{ inputs.version }}
+        PORT_NAME: ${{ inputs.port-name }}
+      run: |
+        # Strip 'v' prefix if present
+        VERSION="${RAW_VERSION#v}"
+        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+        # Derive GitHub repo name from port name
+        # e.g., kcenon-common-system -> common_system
+        SYSTEM_NAME=$(echo "${PORT_NAME}" | sed 's/^kcenon-//' | sed 's/-/_/g')
+        echo "repo=kcenon/${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
+        echo "system-name=${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
+
+        echo "Port: ${PORT_NAME}"
+        echo "Version: ${VERSION}"
+        echo "Repo: kcenon/${SYSTEM_NAME}"
+
+    - name: Checkout source repository
+      uses: actions/checkout@v6
+      with:
+        path: source
+
+    - name: Download release archive and compute SHA512
+      id: sha
+      env:
+        VERSION: ${{ steps.meta.outputs.version }}
+        REPO: ${{ steps.meta.outputs.repo }}
+      run: |
+        TAG="v${VERSION}"
+        URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
+
+        echo "Downloading archive from ${URL}..."
+        HTTP_CODE=$(curl -sL -o /tmp/source.tar.gz -w "%{http_code}" "${URL}")
+
+        if [[ "${HTTP_CODE}" != "200" ]]; then
+          echo "::error::Failed to download release archive (HTTP ${HTTP_CODE}): ${URL}"
+          exit 1
+        fi
+
+        SHA512=$(sha512sum /tmp/source.tar.gz | awk '{print $1}')
+        echo "sha512=${SHA512}" >> "$GITHUB_OUTPUT"
+        echo "SHA512: ${SHA512}"
+        rm -f /tmp/source.tar.gz
+
+    - name: Update portfile.cmake with new SHA512 and REF
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+        VERSION: ${{ steps.meta.outputs.version }}
+        SHA512: ${{ steps.sha.outputs.sha512 }}
+      run: |
+        PORT_DIR="source/vcpkg-ports/${PORT_NAME}"
+        PORTFILE="${PORT_DIR}/portfile.cmake"
+
+        if [[ ! -f "${PORTFILE}" ]]; then
+          echo "::error::Portfile not found: ${PORTFILE}"
+          exit 1
+        fi
+
+        # Update SHA512 hash
+        sed -i "s/SHA512 [0-9a-f]\{1,\}/SHA512 ${SHA512}/" "${PORTFILE}"
+
+        # Verify REF uses the ${VERSION} pattern (no hardcoded tag)
+        if grep -q 'REF "v${VERSION}"' "${PORTFILE}"; then
+          echo "REF uses \${VERSION} variable pattern — no update needed"
+        else
+          echo "::warning::REF does not use \${VERSION} pattern; verify manually"
+        fi
+
+        echo "=== Updated portfile.cmake ==="
+        cat "${PORTFILE}"
+
+    - name: Update vcpkg.json version
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+        VERSION: ${{ steps.meta.outputs.version }}
+      run: |
+        PORT_DIR="source/vcpkg-ports/${PORT_NAME}"
+        VCPKG_JSON="${PORT_DIR}/vcpkg.json"
+
+        if [[ ! -f "${VCPKG_JSON}" ]]; then
+          echo "::error::vcpkg.json not found: ${VCPKG_JSON}"
+          exit 1
+        fi
+
+        # Update version field and reset port-version to 0
+        jq --arg version "${VERSION}" \
+          '.version = $version | .["port-version"] = 0' \
+          "${VCPKG_JSON}" > "${VCPKG_JSON}.tmp"
+        mv "${VCPKG_JSON}.tmp" "${VCPKG_JSON}"
+
+        echo "=== Updated vcpkg.json ==="
+        cat "${VCPKG_JSON}"
+
+    - name: Checkout vcpkg-registry
+      uses: actions/checkout@v6
+      with:
+        repository: kcenon/vcpkg-registry
+        token: ${{ secrets.REGISTRY_PAT }}
+        path: vcpkg-registry
+
+    - name: Copy port files to registry
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+      run: |
+        SRC="source/vcpkg-ports/${PORT_NAME}"
+        DST="vcpkg-registry/ports/${PORT_NAME}"
+
+        mkdir -p "${DST}"
+        cp -r "${SRC}/"* "${DST}/"
+
+        echo "=== Copied port files ==="
+        ls -la "${DST}/"
+
+    - name: Update version database
+      id: versions
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+        VERSION: ${{ steps.meta.outputs.version }}
+      run: |
+        cd vcpkg-registry
+
+        # Configure git for commit
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Stage port files to compute git-tree SHA
+        git add "ports/${PORT_NAME}/"
+        git commit -m "chore(ports): update ${PORT_NAME} to ${VERSION}" --allow-empty
+
+        # Compute git-tree SHA for the port directory
+        GIT_TREE=$(git rev-parse "HEAD:ports/${PORT_NAME}")
+        echo "git-tree: ${GIT_TREE}"
+
+        # Determine the version file prefix (first letter of port name)
+        PREFIX="${PORT_NAME:0:1}"
+        VERSIONS_DIR="versions/${PREFIX}-"
+        VERSIONS_FILE="${VERSIONS_DIR}/${PORT_NAME}.json"
+
+        mkdir -p "${VERSIONS_DIR}"
+
+        # Create or update versions file
+        NEW_ENTRY=$(jq -n \
+          --arg version "${VERSION}" \
+          --arg tree "${GIT_TREE}" \
+          '{"version": $version, "port-version": 0, "git-tree": $tree}')
+
+        if [[ -f "${VERSIONS_FILE}" ]]; then
+          # Check if this version already exists (re-run scenario)
+          if jq -e --arg v "${VERSION}" '.versions[] | select(.version == $v)' "${VERSIONS_FILE}" > /dev/null 2>&1; then
+            echo "Version ${VERSION} already exists, updating in place"
+            jq --argjson entry "${NEW_ENTRY}" --arg v "${VERSION}" \
+              '.versions = [.versions[] | if .version == $v then $entry else . end]' \
+              "${VERSIONS_FILE}" > "${VERSIONS_FILE}.tmp"
+          else
+            # Prepend new version entry to existing versions array
+            jq --argjson entry "${NEW_ENTRY}" \
+              '.versions = [$entry] + .versions' \
+              "${VERSIONS_FILE}" > "${VERSIONS_FILE}.tmp"
+          fi
+          mv "${VERSIONS_FILE}.tmp" "${VERSIONS_FILE}"
+        else
+          # Create new versions file
+          jq -n --argjson entry "${NEW_ENTRY}" \
+            '{"versions": [$entry]}' > "${VERSIONS_FILE}"
+        fi
+
+        echo "=== ${VERSIONS_FILE} ==="
+        cat "${VERSIONS_FILE}"
+
+        # Update baseline.json
+        BASELINE_FILE="versions/baseline.json"
+
+        if [[ ! -f "${BASELINE_FILE}" ]]; then
+          echo "::error::baseline.json not found"
+          exit 1
+        fi
+
+        jq --arg port "${PORT_NAME}" \
+          --arg version "${VERSION}" \
+          '.default[$port] = {"baseline": $version, "port-version": 0}' \
+          "${BASELINE_FILE}" > "${BASELINE_FILE}.tmp"
+        mv "${BASELINE_FILE}.tmp" "${BASELINE_FILE}"
+
+        echo "=== baseline.json (${PORT_NAME} entry) ==="
+        jq --arg port "${PORT_NAME}" '.default[$port]' "${BASELINE_FILE}"
+
+        # Amend the commit to include version database changes
+        git add "${VERSIONS_FILE}" "${BASELINE_FILE}"
+        git commit --amend -m "chore(ports): update ${PORT_NAME} to ${VERSION}"
+
+        # Recompute git-tree SHA after amending (port files unchanged, but
+        # the tree SHA must reflect the final commit)
+        FINAL_GIT_TREE=$(git rev-parse "HEAD:ports/${PORT_NAME}")
+        if [[ "${GIT_TREE}" != "${FINAL_GIT_TREE}" ]]; then
+          echo "::warning::git-tree changed after amend, updating versions file"
+          jq --arg tree "${FINAL_GIT_TREE}" \
+            '.versions[0]["git-tree"] = $tree' \
+            "${VERSIONS_FILE}" > "${VERSIONS_FILE}.tmp"
+          mv "${VERSIONS_FILE}.tmp" "${VERSIONS_FILE}"
+          git add "${VERSIONS_FILE}"
+          git commit --amend -m "chore(ports): update ${PORT_NAME} to ${VERSION}"
+        fi
+
+    - name: Create pull request to vcpkg-registry
+      env:
+        GH_TOKEN: ${{ secrets.REGISTRY_PAT }}
+        PORT_NAME: ${{ inputs.port-name }}
+        VERSION: ${{ steps.meta.outputs.version }}
+        REPO: ${{ steps.meta.outputs.repo }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        BRANCH="auto/${PORT_NAME}-${VERSION}"
+
+        cd vcpkg-registry
+
+        # Create and push branch
+        git checkout -b "${BRANCH}"
+        git push origin "${BRANCH}"
+
+        # Write PR body to file to avoid YAML/heredoc quoting issues
+        {
+          echo "## Summary"
+          echo ""
+          echo "Automated port sync triggered by release of [${REPO} v${VERSION}](https://github.com/${REPO}/releases/tag/v${VERSION})."
+          echo ""
+          echo "- Updated \`ports/${PORT_NAME}/portfile.cmake\` with new SHA512 hash"
+          echo "- Updated \`ports/${PORT_NAME}/vcpkg.json\` to version ${VERSION}"
+          echo "- Updated \`versions/k-/${PORT_NAME}.json\` with new version entry"
+          echo "- Updated \`versions/baseline.json\` baseline"
+          echo ""
+          echo "## Source"
+          echo ""
+          echo "- Repository: \`${REPO}\`"
+          echo "- Release: \`v${VERSION}\`"
+          echo "- Workflow run: ${RUN_URL}"
+          echo ""
+          echo "## Test plan"
+          echo ""
+          echo "- [ ] Verify SHA512 matches the release archive"
+          echo "- [ ] Verify \`vcpkg install ${PORT_NAME}\` resolves correctly"
+        } > /tmp/pr-body.md
+
+        # Create pull request
+        gh pr create \
+          --repo kcenon/vcpkg-registry \
+          --title "chore(ports): update ${PORT_NAME} to ${VERSION}" \
+          --body-file /tmp/pr-body.md \
+          --base main \
+          --head "${BRANCH}"
