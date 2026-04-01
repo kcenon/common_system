@@ -99,6 +99,7 @@ endif()
 # Create interface library (header-only by default)
 add_library(common_system INTERFACE)
 add_library(kcenon::common ALIAS common_system)
+add_library(kcenon::common_system ALIAS common_system)
 add_library(common_system::common_system ALIAS common_system)
 
 # Set include directories
