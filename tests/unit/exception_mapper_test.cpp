@@ -1,6 +1,6 @@
 // BSD 3-Clause License
-// Copyright (c) 2025, kcenon
-// Test for exception_mapper improvements
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
 
 #include <kcenon/common/patterns/result.h>
 #include <gtest/gtest.h>
