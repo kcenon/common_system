@@ -1,7 +1,6 @@
 // BSD 3-Clause License
-//
-// Copyright (c) 2025, kcenon
-// All rights reserved.
+// Copyright (c) 2025, 🍀☀🌕🌥 🌊
+// See the LICENSE file in the project root for full license information.
 
 /**
  * @file result_helpers_test.cpp
