@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Dependency Matrix - 상세 분석
 
+> **SSOT**: This document is the single source of truth for **Dependency Matrix - 상세 분석**.
+
 > **Language:** [English](DEPENDENCY_MATRIX.md) | **한국어**
 
 

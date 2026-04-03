@@ -10,6 +10,8 @@ category: "GUID"
 
 # 스마트 포인터 사용 가이드라인
 
+> **SSOT**: This document is the single source of truth for **스마트 포인터 사용 가이드라인**.
+
 > **Language:** [English](SMART_POINTER_GUIDELINES.md) | **한국어**
 
 

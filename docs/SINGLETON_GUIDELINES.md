@@ -10,6 +10,8 @@ category: "GUID"
 
 # Singleton Pattern Guidelines
 
+> **SSOT**: This document is the single source of truth for **Singleton Pattern Guidelines**.
+
 This guide establishes standardized singleton pattern guidelines for the kcenon ecosystem to prevent Static Destruction Order Fiasco (SDOF) issues across all systems.
 
 ## Background

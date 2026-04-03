@@ -10,6 +10,8 @@ category: "INTR"
 
 # common_system Integration Policy
 
+> **SSOT**: This document is the single source of truth for **common_system Integration Policy**.
+
 > **Language:** **English** | [한국어](INTEGRATION_POLICY.kr.md)
 
 ## Overview

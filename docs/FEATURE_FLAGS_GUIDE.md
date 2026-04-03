@@ -10,6 +10,8 @@ category: "GUID"
 
 # Feature Flags Framework Guide
 
+> **SSOT**: This document is the single source of truth for **Feature Flags Framework Guide**.
+
 > **Language:** **English** | [한국어](FEATURE_FLAGS_GUIDE.kr.md)
 
 **Complete Guide**: Compile-Time Feature Detection, Runtime Feature Flags, and Cross-System Integration

@@ -12,6 +12,8 @@ category: "INTR"
 
 # System Integration Guide
 
+> **SSOT**: This document is the single source of truth for **System Integration Guide**.
+
 ## Table of Contents
 
 - [Overview](#overview)

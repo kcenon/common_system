@@ -10,6 +10,8 @@ category: "MIGR"
 
 # C++20 모듈 마이그레이션 가이드
 
+> **SSOT**: This document is the single source of truth for **C++20 모듈 마이그레이션 가이드**.
+
 **common_system에서 기존 헤더 대신 C++20 모듈을 사용하기 위한 가이드**입니다.
 
 > **Language:** [English](MODULE_MIGRATION.md) | **한국어**

@@ -10,6 +10,8 @@ category: "PROJ"
 
 # 변경 이력
 
+> **SSOT**: This document is the single source of truth for **변경 이력**.
+
 Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문서화됩니다.
 
 이 문서는 [Keep a Changelog](https://keepachangelog.com/ko/1.0.0/) 형식을 따르며,

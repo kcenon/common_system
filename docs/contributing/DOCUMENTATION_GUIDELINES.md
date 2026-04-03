@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Documentation Structure Guidelines
 
+> **SSOT**: This document is the single source of truth for **Documentation Structure Guidelines**.
+
 > **Language:** **English** | [한국어](DOCUMENTATION_GUIDELINES.kr.md)
 
 **Version:** 1.0.0

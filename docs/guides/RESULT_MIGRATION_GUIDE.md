@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Result\<T\> Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Result\<T\> Migration Guide**.
+
 > **Language:** **English** | [한국어](RESULT_MIGRATION_GUIDE.kr.md)
 
 ## Table of Contents

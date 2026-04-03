@@ -10,6 +10,8 @@ category: "MIGR"
 
 # DI Container Migration Guide
 
+> **SSOT**: This document is the single source of truth for **DI Container Migration Guide**.
+
 > **Language:** **English**
 
 ## Table of Contents

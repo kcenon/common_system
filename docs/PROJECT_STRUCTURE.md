@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Common System - Project Structure
 
+> **SSOT**: This document is the single source of truth for **Common System - Project Structure**.
+
 **Language:** **English** | [한국어](PROJECT_STRUCTURE.kr.md)
 
 This document provides a comprehensive overview of the common_system project structure, explaining the purpose of each directory and key files.

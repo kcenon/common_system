@@ -10,6 +10,8 @@ category: "GUID"
 
 # CI/CD Guide - common_system
 
+> **SSOT**: This document is the single source of truth for **CI/CD Guide - common_system**.
+
 This document describes the Continuous Integration and Continuous Deployment (CI/CD) pipeline for the `common_system` project, a header-only C++ library. The pipelines are designed to validate code quality, test functionality, and ensure documentation is always up-to-date.
 
 ## Table of Contents

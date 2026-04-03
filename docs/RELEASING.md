@@ -14,6 +14,8 @@ category: "PROJ"
 
 # Releasing common_system
 
+> **SSOT**: This document is the single source of truth for **Releasing common_system**.
+
 This document describes the versioning policy and release process for common_system
 and the broader kcenon ecosystem.
 

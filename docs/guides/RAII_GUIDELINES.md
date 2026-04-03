@@ -10,6 +10,8 @@ category: "GUID"
 
 # RAII Pattern Guidelines for Common System
 
+> **SSOT**: This document is the single source of truth for **RAII Pattern Guidelines for Common System**.
+
 > **Language:** **English** | [한국어](RAII_GUIDELINES.kr.md)
 
 

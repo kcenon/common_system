@@ -10,6 +10,8 @@ category: "MIGR"
 
 # IExecutor API Migration Guide
 
+> **SSOT**: This document is the single source of truth for **IExecutor API Migration Guide**.
+
 **Date**: 2025-11-09
 **Status**: Deprecation Notice
 **Target Removal**: Next major version (2.0.0)

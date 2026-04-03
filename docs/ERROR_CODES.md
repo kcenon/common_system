@@ -10,6 +10,8 @@ category: "API"
 
 # Error Code Registry
 
+> **SSOT**: This document is the single source of truth for **Error Code Registry**.
+
 > **Language:** **English** | [한국어](ERROR_CODES.kr.md)
 
 Comprehensive registry of all error codes across the kcenon ecosystem systems.

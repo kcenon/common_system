@@ -10,6 +10,8 @@ category: "GUID"
 
 # Logging Best Practices
 
+> **SSOT**: This document is the single source of truth for **Logging Best Practices**.
+
 This guide covers best practices for logging in applications using the common_system runtime binding pattern.
 
 ## Overview

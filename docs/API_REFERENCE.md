@@ -10,6 +10,8 @@ category: "API"
 
 # common_system API Reference
 
+> **SSOT**: This document is the single source of truth for **common_system API Reference**.
+
 > **Version**: 0.2.3.0
 > **Last Updated**: 2025-12-10
 > **Status**: Production Ready (Tier 0)

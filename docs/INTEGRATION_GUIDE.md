@@ -10,6 +10,8 @@ category: "INTR"
 
 # Cross-System Integration Guide
 
+> **SSOT**: This document is the single source of truth for **Cross-System Integration Guide**.
+
 > **Language:** **English** | [한국어](INTEGRATION_GUIDE.kr.md)
 
 **Complete Guide**: Dependency Map, Integration Patterns, Scenarios, Error Handling, and Examples

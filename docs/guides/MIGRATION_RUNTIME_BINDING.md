@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Migration Guide: Runtime Binding Pattern
 
+> **SSOT**: This document is the single source of truth for **Migration Guide: Runtime Binding Pattern**.
+
 This guide provides step-by-step instructions for migrating existing code to use the runtime binding pattern introduced in common_system v2.0.
 
 ## Prerequisites

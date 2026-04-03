@@ -10,6 +10,8 @@ category: "PROJ"
 
 # KCENON 에코시스템 호환성 매트릭스
 
+> **SSOT**: This document is the single source of truth for **KCENON 에코시스템 호환성 매트릭스**.
+
 이 문서는 모든 KCENON 에코시스템 구성 요소 간의 버전 호환성 및 의존성 요구 사항을 정의합니다.
 
 > **Language:** [English](COMPATIBILITY.md) | **한국어**
