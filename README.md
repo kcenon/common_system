@@ -12,43 +12,113 @@
 ## Table of Contents
 
 - [Overview](#overview)
-- [Quick Start](#quick-start)
+- [Key Features](#key-features)
 - [Requirements](#requirements)
+- [Quick Start](#quick-start)
 - [Installation](#installation)
 - [Architecture](#architecture)
-- [Core Features](#core-features)
+- [Core Concepts](#core-concepts)
+- [API Overview](#api-overview)
 - [Examples](#examples)
-- [Documentation](#documentation)
 - [Performance](#performance)
-- [Error Handling Foundation](#error-handling-foundation)
-- [Production Quality](#production-quality)
+- [Ecosystem Integration](#ecosystem-integration)
 - [Contributing](#contributing)
 - [License](#license)
+
+---
 
 ## Overview
 
 A foundational C++20 header-only library providing essential interfaces and design patterns for building modular, loosely-coupled system architectures. Designed as the cornerstone of the ecosystem, it enables seamless integration between system modules while maintaining zero runtime overhead through template-based abstractions and interface-driven design.
 
 **Key Value Propositions**:
-- 🚀 **Zero-overhead abstractions**: Template-based interfaces with compile-time resolution
-- 🔒 **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
-- 🏗️ **Header-only design**: No library linking, no dependencies, instant integration
-- 🛡️ **C++20 Module support**: Optional module-based build for faster compilation
-- 🌐 **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
+- **Zero-overhead abstractions**: Template-based interfaces with compile-time resolution
+- **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
+- **Header-only design**: No library linking, no dependencies, instant integration
+- **C++20 Module support**: Optional module-based build for faster compilation
+- **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
 **Latest Updates** (2026-01):
-- ✅ Complete separation from individual modules
-- ✅ Comprehensive Result<T> pattern implementation
-- ✅ IExecutor interface standardization with ABI version checking
-- ✅ Health monitoring system with dependency graph and recovery handlers
-- ✅ Circuit breaker pattern for fault tolerance and resilience
-- ✅ IStats interface for unified statistics collection and monitoring
+- Complete separation from individual modules
+- Comprehensive Result<T> pattern implementation
+- IExecutor interface standardization with ABI version checking
+- Health monitoring system with dependency graph and recovery handlers
+- Circuit breaker pattern for fault tolerance and resilience
+- IStats interface for unified statistics collection and monitoring
+
+---
+
+## Key Features
+
+| Category | Feature | Description | Status |
+|----------|---------|-------------|--------|
+| **Patterns** | Result<T> | Rust-inspired monadic error handling (and_then, map, or_else) | Stable |
+| **Patterns** | Circuit Breaker | Resilience pattern with CLOSED/OPEN/HALF_OPEN states | Stable |
+| **Patterns** | Event Bus | Thread-safe synchronous pub/sub | Stable |
+| **Interfaces** | IExecutor / IJob | Universal task execution abstraction | Stable |
+| **Interfaces** | ILogger / IMetricCollector | Monitoring and logging interfaces | Stable |
+| **DI** | Service Container | Thread-safe DI with singleton/transient/scoped lifetimes | Stable |
+| **Config** | Config Loader / Watcher | Configuration management with file watching | Stable |
+| **Config** | CLI Parser | Command-line argument parsing | Stable |
+| **Utils** | Circular Buffer / Object Pool | High-performance utility data structures | Stable |
+| **Concepts** | C++20 Concepts | Resultable, Unwrappable, callable, container, etc. | Stable |
+
+---
+
+## Requirements
+
+| Dependency | Version | Required | Description |
+|------------|---------|----------|-------------|
+| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features (concepts) |
+| CMake | 3.28+ | Yes | Build system |
+
+### Compiler Requirements
+
+common_system enforces minimum compiler versions at CMake configure time via
+`KcenonCompilerRequirements.cmake`. Downstream systems can include this module
+for consistent enforcement.
+
+| Build Mode | GCC | Clang | MSVC | Apple Clang |
+|------------|-----|-------|------|-------------|
+| **Header-only** (default) | 11+ | 14+ | 2022 (19.30+) | 14+ |
+| **C++20 Modules** (optional) | 14+ | 16+ | 2022 17.4 (19.34+) | Not supported |
+
+### Ecosystem-Wide Compiler Requirements
+
+When using multiple systems together, use the **highest** requirement from your dependency chain:
+
+| Usage Scenario | GCC | Clang | MSVC | Apple Clang | Notes |
+|----------------|-----|-------|------|-------------|-------|
+| common_system only | 11+ | 14+ | 2022+ | 14+ | Baseline |
+| + thread_system | **13+** | **17+** | 2022+ | 14+ | Higher requirements |
+| + logger_system | 11+ | 14+ | 2022+ | 14+ | Optional thread_system |
+| + container_system | 11+ | 14+ | 2022+ | 14+ | Uses common_system |
+| + monitoring_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
+| + database_system | **13+** | **17+** | 2022+ | 14+ | Full ecosystem |
+| + network_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
+
+> **Note**: If using any system that depends on thread_system, you need GCC 13+ or Clang 17+.
+> All systems can include `KcenonCompilerRequirements.cmake` from common_system for
+> automated version enforcement at configure time.
+
+### Dependency Flow
+
+```
+common_system (Foundation Layer - No Dependencies)
+       |
+       | provides interfaces to
+       |
+       +-- thread_system (implements IExecutor)
+       +-- logger_system (uses Result<T>)
+       +-- container_system (uses Result<T>)
+       +-- monitoring_system (event bus)
+       +-- network_system (uses IExecutor)
+       +-- database_system (uses Result<T> and IExecutor)
+```
 
 ---
 
 ## Quick Start
-
-### Basic Example
 
 ```cpp
 #include <kcenon/common/patterns/result.h>
@@ -73,60 +143,7 @@ auto result = load_config("app.conf")
     .map(apply_defaults);
 ```
 
-📖 **[Full Getting Started Guide →](docs/guides/QUICK_START.md)**
-
----
-
-## Requirements
-
-| Dependency | Version | Required | Description |
-|------------|---------|----------|-------------|
-| C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features (concepts) |
-| CMake | 3.28+ | Yes | Build system |
-
-### Compiler Requirements
-
-common_system enforces minimum compiler versions at CMake configure time via
-`KcenonCompilerRequirements.cmake`. Downstream systems can include this module
-for consistent enforcement.
-
-| Build Mode | GCC | Clang | MSVC | Apple Clang |
-|------------|-----|-------|------|-------------|
-| **Header-only** (default) | 11+ | 14+ | 2022 (19.30+) | 14+ |
-| **C++20 Modules** (optional) | 14+ | 16+ | 2022 17.4 (19.34+) | Not supported |
-
-### Dependency Flow
-
-```
-common_system (Foundation Layer - No Dependencies)
-       │
-       │ provides interfaces to
-       │
-       ├── thread_system (implements IExecutor)
-       ├── logger_system (uses Result<T>)
-       ├── container_system (uses Result<T>)
-       ├── monitoring_system (event bus)
-       ├── network_system (uses IExecutor)
-       └── database_system (uses Result<T> and IExecutor)
-```
-
-### Ecosystem-Wide Compiler Requirements
-
-When using multiple systems together, use the **highest** requirement from your dependency chain:
-
-| Usage Scenario | GCC | Clang | MSVC | Apple Clang | Notes |
-|----------------|-----|-------|------|-------------|-------|
-| common_system only | 11+ | 14+ | 2022+ | 14+ | Baseline |
-| + thread_system | **13+** | **17+** | 2022+ | 14+ | Higher requirements |
-| + logger_system | 11+ | 14+ | 2022+ | 14+ | Optional thread_system |
-| + container_system | 11+ | 14+ | 2022+ | 14+ | Uses common_system |
-| + monitoring_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
-| + database_system | **13+** | **17+** | 2022+ | 14+ | Full ecosystem |
-| + network_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
-
-> **Note**: If using any system that depends on thread_system, you need GCC 13+ or Clang 17+.
-> All systems can include `KcenonCompilerRequirements.cmake` from common_system for
-> automated version enforcement at configure time.
+[Full Getting Started Guide](docs/guides/QUICK_START.md)
 
 ---
 
@@ -144,19 +161,7 @@ find_package(common_system CONFIG REQUIRED)
 target_link_libraries(your_target PRIVATE kcenon::common_system)
 ```
 
-### Option 1: Header-Only Usage (Simplest)
-
-```bash
-git clone https://github.com/kcenon/common_system.git
-# Include headers directly - no build required!
-```
-
-```cpp
-#include <kcenon/common/interfaces/executor_interface.h>
-#include <kcenon/common/patterns/result.h>
-```
-
-### Option 2: CMake Integration (Recommended)
+### CMake FetchContent (Recommended)
 
 ```cmake
 include(FetchContent)
@@ -170,7 +175,19 @@ FetchContent_MakeAvailable(common_system)
 target_link_libraries(your_target PRIVATE kcenon::common)
 ```
 
-### Option 3: C++20 Modules
+### Header-Only Usage (Simplest)
+
+```bash
+git clone https://github.com/kcenon/common_system.git
+# Include headers directly - no build required!
+```
+
+```cpp
+#include <kcenon/common/interfaces/executor_interface.h>
+#include <kcenon/common/patterns/result.h>
+```
+
+### C++20 Modules
 
 ```bash
 # Build with C++20 module support (requires CMake 3.28+, Ninja, Clang 16+/GCC 14+)
@@ -194,64 +211,58 @@ int main() {
 
 ## Architecture
 
-### Ecosystem Integration
-
-This common system serves as the foundational layer that all other system modules build upon:
+### Module Structure
 
 ```
-                    ┌──────────────────┐
-                    │  common_system   │ ◄── Foundation Layer
-                    │  (interfaces)    │
-                    └────────┬─────────┘
-                             │ provides interfaces
-       ┌─────────────────────┼─────────────────────┐
-       │                     │                     │
-┌──────▼───────┐    ┌────────▼────────┐   ┌───────▼────────┐
-│thread_system │    │network_system   │   │monitoring_sys. │
-│(implements   │    │(uses IExecutor) │   │(event bus)     │
-│ IExecutor)   │    └─────────────────┘   └────────────────┘
-└──────────────┘             │                     │
-       │                     │                     │
-       └─────────────────────┼─────────────────────┘
-                             │ all use
-                    ┌────────▼─────────┐
-                    │ Result<T> pattern│
-                    │ Error handling   │
-                    └──────────────────┘
+include/kcenon/common/
+  adapters/       - Adapter pattern (adapter.h, smart_adapter.h)
+  bootstrap/      - System bootstrapper
+  concepts/       - C++20 concepts (Resultable, Unwrappable, callable, container, etc.)
+  config/         - Feature flags, ABI version, config loader/watcher, CLI parser
+  di/             - Dependency injection (service_container, unified_bootstrapper)
+  error/          - Error codes and error category system
+  interfaces/     - Core abstractions (IExecutor, IJob, ILogger, IDatabase, IThreadPool, etc.)
+  logging/        - Log functions and macros
+  patterns/       - Result<T>, event_bus
+  resilience/     - Circuit breaker (CLOSED/OPEN/HALF_OPEN state machine)
+  utils/          - Circular buffer, object pool, enum serialization
 ```
 
-📖 **[Complete Architecture Guide →](docs/01-ARCHITECTURE.md)**
+### Ecosystem Position
+
+```
+                    +------------------+
+                    |  common_system   | <-- Foundation Layer
+                    |  (interfaces)    |
+                    +--------+---------+
+                             | provides interfaces
+       +---------------------+---------------------+
+       |                     |                     |
++------v-------+    +--------v--------+   +-------v--------+
+|thread_system |    |network_system   |   |monitoring_sys. |
+|(implements   |    |(uses IExecutor) |   |(event bus)     |
+| IExecutor)   |    +-----------------+   +----------------+
++--------------+             |                     |
+       |                     |                     |
+       +---------------------+---------------------+
+                             | all use
+                    +--------v---------+
+                    | Result<T> pattern|
+                    | Error handling   |
+                    +------------------+
+```
+
+[Complete Architecture Guide](docs/ARCHITECTURE.md)
 
 ---
 
-## Core Features
-
-### IExecutor Interface
-
-Universal task execution abstraction for any threading backend:
-
-```cpp
-#include <kcenon/common/interfaces/executor_interface.h>
-
-class MyService {
-    std::shared_ptr<common::interfaces::IExecutor> executor_;
-
-public:
-    void process_async(const Data& data) {
-        auto future = executor_->submit([data]() {
-            return process(data);
-        });
-    }
-};
-```
+## Core Concepts
 
 ### Result<T> Pattern
 
 Type-safe error handling without exceptions, inspired by Rust:
 
 ```cpp
-#include <kcenon/common/patterns/result.h>
-
 auto result = load_config("app.conf")
     .and_then(validate_config)
     .map(apply_defaults)
@@ -261,41 +272,91 @@ auto result = load_config("app.conf")
     });
 ```
 
+### IExecutor Interface
+
+Universal task execution abstraction for any threading backend:
+
+```cpp
+class MyService {
+    std::shared_ptr<common::interfaces::IExecutor> executor_;
+public:
+    void process_async(const Data& data) {
+        auto future = executor_->submit([data]() { return process(data); });
+    }
+};
+```
+
 ### Health Monitoring
 
 Comprehensive health check system with dependency graph:
 
 ```cpp
-#include <kcenon/common/interfaces/monitoring.h>
-
 auto& monitor = global_health_monitor();
-
 auto db_check = health_check_builder()
     .name("database")
     .type(health_check_type::dependency)
     .timeout(std::chrono::seconds{5})
     .with_check([]() { /* check logic */ })
     .build();
-
 monitor.register_check("database", db_check.value());
 monitor.add_dependency("api", "database");
 ```
 
-📖 **[Detailed Features Documentation →](docs/FEATURES.md)**
+### Error Code Registry
+
+Centralized error code registry providing system-specific ranges:
+
+| System | Range | Purpose |
+|--------|-------|---------|
+| common_system | -1 to -99 | Core errors |
+| thread_system | -100 to -199 | Threading errors |
+| logger_system | -200 to -299 | Logging errors |
+| monitoring_system | -300 to -399 | Monitoring errors |
+| container_system | -400 to -499 | Container errors |
+| database_system | -500 to -599 | Database errors |
+| network_system | -600 to -699 | Network errors |
+
+### Circuit Breaker
+
+Resilience pattern for fault tolerance:
+
+```cpp
+auto breaker = circuit_breaker("db_connection", {
+    .failure_threshold = 5,
+    .recovery_timeout = std::chrono::seconds{30}
+});
+auto result = breaker.execute([&]() { return db.query("SELECT 1"); });
+```
+
+---
+
+## API Overview
+
+| Component | Purpose | Header |
+|-----------|---------|--------|
+| `Result<T>` / `VoidResult` | Monadic error handling | `patterns/result.h` |
+| `IExecutor` / `IJob` | Task execution interface | `interfaces/executor_interface.h` |
+| `ILogger` | Logging abstraction | `interfaces/logger_interface.h` |
+| `service_container` | Dependency injection | `di/service_container.h` |
+| `simple_event_bus` | Synchronous pub/sub | `patterns/event_bus.h` |
+| `circuit_breaker` | Resilience pattern | `resilience/circuit_breaker.h` |
+| `config_loader` | Configuration management | `config/config_loader.h` |
+| `circular_buffer` | Fixed-size ring buffer | `utils/circular_buffer.h` |
+| `object_pool` | Object pooling | `utils/object_pool.h` |
+
+[Complete API Reference](docs/API_REFERENCE.md)
 
 ---
 
 ## Examples
 
-### Sample Applications
-
-| Example | Description |
-|---------|-------------|
-| [result_example](examples/result_example.cpp) | `Result<T>` error handling patterns |
-| [executor_example](examples/executor_example.cpp) | Executor interface and thread management |
-| [abi_version_example](examples/abi_version_example.cpp) | ABI version checking and compatibility |
-| [unwrap_demo](examples/unwrap_demo.cpp) | Result unwrapping and chaining |
-| [multi_system_app](examples/multi_system_app/) | Multi-system integration example |
+| Example | Description | Difficulty |
+|---------|-------------|------------|
+| [result_example](examples/result_example.cpp) | Result<T> error handling patterns | Beginner |
+| [executor_example](examples/executor_example.cpp) | Executor interface and thread management | Beginner |
+| [abi_version_example](examples/abi_version_example.cpp) | ABI version checking and compatibility | Intermediate |
+| [unwrap_demo](examples/unwrap_demo.cpp) | Result unwrapping and chaining | Intermediate |
+| [multi_system_app](examples/multi_system_app/) | Multi-system integration example | Advanced |
 
 ### Running Examples
 
@@ -304,23 +365,6 @@ cmake -B build -DCOMMON_BUILD_EXAMPLES=ON
 cmake --build build
 ./build/examples/result_example
 ```
-
----
-
-## Documentation
-
-| Category | Document | Description |
-|----------|----------|-------------|
-| **Guides** | [Quick Start](docs/guides/QUICK_START.md) | Get up and running in minutes |
-| | [Best Practices](docs/guides/BEST_PRACTICES.md) | Recommended usage patterns |
-| | [FAQ](docs/guides/FAQ.md) | Frequently asked questions |
-| | [Troubleshooting](docs/guides/TROUBLESHOOTING.md) | Common issues and solutions |
-| **Advanced** | [Architecture](docs/01-ARCHITECTURE.md) | System design and principles |
-| | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
-| | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
-| | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
-| **Contributing** | [Contributing](CONTRIBUTING.md) | How to contribute |
-| | [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) | Error code management |
 
 ---
 
@@ -338,39 +382,64 @@ cmake --build build
 - IExecutor is 53x faster than std::async for high-frequency tasks
 - Zero-overhead abstractions - compiler optimizes away all abstraction layers
 
-📖 **[Full Benchmarks →](docs/BENCHMARKS.md)**
-
----
-
-## Error Handling Foundation
-
-Centralized error code registry providing system-specific ranges:
-
-| System | Range | Purpose |
-|--------|-------|---------|
-| common_system | -1 to -99 | Core errors |
-| thread_system | -100 to -199 | Threading errors |
-| logger_system | -200 to -299 | Logging errors |
-| monitoring_system | -300 to -399 | Monitoring errors |
-| container_system | -400 to -499 | Container errors |
-| database_system | -500 to -599 | Database errors |
-| network_system | -600 to -699 | Network errors |
-
----
-
-## Production Quality
-
-### Quality Metrics
+**Quality Metrics**:
 - **Test coverage**: 80%+ (target: 85%)
 - **Sanitizer tests**: 18/18 passing with zero warnings
 - **Cross-platform**: Ubuntu, macOS, Windows
 - **Zero memory leaks**: AddressSanitizer verified
 - **Zero data races**: ThreadSanitizer verified
+- **RAII Grade: A** - All resources managed through smart pointers
 
-### RAII Grade: A
-- All resources managed through smart pointers
-- No manual memory management in any interface
-- Exception-safe design validated
+[Full Benchmarks](docs/BENCHMARKS.md)
+
+---
+
+## Ecosystem Integration
+
+This common system serves as the foundational layer (Tier 0) that all other system modules build upon:
+
+```
+common_system (Tier 0 - Foundation)
+       |
+       +-- thread_system     (Tier 1) - Implements IExecutor
+       +-- container_system  (Tier 1) - Uses Result<T>
+       +-- logger_system     (Tier 2) - Uses ILogger, Result<T>
+       +-- monitoring_system (Tier 3) - Uses Event Bus
+       +-- database_system   (Tier 3) - Uses Result<T>, IExecutor
+       +-- network_system    (Tier 4) - Uses IExecutor
+       +-- pacs_system       (Tier 5) - Full ecosystem consumer
+```
+
+### Integration Example
+
+```cpp
+// Any ecosystem project can use common_system interfaces
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/interfaces/executor_interface.h>
+
+// Result<T> is the universal error handling pattern
+auto result = do_something();
+if (result.is_err()) {
+    // Consistent error handling across all projects
+    auto error = result.error();
+    std::cerr << error.message << " (code: " << error.code << ")\n";
+}
+```
+
+### Documentation
+
+| Category | Document | Description |
+|----------|----------|-------------|
+| **Guides** | [Quick Start](docs/guides/QUICK_START.md) | Get up and running in minutes |
+| | [Best Practices](docs/guides/BEST_PRACTICES.md) | Recommended usage patterns |
+| | [FAQ](docs/guides/FAQ.md) | Frequently asked questions |
+| | [Troubleshooting](docs/guides/TROUBLESHOOTING.md) | Common issues and solutions |
+| **Advanced** | [Architecture](docs/ARCHITECTURE.md) | System design and principles |
+| | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
+| | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
+| | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
+| **Contributing** | [Contributing](CONTRIBUTING.md) | How to contribute |
+| | [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) | Error code management |
 
 ---
 
@@ -384,9 +453,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](docs/contributing/CONTRIB
 - [Code Style](docs/contributing/CONTRIBUTING.md#code-style)
 - [Pull Request Process](docs/contributing/CONTRIBUTING.md#development-workflow)
 
----
-
-## Support
+### Support
 
 - **Issues**: [GitHub Issues](https://github.com/kcenon/common_system/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/kcenon/common_system/discussions)
@@ -400,8 +467,6 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 
 ---
 
-## Acknowledgments
-
-- Inspired by Rust's Result<T,E> type and error handling
-- Interface design influenced by Java's ExecutorService
-- Event bus pattern from reactive programming frameworks
+<p align="center">
+  Made with care by the kcenon team
+</p>
