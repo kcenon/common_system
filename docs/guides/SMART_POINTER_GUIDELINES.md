@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-025"
+doc_title: "Smart Pointer Usage Guidelines"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Smart Pointer Usage Guidelines
 
 > **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES.kr.md)

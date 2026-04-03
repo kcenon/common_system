@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-010"
+doc_title: "Result\<T\> Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 # Result\<T\> Migration Guide
 
 > **Language:** **English** | [한국어](RESULT_MIGRATION_GUIDE.kr.md)

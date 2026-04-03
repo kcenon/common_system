@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-003"
+doc_title: "Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 > **Language:** **English** | [한국어](MIGRATION.kr.md)
 
 # Migration Guide

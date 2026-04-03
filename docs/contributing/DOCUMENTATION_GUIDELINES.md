@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-018"
+doc_title: "Documentation Structure Guidelines"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Documentation Structure Guidelines
 
 > **Language:** **English** | [한국어](DOCUMENTATION_GUIDELINES.kr.md)

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-012"
+doc_title: "SOUP Inventory — kcenon Ecosystem"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # SOUP Inventory — kcenon Ecosystem
 
 > **SOUP** = Software of Unknown Provenance (IEC 62304 §8.1.2)

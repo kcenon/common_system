@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-005"
+doc_title: "Deprecated APIs"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Deprecated APIs
 
 이 문서는 Common System 라이브러리의 모든 deprecated API, 대체 API, 마이그레이션 가이드를 제공합니다.

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-FEAT-001"
+doc_title: "Common System - 상세 기능"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "FEAT"
+---
+
 # Common System - 상세 기능
 
 **언어:** [English](FEATURES.md) | **한국어**

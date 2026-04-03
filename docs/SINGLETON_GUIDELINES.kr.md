@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-009"
+doc_title: "싱글톤 패턴 가이드라인"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # 싱글톤 패턴 가이드라인
 
 이 가이드는 kcenon 에코시스템 전체에서 Static Destruction Order Fiasco (SDOF) 문제를 방지하기 위한 표준화된 싱글톤 패턴 가이드라인을 수립합니다.

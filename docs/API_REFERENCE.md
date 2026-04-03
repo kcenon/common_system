@@ -1,3 +1,13 @@
+---
+doc_id: "COM-API-002"
+doc_title: "common_system API Reference"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "API"
+---
+
 # common_system API Reference
 
 > **Version**: 0.2.3.0

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-019"
+doc_title: "Common System - Frequently Asked Questions"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Common System - Frequently Asked Questions
 
 **Version:** 0.2.0 | **Last Updated:** November 2025

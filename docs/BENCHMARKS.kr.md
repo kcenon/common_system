@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PERF-001"
+doc_title: "Common System - 성능 벤치마크"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PERF"
+---
+
 # Common System - 성능 벤치마크
 
 **언어:** [English](BENCHMARKS.md) | **한국어**

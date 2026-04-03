@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-001"
+doc_title: "변경 이력"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # 변경 이력
 
 Common System 프로젝트의 모든 주요 변경 사항이 이 파일에 문서화됩니다.

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PERF-004"
+doc_title: "End-to-End Benchmark Documentation"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PERF"
+---
+
 # End-to-End Benchmark Documentation
 
 > **Status**: ✅ **Complete**

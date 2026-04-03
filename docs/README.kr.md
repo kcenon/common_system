@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-006"
+doc_title: "Common System 문서"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Common System 문서
 
 > **Language:** [English](README.md) | **한국어**

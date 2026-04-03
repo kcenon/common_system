@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-008"
+doc_title: "C++20 Module Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 # C++20 Module Migration Guide
 
 **Guide for using C++20 modules** with common_system instead of traditional header includes.

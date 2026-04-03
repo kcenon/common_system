@@ -1,3 +1,13 @@
+---
+doc_id: "COM-API-004"
+doc_title: "에러 코드 레지스트리"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "API"
+---
+
 > **Language:** [English](ERROR_CODE_REGISTRY.md) | **한국어**
 
 # 에러 코드 레지스트리

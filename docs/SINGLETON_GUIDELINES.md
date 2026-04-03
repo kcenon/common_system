@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-010"
+doc_title: "Singleton Pattern Guidelines"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Singleton Pattern Guidelines
 
 This guide establishes standardized singleton pattern guidelines for the kcenon ecosystem to prevent Static Destruction Order Fiasco (SDOF) issues across all systems.

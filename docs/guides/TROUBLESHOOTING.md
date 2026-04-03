@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-026"
+doc_title: "Troubleshooting Guide - common_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Troubleshooting Guide - common_system
 
 > **Language:** **English** | [한국어](TROUBLESHOOTING.kr.md)

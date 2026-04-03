@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-011"
+doc_title: "Rust/C++ Feature Parity Matrix"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Rust/C++ Feature Parity Matrix
 
 > **Language:** **English** | [한국어](RUST_PARITY.kr.md)

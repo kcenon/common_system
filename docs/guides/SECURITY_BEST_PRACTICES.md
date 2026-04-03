@@ -1,3 +1,13 @@
+---
+doc_id: "COM-SECU-002"
+doc_title: "Security Best Practices"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "SECU"
+---
+
 # Security Best Practices
 
 This guide documents security features and best practices for the Common System, focusing on registry protection and audit logging.

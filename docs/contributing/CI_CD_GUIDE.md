@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-011"
+doc_title: "CI/CD Guide - common_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # CI/CD Guide - common_system
 
 This document describes the Continuous Integration and Continuous Deployment (CI/CD) pipeline for the `common_system` project, a header-only C++ library. The pipelines are designed to validate code quality, test functionality, and ensure documentation is always up-to-date.

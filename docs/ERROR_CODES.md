@@ -1,3 +1,13 @@
+---
+doc_id: "COM-API-003"
+doc_title: "Error Code Registry"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "API"
+---
+
 # Error Code Registry
 
 > **Language:** **English** | [한국어](ERROR_CODES.kr.md)

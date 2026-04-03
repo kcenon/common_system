@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-004"
+doc_title: "KCENON Ecosystem Compatibility Matrix"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # KCENON Ecosystem Compatibility Matrix
 
 This document defines version compatibility and dependency requirements across all KCENON ecosystem components.
