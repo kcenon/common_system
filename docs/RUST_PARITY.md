@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Rust/C++ Feature Parity Matrix
 
+> **SSOT**: This document is the single source of truth for **Rust/C++ Feature Parity Matrix**.
+
 > **Language:** **English** | [한국어](RUST_PARITY.kr.md)
 
 **Complete (Parts 1-3)**: Overall Parity Status, API Mapping, Feature Comparison, Interop, and Roadmap

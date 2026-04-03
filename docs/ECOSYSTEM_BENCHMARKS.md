@@ -10,6 +10,8 @@ category: "PERF"
 
 # Ecosystem Pipeline Benchmarks
 
+> **SSOT**: This document is the single source of truth for **Ecosystem Pipeline Benchmarks**.
+
 Cross-system end-to-end integration benchmarks for the kcenon ecosystem pipeline.
 Measures interface-level overhead and integration costs across all 8 ecosystem systems.
 

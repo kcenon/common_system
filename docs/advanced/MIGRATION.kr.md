@@ -12,6 +12,8 @@ category: "MIGR"
 
 # 마이그레이션 가이드
 
+> **SSOT**: This document is the single source of truth for **마이그레이션 가이드**.
+
 ## 목차
 
 - [개요](#개요)

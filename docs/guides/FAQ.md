@@ -10,6 +10,8 @@ category: "GUID"
 
 # Common System - Frequently Asked Questions
 
+> **SSOT**: This document is the single source of truth for **Common System - Frequently Asked Questions**.
+
 **Version:** 0.2.0 | **Last Updated:** November 2025
 
 This FAQ covers the most common questions about the common_system library - a header-only C++20 foundation library providing universal interfaces and design patterns for modular system architectures.

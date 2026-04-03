@@ -10,6 +10,8 @@ category: "GUID"
 
 # Error Handling Guidelines
 
+> **SSOT**: This document is the single source of truth for **Error Handling Guidelines**.
+
 > **Language:** **English** | [한국어](ERROR_HANDLING.kr.md)
 
 

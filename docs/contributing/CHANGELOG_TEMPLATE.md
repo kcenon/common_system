@@ -10,6 +10,8 @@ category: "PROJ"
 
 # CHANGELOG Template
 
+> **SSOT**: This document is the single source of truth for **CHANGELOG Template**.
+
 This template provides a standardized CHANGELOG format for all KCENON ecosystem systems.
 
 ## Format Specification

@@ -10,6 +10,8 @@ category: "PERF"
 
 # Common System - 성능 벤치마크
 
+> **SSOT**: This document is the single source of truth for **Common System - 성능 벤치마크**.
+
 **언어:** [English](BENCHMARKS.md) | **한국어**
 
 이 문서는 Common System 프로젝트에 대한 포괄적인 성능 벤치마크 및 분석을 제공합니다.

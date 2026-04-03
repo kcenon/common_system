@@ -10,6 +10,8 @@ category: "GUID"
 
 # [Guide Title]
 
+> **SSOT**: This document is the single source of truth for **[Guide Title]**.
+
 > **Language:** **English** | [한국어](GUIDE_NAME.kr.md)
 
 **Version:** X.Y.Z

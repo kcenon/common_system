@@ -10,6 +10,8 @@ category: "GUID"
 
 # Quick Start Guide - common_system
 
+> **SSOT**: This document is the single source of truth for **Quick Start Guide - common_system**.
+
 **5-minute guide** to get started with the header-only common_system library for C++20.
 
 ## Prerequisites

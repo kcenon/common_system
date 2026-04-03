@@ -10,6 +10,8 @@ category: "GUID"
 
 # C++20 Concepts 가이드
 
+> **SSOT**: This document is the single source of truth for **C++20 Concepts 가이드**.
+
 **Language:** [English](CONCEPTS_GUIDE.md) | **한국어**
 
 이 가이드는 Common System 라이브러리에서 컴파일 타임 타입 검증을 위해 C++20 concepts를 사용하는 방법을 설명합니다.

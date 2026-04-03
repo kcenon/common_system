@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Deprecated APIs
 
+> **SSOT**: This document is the single source of truth for **Deprecated APIs**.
+
 This document lists all deprecated APIs in the Common System library, their replacements, and migration guidance.
 
 > **Language:** **English** | [한국어](DEPRECATION.kr.md)

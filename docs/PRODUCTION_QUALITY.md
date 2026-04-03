@@ -10,6 +10,8 @@ category: "QUAL"
 
 # Common System Production Quality
 
+> **SSOT**: This document is the single source of truth for **Common System Production Quality**.
+
 **Last Updated**: 2025-11-21
 **Status**: Under Development
 **Tier**: 0 (Foundation)

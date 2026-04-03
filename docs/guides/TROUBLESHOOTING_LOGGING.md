@@ -10,6 +10,8 @@ category: "GUID"
 
 # Troubleshooting Guide
 
+> **SSOT**: This document is the single source of truth for **Troubleshooting Guide**.
+
 This guide helps diagnose and resolve common issues with the logging system in common_system.
 
 ## Quick Diagnostic Checklist

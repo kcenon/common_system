@@ -12,6 +12,8 @@ category: "ARCH"
 
 # 시스템 아키텍처
 
+> **SSOT**: This document is the single source of truth for **시스템 아키텍처**.
+
 ## 개요
 
 이 문서는 7개의 핵심 시스템 아키텍처와 시스템 간 통합 방법을 설명합니다.

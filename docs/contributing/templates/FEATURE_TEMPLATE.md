@@ -10,6 +10,8 @@ category: "PROJ"
 
 # [SYSTEM_NAME] Features
 
+> **SSOT**: This document is the single source of truth for **[SYSTEM_NAME] Features**.
+
 > **Language:** **English** | [한국어](FEATURES.kr.md)
 
 **Version:** X.Y.Z

@@ -10,6 +10,8 @@ category: "GUID"
 
 # Production Deployment Guide
 
+> **SSOT**: This document is the single source of truth for **Production Deployment Guide**.
+
 > **Status**: ✅ **Complete**
 
 This guide provides comprehensive instructions for deploying kcenon ecosystem applications to production environments, covering configuration, deployment patterns, containerization, monitoring, troubleshooting, security, and upgrade procedures.

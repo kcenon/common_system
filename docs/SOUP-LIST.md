@@ -10,6 +10,8 @@ category: "PROJ"
 
 # SOUP Inventory — kcenon Ecosystem
 
+> **SSOT**: This document is the single source of truth for **SOUP Inventory — kcenon Ecosystem**.
+
 > **SOUP** = Software of Unknown Provenance (IEC 62304 §8.1.2)
 >
 > This document catalogs all third-party dependencies used across the kcenon

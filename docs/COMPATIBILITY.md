@@ -10,6 +10,8 @@ category: "PROJ"
 
 # KCENON Ecosystem Compatibility Matrix
 
+> **SSOT**: This document is the single source of truth for **KCENON Ecosystem Compatibility Matrix**.
+
 This document defines version compatibility and dependency requirements across all KCENON ecosystem components.
 
 > **Language:** **English** | [한국어](COMPATIBILITY.kr.md)

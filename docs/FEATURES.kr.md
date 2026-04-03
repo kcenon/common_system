@@ -10,6 +10,8 @@ category: "FEAT"
 
 # Common System - 상세 기능
 
+> **SSOT**: This document is the single source of truth for **Common System - 상세 기능**.
+
 **언어:** [English](FEATURES.md) | **한국어**
 
 이 문서는 Common System 프로젝트에서 사용 가능한 모든 기능에 대한 포괄적인 세부 정보를 제공합니다.

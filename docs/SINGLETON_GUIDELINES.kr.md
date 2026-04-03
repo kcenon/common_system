@@ -10,6 +10,8 @@ category: "GUID"
 
 # 싱글톤 패턴 가이드라인
 
+> **SSOT**: This document is the single source of truth for **싱글톤 패턴 가이드라인**.
+
 이 가이드는 kcenon 에코시스템 전체에서 Static Destruction Order Fiasco (SDOF) 문제를 방지하기 위한 표준화된 싱글톤 패턴 가이드라인을 수립합니다.
 
 ## 배경

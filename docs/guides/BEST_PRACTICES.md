@@ -10,6 +10,8 @@ category: "GUID"
 
 # Best Practices for common_system
 
+> **SSOT**: This document is the single source of truth for **Best Practices for common_system**.
+
 **Version**: 0.1.1.0
 **Last Updated**: 2026-01-03
 

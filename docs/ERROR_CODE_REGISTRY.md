@@ -12,6 +12,8 @@ category: "API"
 
 # Error Code Registry
 
+> **SSOT**: This document is the single source of truth for **Error Code Registry**.
+
 This document provides a complete reference of all error codes used across the unified_system ecosystem.
 
 ## Error Code Ranges
