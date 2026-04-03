@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-003"
+doc_title: "Configuration Subsystem Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Configuration Subsystem Guide
 
 > **Language:** **English** | [한국어](CONFIG_GUIDE.kr.md)

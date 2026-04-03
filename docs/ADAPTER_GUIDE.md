@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-001"
+doc_title: "Adapter Framework Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Adapter Framework Guide
 
 > **Language:** **English** | [한국어](ADAPTER_GUIDE.kr.md)

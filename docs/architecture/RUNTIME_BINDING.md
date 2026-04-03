@@ -1,3 +1,13 @@
+---
+doc_id: "COM-ARCH-004"
+doc_title: "Runtime Binding Architecture"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "ARCH"
+---
+
 # Runtime Binding Architecture
 
 ## Overview

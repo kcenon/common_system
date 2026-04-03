@@ -1,3 +1,13 @@
+---
+doc_id: "COM-ARCH-003"
+doc_title: "Common System - Project Structure"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "ARCH"
+---
+
 # Common System - Project Structure
 
 **English | [한국어](STRUCTURE.kr.md)**

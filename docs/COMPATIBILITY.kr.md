@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-003"
+doc_title: "KCENON 에코시스템 호환성 매트릭스"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # KCENON 에코시스템 호환성 매트릭스
 
 이 문서는 모든 KCENON 에코시스템 구성 요소 간의 버전 호환성 및 의존성 요구 사항을 정의합니다.

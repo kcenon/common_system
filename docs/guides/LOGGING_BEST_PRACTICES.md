@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-020"
+doc_title: "Logging Best Practices"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Logging Best Practices
 
 This guide covers best practices for logging in applications using the common_system runtime binding pattern.

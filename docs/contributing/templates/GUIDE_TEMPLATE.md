@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-012"
+doc_title: "[Guide Title]"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # [Guide Title]
 
 > **Language:** **English** | [한국어](GUIDE_NAME.kr.md)

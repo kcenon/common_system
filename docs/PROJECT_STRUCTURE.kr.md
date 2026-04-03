@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-008"
+doc_title: "Common System - 프로젝트 구조"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Common System - 프로젝트 구조
 
 **언어:** [English](PROJECT_STRUCTURE.md) | **한국어**

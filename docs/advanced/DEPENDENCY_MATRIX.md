@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-015"
+doc_title: "Dependency Matrix - Detailed Analysis"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Dependency Matrix - Detailed Analysis
 
 > **Language:** **English** | [한국어](DEPENDENCY_MATRIX.kr.md)

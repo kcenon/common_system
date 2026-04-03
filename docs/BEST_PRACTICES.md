@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-002"
+doc_title: "Result<T> Best Practices"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Result<T> Best Practices
 
 This guide documents the recommended patterns for creating and using `Result<T>` objects in the Common System.

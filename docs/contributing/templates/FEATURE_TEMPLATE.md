@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-019"
+doc_title: "[SYSTEM_NAME] Features"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # [SYSTEM_NAME] Features
 
 > **Language:** **English** | [한국어](FEATURES.kr.md)

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-ADR-001"
+doc_title: "ADR-001: Standardize on vcpkg as the sole package manager"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "ADR"
+---
+
 # ADR-001: Standardize on vcpkg as the sole package manager
 
 | Field | Value |

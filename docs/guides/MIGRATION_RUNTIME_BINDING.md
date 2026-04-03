@@ -1,3 +1,13 @@
+---
+doc_id: "COM-ARCH-006"
+doc_title: "Migration Guide: Runtime Binding Pattern"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "ARCH"
+---
+
 # Migration Guide: Runtime Binding Pattern
 
 This guide provides step-by-step instructions for migrating existing code to use the runtime binding pattern introduced in common_system v2.0.

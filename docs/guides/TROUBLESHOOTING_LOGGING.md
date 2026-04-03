@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-027"
+doc_title: "Troubleshooting Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Troubleshooting Guide
 
 This guide helps diagnose and resolve common issues with the logging system in common_system.

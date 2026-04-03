@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-017"
+doc_title: "Contributing to common_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 <!-- BSD 3-Clause License
      Copyright (c) 2025, kcenon
      See the LICENSE file in the project root for full license information. -->

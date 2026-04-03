@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-006"
+doc_title: "fmt → std::format Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 # fmt → std::format Migration Guide
 
 > **Tracking**: [common_system#406](https://github.com/kcenon/common_system/issues/406)

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-013"
+doc_title: "Best Practices for common_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Best Practices for common_system
 
 **Version**: 0.1.1.0

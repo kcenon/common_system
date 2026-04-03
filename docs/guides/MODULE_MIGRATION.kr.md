@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-007"
+doc_title: "C++20 모듈 마이그레이션 가이드"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 # C++20 모듈 마이그레이션 가이드
 
 **common_system에서 기존 헤더 대신 C++20 모듈을 사용하기 위한 가이드**입니다.

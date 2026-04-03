@@ -1,3 +1,13 @@
+---
+doc_id: "COM-MIGR-005"
+doc_title: "DI Container Migration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "MIGR"
+---
+
 # DI Container Migration Guide
 
 > **Language:** **English**
