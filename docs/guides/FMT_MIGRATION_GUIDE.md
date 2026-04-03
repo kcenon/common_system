@@ -10,6 +10,8 @@ category: "MIGR"
 
 # fmt → std::format Migration Guide
 
+> **SSOT**: This document is the single source of truth for **fmt → std::format Migration Guide**.
+
 > **Tracking**: [common_system#406](https://github.com/kcenon/common_system/issues/406)
 >
 > **Status**: Migration complete — all ecosystem projects now use C++20 `std::format`

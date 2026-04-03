@@ -12,6 +12,8 @@ category: "API"
 
 # 에러 코드 레지스트리
 
+> **SSOT**: This document is the single source of truth for **에러 코드 레지스트리**.
+
 이 문서는 unified_system 생태계 전체에서 사용되는 모든 에러 코드의 완전한 참조를 제공합니다.
 
 ## 에러 코드 범위

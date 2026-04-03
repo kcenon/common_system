@@ -10,6 +10,8 @@ category: "GUID"
 
 # Result<T> Best Practices
 
+> **SSOT**: This document is the single source of truth for **Result<T> Best Practices**.
+
 This guide documents the recommended patterns for creating and using `Result<T>` objects in the Common System.
 
 ## Header Structure

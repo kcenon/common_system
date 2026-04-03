@@ -10,6 +10,8 @@ category: "PERF"
 
 # End-to-End Benchmark Documentation
 
+> **SSOT**: This document is the single source of truth for **End-to-End Benchmark Documentation**.
+
 > **Status**: ✅ **Complete**
 
 This document provides comprehensive end-to-end performance benchmarks measuring system integration overhead when multiple kcenon ecosystem systems work together in real-world scenarios.

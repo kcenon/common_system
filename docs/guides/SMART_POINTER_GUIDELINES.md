@@ -10,6 +10,8 @@ category: "GUID"
 
 # Smart Pointer Usage Guidelines
 
+> **SSOT**: This document is the single source of truth for **Smart Pointer Usage Guidelines**.
+
 > **Language:** **English** | [한국어](SMART_POINTER_GUIDELINES.kr.md)
 
 

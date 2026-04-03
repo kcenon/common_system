@@ -10,6 +10,8 @@ category: "INTR"
 
 # 크로스 시스템 통합 가이드
 
+> **SSOT**: This document is the single source of truth for **크로스 시스템 통합 가이드**.
+
 > **언어:** [English](INTEGRATION_GUIDE.md) | **한국어**
 
 **완전한 가이드**: 의존성 맵, 통합 패턴, 시나리오, 에러 처리, 예제

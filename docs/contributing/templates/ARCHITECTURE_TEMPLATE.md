@@ -10,6 +10,8 @@ category: "ARCH"
 
 # [SYSTEM_NAME] Architecture
 
+> **SSOT**: This document is the single source of truth for **[SYSTEM_NAME] Architecture**.
+
 > **Language:** **English** | [한국어](ARCHITECTURE.kr.md)
 
 **Version:** X.Y.Z

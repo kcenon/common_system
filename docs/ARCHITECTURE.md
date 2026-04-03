@@ -12,6 +12,8 @@ category: "ARCH"
 
 # System Architecture
 
+> **SSOT**: This document is the single source of truth for **System Architecture**.
+
 ## Overview
 
 This document describes the architecture of the 7 core systems and how they integrate with each other.

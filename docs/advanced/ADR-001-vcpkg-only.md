@@ -10,6 +10,8 @@ category: "ADR"
 
 # ADR-001: Standardize on vcpkg as the sole package manager
 
+> **SSOT**: This document is the single source of truth for **ADR-001: Standardize on vcpkg as the sole package manager**.
+
 | Field | Value |
 |-------|-------|
 | Status | Accepted |

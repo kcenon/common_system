@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Common System - 프로젝트 구조
 
+> **SSOT**: This document is the single source of truth for **Common System - 프로젝트 구조**.
+
 **언어:** [English](PROJECT_STRUCTURE.md) | **한국어**
 
 이 문서는 common_system 프로젝트 구조에 대한 포괄적인 개요를 제공하며, 각 디렉토리와 주요 파일의 목적을 설명합니다.

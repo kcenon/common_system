@@ -10,6 +10,8 @@ category: "MIGR"
 
 # C++20 Module Migration Guide
 
+> **SSOT**: This document is the single source of truth for **C++20 Module Migration Guide**.
+
 **Guide for using C++20 modules** with common_system instead of traditional header includes.
 
 > **Language:** **English** | [한국어](MODULE_MIGRATION.kr.md)

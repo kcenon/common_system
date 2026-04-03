@@ -10,6 +10,8 @@ category: "FEAT"
 
 # Common System - Detailed Features
 
+> **SSOT**: This document is the single source of truth for **Common System - Detailed Features**.
+
 **Language:** **English** | [한국어](FEATURES.kr.md)
 
 This document provides comprehensive details about all features available in the Common System project.

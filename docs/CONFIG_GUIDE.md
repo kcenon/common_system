@@ -10,6 +10,8 @@ category: "GUID"
 
 # Configuration Subsystem Guide
 
+> **SSOT**: This document is the single source of truth for **Configuration Subsystem Guide**.
+
 > **Language:** **English** | [한국어](CONFIG_GUIDE.kr.md)
 
 **Complete Guide**: Unified Configuration, Hot-Reload File Watching, CLI Argument Parsing, and Configuration Loading

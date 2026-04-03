@@ -1,6 +1,6 @@
 ---
 doc_id: "COM-GUID-007"
-doc_title: "Common System Documentation"
+doc_title: "Common System Documentation Registry"
 doc_version: "1.0.0"
 doc_date: "2026-04-04"
 doc_status: "Released"
@@ -8,324 +8,241 @@ project: "common_system"
 category: "GUID"
 ---
 
-# Common System Documentation
+# Common System — Documentation Registry
 
-> **Language:** **English** | [한국어](README.kr.md)
+> **SSOT**: This file is the single source of truth for the documentation index
+> of **common_system**.
 
-**Version:** 0.2.0
-**Last Updated:** 2025-11-11
-**Status:** Comprehensive
+Total documents: **83**
 
-Welcome to the common_system documentation! This is the foundational Layer 0 system providing standard interfaces, type-safe error handling (Result<T>), and core utilities for all KCENON C++ systems.
+## Document Index
 
----
+| # | doc_id | Topic | Authority Document | Status |
+|---|--------|-------|-------------------|--------|
+| 1 | COM-ARCH-001 | 시스템 아키텍처 | [ARCHITECTURE.kr.md](./ARCHITECTURE.kr.md) | Released |
+| 2 | COM-ARCH-002 | System Architecture | [ARCHITECTURE.md](./ARCHITECTURE.md) | Released |
+| 3 | COM-ARCH-003 | Common System - Project Structure | [STRUCTURE.md](./advanced/STRUCTURE.md) | Released |
+| 4 | COM-ARCH-004 | Runtime Binding Architecture | [RUNTIME_BINDING.md](./architecture/RUNTIME_BINDING.md) | Released |
+| 5 | COM-ARCH-005 | [SYSTEM_NAME] Architecture | [ARCHITECTURE_TEMPLATE.md](./contributing/templates/ARCHITECTURE_TEMPLATE.md) | Released |
+| 6 | COM-ARCH-006 | Migration Guide: Runtime Binding Pattern | [MIGRATION_RUNTIME_BINDING.md](./guides/MIGRATION_RUNTIME_BINDING.md) | Released |
+| 7 | COM-API-001 | common_system API 레퍼런스 | [API_REFERENCE.kr.md](./API_REFERENCE.kr.md) | Released |
+| 8 | COM-API-002 | common_system API Reference | [API_REFERENCE.md](./API_REFERENCE.md) | Released |
+| 9 | COM-API-003 | Error Code Registry | [ERROR_CODES.md](./ERROR_CODES.md) | Released |
+| 10 | COM-API-004 | 에러 코드 레지스트리 | [ERROR_CODE_REGISTRY.kr.md](./ERROR_CODE_REGISTRY.kr.md) | Released |
+| 11 | COM-API-005 | Error Code Registry | [ERROR_CODE_REGISTRY.md](./ERROR_CODE_REGISTRY.md) | Released |
+| 12 | COM-FEAT-001 | Common System - 상세 기능 | [FEATURES.kr.md](./FEATURES.kr.md) | Released |
+| 13 | COM-FEAT-002 | Common System - Detailed Features | [FEATURES.md](./FEATURES.md) | Released |
+| 14 | COM-GUID-001 | Adapter Framework Guide | [ADAPTER_GUIDE.md](./ADAPTER_GUIDE.md) | Released |
+| 15 | COM-GUID-002 | Result<T> Best Practices | [BEST_PRACTICES.md](./BEST_PRACTICES.md) | Released |
+| 16 | COM-GUID-003 | Configuration Subsystem Guide | [CONFIG_GUIDE.md](./CONFIG_GUIDE.md) | Released |
+| 17 | COM-GUID-004 | Feature Flags Framework Guide | [FEATURE_FLAGS_GUIDE.md](./FEATURE_FLAGS_GUIDE.md) | Released |
+| 18 | COM-GUID-005 | Production Deployment Guide | [PRODUCTION_GUIDE.md](./PRODUCTION_GUIDE.md) | Released |
+| 19 | COM-GUID-006 | Common System 문서 | [README.kr.md](./README.kr.md) | Released |
+| 20 | COM-GUID-008 | README_TEMPLATE.md | [README_TEMPLATE.md](./README_TEMPLATE.md) | Released |
+| 21 | COM-GUID-009 | 싱글톤 패턴 가이드라인 | [SINGLETON_GUIDELINES.kr.md](./SINGLETON_GUIDELINES.kr.md) | Released |
+| 22 | COM-GUID-010 | Singleton Pattern Guidelines | [SINGLETON_GUIDELINES.md](./SINGLETON_GUIDELINES.md) | Released |
+| 23 | COM-GUID-011 | CI/CD Guide - common_system | [CI_CD_GUIDE.md](./contributing/CI_CD_GUIDE.md) | Released |
+| 24 | COM-GUID-012 | [Guide Title] | [GUIDE_TEMPLATE.md](./contributing/templates/GUIDE_TEMPLATE.md) | Released |
+| 25 | COM-GUID-013 | Best Practices for common_system | [BEST_PRACTICES.md](./guides/BEST_PRACTICES.md) | Released |
+| 26 | COM-GUID-014 | C++20 Concepts 가이드 | [CONCEPTS_GUIDE.kr.md](./guides/CONCEPTS_GUIDE.kr.md) | Released |
+| 27 | COM-GUID-015 | C++20 Concepts Guide | [CONCEPTS_GUIDE.md](./guides/CONCEPTS_GUIDE.md) | Released |
+| 28 | COM-GUID-016 | Error Code Guidelines | [ERROR_CODE_GUIDELINES.md](./guides/ERROR_CODE_GUIDELINES.md) | Released |
+| 29 | COM-GUID-017 | Error Handling 가이드라인 | [ERROR_HANDLING.kr.md](./guides/ERROR_HANDLING.kr.md) | Released |
+| 30 | COM-GUID-018 | Error Handling Guidelines | [ERROR_HANDLING.md](./guides/ERROR_HANDLING.md) | Released |
+| 31 | COM-GUID-019 | Common System - Frequently Asked Questions | [FAQ.md](./guides/FAQ.md) | Released |
+| 32 | COM-GUID-020 | Logging Best Practices | [LOGGING_BEST_PRACTICES.md](./guides/LOGGING_BEST_PRACTICES.md) | Released |
+| 33 | COM-GUID-021 | Quick Start Guide - common_system | [QUICK_START.md](./guides/QUICK_START.md) | Released |
+| 34 | COM-GUID-022 | Common System을 위한 RAII 패턴 가이드라인 | [RAII_GUIDELINES.kr.md](./guides/RAII_GUIDELINES.kr.md) | Released |
+| 35 | COM-GUID-023 | RAII Pattern Guidelines for Common System | [RAII_GUIDELINES.md](./guides/RAII_GUIDELINES.md) | Released |
+| 36 | COM-GUID-024 | 스마트 포인터 사용 가이드라인 | [SMART_POINTER_GUIDELINES.kr.md](./guides/SMART_POINTER_GUIDELINES.kr.md) | Released |
+| 37 | COM-GUID-025 | Smart Pointer Usage Guidelines | [SMART_POINTER_GUIDELINES.md](./guides/SMART_POINTER_GUIDELINES.md) | Released |
+| 38 | COM-GUID-026 | Troubleshooting Guide - common_system | [TROUBLESHOOTING.md](./guides/TROUBLESHOOTING.md) | Released |
+| 39 | COM-GUID-027 | Troubleshooting Guide | [TROUBLESHOOTING_LOGGING.md](./guides/TROUBLESHOOTING_LOGGING.md) | Released |
+| 40 | COM-PERF-001 | Common System - 성능 벤치마크 | [BENCHMARKS.kr.md](./BENCHMARKS.kr.md) | Released |
+| 41 | COM-PERF-002 | Common System - Performance Benchmarks | [BENCHMARKS.md](./BENCHMARKS.md) | Released |
+| 42 | COM-PERF-003 | Ecosystem Pipeline Benchmarks | [ECOSYSTEM_BENCHMARKS.md](./ECOSYSTEM_BENCHMARKS.md) | Released |
+| 43 | COM-PERF-004 | End-to-End Benchmark Documentation | [E2E_BENCHMARKS.md](./performance/E2E_BENCHMARKS.md) | Released |
+| 44 | COM-MIGR-001 | IExecutor API Migration Guide | [IEXECUTOR_MIGRATION_GUIDE.md](./advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Released |
+| 45 | COM-MIGR-002 | 마이그레이션 가이드 | [MIGRATION.kr.md](./advanced/MIGRATION.kr.md) | Released |
+| 46 | COM-MIGR-003 | Migration Guide | [MIGRATION.md](./advanced/MIGRATION.md) | Released |
+| 47 | COM-MIGR-004 | Namespace Migration Guide | [NAMESPACE_MIGRATION.md](./advanced/NAMESPACE_MIGRATION.md) | Released |
+| 48 | COM-MIGR-005 | DI Container Migration Guide | [DI_MIGRATION_GUIDE.md](./guides/DI_MIGRATION_GUIDE.md) | Released |
+| 49 | COM-MIGR-006 | fmt → std::format Migration Guide | [FMT_MIGRATION_GUIDE.md](./guides/FMT_MIGRATION_GUIDE.md) | Released |
+| 50 | COM-MIGR-007 | C++20 모듈 마이그레이션 가이드 | [MODULE_MIGRATION.kr.md](./guides/MODULE_MIGRATION.kr.md) | Released |
+| 51 | COM-MIGR-008 | C++20 Module Migration Guide | [MODULE_MIGRATION.md](./guides/MODULE_MIGRATION.md) | Released |
+| 52 | COM-MIGR-009 | Result\<T\> 마이그레이션 가이드 | [RESULT_MIGRATION_GUIDE.kr.md](./guides/RESULT_MIGRATION_GUIDE.kr.md) | Released |
+| 53 | COM-MIGR-010 | Result\<T\> Migration Guide | [RESULT_MIGRATION_GUIDE.md](./guides/RESULT_MIGRATION_GUIDE.md) | Released |
+| 54 | COM-INTR-001 | 크로스 시스템 통합 가이드 | [INTEGRATION_GUIDE.kr.md](./INTEGRATION_GUIDE.kr.md) | Released |
+| 55 | COM-INTR-002 | Cross-System Integration Guide | [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md) | Released |
+| 56 | COM-INTR-003 | 시스템 통합 가이드 | [INTEGRATION.kr.md](./guides/INTEGRATION.kr.md) | Released |
+| 57 | COM-INTR-004 | System Integration Guide | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
+| 58 | COM-INTR-005 | common_system 통합 정책 | [INTEGRATION_POLICY.kr.md](./guides/INTEGRATION_POLICY.kr.md) | Released |
+| 59 | COM-INTR-006 | common_system Integration Policy | [INTEGRATION_POLICY.md](./guides/INTEGRATION_POLICY.md) | Released |
+| 60 | COM-QUAL-001 | Common System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
+| 61 | COM-QUAL-002 | Common System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
+| 62 | COM-SECU-001 | CVE Scanning and SBOM Generation Guide | [CVE-SCANNING.md](./guides/CVE-SCANNING.md) | Released |
+| 63 | COM-SECU-002 | Security Best Practices | [SECURITY_BEST_PRACTICES.md](./guides/SECURITY_BEST_PRACTICES.md) | Released |
+| 64 | COM-ADR-001 | ADR-001: Standardize on vcpkg as the sole package manager | [ADR-001-vcpkg-only.md](./advanced/ADR-001-vcpkg-only.md) | Released |
+| 65 | COM-PROJ-001 | 변경 이력 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| 66 | COM-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| 67 | COM-PROJ-003 | KCENON 에코시스템 호환성 매트릭스 | [COMPATIBILITY.kr.md](./COMPATIBILITY.kr.md) | Released |
+| 68 | COM-PROJ-004 | KCENON Ecosystem Compatibility Matrix | [COMPATIBILITY.md](./COMPATIBILITY.md) | Released |
+| 69 | COM-PROJ-005 | Deprecated APIs | [DEPRECATION.kr.md](./DEPRECATION.kr.md) | Released |
+| 70 | COM-PROJ-006 | Deprecated APIs | [DEPRECATION.md](./DEPRECATION.md) | Released |
+| 71 | COM-PROJ-007 | Unified System SDK Improvement Proposal | [IMPROVEMENT_PROPOSAL.md](./IMPROVEMENT_PROPOSAL.md) | Released |
+| 72 | COM-PROJ-008 | Common System - 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| 73 | COM-PROJ-009 | Common System - Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| 74 | COM-PROJ-010 | Releasing common_system | [RELEASING.md](./RELEASING.md) | Released |
+| 75 | COM-PROJ-011 | Rust/C++ Feature Parity Matrix | [RUST_PARITY.md](./RUST_PARITY.md) | Released |
+| 76 | COM-PROJ-012 | SOUP Inventory — kcenon Ecosystem | [SOUP-LIST.md](./SOUP-LIST.md) | Released |
+| 77 | COM-PROJ-013 | SOUP List &mdash; common_system | [SOUP.md](./SOUP.md) | Released |
+| 78 | COM-PROJ-014 | Dependency Matrix - 상세 분석 | [DEPENDENCY_MATRIX.kr.md](./advanced/DEPENDENCY_MATRIX.kr.md) | Released |
+| 79 | COM-PROJ-015 | Dependency Matrix - Detailed Analysis | [DEPENDENCY_MATRIX.md](./advanced/DEPENDENCY_MATRIX.md) | Released |
+| 80 | COM-PROJ-016 | CHANGELOG Template | [CHANGELOG_TEMPLATE.md](./contributing/CHANGELOG_TEMPLATE.md) | Released |
+| 81 | COM-PROJ-017 | Contributing to common_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
+| 82 | COM-PROJ-018 | Documentation Structure Guidelines | [DOCUMENTATION_GUIDELINES.md](./contributing/DOCUMENTATION_GUIDELINES.md) | Released |
+| 83 | COM-PROJ-019 | [SYSTEM_NAME] Features | [FEATURE_TEMPLATE.md](./contributing/templates/FEATURE_TEMPLATE.md) | Released |
 
-## 🚀 Quick Navigation
+## Documents by Category
 
-| I want to... | Document |
-|--------------|----------|
-| ⚡ Get started in 5 minutes | [Quick Start](guides/QUICK_START.md) |
-| 🏗️ Understand the architecture | [Architecture](01-ARCHITECTURE.md) |
-| 🔧 Integrate into my project | [Integration Guide](guides/INTEGRATION.md) |
-| ❓ Find answers to common questions | [FAQ](guides/FAQ.md) (23 Q&A) |
-| 🐛 Troubleshoot an issue | [Troubleshooting](guides/TROUBLESHOOTING.md) |
-| ✨ Learn best practices | [Best Practices](guides/BEST_PRACTICES.md) |
-| 🤝 Contribute to the project | [Contributing](contributing/CONTRIBUTING.md) |
+### Architecture (6)
 
----
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-ARCH-001 | 시스템 아키텍처 | [ARCHITECTURE.kr.md](./ARCHITECTURE.kr.md) | Released |
+| COM-ARCH-002 | System Architecture | [ARCHITECTURE.md](./ARCHITECTURE.md) | Released |
+| COM-ARCH-003 | Common System - Project Structure | [STRUCTURE.md](./advanced/STRUCTURE.md) | Released |
+| COM-ARCH-004 | Runtime Binding Architecture | [RUNTIME_BINDING.md](./architecture/RUNTIME_BINDING.md) | Released |
+| COM-ARCH-005 | [SYSTEM_NAME] Architecture | [ARCHITECTURE_TEMPLATE.md](./contributing/templates/ARCHITECTURE_TEMPLATE.md) | Released |
+| COM-ARCH-006 | Migration Guide: Runtime Binding Pattern | [MIGRATION_RUNTIME_BINDING.md](./guides/MIGRATION_RUNTIME_BINDING.md) | Released |
 
-## Table of Contents
+### API Reference (5)
 
-- [Documentation Structure](#documentation-structure)
-- [Documentation by Role](#documentation-by-role)
-- [By Feature](#by-feature)
-- [Contributing to Documentation](#contributing-to-documentation)
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-API-001 | common_system API 레퍼런스 | [API_REFERENCE.kr.md](./API_REFERENCE.kr.md) | Released |
+| COM-API-002 | common_system API Reference | [API_REFERENCE.md](./API_REFERENCE.md) | Released |
+| COM-API-003 | Error Code Registry | [ERROR_CODES.md](./ERROR_CODES.md) | Released |
+| COM-API-004 | 에러 코드 레지스트리 | [ERROR_CODE_REGISTRY.kr.md](./ERROR_CODE_REGISTRY.kr.md) | Released |
+| COM-API-005 | Error Code Registry | [ERROR_CODE_REGISTRY.md](./ERROR_CODE_REGISTRY.md) | Released |
 
----
+### Features (2)
 
-## Documentation Structure
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-FEAT-001 | Common System - 상세 기능 | [FEATURES.kr.md](./FEATURES.kr.md) | Released |
+| COM-FEAT-002 | Common System - Detailed Features | [FEATURES.md](./FEATURES.md) | Released |
 
-### 📘 Core Documentation
+### Guides (26)
 
-Essential documents for understanding the system:
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-GUID-001 | Adapter Framework Guide | [ADAPTER_GUIDE.md](./ADAPTER_GUIDE.md) | Released |
+| COM-GUID-002 | Result<T> Best Practices | [BEST_PRACTICES.md](./BEST_PRACTICES.md) | Released |
+| COM-GUID-003 | Configuration Subsystem Guide | [CONFIG_GUIDE.md](./CONFIG_GUIDE.md) | Released |
+| COM-GUID-004 | Feature Flags Framework Guide | [FEATURE_FLAGS_GUIDE.md](./FEATURE_FLAGS_GUIDE.md) | Released |
+| COM-GUID-005 | Production Deployment Guide | [PRODUCTION_GUIDE.md](./PRODUCTION_GUIDE.md) | Released |
+| COM-GUID-006 | Common System 문서 | [README.kr.md](./README.kr.md) | Released |
+| COM-GUID-008 | README_TEMPLATE.md | [README_TEMPLATE.md](./README_TEMPLATE.md) | Released |
+| COM-GUID-009 | 싱글톤 패턴 가이드라인 | [SINGLETON_GUIDELINES.kr.md](./SINGLETON_GUIDELINES.kr.md) | Released |
+| COM-GUID-010 | Singleton Pattern Guidelines | [SINGLETON_GUIDELINES.md](./SINGLETON_GUIDELINES.md) | Released |
+| COM-GUID-011 | CI/CD Guide - common_system | [CI_CD_GUIDE.md](./contributing/CI_CD_GUIDE.md) | Released |
+| COM-GUID-012 | [Guide Title] | [GUIDE_TEMPLATE.md](./contributing/templates/GUIDE_TEMPLATE.md) | Released |
+| COM-GUID-013 | Best Practices for common_system | [BEST_PRACTICES.md](./guides/BEST_PRACTICES.md) | Released |
+| COM-GUID-014 | C++20 Concepts 가이드 | [CONCEPTS_GUIDE.kr.md](./guides/CONCEPTS_GUIDE.kr.md) | Released |
+| COM-GUID-015 | C++20 Concepts Guide | [CONCEPTS_GUIDE.md](./guides/CONCEPTS_GUIDE.md) | Released |
+| COM-GUID-016 | Error Code Guidelines | [ERROR_CODE_GUIDELINES.md](./guides/ERROR_CODE_GUIDELINES.md) | Released |
+| COM-GUID-017 | Error Handling 가이드라인 | [ERROR_HANDLING.kr.md](./guides/ERROR_HANDLING.kr.md) | Released |
+| COM-GUID-018 | Error Handling Guidelines | [ERROR_HANDLING.md](./guides/ERROR_HANDLING.md) | Released |
+| COM-GUID-019 | Common System - Frequently Asked Questions | [FAQ.md](./guides/FAQ.md) | Released |
+| COM-GUID-020 | Logging Best Practices | [LOGGING_BEST_PRACTICES.md](./guides/LOGGING_BEST_PRACTICES.md) | Released |
+| COM-GUID-021 | Quick Start Guide - common_system | [QUICK_START.md](./guides/QUICK_START.md) | Released |
+| COM-GUID-022 | Common System을 위한 RAII 패턴 가이드라인 | [RAII_GUIDELINES.kr.md](./guides/RAII_GUIDELINES.kr.md) | Released |
+| COM-GUID-023 | RAII Pattern Guidelines for Common System | [RAII_GUIDELINES.md](./guides/RAII_GUIDELINES.md) | Released |
+| COM-GUID-024 | 스마트 포인터 사용 가이드라인 | [SMART_POINTER_GUIDELINES.kr.md](./guides/SMART_POINTER_GUIDELINES.kr.md) | Released |
+| COM-GUID-025 | Smart Pointer Usage Guidelines | [SMART_POINTER_GUIDELINES.md](./guides/SMART_POINTER_GUIDELINES.md) | Released |
+| COM-GUID-026 | Troubleshooting Guide - common_system | [TROUBLESHOOTING.md](./guides/TROUBLESHOOTING.md) | Released |
+| COM-GUID-027 | Troubleshooting Guide | [TROUBLESHOOTING_LOGGING.md](./guides/TROUBLESHOOTING_LOGGING.md) | Released |
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [01-ARCHITECTURE.md](01-ARCHITECTURE.md) | Layer 0 foundation architecture, standard interfaces, system dependencies | [🇰🇷](01-ARCHITECTURE.kr.md) | 800+ |
+### Performance (4)
 
-### 📗 User Guides
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-PERF-001 | Common System - 성능 벤치마크 | [BENCHMARKS.kr.md](./BENCHMARKS.kr.md) | Released |
+| COM-PERF-002 | Common System - Performance Benchmarks | [BENCHMARKS.md](./BENCHMARKS.md) | Released |
+| COM-PERF-003 | Ecosystem Pipeline Benchmarks | [ECOSYSTEM_BENCHMARKS.md](./ECOSYSTEM_BENCHMARKS.md) | Released |
+| COM-PERF-004 | End-to-End Benchmark Documentation | [E2E_BENCHMARKS.md](./performance/E2E_BENCHMARKS.md) | Released |
 
-Step-by-step guides for users:
+### Migration (10)
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [QUICK_START.md](guides/QUICK_START.md) | 5-minute getting started guide for header-only integration | - | 324 |
-| [FAQ.md](guides/FAQ.md) | 23 frequently asked questions with examples | - | 1020 |
-| [TROUBLESHOOTING.md](guides/TROUBLESHOOTING.md) | Common problems, template errors, IDE configuration | - | 1221 |
-| [BEST_PRACTICES.md](guides/BEST_PRACTICES.md) | Recommended patterns for Result<T>, RAII, error handling | - | 1272 |
-| [ERROR_HANDLING.md](guides/ERROR_HANDLING.md) | Result<T> pattern usage and monadic operations | [🇰🇷](guides/ERROR_HANDLING.kr.md) | 600+ |
-| [RAII_GUIDELINES.md](guides/RAII_GUIDELINES.md) | Resource Acquisition Is Initialization patterns | [🇰🇷](guides/RAII_GUIDELINES.kr.md) | 400+ |
-| [SMART_POINTER_GUIDELINES.md](guides/SMART_POINTER_GUIDELINES.md) | unique_ptr and shared_ptr usage patterns | [🇰🇷](guides/SMART_POINTER_GUIDELINES.kr.md) | 300+ |
-| [ERROR_CODE_GUIDELINES.md](guides/ERROR_CODE_GUIDELINES.md) | Error code ranges, allocation, compile-time validation | - | 200+ |
-| [INTEGRATION.md](guides/INTEGRATION.md) | System integration patterns and examples | [🇰🇷](guides/INTEGRATION.kr.md) | 500+ |
-| [INTEGRATION_POLICY.md](guides/INTEGRATION_POLICY.md) | Official integration policy and CMake patterns | [🇰🇷](guides/INTEGRATION_POLICY.kr.md) | 300+ |
-| [MODULE_MIGRATION.md](guides/MODULE_MIGRATION.md) | C++20 module migration guide | [🇰🇷](guides/MODULE_MIGRATION.kr.md) | 200+ |
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-MIGR-001 | IExecutor API Migration Guide | [IEXECUTOR_MIGRATION_GUIDE.md](./advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Released |
+| COM-MIGR-002 | 마이그레이션 가이드 | [MIGRATION.kr.md](./advanced/MIGRATION.kr.md) | Released |
+| COM-MIGR-003 | Migration Guide | [MIGRATION.md](./advanced/MIGRATION.md) | Released |
+| COM-MIGR-004 | Namespace Migration Guide | [NAMESPACE_MIGRATION.md](./advanced/NAMESPACE_MIGRATION.md) | Released |
+| COM-MIGR-005 | DI Container Migration Guide | [DI_MIGRATION_GUIDE.md](./guides/DI_MIGRATION_GUIDE.md) | Released |
+| COM-MIGR-006 | fmt → std::format Migration Guide | [FMT_MIGRATION_GUIDE.md](./guides/FMT_MIGRATION_GUIDE.md) | Released |
+| COM-MIGR-007 | C++20 모듈 마이그레이션 가이드 | [MODULE_MIGRATION.kr.md](./guides/MODULE_MIGRATION.kr.md) | Released |
+| COM-MIGR-008 | C++20 Module Migration Guide | [MODULE_MIGRATION.md](./guides/MODULE_MIGRATION.md) | Released |
+| COM-MIGR-009 | Result\<T\> 마이그레이션 가이드 | [RESULT_MIGRATION_GUIDE.kr.md](./guides/RESULT_MIGRATION_GUIDE.kr.md) | Released |
+| COM-MIGR-010 | Result\<T\> Migration Guide | [RESULT_MIGRATION_GUIDE.md](./guides/RESULT_MIGRATION_GUIDE.md) | Released |
 
-### 📙 Advanced Topics
+### Integration (6)
 
-For experienced users and contributors:
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-INTR-001 | 크로스 시스템 통합 가이드 | [INTEGRATION_GUIDE.kr.md](./INTEGRATION_GUIDE.kr.md) | Released |
+| COM-INTR-002 | Cross-System Integration Guide | [INTEGRATION_GUIDE.md](./INTEGRATION_GUIDE.md) | Released |
+| COM-INTR-003 | 시스템 통합 가이드 | [INTEGRATION.kr.md](./guides/INTEGRATION.kr.md) | Released |
+| COM-INTR-004 | System Integration Guide | [INTEGRATION.md](./guides/INTEGRATION.md) | Released |
+| COM-INTR-005 | common_system 통합 정책 | [INTEGRATION_POLICY.kr.md](./guides/INTEGRATION_POLICY.kr.md) | Released |
+| COM-INTR-006 | common_system Integration Policy | [INTEGRATION_POLICY.md](./guides/INTEGRATION_POLICY.md) | Released |
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [COMPATIBILITY.md](COMPATIBILITY.md) | Version compatibility matrix for KCENON ecosystem | [🇰🇷](COMPATIBILITY.kr.md) | 300+ |
-| [MIGRATION.md](advanced/MIGRATION.md) | Migration guide to common_system integration | [🇰🇷](advanced/MIGRATION.kr.md) | 400+ |
-| [IEXECUTOR_MIGRATION_GUIDE.md](advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Function-based to job-based API migration | - | 200+ |
-| [NAMESPACE_MIGRATION.md](advanced/NAMESPACE_MIGRATION.md) | Namespace migration strategy and patterns | - | 150+ |
-| [DEPENDENCY_MATRIX.md](advanced/DEPENDENCY_MATRIX.md) | System dependency relationships and integration status | [🇰🇷](advanced/DEPENDENCY_MATRIX.kr.md) | 200+ |
-| [STRUCTURE.md](advanced/STRUCTURE.md) | Project directory layout and organization | - | 150+ |
-| [SINGLETON_GUIDELINES.md](SINGLETON_GUIDELINES.md) | Singleton pattern guidelines for SDOF prevention | [🇰🇷](SINGLETON_GUIDELINES.kr.md) | 300+ |
+### Quality (2)
 
-### 🤝 Contributing
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-QUAL-001 | Common System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
+| COM-QUAL-002 | Common System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
 
-For contributors and maintainers:
+### Security (2)
 
-| Document | Description | Korean | Lines |
-|----------|-------------|--------|-------|
-| [CONTRIBUTING.md](contributing/CONTRIBUTING.md) | Contribution guidelines, header-only best practices, testing | - | 996 |
-| [CI_CD_GUIDE.md](contributing/CI_CD_GUIDE.md) | CI/CD pipeline, static analysis, header validation | - | 864 |
-| [CHANGELOG_TEMPLATE.md](contributing/CHANGELOG_TEMPLATE.md) | Standardized CHANGELOG format for ecosystem | - | 200+ |
-| [DOCUMENTATION_GUIDELINES.md](contributing/DOCUMENTATION_GUIDELINES.md) | Documentation structure standards for ecosystem | - | 400+ |
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-SECU-001 | CVE Scanning and SBOM Generation Guide | [CVE-SCANNING.md](./guides/CVE-SCANNING.md) | Released |
+| COM-SECU-002 | Security Best Practices | [SECURITY_BEST_PRACTICES.md](./guides/SECURITY_BEST_PRACTICES.md) | Released |
 
----
+### Architecture Decision Records (1)
 
-## Documentation by Role
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-ADR-001 | ADR-001: Standardize on vcpkg as the sole package manager | [ADR-001-vcpkg-only.md](./advanced/ADR-001-vcpkg-only.md) | Released |
 
-### 👤 For New Users
+### Project (19)
 
-**Getting Started Path**:
-1. **⚡ Quick Start** - [5-minute guide](guides/QUICK_START.md) to first program with Result<T>
-2. **🏗️ Architecture** - [System overview](01-ARCHITECTURE.md) and Layer 0 foundation
-3. **🔧 Integration** - [Integration guide](guides/INTEGRATION.md) with CMake examples
-4. **💡 Examples** - [FAQ](guides/FAQ.md) with 23 practical examples
-
-**When You Have Issues**:
-- Check [FAQ](guides/FAQ.md) first (23 common questions)
-- Use [Troubleshooting](guides/TROUBLESHOOTING.md) for template errors
-- Search [GitHub Issues](https://github.com/kcenon/common_system/issues)
-
-### 💻 For Experienced Developers
-
-**Advanced Usage Path**:
-1. **🏗️ Architecture** - Understand [Layer 0 foundation](01-ARCHITECTURE.md)
-2. **⚠️ Error Handling** - Master [Result<T> pattern](guides/ERROR_HANDLING.md)
-3. **✨ Best Practices** - Learn [optimization patterns](guides/BEST_PRACTICES.md)
-4. **🔍 Advanced** - Study [dependency matrix](advanced/DEPENDENCY_MATRIX.md)
-
-**Deep Dive Topics**:
-- [Error Handling](guides/ERROR_HANDLING.md) - Monadic operations and patterns
-- [RAII Guidelines](guides/RAII_GUIDELINES.md) - Resource management
-- [Smart Pointers](guides/SMART_POINTER_GUIDELINES.md) - Ownership semantics
-- [Error Codes](guides/ERROR_CODE_GUIDELINES.md) - Adding custom error codes
-
-### 🔧 For System Integrators
-
-**Integration Path**:
-1. **🔧 Integration Guide** - [System integration](guides/INTEGRATION.md)
-2. **📋 Integration Policy** - [Official requirements](guides/INTEGRATION_POLICY.md)
-3. **✨ Best Practices** - [Integration patterns](guides/BEST_PRACTICES.md#system-integration)
-4. **🐛 Troubleshooting** - [Common issues](guides/TROUBLESHOOTING.md)
-
-**Migration Resources**:
-- [Migration Guide](advanced/MIGRATION.md) - Adopt common_system integration
-- [IExecutor Migration](advanced/IEXECUTOR_MIGRATION_GUIDE.md) - Update executor usage
-- [Namespace Migration](advanced/NAMESPACE_MIGRATION.md) - Namespace changes
-- [Dependency Matrix](advanced/DEPENDENCY_MATRIX.md) - System relationships
-- [Compatibility Matrix](COMPATIBILITY.md) - Version requirements across ecosystem
-
-### 🤝 For Contributors
-
-**Contribution Path**:
-1. **🤝 Contributing** - [How to contribute](contributing/CONTRIBUTING.md)
-2. **🚀 CI/CD** - [Pipeline documentation](contributing/CI_CD_GUIDE.md)
-3. **🏗️ Architecture** - [System internals](01-ARCHITECTURE.md)
-4. **📊 Structure** - [Project organization](advanced/STRUCTURE.md)
-
-**Development Resources**:
-- [Code Style](contributing/CONTRIBUTING.md#code-style-guidelines)
-- [Testing Guide](contributing/CI_CD_GUIDE.md#running-checks-locally)
-- [Header-Only Best Practices](contributing/CONTRIBUTING.md#header-only-library-guidelines)
-
----
-
-## By Feature
-
-### ⚠️ Result<T> Pattern
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| Usage | [Error Handling](guides/ERROR_HANDLING.md) | Result<T> Pattern |
-| Best Practices | [Best Practices](guides/BEST_PRACTICES.md) | Error Handling |
-| FAQ | [FAQ](guides/FAQ.md) | Result<T> Usage |
-| Examples | [Quick Start](guides/QUICK_START.md) | First Program |
-
-### 🔗 Standard Interfaces
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| ILogger | [Architecture](01-ARCHITECTURE.md) | Standard Interfaces |
-| IMonitor | [Architecture](01-ARCHITECTURE.md) | Standard Interfaces |
-| IExecutor | [Architecture](01-ARCHITECTURE.md) | Standard Interfaces |
-| Migration | [IExecutor Migration](advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Job-Based API |
-
-### 🛡️ RAII Patterns
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| Guidelines | [RAII Guidelines](guides/RAII_GUIDELINES.md) | Resource Management |
-| Smart Pointers | [Smart Pointer Guidelines](guides/SMART_POINTER_GUIDELINES.md) | Ownership |
-| Best Practices | [Best Practices](guides/BEST_PRACTICES.md) | RAII Patterns |
-| Examples | [FAQ](guides/FAQ.md) | RAII Usage |
-
-### 🔧 System Integration
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| Quick Integration | [Integration](guides/INTEGRATION.md) | Quick Start |
-| CMake Patterns | [Integration Policy](guides/INTEGRATION_POLICY.md) | CMake Config |
-| Migration | [Migration Guide](advanced/MIGRATION.md) | Step-by-Step |
-| Dependencies | [Dependency Matrix](advanced/DEPENDENCY_MATRIX.md) | System Graph |
-
-### 🐛 Error Codes
-
-| Topic | Document | Section |
-|-------|----------|---------|
-| Guidelines | [Error Code Guidelines](guides/ERROR_CODE_GUIDELINES.md) | Allocation |
-| Adding Codes | [Error Code Guidelines](guides/ERROR_CODE_GUIDELINES.md) | New Codes |
-| Validation | [Error Code Guidelines](guides/ERROR_CODE_GUIDELINES.md) | Compile-Time |
-| Troubleshooting | [Troubleshooting](guides/TROUBLESHOOTING.md) | Error Codes |
-
----
-
-## Project Information
-
-### Current Status
-- **Version**: 0.1.0.0 (Layer 0 Foundation)
-- **Type**: Header-Only Library
-- **C++ Standard**: C++17 (C++20 for optional features)
-- **License**: BSD 3-Clause
-- **Test Status**: Under Development
-
-### Layer 0 Foundation
-Common system provides the foundational layer for all KCENON systems:
-- ✅ **Standard Interfaces** - ILogger, IMonitor, IExecutor abstractions
-- ✅ **Result<T> Pattern** - Type-safe error handling with monadic operations
-- ✅ **RAII Support** - Resource management utilities and guidelines
-- ✅ **Smart Pointer Guidelines** - Ownership semantics and best practices
-- ✅ **Error Code System** - Compile-time validated error code registry
-- ✅ **Cross-Platform** - Windows, macOS, Linux support
-
-### Key Features
-- 🎯 **Header-Only** - No build artifacts, include and use
-- 🔗 **Standard Interfaces** - Unified abstractions for logging, monitoring, execution
-- ⚠️ **Result<T> Pattern** - Type-safe error handling replacing exceptions
-- 🛡️ **RAII Patterns** - Resource safety with compile-time guarantees
-- 🔧 **System Integration** - Foundation for 6 higher-layer systems
-- 📦 **Dependency Injection** - Interface-based design for testability
-- 🧵 **Thread Safe** - Core utilities verified with TSan
-- 🔐 **Production Ready** - Used across all KCENON production systems
-
-### Dependent Systems
-Common system serves as Layer 0 foundation for:
-- **Layer 1**: thread_system, container_system
-- **Layer 2**: logger_system, monitoring_system, database_system
-- **Layer 3**: network_system
-- **Application**: messaging_system
-
----
-
-## Contributing to Documentation
-
-### Documentation Standards
-Follow the [Documentation Structure Guidelines](contributing/DOCUMENTATION_GUIDELINES.md):
-- Standard folder structure for all ecosystem systems
-- Required documents and naming conventions
-- Front matter on all documents
-- Code examples must compile
-- Bilingual support (English/Korean)
-- Cross-references with relative links
-
-Use the provided templates in `docs/contributing/templates/`:
-- [ARCHITECTURE_TEMPLATE.md](contributing/templates/ARCHITECTURE_TEMPLATE.md)
-- [FEATURE_TEMPLATE.md](contributing/templates/FEATURE_TEMPLATE.md)
-- [GUIDE_TEMPLATE.md](contributing/templates/GUIDE_TEMPLATE.md)
-
-### Areas for Improvement
-- [ ] Korean translations for new guides (FAQ, TROUBLESHOOTING, BEST_PRACTICES)
-- [ ] Video tutorials for Result<T> pattern
-- [ ] Interactive examples for RAII patterns
-- [ ] More integration scenarios
-
-### Submission Process
-1. Read [Contributing Guide](contributing/CONTRIBUTING.md)
-2. Edit markdown files
-3. Test all code examples (header-only compile checks)
-4. Update Korean translations
-5. Submit pull request
+| doc_id | Topic | Document | Status |
+|--------|-------|----------|--------|
+| COM-PROJ-001 | 변경 이력 | [CHANGELOG.kr.md](./CHANGELOG.kr.md) | Released |
+| COM-PROJ-002 | Changelog | [CHANGELOG.md](./CHANGELOG.md) | Released |
+| COM-PROJ-003 | KCENON 에코시스템 호환성 매트릭스 | [COMPATIBILITY.kr.md](./COMPATIBILITY.kr.md) | Released |
+| COM-PROJ-004 | KCENON Ecosystem Compatibility Matrix | [COMPATIBILITY.md](./COMPATIBILITY.md) | Released |
+| COM-PROJ-005 | Deprecated APIs | [DEPRECATION.kr.md](./DEPRECATION.kr.md) | Released |
+| COM-PROJ-006 | Deprecated APIs | [DEPRECATION.md](./DEPRECATION.md) | Released |
+| COM-PROJ-007 | Unified System SDK Improvement Proposal | [IMPROVEMENT_PROPOSAL.md](./IMPROVEMENT_PROPOSAL.md) | Released |
+| COM-PROJ-008 | Common System - 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
+| COM-PROJ-009 | Common System - Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
+| COM-PROJ-010 | Releasing common_system | [RELEASING.md](./RELEASING.md) | Released |
+| COM-PROJ-011 | Rust/C++ Feature Parity Matrix | [RUST_PARITY.md](./RUST_PARITY.md) | Released |
+| COM-PROJ-012 | SOUP Inventory — kcenon Ecosystem | [SOUP-LIST.md](./SOUP-LIST.md) | Released |
+| COM-PROJ-013 | SOUP List &mdash; common_system | [SOUP.md](./SOUP.md) | Released |
+| COM-PROJ-014 | Dependency Matrix - 상세 분석 | [DEPENDENCY_MATRIX.kr.md](./advanced/DEPENDENCY_MATRIX.kr.md) | Released |
+| COM-PROJ-015 | Dependency Matrix - Detailed Analysis | [DEPENDENCY_MATRIX.md](./advanced/DEPENDENCY_MATRIX.md) | Released |
+| COM-PROJ-016 | CHANGELOG Template | [CHANGELOG_TEMPLATE.md](./contributing/CHANGELOG_TEMPLATE.md) | Released |
+| COM-PROJ-017 | Contributing to common_system | [CONTRIBUTING.md](./contributing/CONTRIBUTING.md) | Released |
+| COM-PROJ-018 | Documentation Structure Guidelines | [DOCUMENTATION_GUIDELINES.md](./contributing/DOCUMENTATION_GUIDELINES.md) | Released |
+| COM-PROJ-019 | [SYSTEM_NAME] Features | [FEATURE_TEMPLATE.md](./contributing/templates/FEATURE_TEMPLATE.md) | Released |
 
 ---
 
-## 📞 Getting Help
-
-### Documentation Issues
-- **Missing info**: [Open documentation issue](https://github.com/kcenon/common_system/issues/new?labels=documentation)
-- **Incorrect examples**: Report with details
-- **Unclear instructions**: Suggest improvements
-
-### Technical Support
-1. Check [FAQ](guides/FAQ.md) - 23 common questions
-2. Read [Troubleshooting](guides/TROUBLESHOOTING.md) - Template errors and solutions
-3. Search [GitHub Issues](https://github.com/kcenon/common_system/issues)
-4. Ask on [GitHub Discussions](https://github.com/kcenon/common_system/discussions)
-
-### Support Resources
-- **Issues**: Bug reports and feature requests
-- **Discussions**: Questions and support
-- **Pull Requests**: Code and documentation contributions
-
----
-
-## External Resources
-
-- **GitHub Repository**: [kcenon/common_system](https://github.com/kcenon/common_system)
-- **Issue Tracker**: [GitHub Issues](https://github.com/kcenon/common_system/issues)
-- **Main README**: [../README.md](../README.md)
-- **Layer Architecture**: [01-ARCHITECTURE.md](01-ARCHITECTURE.md)
-
----
-
-## Documentation Roadmap
-
-### ✅ Current (v1.0 - 2025-11-11)
-- ✅ Comprehensive architecture documentation
-- ✅ 23 FAQ questions covering all features
-- ✅ Detailed troubleshooting guide
-- ✅ Best practices documentation
-- ✅ Header-only specific guidelines
-- ✅ Integration policy and patterns
-- ✅ Migration guides
-- ✅ CI/CD documentation
-
-### 📋 Future Enhancements
-- 📝 Korean translations for new guides
-- 🎥 Video tutorials for Result<T> and RAII
-- 📊 Interactive examples with compiler explorer
-- 🌐 Multi-language support (Japanese, Chinese)
-- 📖 Case studies from dependent systems
-- 🔄 Migration guides for major versions
-
----
-
-**Common System Documentation** - Layer 0 Foundation for C++17/20 Systems
-
-**Last Updated**: 2025-11-11
-**Next Review**: 2026-02-11
+*Registry generated for issue [#563](https://github.com/kcenon/common_system/issues/563).*

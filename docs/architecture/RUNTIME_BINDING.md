@@ -10,6 +10,8 @@ category: "ARCH"
 
 # Runtime Binding Architecture
 
+> **SSOT**: This document is the single source of truth for **Runtime Binding Architecture**.
+
 ## Overview
 
 The Runtime Binding Pattern is a fundamental architectural approach in common_system that decouples interface definitions from their implementations at runtime. This pattern enables:

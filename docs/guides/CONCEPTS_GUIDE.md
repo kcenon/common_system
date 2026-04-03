@@ -10,6 +10,8 @@ category: "GUID"
 
 # C++20 Concepts Guide
 
+> **SSOT**: This document is the single source of truth for **C++20 Concepts Guide**.
+
 **Language:** **English** | [한국어](CONCEPTS_GUIDE.kr.md)
 
 This guide explains how to use C++20 concepts in the Common System library for compile-time type validation.

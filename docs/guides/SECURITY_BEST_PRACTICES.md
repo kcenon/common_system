@@ -10,6 +10,8 @@ category: "SECU"
 
 # Security Best Practices
 
+> **SSOT**: This document is the single source of truth for **Security Best Practices**.
+
 This guide documents security features and best practices for the Common System, focusing on registry protection and audit logging.
 
 ## Overview

@@ -10,6 +10,8 @@ category: "MIGR"
 
 # Namespace Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Namespace Migration Guide**.
+
 ## Issue
 
 The common_system include path is `kcenon/common/*`, but some headers declare `namespace common` instead of `namespace kcenon::common`. This creates inconsistency where:

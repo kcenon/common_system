@@ -10,6 +10,8 @@ category: "GUID"
 
 # Adapter Framework Guide
 
+> **SSOT**: This document is the single source of truth for **Adapter Framework Guide**.
+
 > **Language:** **English** | [한국어](ADAPTER_GUIDE.kr.md)
 
 **Complete Guide**: Type-Safe Adapters, Interface Adaptation, and Cross-System Integration

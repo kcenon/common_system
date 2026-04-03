@@ -12,6 +12,8 @@ category: "MIGR"
 
 # Migration Guide
 
+> **SSOT**: This document is the single source of truth for **Migration Guide**.
+
 ## Table of Contents
 
 - [Overview](#overview)

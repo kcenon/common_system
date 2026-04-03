@@ -10,6 +10,8 @@ category: "PERF"
 
 # Common System - Performance Benchmarks
 
+> **SSOT**: This document is the single source of truth for **Common System - Performance Benchmarks**.
+
 **Language:** **English** | [한국어](BENCHMARKS.kr.md)
 
 This document provides comprehensive performance benchmarks and analysis for the Common System project.

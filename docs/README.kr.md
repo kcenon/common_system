@@ -10,6 +10,8 @@ category: "GUID"
 
 # Common System 문서
 
+> **SSOT**: This document is the single source of truth for **Common System 문서**.
+
 > **Language:** [English](README.md) | **한국어**
 
 common_system 문서에 오신 것을 환영합니다. 이 디렉토리에는 common system을 사용하고 통합하기 위한 포괄적인 가이드, 참조 자료 및 모범 사례가 포함되어 있습니다.

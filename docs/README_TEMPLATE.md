@@ -10,6 +10,8 @@ category: "GUID"
 
 # README_TEMPLATE.md
 
+> **SSOT**: This document is the single source of truth for **README_TEMPLATE.md**.
+
 > Canonical README structure for all kcenon ecosystem projects.
 > Every project README (both `README.md` and `README.kr.md`) MUST follow
 > this 13-section layout in the order shown below.

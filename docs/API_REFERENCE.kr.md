@@ -10,6 +10,8 @@ category: "API"
 
 # common_system API 레퍼런스
 
+> **SSOT**: This document is the single source of truth for **common_system API 레퍼런스**.
+
 > **버전**: 0.2.3
 > **최종 업데이트**: 2025-12-10
 > **상태**: 개발 중 (Tier 0)

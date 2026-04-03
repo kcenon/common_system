@@ -10,6 +10,8 @@ category: "PROJ"
 
 # Unified System SDK Improvement Proposal
 
+> **SSOT**: This document is the single source of truth for **Unified System SDK Improvement Proposal**.
+
 > **Version:** 3.1.0
 > **Last Updated:** 2025-12-28
 > **Status:** Verified Analysis & Recommendations
