@@ -2,6 +2,16 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file database_interface.h
+ * @brief Abstract database interface with value types and query operations.
+ *
+ * Defines IDatabase, database_value variant, and database_row for
+ * backend-agnostic database access across the ecosystem.
+ *
+ * @see database_system For the concrete implementations
+ */
+
 #pragma once
 
 #include <cstdint>

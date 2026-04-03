@@ -2,6 +2,15 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file object_pool.h
+ * @brief Thread-safe object pool reusing raw storage for expensive objects.
+ *
+ * Allocates raw memory once, performs placement-new on acquisition,
+ * and destructs (but does not deallocate) on release. Reduces allocation
+ * overhead for frequently created/destroyed objects.
+ */
+
 #pragma once
 
 #include <cstddef>
