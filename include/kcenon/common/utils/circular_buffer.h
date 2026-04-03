@@ -2,6 +2,14 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file circular_buffer.h
+ * @brief Thread-safe fixed-capacity circular buffer (SPSC-friendly).
+ *
+ * Provides a mutex-protected ring buffer with optional overwrite-on-full
+ * semantics. Useful for bounded logging, event queues, and sliding windows.
+ */
+
 #pragma once
 
 #include <array>

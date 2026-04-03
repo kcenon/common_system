@@ -2,6 +2,13 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
+/**
+ * @file adapter.h
+ * @brief Adapter traits and base class for type-erased cross-system wrappers.
+ *
+ * @see smart_adapter.h For the ownership-managing adapter variant
+ */
+
 #pragma once
 
 #include <atomic>
