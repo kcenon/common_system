@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PERF-002"
+doc_title: "Common System - Performance Benchmarks"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PERF"
+---
+
 # Common System - Performance Benchmarks
 
 **Language:** **English** | [한국어](BENCHMARKS.kr.md)

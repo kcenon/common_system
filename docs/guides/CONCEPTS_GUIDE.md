@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-015"
+doc_title: "C++20 Concepts Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # C++20 Concepts Guide
 
 **Language:** **English** | [한국어](CONCEPTS_GUIDE.kr.md)

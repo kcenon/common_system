@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-002"
+doc_title: "Changelog"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Changelog
 
 All notable changes to the Common System project will be documented in this file.

@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-007"
+doc_title: "Unified System SDK Improvement Proposal"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Unified System SDK Improvement Proposal
 
 > **Version:** 3.1.0

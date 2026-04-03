@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-004"
+doc_title: "Feature Flags Framework Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Feature Flags Framework Guide
 
 > **Language:** **English** | [한국어](FEATURE_FLAGS_GUIDE.kr.md)

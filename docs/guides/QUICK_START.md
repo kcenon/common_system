@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-021"
+doc_title: "Quick Start Guide - common_system"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Quick Start Guide - common_system
 
 **5-minute guide** to get started with the header-only common_system library for C++20.

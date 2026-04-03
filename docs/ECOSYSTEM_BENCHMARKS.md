@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PERF-003"
+doc_title: "Ecosystem Pipeline Benchmarks"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PERF"
+---
+
 # Ecosystem Pipeline Benchmarks
 
 Cross-system end-to-end integration benchmarks for the kcenon ecosystem pipeline.

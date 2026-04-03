@@ -1,3 +1,13 @@
+---
+doc_id: "COM-INTR-001"
+doc_title: "크로스 시스템 통합 가이드"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "INTR"
+---
+
 # 크로스 시스템 통합 가이드
 
 > **언어:** [English](INTEGRATION_GUIDE.md) | **한국어**

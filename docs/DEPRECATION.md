@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-006"
+doc_title: "Deprecated APIs"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # Deprecated APIs
 
 This document lists all deprecated APIs in the Common System library, their replacements, and migration guidance.

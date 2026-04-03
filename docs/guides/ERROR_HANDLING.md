@@ -1,3 +1,13 @@
+---
+doc_id: "COM-GUID-018"
+doc_title: "Error Handling Guidelines"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # Error Handling Guidelines
 
 > **Language:** **English** | [한국어](ERROR_HANDLING.kr.md)

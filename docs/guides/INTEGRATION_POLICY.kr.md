@@ -1,3 +1,13 @@
+---
+doc_id: "COM-INTR-005"
+doc_title: "common_system 통합 정책"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "INTR"
+---
+
 # common_system 통합 정책
 
 > **Language:** [English](INTEGRATION_POLICY.md) | **한국어**

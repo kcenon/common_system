@@ -1,3 +1,13 @@
+---
+doc_id: "COM-INTR-004"
+doc_title: "System Integration Guide"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "INTR"
+---
+
 > **Language:** **English** | [한국어](INTEGRATION.kr.md)
 
 # System Integration Guide

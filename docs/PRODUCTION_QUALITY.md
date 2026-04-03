@@ -1,3 +1,13 @@
+---
+doc_id: "COM-QUAL-002"
+doc_title: "Common System Production Quality"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "QUAL"
+---
+
 # Common System Production Quality
 
 **Last Updated**: 2025-11-21

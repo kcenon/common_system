@@ -1,3 +1,13 @@
+---
+doc_id: "COM-ARCH-005"
+doc_title: "[SYSTEM_NAME] Architecture"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "ARCH"
+---
+
 # [SYSTEM_NAME] Architecture
 
 > **Language:** **English** | [한국어](ARCHITECTURE.kr.md)

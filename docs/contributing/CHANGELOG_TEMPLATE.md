@@ -1,3 +1,13 @@
+---
+doc_id: "COM-PROJ-016"
+doc_title: "CHANGELOG Template"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "PROJ"
+---
+
 # CHANGELOG Template
 
 This template provides a standardized CHANGELOG format for all KCENON ecosystem systems.

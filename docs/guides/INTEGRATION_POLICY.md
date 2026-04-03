@@ -1,3 +1,13 @@
+---
+doc_id: "COM-INTR-006"
+doc_title: "common_system Integration Policy"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "INTR"
+---
+
 # common_system Integration Policy
 
 > **Language:** **English** | [한국어](INTEGRATION_POLICY.kr.md)

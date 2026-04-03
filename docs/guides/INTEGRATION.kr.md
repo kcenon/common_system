@@ -1,3 +1,13 @@
+---
+doc_id: "COM-INTR-003"
+doc_title: "시스템 통합 가이드"
+doc_version: "1.0.0"
+doc_date: "2026-04-04"
+doc_status: "Released"
+project: "common_system"
+category: "INTR"
+---
+
 > **Language:** [English](INTEGRATION.md) | **한국어**
 
 # 시스템 통합 가이드
