@@ -1,0 +1,96 @@
+name: Ecosystem Documentation Audit
+
+on:
+  schedule:
+    - cron: '23 3 * * 1'  # Monday 3:23 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Audit ${{ matrix.repo }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+          - common_system
+          - thread_system
+          - logger_system
+          - container_system
+          - monitoring_system
+          - database_system
+          - network_system
+          - pacs_system
+
+    steps:
+      - name: Checkout audit tool
+        uses: actions/checkout@v4
+        with:
+          path: common_system
+          sparse-checkout: tools/doc-audit
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: kcenon/${{ matrix.repo }}
+          path: ${{ matrix.repo }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Prepare audit tool
+        run: |
+          cp -r common_system/tools/doc-audit "$RUNNER_TEMP/doc_audit"
+
+      - name: Run full audit
+        run: |
+          python -m doc_audit "$GITHUB_WORKSPACE/${{ matrix.repo }}" --format json \
+            | tee audit-report.json
+        env:
+          PYTHONPATH: ${{ runner.temp }}
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-${{ matrix.repo }}
+          path: audit-report.json
+          retention-days: 30
+
+  summary:
+    name: Audit Summary
+    runs-on: ubuntu-latest
+    needs: audit
+    if: always()
+
+    steps:
+      - name: Download all reports
+        uses: actions/download-artifact@v4
+        with:
+          path: reports
+          pattern: audit-*
+
+      - name: Generate summary
+        run: |
+          echo "## Ecosystem Documentation Audit Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Repository | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|------------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          for dir in reports/audit-*/; do
+            repo=$(basename "$dir" | sed 's/^audit-//')
+            if [ -f "$dir/audit-report.json" ]; then
+              echo "| $repo | Completed |" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "| $repo | No report |" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
