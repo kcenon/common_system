@@ -23,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Modernized Doxygen documentation** (#581)
+  - Integrated doxygen-awesome-css theme with dark mode toggle support
+  - Added `docs/header.html` with doxygen-awesome-css script initialization
+  - Added `docs/custom.css` with kcenon branding color overrides
+  - Created standardized `docs/mainpage.dox` with 8 standard sections
+  - Updated `Doxyfile` with theme settings and standardized configuration
+
 ### Removed
 - **Deprecated THREAD_LOG_* macros** (#289)
   - Removed deprecated logging macros that were scheduled for removal in v3.0.0:
