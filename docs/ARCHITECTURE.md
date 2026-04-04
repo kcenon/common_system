@@ -16,6 +16,12 @@ category: "ARCH"
 
 ## Overview
 
+> **Cross-reference**:
+> [API Reference](./API_REFERENCE.md) — Result&lt;T&gt;, interfaces, and utility APIs
+> [Integration Policy](./INTEGRATION_POLICY.md) — Rules for downstream system integration
+> [Best Practices](./BEST_PRACTICES.md) — Coding conventions and patterns
+> [Cross-Reference Guide](./CROSS_REFERENCE_GUIDE.md) — Ecosystem cross-reference convention
+
 This document describes the architecture of the 7 core systems and how they integrate with each other.
 
 ## Layer Architecture
@@ -382,9 +388,39 @@ target_link_libraries(your_app PRIVATE kcenon::common_modules)
 
 For detailed migration instructions, see the [Module Migration Guide](guides/MODULE_MIGRATION.md).
 
+## Ecosystem Dependencies
+
+common_system is the **Tier 0 foundation** of the kcenon ecosystem. All other projects depend on it.
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style A fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [thread_system](https://github.com/kcenon/thread_system) — Tier 1: Implements IExecutor interface
+> [container_system](https://github.com/kcenon/container_system) — Tier 1: Uses Result&lt;T&gt; for serialization errors
+> [logger_system](https://github.com/kcenon/logger_system) — Tier 2: Uses ILogger, Result&lt;T&gt;
+> [monitoring_system](https://github.com/kcenon/monitoring_system) — Tier 3: Uses event bus, IMonitor
+> [database_system](https://github.com/kcenon/database_system) — Tier 3: Uses Result&lt;T&gt;, IExecutor
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Uses IExecutor, Result&lt;T&gt;
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: Full ecosystem consumer
+
+---
+
 ## References
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
 - [INTEGRATION.md](./INTEGRATION.md) - Integration examples
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Improvement tracking
 - [Module Migration Guide](guides/MODULE_MIGRATION.md) - C++20 module migration
+- [Cross-Reference Guide](./CROSS_REFERENCE_GUIDE.md) - Ecosystem cross-reference convention
