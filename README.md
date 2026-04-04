@@ -396,6 +396,31 @@ cmake --build build
 
 ## Ecosystem Integration
 
+### Ecosystem Dependency Map
+
+```mermaid
+graph TD
+    A[common_system] --> B[thread_system]
+    A --> C[container_system]
+    B --> D[logger_system]
+    B --> E[monitoring_system]
+    D --> F[database_system]
+    E --> F
+    F --> G[network_system]
+    G --> H[pacs_system]
+
+    style A fill:#f9f,stroke:#333,stroke-width:3px
+```
+
+> **Ecosystem reference**:
+> [thread_system](https://github.com/kcenon/thread_system) — Tier 1: Implements IExecutor interface
+> [container_system](https://github.com/kcenon/container_system) — Tier 1: Uses Result&lt;T&gt; for error handling
+> [logger_system](https://github.com/kcenon/logger_system) — Tier 2: Uses ILogger, Result&lt;T&gt;
+> [monitoring_system](https://github.com/kcenon/monitoring_system) — Tier 3: Uses event bus, IMonitor
+> [database_system](https://github.com/kcenon/database_system) — Tier 3: Uses Result&lt;T&gt;, IExecutor
+> [network_system](https://github.com/kcenon/network_system) — Tier 4: Uses IExecutor, Result&lt;T&gt;
+> [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: Full ecosystem consumer
+
 This common system serves as the foundational layer (Tier 0) that all other system modules build upon:
 
 ```
