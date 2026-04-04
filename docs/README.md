@@ -80,7 +80,7 @@ Total documents: **86**
 | 59 | COM-INTR-006 | common_system Integration Policy | [INTEGRATION_POLICY.md](./guides/INTEGRATION_POLICY.md) | Released |
 | 60 | COM-QUAL-001 | Common System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | 61 | COM-QUAL-002 | Common System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| 62 | COM-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| 62 | COM-QUAL-003 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 | 63 | COM-SECU-001 | CVE Scanning and SBOM Generation Guide | [CVE-SCANNING.md](./guides/CVE-SCANNING.md) | Released |
 | 64 | COM-SECU-002 | Security Best Practices | [SECURITY_BEST_PRACTICES.md](./guides/SECURITY_BEST_PRACTICES.md) | Released |
 | 65 | COM-ADR-001 | ADR-001: Standardize on vcpkg as the sole package manager | [ADR-001-vcpkg-only.md](./advanced/ADR-001-vcpkg-only.md) | Released |
@@ -208,7 +208,7 @@ Total documents: **86**
 |--------|-------|----------|--------|
 | COM-QUAL-001 | Common System 프로덕션 품질 | [PRODUCTION_QUALITY.kr.md](./PRODUCTION_QUALITY.kr.md) | Released |
 | COM-QUAL-002 | Common System Production Quality | [PRODUCTION_QUALITY.md](./PRODUCTION_QUALITY.md) | Released |
-| COM-QUAL-002 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
+| COM-QUAL-003 | Feature-Test-Module Traceability Matrix | [TRACEABILITY.md](./TRACEABILITY.md) | Released |
 
 ### Security (2)
 
