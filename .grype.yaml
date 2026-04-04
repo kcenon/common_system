@@ -1,0 +1,8 @@
+ignore:
+  # GHSA-cxww-7g56-2vh6 (CVE-2024-42471): Arbitrary file write in actions/download-artifact < 4.1.7
+  # This is a false positive — Syft catalogs GitHub Actions references from workflow YAML files
+  # into the SBOM using the floating @v4 tag, which cannot be resolved to the actual patched
+  # version at scan time. The @v4 tag resolves to the latest 4.x release (>= 4.1.8) at runtime.
+  - vulnerability: GHSA-cxww-7g56-2vh6
+    package:
+      name: actions/download-artifact
