@@ -2,10 +2,17 @@
 // Copyright (c) 2021-2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-/**
- * @file executor_example.cpp
- * @brief Example demonstrating the IExecutor interface usage
- */
+/// @file executor_example.cpp
+/// @example executor_example.cpp
+/// @brief Demonstrates the IExecutor and IJob interfaces for task execution.
+///
+/// Covers basic task execution, batch processing, delayed execution,
+/// error handling, custom job implementations, the executor provider
+/// pattern, and graceful shutdown. Implements a mock_executor to
+/// illustrate how to build concrete executor back-ends.
+///
+/// @see kcenon::common::interfaces::IExecutor
+/// @see kcenon::common::interfaces::IJob
 
 #include <kcenon/common/interfaces/executor_interface.h>
 #include <iostream>
