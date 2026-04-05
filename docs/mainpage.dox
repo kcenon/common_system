@@ -1,25 +1,217 @@
 /**
 @mainpage Common System
 
-@section overview Overview
-Common System provides foundational C++ interfaces and patterns that promote
-loose coupling and consistent error handling across the project. It is
-primarily a header-only library designed to be easy to integrate in other
-system modules (thread, logger, monitoring, container, database, network).
+@tableofcontents
+
+@section overview System Overview
+
+Common System provides shared interfaces, patterns, and utilities for the
+kcenon ecosystem. It is a foundational C++20 header-only library that enables
+seamless integration between system modules while maintaining zero runtime
+overhead through template-based abstractions and interface-driven design.
+
+As the Tier 0 cornerstone, every ecosystem project depends on Common System
+for consistent error handling, task execution interfaces, and architectural
+patterns.
 
 @section features Key Features
-- Result<T> type for exception-free error handling
-- Event bus abstraction with optional monitoring-system integration
-- Executor interfaces for pluggable threading backends
 
-@section usage Usage
-The library is installed as a set of headers. After installation or adding the
-repository as a submodule, include the headers from `kcenon/common` and link
-the CMake interface target `kcenon::common` when needed.
+| Category | Feature | Description |
+|----------|---------|-------------|
+| **Patterns** | Result\<T\> | Rust-inspired monadic error handling with `and_then`, `map`, `or_else` |
+| **Patterns** | Circuit Breaker | Resilience pattern with CLOSED / OPEN / HALF_OPEN states |
+| **Patterns** | Event Bus | Thread-safe synchronous pub/sub messaging |
+| **DI** | Service Container | Thread-safe dependency injection with singleton, transient, and scoped lifetimes |
+| **Config** | Config Loader | Configuration management with file watching and hot-reload |
+| **Config** | Feature Flags | Runtime feature toggles with dependency tracking |
+| **Config** | CLI Parser | Command-line argument parsing |
+| **Utils** | Circular Buffer | Fixed-size, lock-free ring buffer |
+| **Utils** | Object Pool | High-performance object pooling with RAII return |
 
-@section build Build
-The project uses CMake. It can be consumed as a header-only target by default,
-and optionally built as a static library by turning off `COMMON_HEADER_ONLY`.
+@section architecture Architecture Diagram
+
+The library is organized into layers. Higher layers depend on lower layers, but
+never the reverse.
+
+@dot
+digraph architecture {
+    rankdir=TB;
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=11];
+    edge [color="#555555"];
+
+    subgraph cluster_interfaces {
+        label="Interfaces";
+        style="dashed";
+        color="#1a73e8";
+        fontcolor="#1a73e8";
+        IExecutor  [label="IExecutor / IJob", fillcolor="#e8f0fe"];
+        ILogger    [label="ILogger / IMetricCollector", fillcolor="#e8f0fe"];
+        IDatabase  [label="IDatabase", fillcolor="#e8f0fe"];
+        IThreadPool[label="IThreadPool", fillcolor="#e8f0fe"];
+    }
+
+    subgraph cluster_patterns {
+        label="Patterns";
+        style="dashed";
+        color="#34a853";
+        fontcolor="#34a853";
+        Result     [label="Result<T> / VoidResult", fillcolor="#e6f4ea"];
+        EventBus   [label="Event Bus", fillcolor="#e6f4ea"];
+        CircuitBrk [label="Circuit Breaker", fillcolor="#e6f4ea"];
+    }
+
+    subgraph cluster_utils {
+        label="Utilities";
+        style="dashed";
+        color="#ea8600";
+        fontcolor="#ea8600";
+        CircBuf    [label="Circular Buffer", fillcolor="#fef7e0"];
+        ObjPool    [label="Object Pool", fillcolor="#fef7e0"];
+        EnumSer    [label="Enum Serialization", fillcolor="#fef7e0"];
+    }
+
+    subgraph cluster_config {
+        label="Configuration";
+        style="dashed";
+        color="#9334e6";
+        fontcolor="#9334e6";
+        ConfigLoad [label="Config Loader / Watcher", fillcolor="#f3e8fd"];
+        FeatureFlg [label="Feature Flags", fillcolor="#f3e8fd"];
+        CLIParser  [label="CLI Parser", fillcolor="#f3e8fd"];
+        DI         [label="Service Container", fillcolor="#f3e8fd"];
+    }
+
+    IExecutor  -> Result;
+    ILogger    -> Result;
+    IDatabase  -> Result;
+    EventBus   -> Result;
+    CircuitBrk -> Result;
+    DI         -> Result;
+    ConfigLoad -> Result;
+}
+@enddot
+
+@section quickstart Quick Start
+
+A minimal example using Result\<T\> and the service container:
+
+@code{.cpp}
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/di/service_container.h>
+
+using namespace kcenon::common;
+
+// Result<T> for type-safe error handling
+Result<int> parse_port(const std::string& input) {
+    try {
+        int port = std::stoi(input);
+        if (port < 1 || port > 65535)
+            return make_error<int>(error_codes::INVALID_ARGUMENT,
+                                   "port out of range", "config");
+        return ok(port);
+    } catch (...) {
+        return make_error<int>(error_codes::INVALID_ARGUMENT,
+                               "not a number", "config");
+    }
+}
+
+int main() {
+    // Monadic chaining
+    auto result = parse_port("8080")
+        .map([](int p) { return p + 1; });
+
+    if (result.is_ok()) {
+        std::cout << "port: " << result.value() << "\n";
+    }
+
+    // Dependency injection
+    di::service_container container;
+    container.register_singleton<ILogger>(
+        []() { return std::make_shared<ConsoleLogger>(); });
+
+    auto logger = container.resolve<ILogger>();
+    return 0;
+}
+@endcode
+
+@section installation Installation
+
+@subsection install_fetchcontent CMake FetchContent (Recommended)
+
+@code{.cmake}
+include(FetchContent)
+FetchContent_Declare(
+    common_system
+    GIT_REPOSITORY https://github.com/kcenon/common_system.git
+    GIT_TAG        v0.2.0
+)
+FetchContent_MakeAvailable(common_system)
+
+target_link_libraries(your_target PRIVATE kcenon::common)
+@endcode
+
+@subsection install_vcpkg vcpkg
+
+@code{.bash}
+vcpkg install kcenon-common-system
+@endcode
+
+@code{.cmake}
+find_package(common_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::common_system)
+@endcode
+
+@subsection install_manual Header-Only (Manual)
+
+@code{.bash}
+git clone https://github.com/kcenon/common_system.git
+# Include headers directly -- no build required
+@endcode
+
+@code{.cpp}
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/interfaces/executor_interface.h>
+@endcode
+
+@section modules Module Overview
+
+| Module | Directory | Key Headers | Description |
+|--------|-----------|-------------|-------------|
+| **Adapters** | `adapters/` | adapter.h, smart_adapter.h | Adapter and smart adapter patterns |
+| **Bootstrap** | `bootstrap/` | system_bootstrapper.h | System bootstrapping and initialization |
+| **Concepts** | `concepts/` | callable.h, container.h, core.h | C++20 concepts (Resultable, Unwrappable, callable, container) |
+| **Config** | `config/` | config_loader.h, cli_config_parser.h, feature_flags.h | Configuration loading, CLI parsing, and feature flags |
+| **DI** | `di/` | service_container.h, unified_bootstrapper.h | Thread-safe dependency injection container |
+| **Error** | `error/` | error_codes.h, error_category.h | Centralized error codes and category system |
+| **Interfaces** | `interfaces/` | executor_interface.h, logger_interface.h | Core abstractions: IExecutor, IJob, ILogger, IDatabase |
+| **Logging** | `logging/` | log_functions.h, log_macros.h | Log functions and convenience macros |
+| **Patterns** | `patterns/` | result.h, event_bus.h | Result\<T\> error handling and event bus |
+| **Resilience** | `resilience/` | circuit_breaker.h | Circuit breaker with RAII guard |
+| **Utils** | `utils/` | circular_buffer.h, object_pool.h | High-performance utility data structures |
+
+@section examples Examples
+
+| Example | Source | Description |
+|---------|--------|-------------|
+| Result Example | @ref result_example.cpp | Result\<T\> error handling patterns and monadic chaining |
+| Executor Example | @ref executor_example.cpp | Executor interface usage and task submission |
+| ABI Version Example | @ref abi_version_example.cpp | ABI version checking and compatibility validation |
+| Unwrap Demo | @ref unwrap_demo.cpp | Result unwrapping, value_or, and chaining patterns |
+| Multi-System App | @ref multi_system_app/main.cpp | Multi-system integration with config and DI |
+
+@section related Related Systems
+
+Common System is the foundation (Tier 0) of the kcenon ecosystem.
+Downstream systems build on its interfaces and patterns:
+
+| System | Tier | Uses | Repository |
+|--------|------|------|------------|
+| thread_system | 1 | IExecutor, IJob | https://github.com/kcenon/thread_system |
+| container_system | 1 | Result\<T\> | https://github.com/kcenon/container_system |
+| logger_system | 2 | ILogger, Result\<T\> | https://github.com/kcenon/logger_system |
+| monitoring_system | 3 | Event Bus, IMonitor | https://github.com/kcenon/monitoring_system |
+| database_system | 3 | Result\<T\>, IExecutor | https://github.com/kcenon/database_system |
+| network_system | 4 | IExecutor, Result\<T\> | https://github.com/kcenon/network_system |
+| pacs_system | 5 | Full ecosystem | https://github.com/kcenon/pacs_system |
 
 */
-
