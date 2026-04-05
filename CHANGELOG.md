@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Modernize Doxygen documentation with doxygen-awesome-css theme and standardized mainpage ([#581](https://github.com/kcenon/common_system/issues/581))
 
+### Changed
+
+- Pin Doxygen version to 1.12.0 in reusable CI workflow for reproducible documentation builds ([#590](https://github.com/kcenon/common_system/issues/590))
+- Enable `WARN_NO_PARAMDOC` in Doxyfile for stricter parameter documentation checks ([#590](https://github.com/kcenon/common_system/issues/590))
+
 ### Fixed
 
 - Remove `const_cast` in `circuit_breaker::get_stats()` by making `failure_window` methods const-correct ([#492](https://github.com/kcenon/common_system/issues/492))
