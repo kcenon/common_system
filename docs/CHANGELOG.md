@@ -31,6 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Created standardized `docs/mainpage.dox` with 8 standard sections
   - Updated `Doxyfile` with theme settings and standardized configuration
 
+### Changed
+- **Pinned Doxygen version in CI workflow** (#590)
+  - Pinned Doxygen to version 1.12.0 in the reusable `doxygen.yml` workflow
+  - Downloads specific release binary from GitHub instead of `apt-get install`
+  - Includes fallback to system package if download fails
+  - Ensures reproducible documentation builds across all ecosystem repositories
+- **Enabled `WARN_NO_PARAMDOC` in Doxyfile** (#590)
+  - Doxygen now warns when function parameters lack documentation
+  - Raises documentation quality bar for the canonical Doxyfile
+
 ### Removed
 - **Deprecated THREAD_LOG_* macros** (#289)
   - Removed deprecated logging macros that were scheduled for removal in v3.0.0:
