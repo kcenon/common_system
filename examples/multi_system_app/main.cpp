@@ -1,11 +1,17 @@
-// examples/multi_system_app/main.cpp
-// Multi-System Integration Example
-//
-// Demonstrates integration of 4 kcenon systems:
-// - common_system: Foundation (Result<T>, interfaces)
-// - thread_system: Async processing
-// - logger_system: Structured logging
-// - database_system: Data persistence
+/// @file main.cpp
+/// @example multi_system_app/main.cpp
+/// @brief End-to-end integration example using common_system with thread, logger, and database systems.
+///
+/// Demonstrates a realistic application that:
+/// - Loads YAML configuration with config_reader
+/// - Bootstraps services via unified_bootstrapper and service_container
+/// - Connects to an SQLite database and performs CRUD operations
+/// - Uses Result<T> throughout for type-safe error handling
+/// - Handles graceful shutdown with signal handlers
+///
+/// @see kcenon::common::di::unified_bootstrapper
+/// @see kcenon::common::di::service_container
+/// @see kcenon::common::Result
 
 #include <kcenon/common/di/unified_bootstrapper.h>
 #include <kcenon/common/config/config_reader.h>

@@ -2,10 +2,16 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-/**
- * @file abi_version_example.cpp
- * @brief Example demonstrating ABI version checking
- */
+/// @file abi_version_example.cpp
+/// @example abi_version_example.cpp
+/// @brief Demonstrates ABI version checking and compatibility validation.
+///
+/// Shows how to query compile-time and runtime version information,
+/// perform ABI compatibility checks, and inspect the link-time ABI
+/// signature. Useful for ensuring binary compatibility between
+/// separately compiled modules.
+///
+/// @see kcenon::common::abi
 
 #include <kcenon/common/config/abi_version.h>
 #include <iostream>
