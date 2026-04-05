@@ -42,9 +42,24 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Doxygen and Graphviz
+        env:
+          DOXYGEN_VERSION: '1.12.0'
         run: |
           sudo apt-get update
-          sudo apt-get install -y doxygen graphviz
+          sudo apt-get install -y graphviz
+          DOXYGEN_DEB="doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz"
+          DOXYGEN_URL="https://github.com/doxygen/doxygen/releases/download/Release_${DOXYGEN_VERSION//./_}/${DOXYGEN_DEB}"
+          echo "Downloading Doxygen ${DOXYGEN_VERSION} from ${DOXYGEN_URL}"
+          if curl -fSL -o doxygen.tar.gz "${DOXYGEN_URL}"; then
+            mkdir -p doxygen-bin
+            tar xzf doxygen.tar.gz -C doxygen-bin --strip-components=1
+            sudo install -m 755 doxygen-bin/bin/doxygen /usr/local/bin/doxygen
+            rm -rf doxygen.tar.gz doxygen-bin
+          else
+            echo "::warning::Failed to download Doxygen ${DOXYGEN_VERSION}; falling back to apt-get"
+            sudo apt-get install -y doxygen
+          fi
+          doxygen --version
 
       - name: Generate documentation
         run: doxygen Doxyfile
