@@ -104,7 +104,7 @@ EXAMPLE_PATH           = ./examples
 EXAMPLE_PATTERNS       = *.cpp \
                          *.h
 EXAMPLE_RECURSIVE      = YES
-USE_MDFILE_AS_MAINPAGE = docs/mainpage.dox
+USE_MDFILE_AS_MAINPAGE =
 
 # Source browsing
 SOURCE_BROWSER         = YES
