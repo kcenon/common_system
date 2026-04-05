@@ -4,7 +4,7 @@ PROJECT_NAME           = "Common System"
 PROJECT_NUMBER         = "0.2.0"
 PROJECT_BRIEF          = "Common interfaces and patterns for system integration"
 OUTPUT_DIRECTORY       = documents
-CREATE_SUBDIRS         = NO
+CREATE_SUBDIRS         = YES
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
@@ -72,7 +72,8 @@ WARN_FORMAT            = "$file:$line: $text"
 # Input settings
 INPUT                  = ./include/kcenon/common \
                          ./src \
-                         ./README.md
+                         ./README.md \
+                         ./docs/mainpage.dox
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \
@@ -83,7 +84,8 @@ FILE_PATTERNS          = *.c \
                          *.hh \
                          *.hpp \
                          *.tpp \
-                         *.md
+                         *.md \
+                         *.dox
 RECURSIVE              = YES
 EXCLUDE                = ./build \
                          ./build_test \
@@ -103,7 +105,7 @@ EXAMPLE_PATH           = ./examples
 EXAMPLE_PATTERNS       = *.cpp \
                          *.h
 EXAMPLE_RECURSIVE      = YES
-USE_MDFILE_AS_MAINPAGE = README.md
+USE_MDFILE_AS_MAINPAGE = docs/mainpage.dox
 
 # Source browsing
 SOURCE_BROWSER         = YES
@@ -122,7 +124,16 @@ ALPHABETICAL_INDEX     = YES
 GENERATE_HTML          = YES
 HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
-HTML_COLORSTYLE        = AUTO_LIGHT
+HTML_HEADER            = docs/header.html
+HTML_EXTRA_STYLESHEET  = docs/doxygen-awesome-css/doxygen-awesome.css \
+                         docs/doxygen-awesome-css/doxygen-awesome-sidebar-only.css \
+                         docs/custom.css
+HTML_EXTRA_FILES       = docs/doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js \
+                         docs/doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js \
+                         docs/doxygen-awesome-css/doxygen-awesome-paragraph-link.js \
+                         docs/doxygen-awesome-css/doxygen-awesome-interactive-toc.js
+HTML_COPY_CLIPBOARD    = NO
+HTML_COLORSTYLE        = LIGHT
 HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 100
 HTML_COLORSTYLE_GAMMA  = 80
