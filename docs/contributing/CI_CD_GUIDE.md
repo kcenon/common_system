@@ -599,11 +599,17 @@ Generates and deploys API documentation.
 #### Setup
 
 ```bash
-sudo apt-get install -y doxygen graphviz
+sudo apt-get install -y graphviz
+# Doxygen is pinned to version 1.12.0 (downloaded from GitHub Releases)
 ```
 
-- **Doxygen**: Documentation generator
+- **Doxygen 1.12.0**: Documentation generator (pinned version for reproducible builds)
 - **Graphviz**: Creates visual diagrams and graphs in documentation
+
+The workflow downloads a specific Doxygen release binary rather than using
+`apt-get install doxygen`, ensuring consistent output across all CI runs
+regardless of the Ubuntu runner's package version. If the download fails,
+the workflow falls back to the system package as a safety net.
 
 #### Documentation Generation
 
@@ -738,10 +744,13 @@ xdg-open coverage_html/index.html  # Linux
 ### Documentation Generation Locally
 
 ```bash
-# Ensure Doxygen and Graphviz are installed
+# Ensure Doxygen (1.12.0 recommended) and Graphviz are installed
 brew install doxygen graphviz  # macOS
 # or
 sudo apt-get install doxygen graphviz  # Linux
+
+# Note: CI pins Doxygen to 1.12.0 for reproducible builds.
+# Using the same version locally avoids formatting differences.
 
 # Generate documentation
 doxygen Doxyfile
