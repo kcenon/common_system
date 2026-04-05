@@ -2,10 +2,18 @@
 // Copyright (c) 2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-/**
- * @file unwrap_demo.cpp
- * @brief Demonstration of improved unwrap() with source location
- */
+/// @file unwrap_demo.cpp
+/// @example unwrap_demo.cpp
+/// @brief Demonstrates improved unwrap() diagnostics with automatic source location.
+///
+/// Shows how unwrap() on Result<T> and Optional<T> captures the call
+/// site via std::source_location, producing detailed error messages
+/// that include file name, line number, and function context. Also
+/// demonstrates safe alternatives: unwrap_or, is_ok/is_err checks,
+/// and monadic operations.
+///
+/// @see kcenon::common::Result
+/// @see kcenon::common::Optional
 
 #include "kcenon/common/patterns/result.h"
 #include <iostream>

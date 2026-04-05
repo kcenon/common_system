@@ -2,10 +2,18 @@
 // Copyright (c) 2021-2025, 🍀☀🌕🌥 🌊
 // See the LICENSE file in the project root for full license information.
 
-/**
- * @file result_example.cpp
- * @brief Example demonstrating the Result pattern usage
- */
+/// @file result_example.cpp
+/// @example result_example.cpp
+/// @brief Demonstrates the Result<T> pattern for type-safe error handling.
+///
+/// Covers basic Result usage, value_or / unwrap_or defaults, pattern
+/// matching, monadic operations (map, and_then, or_else), error
+/// recovery, and exception wrapping with try_catch. Provides
+/// real-world examples of division and file-reading functions
+/// that return Result<T> instead of throwing exceptions.
+///
+/// @see kcenon::common::Result
+/// @see kcenon::common::error_info
 
 #include <kcenon/common/patterns/result.h>
 #include <iostream>
