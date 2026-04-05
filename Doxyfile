@@ -72,7 +72,8 @@ WARN_FORMAT            = "$file:$line: $text"
 INPUT                  = ./include/kcenon/common \
                          ./src \
                          ./README.md \
-                         ./docs/mainpage.dox
+                         ./docs/mainpage.dox \
+                         ./examples
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \
