@@ -36,7 +36,6 @@ BUILTIN_STL_SUPPORT    = YES
 SUBGROUPING            = YES
 NUM_PROC_THREADS       = 1
 TIMESTAMP              = NO
-HTML_TIMESTAMP         = NO
 
 # Extraction settings
 EXTRACT_ALL            = YES
