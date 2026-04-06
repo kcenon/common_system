@@ -1,0 +1,111 @@
+/**
+@page troubleshooting Troubleshooting Guide
+
+@tableofcontents
+
+@section ts_build Build Issues
+
+@subsection ts_build_cpp20 "error: 'format' is not a member of 'std'"
+
+**Cause**: Your compiler is below the C++20 baseline required by common_system.
+`std::format` arrived in GCC 13, Clang 17, and MSVC 2022 — earlier versions
+will reject the headers.
+
+**Fix**: Upgrade the compiler, or on Linux install `libstdc++-13-dev` alongside
+GCC 13.
+
+@subsection ts_build_concept "concept 'invocable' was not declared"
+
+**Cause**: The `<concepts>` header isn't being found, or `-std=c++20` isn't
+being passed to the compiler.
+
+**Fix**: In CMake, ensure `CMAKE_CXX_STANDARD` is set before the project
+declaration:
+
+@code{.cmake}
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(my_app)
+@endcode
+
+@section ts_cmake CMake Configuration Issues
+
+@subsection ts_cmake_notfound "Could not find package kcenon-common-system"
+
+**Cause**: CMake can't locate the installed package. Either it isn't installed,
+or `CMAKE_PREFIX_PATH` doesn't include the install location.
+
+**Fix**: Either install common_system to a system location
+(`cmake --install build`), or point your build at the install tree:
+
+@code{.bash}
+cmake -B build -DCMAKE_PREFIX_PATH=/opt/kcenon
+@endcode
+
+For development, prefer `FetchContent` or `add_subdirectory` to pull
+common_system directly into your build.
+
+@section ts_vcpkg vcpkg Integration Issues
+
+@subsection ts_vcpkg_port "port name not recognized"
+
+**Cause**: vcpkg's registry doesn't know about common_system — you need to
+register the overlay.
+
+**Fix**: Add the overlay to `vcpkg-configuration.json`:
+
+@code{.json}
+{
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/kcenon/vcpkg-registry",
+      "reference": "main",
+      "baseline": "...",
+      "packages": ["kcenon-common-system"]
+    }
+  ]
+}
+@endcode
+
+@section ts_linker Linker Issues
+
+@subsection ts_linker_undef "undefined reference to kcenon::common::event_bus::publish"
+
+**Cause**: The application is including the headers but not linking the library
+target. Some patterns (event bus, circuit breaker) have out-of-line definitions.
+
+**Fix**: In your `CMakeLists.txt`:
+
+@code{.cmake}
+target_link_libraries(my_app PRIVATE kcenon::common_system)
+@endcode
+
+Do NOT just add the include path — the linker needs the target.
+
+@section ts_runtime Runtime Issues
+
+@subsection ts_runtime_resolve "service_container::resolve: type not registered"
+
+**Cause**: You're trying to resolve a service that nothing ever registered.
+Common causes: initialization order, register-after-resolve, or the wrong
+interface type.
+
+**Fix**: Ensure registration happens during startup, before the first resolve.
+Log or break at the registration point to confirm it actually runs:
+
+@code{.cpp}
+auto& container = service_container::instance();
+container.register_singleton<IClock, system_clock>();
+assert(container.contains<IClock>());  // verify
+@endcode
+
+@subsection ts_runtime_value "bad_result_access thrown from Result::value()"
+
+**Cause**: You called `.value()` on a `Result` that carries an error. The error
+details are in `.error()`, not `.value()`.
+
+**Fix**: Check `.is_ok()` first, or use `.value_or(default)`. See
+@ref tutorial_result for the idiomatic pattern.
+
+*/

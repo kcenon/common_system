@@ -1,0 +1,95 @@
+/**
+@page tutorial_di Tutorial: Dependency Injection
+
+@tableofcontents
+
+@section di_goal Goal
+
+Use common_system's lightweight service container to register, resolve, and compose dependencies. You'll learn how to structure an application so that services can be swapped for tests without changing call sites.
+
+@section di_prereq Prerequisites
+
+- Read @ref tutorial_result first — DI services frequently return `Result<T>`
+- Understand C++20 concepts and `std::shared_ptr`
+
+@section di_step1 Step 1: Define a service interface
+
+Services are ordinary abstract classes. The container binds concrete implementations to the interface type.
+
+@code{.cpp}
+#include <kcenon/common/patterns/service_container.h>
+
+struct IClock {
+    virtual ~IClock() = default;
+    virtual std::chrono::system_clock::time_point now() const = 0;
+};
+
+struct system_clock : IClock {
+    std::chrono::system_clock::time_point now() const override {
+        return std::chrono::system_clock::now();
+    }
+};
+@endcode
+
+@section di_step2 Step 2: Register and resolve
+
+Register the concrete implementation against the interface, then resolve it by type:
+
+@code{.cpp}
+using namespace kcenon::common;
+
+int main() {
+    auto& container = service_container::instance();
+    container.register_singleton<IClock, system_clock>();
+
+    auto clock = container.resolve<IClock>();
+    auto t = clock->now();
+    // ... use clock ...
+}
+@endcode
+
+`register_singleton` creates the instance once and returns the same shared pointer
+on every resolve. Use `register_transient` if you want a fresh instance per resolve.
+
+@section di_step3 Step 3: Swap implementations in tests
+
+The whole point of DI: production uses `system_clock`, tests use a fake that
+lets you advance time manually.
+
+@code{.cpp}
+struct fake_clock : IClock {
+    std::chrono::system_clock::time_point fixed_time;
+    std::chrono::system_clock::time_point now() const override {
+        return fixed_time;
+    }
+};
+
+TEST(MyService, handles_time_correctly) {
+    auto fake = std::make_shared<fake_clock>();
+    fake->fixed_time = std::chrono::system_clock::now();
+
+    auto& container = service_container::instance();
+    container.register_instance<IClock>(fake);
+
+    // service_under_test now sees the frozen time
+    MyService svc;
+    EXPECT_TRUE(svc.do_something().is_ok());
+}
+@endcode
+
+@section di_mistakes Common Mistakes
+
+- **Static singletons bypassing DI.** If `MyService` calls
+  `std::chrono::system_clock::now()` directly, DI can't help you test it.
+  Inject `IClock` through the constructor instead.
+- **Resolving inside hot loops.** Resolve once, store the pointer, reuse.
+  Container lookup is not free.
+- **Registering concrete types.** Always register against the interface —
+  otherwise swapping implementations later becomes a find-and-replace exercise.
+
+@section di_next Next Steps
+
+- @ref tutorial_eventbus "Tutorial: Event Bus" — decouple services further
+- See `examples/multi_system_app/` for a realistic multi-service application
+
+*/

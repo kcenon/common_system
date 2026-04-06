@@ -73,6 +73,11 @@ INPUT                  = ./include/kcenon/common \
                          ./src \
                          ./README.md \
                          ./docs/mainpage.dox \
+                         ./docs/tutorial_result.dox \
+                         ./docs/tutorial_di.dox \
+                         ./docs/tutorial_eventbus.dox \
+                         ./docs/faq.dox \
+                         ./docs/troubleshooting.dox \
                          ./examples
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
