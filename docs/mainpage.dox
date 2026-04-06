@@ -209,18 +209,22 @@ New to common_system? Start here:
 - @ref faq "Frequently Asked Questions" — common design and integration questions
 - @ref troubleshooting "Troubleshooting Guide" — build, link, and runtime issue solutions
 
+Choosing systems for a new project? See the @ref ecosystem_guide
+"Ecosystem Guide" for a decision tree, adoption order, and minimal combinations.
+
 @section related Related Systems
 
-Common System is the foundation (Tier 0) of the kcenon ecosystem.
-Downstream systems build on its interfaces and patterns:
+Common System is the foundation (Tier 0) of the kcenon ecosystem. Every other
+system depends on its interfaces and patterns. Use the @ref ecosystem_guide
+"Ecosystem Guide" if you are deciding which systems to adopt.
 
-| System | Tier | Uses | Repository |
-|--------|------|------|------------|
-| thread_system | 1 | IExecutor, IJob | https://github.com/kcenon/thread_system |
-| container_system | 1 | Result\<T\> | https://github.com/kcenon/container_system |
+| System | Tier | Uses from common_system | Repository |
+|--------|------|-------------------------|------------|
+| thread_system | 1 | IExecutor, IJob, Result\<T\> | https://github.com/kcenon/thread_system |
+| container_system | 1 | Result\<T\>, IExecutor | https://github.com/kcenon/container_system |
 | logger_system | 2 | ILogger, Result\<T\> | https://github.com/kcenon/logger_system |
-| monitoring_system | 3 | Event Bus, IMonitor | https://github.com/kcenon/monitoring_system |
-| database_system | 3 | Result\<T\>, IExecutor | https://github.com/kcenon/database_system |
+| monitoring_system | 3 | IMonitor, Event Bus, Result\<T\> | https://github.com/kcenon/monitoring_system |
+| database_system | 3 | IDatabase, IExecutor, Result\<T\> | https://github.com/kcenon/database_system |
 | network_system | 4 | IExecutor, Result\<T\> | https://github.com/kcenon/network_system |
 | pacs_system | 5 | Full ecosystem | https://github.com/kcenon/pacs_system |
 
