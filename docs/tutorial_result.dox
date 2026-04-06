@@ -1,0 +1,97 @@
+/**
+@page tutorial_result Tutorial: Result<T> Error Handling
+
+@tableofcontents
+
+@section result_goal Goal
+
+Learn how to use `kcenon::common::Result<T>` for safe, explicit error handling without exceptions. By the end of this tutorial you will be able to create, chain, and consume `Result` values idiomatically.
+
+@section result_prereq Prerequisites
+
+- C++20 compiler (GCC 13+, Clang 17+, MSVC 2022+)
+- common_system installed (see @ref mainpage "Main Page" for installation)
+- Familiarity with basic template syntax
+
+@section result_step1 Step 1: Creating Result values
+
+A `Result<T>` carries either a successful value of type `T` or an `error_info`. Construct one of each:
+
+@code{.cpp}
+#include <kcenon/common/patterns/result.h>
+#include <string>
+
+using namespace kcenon::common;
+
+Result<int> parse_port(const std::string& s) {
+    try {
+        int port = std::stoi(s);
+        if (port < 1 || port > 65535) {
+            return make_error<int>(error_code::invalid_argument,
+                                   "Port out of range: " + s);
+        }
+        return make_ok(port);
+    } catch (const std::exception& e) {
+        return make_error<int>(error_code::parse_failed, e.what());
+    }
+}
+@endcode
+
+@note Prefer `make_ok` / `make_error` factory helpers over direct construction —
+they document intent and avoid accidental slicing.
+
+@section result_step2 Step 2: Consuming Result values
+
+Use `is_ok()` / `is_error()` to branch, or pattern-match with `std::visit`:
+
+@code{.cpp}
+void start_server(const std::string& port_str) {
+    auto result = parse_port(port_str);
+
+    if (result.is_ok()) {
+        int port = result.value();
+        std::cout << "Starting server on port " << port << std::endl;
+        // ... bind socket, begin listening ...
+    } else {
+        const auto& err = result.error();
+        std::cerr << "Failed: [" << static_cast<int>(err.code)
+                  << "] " << err.message << std::endl;
+    }
+}
+@endcode
+
+@section result_step3 Step 3: Chaining operations
+
+Multiple fallible operations can be chained with `.and_then()` so that the first
+error short-circuits the rest — no nested `if` pyramids required.
+
+@code{.cpp}
+Result<config> load_config(const std::string& path) {
+    return read_file(path)
+        .and_then([](const std::string& text) { return parse_json(text); })
+        .and_then([](const json_value& json) { return validate_schema(json); })
+        .and_then([](const json_value& json) { return build_config(json); });
+}
+@endcode
+
+Each step receives the previous step's success value; if any returns an error,
+the whole chain becomes that error.
+
+@section result_mistakes Common Mistakes
+
+- **Ignoring the return value.** `Result` has `[[nodiscard]]` — respect it. Silently
+  dropping a result discards its error, defeating the whole point of using it.
+- **Calling `.value()` without checking.** `.value()` on an error `Result` throws
+  (or aborts, depending on configuration). Use `.is_ok()` first, or prefer
+  `.value_or(default)`.
+- **Mixing exceptions and Result.** Choose one style per module. Wrapping
+  exception-throwing code at API boundaries is fine; sprinkling throws inside
+  Result chains defeats the explicitness.
+
+@section result_next Next Steps
+
+- @ref tutorial_di "Tutorial: Dependency Injection" — pass Result-returning services through DI
+- @ref faq "FAQ" — common Result<T> questions
+- See `examples/result_example.cpp` for a full working example
+
+*/
