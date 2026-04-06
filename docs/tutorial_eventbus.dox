@@ -1,0 +1,91 @@
+/**
+@page tutorial_eventbus Tutorial: Event Bus
+
+@tableofcontents
+
+@section eb_goal Goal
+
+Use the event bus to decouple publishers from subscribers. You'll learn how to define events, subscribe handlers, and publish without the publisher knowing who — if anyone — is listening.
+
+@section eb_prereq Prerequisites
+
+- Read @ref tutorial_di first — event bus is typically registered as a DI service
+- Basic understanding of the observer pattern
+
+@section eb_step1 Step 1: Define an event type
+
+Events are plain structs. Keep them immutable — subscribers should not modify
+the event they receive.
+
+@code{.cpp}
+#include <kcenon/common/patterns/event_bus.h>
+
+struct user_logged_in {
+    std::string user_id;
+    std::chrono::system_clock::time_point timestamp;
+};
+@endcode
+
+@section eb_step2 Step 2: Subscribe a handler
+
+Subscribers register a callback for a specific event type. The handle returned
+by `subscribe` must stay alive for as long as you want the subscription active —
+destroying it cancels the subscription.
+
+@code{.cpp}
+using namespace kcenon::common;
+
+class audit_logger {
+    event_bus::subscription sub_;
+public:
+    explicit audit_logger(event_bus& bus) {
+        sub_ = bus.subscribe<user_logged_in>(
+            [](const user_logged_in& event) {
+                std::cout << "AUDIT: " << event.user_id
+                          << " logged in" << std::endl;
+            });
+    }
+};
+@endcode
+
+@section eb_step3 Step 3: Publish from another component
+
+The publisher holds no reference to subscribers — it just fires the event.
+All subscribers registered for that type receive it.
+
+@code{.cpp}
+class authentication_service {
+    event_bus& bus_;
+public:
+    explicit authentication_service(event_bus& bus) : bus_(bus) {}
+
+    Result<session> login(const credentials& creds) {
+        auto session = verify_credentials(creds);
+        if (session.is_error()) return session;
+
+        bus_.publish(user_logged_in{
+            .user_id = creds.username,
+            .timestamp = std::chrono::system_clock::now()
+        });
+
+        return session;
+    }
+};
+@endcode
+
+@section eb_mistakes Common Mistakes
+
+- **Long-running handlers.** Handlers run on the publisher's thread by default.
+  If you need to do heavy work, hand off to a worker thread — otherwise the
+  publisher is blocked.
+- **Subscribing inside handlers.** Adding/removing subscriptions while dispatching
+  an event can cause invalidation. Defer such changes to after the handler returns.
+- **Forgetting to store the subscription.** A discarded subscription handle is
+  immediately cancelled. Keep it in a member variable or container.
+
+@section eb_next Next Steps
+
+- @ref faq "FAQ" — when to use event bus vs direct method calls
+- @ref troubleshooting "Troubleshooting" — debugging missing events
+
+*/

@@ -1,0 +1,117 @@
+/**
+@page faq Frequently Asked Questions
+
+@tableofcontents
+
+@section faq_result Result<T> Questions
+
+@subsection faq_result_vs_exceptions When should I use Result<T> instead of exceptions?
+
+Use `Result<T>` when the failure is an expected part of the API contract:
+configuration parsing, network timeouts, missing files, invalid user input.
+Use exceptions for genuinely exceptional situations: out-of-memory, programmer
+errors like precondition violations, and corruption.
+
+The boundary matters more than the choice: never leak exceptions across a
+module that promises `Result<T>`, and never return `Result<T>` from a function
+whose caller expects exceptions.
+
+@subsection faq_result_chain How do I chain Result<T> operations without nesting?
+
+Use `.and_then()` / `.or_else()` — each step composes onto the previous one and
+short-circuits on the first error. See @ref tutorial_result "Result Tutorial"
+for a worked example.
+
+@subsection faq_result_unwrap Why doesn't .value() just return a default on error?
+
+Because silently swallowing errors is how bugs hide for months. If you genuinely
+want a default, say so explicitly with `.value_or(default)`. `.value()` on an
+error is a contract violation and should fail loudly.
+
+@section faq_di Dependency Injection Questions
+
+@subsection faq_di_container_lifecycle How does the service container lifecycle work?
+
+Singletons live for the lifetime of the container. Transients are created on
+each resolve and owned by the caller. The container itself is process-global
+by default (`service_container::instance()`), but you can create local
+instances for isolated test scopes.
+
+@subsection faq_di_standalone Can I use common_system without the rest of the ecosystem?
+
+Yes. common_system is deliberately the foundation layer and has no dependencies
+on the other kcenon systems. You can pull it in for `Result<T>`, the service
+container, and the event bus without committing to the full stack.
+
+@section faq_build Build and Integration Questions
+
+@subsection faq_cpp_version What C++ version is required?
+
+C++20. Specifically, the code uses `std::format`, concepts, and three-way
+comparison, so the minimum compiler baseline is GCC 13, Clang 17, or MSVC 2022.
+
+@subsection faq_integration How do I integrate with existing exception-based code?
+
+Wrap the exception boundary with a try/catch that converts to `Result`:
+
+@code{.cpp}
+Result<int> safe_parse(const std::string& s) {
+    try {
+        return make_ok(std::stoi(s));
+    } catch (const std::exception& e) {
+        return make_error<int>(error_code::parse_failed, e.what());
+    }
+}
+@endcode
+
+Do this once at the boundary — not in every function.
+
+@section faq_threading Threading Questions
+
+@subsection faq_threading_safety Is the service container thread-safe?
+
+Yes for lookup and resolve. Registration is also thread-safe but intended to
+happen during application startup before any resolves — registering from
+multiple threads while others are resolving is supported but stylistically suspect.
+
+@subsection faq_eventbus_thread Does the event bus dispatch on a worker thread?
+
+No — handlers run synchronously on the publisher's thread. If you need async
+dispatch, wrap the handler in a lambda that posts work to thread_system's pool.
+
+@section faq_testing Testing Questions
+
+@subsection faq_test_mock How do I mock a service for testing?
+
+Create a test double that implements the interface and register it instead of
+the production implementation. See @ref tutorial_di for the pattern.
+
+@subsection faq_test_result How do I test Result-returning functions?
+
+Check both branches explicitly:
+
+@code{.cpp}
+TEST(Parser, rejects_empty_input) {
+    auto r = parse("");
+    ASSERT_TRUE(r.is_error());
+    EXPECT_EQ(r.error().code, error_code::invalid_argument);
+}
+@endcode
+
+@section faq_performance Performance Questions
+
+@subsection faq_result_cost Is Result<T> expensive compared to exceptions?
+
+In the happy path, `Result<T>` is usually cheaper: no stack unwinding, no RTTI
+lookup, and the compiler can often inline the check away. In the error path,
+Result is consistently cheap while exceptions are consistently expensive.
+
+@section faq_deploy Deployment Questions
+
+@subsection faq_header_only Is common_system header-only?
+
+Most of it is. Some patterns (event bus, circuit breaker) have small .cpp
+files. The CMake target handles both cases transparently — just link
+`kcenon::common_system`.
+
+*/

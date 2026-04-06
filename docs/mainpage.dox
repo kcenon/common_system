@@ -199,6 +199,16 @@ git clone https://github.com/kcenon/common_system.git
 | Unwrap Demo | @ref unwrap_demo.cpp | Result unwrapping, value_or, and chaining patterns |
 | Multi-System App | @ref multi_system_app/main.cpp | Multi-system integration with config and DI |
 
+@section learning_resources Learning Resources
+
+New to common_system? Start here:
+
+- @ref tutorial_result "Tutorial: Result<T> Error Handling" — explicit error handling without exceptions
+- @ref tutorial_di "Tutorial: Dependency Injection" — service container registration and resolution
+- @ref tutorial_eventbus "Tutorial: Event Bus" — decoupled publish/subscribe messaging
+- @ref faq "Frequently Asked Questions" — common design and integration questions
+- @ref troubleshooting "Troubleshooting Guide" — build, link, and runtime issue solutions
+
 @section related Related Systems
 
 Common System is the foundation (Tier 0) of the kcenon ecosystem.
