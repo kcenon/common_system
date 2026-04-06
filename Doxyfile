@@ -73,6 +73,7 @@ INPUT                  = ./include/kcenon/common \
                          ./src \
                          ./README.md \
                          ./docs/mainpage.dox \
+                         ./docs/ecosystem_guide.dox \
                          ./docs/tutorial_result.dox \
                          ./docs/tutorial_di.dox \
                          ./docs/tutorial_eventbus.dox \
