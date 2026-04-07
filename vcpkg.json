@@ -25,6 +25,14 @@
           "name": "benchmark"
         }
       ]
+    },
+    "yaml": {
+      "description": "YAML configuration file support",
+      "dependencies": [
+        {
+          "name": "yaml-cpp"
+        }
+      ]
     }
   }
 }
