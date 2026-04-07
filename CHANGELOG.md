@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- End-to-end ecosystem vcpkg integration test workflow that validates all 8 ports in dependency order on Ubuntu and macOS ([#604](https://github.com/kcenon/common_system/issues/604))
 - Modernize Doxygen documentation with doxygen-awesome-css theme and standardized mainpage ([#581](https://github.com/kcenon/common_system/issues/581))
 
 ### Changed

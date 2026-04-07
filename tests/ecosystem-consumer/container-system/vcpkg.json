@@ -1,0 +1,5 @@
+{
+  "name": "test-container-system",
+  "version-string": "0.0.0",
+  "dependencies": ["kcenon-container-system"]
+}

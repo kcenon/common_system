@@ -1,0 +1,608 @@
+name: Ecosystem vcpkg Integration
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'vcpkg-ports/**'
+      - 'vcpkg.json'
+      - 'vcpkg-configuration.json'
+      - 'tests/ecosystem-consumer/**'
+      - '.github/workflows/ecosystem-vcpkg-integration.yml'
+  schedule:
+    # Nightly at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  VCPKG_BINARY_SOURCES: "clear;default,readwrite"
+
+jobs:
+  # ─── Layer 0: common_system (base, no kcenon deps) ─────────────────────────
+  layer-0-common-system:
+    name: "Layer 0: common_system / ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/common-system
+          extra-cache-key: 'ecosystem-layer0'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/common-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer0 \
+            -S tests/ecosystem-consumer/common-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 0 (common_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer0 --config Release 2>&1 || {
+            echo "::error::Layer 0 (common_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer0/test_common_system ]; then
+            ./build/layer0/test_common_system
+          else
+            ./build/layer0/Release/test_common_system
+          fi || {
+            echo "::error::Layer 0 (common_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer0-${{ matrix.os }}-logs
+          path: |
+            build/layer0/**/*.log
+            build/layer0/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 1: thread_system (depends on common_system) ─────────────────────
+  layer-1-thread-system:
+    name: "Layer 1: thread_system / ${{ matrix.os }}"
+    needs: [layer-0-common-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/thread-system
+          extra-cache-key: 'ecosystem-layer1'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/thread-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer1 \
+            -S tests/ecosystem-consumer/thread-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 1 (thread_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer1 --config Release 2>&1 || {
+            echo "::error::Layer 1 (thread_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer1/test_thread_system ]; then
+            ./build/layer1/test_thread_system
+          else
+            ./build/layer1/Release/test_thread_system
+          fi || {
+            echo "::error::Layer 1 (thread_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer1-${{ matrix.os }}-logs
+          path: |
+            build/layer1/**/*.log
+            build/layer1/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 2: logger_system (depends on thread_system) ─────────────────────
+  layer-2-logger-system:
+    name: "Layer 2: logger_system / ${{ matrix.os }}"
+    needs: [layer-1-thread-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/logger-system
+          extra-cache-key: 'ecosystem-layer2'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/logger-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer2 \
+            -S tests/ecosystem-consumer/logger-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 2 (logger_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer2 --config Release 2>&1 || {
+            echo "::error::Layer 2 (logger_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer2/test_logger_system ]; then
+            ./build/layer2/test_logger_system
+          else
+            ./build/layer2/Release/test_logger_system
+          fi || {
+            echo "::error::Layer 2 (logger_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer2-${{ matrix.os }}-logs
+          path: |
+            build/layer2/**/*.log
+            build/layer2/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 3: container_system (depends on common_system) ──────────────────
+  layer-3-container-system:
+    name: "Layer 3: container_system / ${{ matrix.os }}"
+    needs: [layer-0-common-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/container-system
+          extra-cache-key: 'ecosystem-layer3'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/container-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer3 \
+            -S tests/ecosystem-consumer/container-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 3 (container_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer3 --config Release 2>&1 || {
+            echo "::error::Layer 3 (container_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer3/test_container_system ]; then
+            ./build/layer3/test_container_system
+          else
+            ./build/layer3/Release/test_container_system
+          fi || {
+            echo "::error::Layer 3 (container_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer3-${{ matrix.os }}-logs
+          path: |
+            build/layer3/**/*.log
+            build/layer3/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 4: network_system (depends on thread_system) ────────────────────
+  layer-4-network-system:
+    name: "Layer 4: network_system / ${{ matrix.os }}"
+    needs: [layer-1-thread-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/network-system
+          extra-cache-key: 'ecosystem-layer4'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/network-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer4 \
+            -S tests/ecosystem-consumer/network-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 4 (network_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer4 --config Release 2>&1 || {
+            echo "::error::Layer 4 (network_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer4/test_network_system ]; then
+            ./build/layer4/test_network_system
+          else
+            ./build/layer4/Release/test_network_system
+          fi || {
+            echo "::error::Layer 4 (network_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer4-${{ matrix.os }}-logs
+          path: |
+            build/layer4/**/*.log
+            build/layer4/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 5: database_system (depends on common_system) ───────────────────
+  layer-5-database-system:
+    name: "Layer 5: database_system / ${{ matrix.os }}"
+    needs: [layer-0-common-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/database-system
+          extra-cache-key: 'ecosystem-layer5'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/database-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer5 \
+            -S tests/ecosystem-consumer/database-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 5 (database_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer5 --config Release 2>&1 || {
+            echo "::error::Layer 5 (database_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer5/test_database_system ]; then
+            ./build/layer5/test_database_system
+          else
+            ./build/layer5/Release/test_database_system
+          fi || {
+            echo "::error::Layer 5 (database_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer5-${{ matrix.os }}-logs
+          path: |
+            build/layer5/**/*.log
+            build/layer5/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 6: monitoring_system (depends on logger, thread, network) ───────
+  layer-6-monitoring-system:
+    name: "Layer 6: monitoring_system / ${{ matrix.os }}"
+    needs: [layer-2-logger-system, layer-4-network-system]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/monitoring-system
+          extra-cache-key: 'ecosystem-layer6'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/monitoring-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer6 \
+            -S tests/ecosystem-consumer/monitoring-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 6 (monitoring_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer6 --config Release 2>&1 || {
+            echo "::error::Layer 6 (monitoring_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer6/test_monitoring_system ]; then
+            ./build/layer6/test_monitoring_system
+          else
+            ./build/layer6/Release/test_monitoring_system
+          fi || {
+            echo "::error::Layer 6 (monitoring_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer6-${{ matrix.os }}-logs
+          path: |
+            build/layer6/**/*.log
+            build/layer6/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
+
+  # ─── Layer 7: pacs_system (depends on monitoring + most of the stack) ──────
+  layer-7-pacs-system:
+    name: "Layer 7: pacs_system / ${{ matrix.os }}"
+    needs:
+      - layer-6-monitoring-system
+      - layer-3-container-system
+      - layer-5-database-system
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            triplet: x64-linux
+          - os: macos-14
+            triplet: arm64-osx
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup vcpkg
+        uses: kcenon/common_system/.github/actions/setup-vcpkg@main
+        with:
+          manifest-dir: tests/ecosystem-consumer/pacs-system
+          extra-cache-key: 'ecosystem-layer7'
+
+      - name: Install GCC 13 (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+
+      - name: Copy shared registry config
+        run: cp tests/ecosystem-consumer/vcpkg-configuration.json tests/ecosystem-consumer/pacs-system/vcpkg-configuration.json
+
+      - name: Configure and build consumer
+        run: |
+          cmake -B build/layer7 \
+            -S tests/ecosystem-consumer/pacs-system \
+            -DCMAKE_TOOLCHAIN_FILE="$CMAKE_TOOLCHAIN_FILE" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
+            -DCMAKE_BUILD_TYPE=Release 2>&1 || {
+            echo "::error::Layer 7 (pacs_system): CMake configure failed"
+            exit 1
+          }
+          cmake --build build/layer7 --config Release 2>&1 || {
+            echo "::error::Layer 7 (pacs_system): build failed"
+            exit 1
+          }
+
+      - name: Run consumer binary
+        run: |
+          if [ -f build/layer7/test_pacs_system ]; then
+            ./build/layer7/test_pacs_system
+          else
+            ./build/layer7/Release/test_pacs_system
+          fi || {
+            echo "::error::Layer 7 (pacs_system): consumer binary failed"
+            exit 1
+          }
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ecosystem-layer7-${{ matrix.os }}-logs
+          path: |
+            build/layer7/**/*.log
+            build/layer7/vcpkg_installed/vcpkg/issue_body.md
+          retention-days: 7
