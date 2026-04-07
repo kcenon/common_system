@@ -1,5 +1,10 @@
 {
   "name": "test-database-system",
   "version-string": "0.0.0",
-  "dependencies": ["kcenon-database-system"]
+  "dependencies": [
+    {
+      "name": "kcenon-database-system",
+      "default-features": false
+    }
+  ]
 }
