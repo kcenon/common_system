@@ -1,0 +1,5 @@
+{
+  "name": "test-logger-system",
+  "version-string": "0.0.0",
+  "dependencies": ["kcenon-logger-system"]
+}
