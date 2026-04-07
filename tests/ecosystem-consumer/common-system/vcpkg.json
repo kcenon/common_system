@@ -1,0 +1,5 @@
+{
+  "name": "test-common-system",
+  "version-string": "0.0.0",
+  "dependencies": ["kcenon-common-system"]
+}
