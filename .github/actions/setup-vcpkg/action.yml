@@ -46,6 +46,10 @@ runs:
         restore-keys: |
           vcpkg-${{ runner.os }}-${{ inputs.vcpkg-commit }}-
 
+    - name: Clear stale registry cache
+      shell: bash
+      run: rm -rf "${{ steps.paths.outputs.vcpkg-dir }}/registries"
+
     - name: Checkout vcpkg
       shell: bash
       run: |
