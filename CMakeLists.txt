@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
-project(common_system VERSION 0.2.0 LANGUAGES CXX)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" PROJECT_VERSION_RAW)
+string(STRIP "${PROJECT_VERSION_RAW}" PROJECT_VERSION)
+project(common_system VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 
 # =============================================================================
 # BUILD ORDER DOCUMENTATION
