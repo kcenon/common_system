@@ -7,4 +7,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(common_system CONFIG REQUIRED)
 
 add_executable(test_common_system main.cpp)
-target_link_libraries(test_common_system PRIVATE common_system::common_system)
+target_link_libraries(test_common_system PRIVATE kcenon::common_system)
