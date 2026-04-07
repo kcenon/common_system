@@ -41,6 +41,7 @@ runs:
           !${{ steps.paths.outputs.vcpkg-dir }}/buildtrees
           !${{ steps.paths.outputs.vcpkg-dir }}/packages
           !${{ steps.paths.outputs.vcpkg-dir }}/downloads
+          !${{ steps.paths.outputs.vcpkg-dir }}/registries
         key: vcpkg-${{ runner.os }}-${{ inputs.vcpkg-commit }}-${{ hashFiles(format('{0}/vcpkg.json', inputs.manifest-dir), format('{0}/vcpkg-configuration.json', inputs.manifest-dir)) }}${{ inputs.extra-cache-key && format('-{0}', inputs.extra-cache-key) || '' }}
         restore-keys: |
           vcpkg-${{ runner.os }}-${{ inputs.vcpkg-commit }}-
