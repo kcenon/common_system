@@ -1,6 +1,7 @@
 [![CI](https://github.com/kcenon/common_system/actions/workflows/ci.yml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/ci.yml)
 [![Code Coverage](https://github.com/kcenon/common_system/actions/workflows/coverage.yml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/coverage.yml)
 [![Static Analysis](https://github.com/kcenon/common_system/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/static-analysis.yml)
+[![Ecosystem vcpkg Integration](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml)
 [![codecov](https://codecov.io/gh/kcenon/common_system/branch/main/graph/badge.svg)](https://codecov.io/gh/kcenon/common_system)
 [![Documentation](https://github.com/kcenon/common_system/actions/workflows/build-Doxygen.yaml/badge.svg)](https://github.com/kcenon/common_system/actions/workflows/build-Doxygen.yaml)
 [![License](https://img.shields.io/github/license/kcenon/common_system)](https://github.com/kcenon/common_system/blob/main/LICENSE)
@@ -420,6 +421,10 @@ graph TD
 > [database_system](https://github.com/kcenon/database_system) — Tier 3: Uses Result&lt;T&gt;, IExecutor
 > [network_system](https://github.com/kcenon/network_system) — Tier 4: Uses IExecutor, Result&lt;T&gt;
 > [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: Full ecosystem consumer
+
+### Ecosystem CI Verification
+
+The [Ecosystem vcpkg Integration](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml) workflow validates that all 8 ecosystem ports install and build correctly as a consumer would experience them. It tests each port in bottom-up dependency order (Layer 0 through Layer 7) on Ubuntu and macOS, running on every PR that touches vcpkg ports and nightly at 03:00 UTC.
 
 This common system serves as the foundational layer (Tier 0) that all other system modules build upon:
 
