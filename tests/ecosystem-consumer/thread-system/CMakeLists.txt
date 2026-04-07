@@ -7,4 +7,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(thread_system CONFIG REQUIRED)
 
 add_executable(test_thread_system main.cpp)
-target_link_libraries(test_thread_system PRIVATE thread_system::thread_system)
+target_link_libraries(test_thread_system PRIVATE thread_system::utilities)
