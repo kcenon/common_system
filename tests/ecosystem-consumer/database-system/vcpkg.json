@@ -1,5 +1,8 @@
 {
   "name": "test-database-system",
   "version-string": "0.0.0",
-  "dependencies": ["kcenon-database-system"]
+  "dependencies": ["kcenon-database-system"],
+  "overrides": [
+    { "name": "kcenon-database-system", "version-semver": "0.1.1" }
+  ]
 }
