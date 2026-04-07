@@ -7,7 +7,7 @@
     {
       "kind": "git",
       "repository": "https://github.com/kcenon/vcpkg-registry.git",
-      "baseline": "3e9495854598569008791f01ff3fd2099adc3187",
+      "baseline": "a2a7f4d4f331918224c5258e5bae0f690732cb43",
       "packages": ["kcenon-*"]
     }
   ]
