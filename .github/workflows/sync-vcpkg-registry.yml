@@ -1,3 +1,19 @@
+# Reusable workflow: Sync vcpkg port to kcenon/vcpkg-registry on release.
+#
+# Consumed by other ecosystem repos via:
+#   uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@main
+#   with:
+#     port-name: kcenon-<system-name>
+#     version: ${{ github.event.release.tag_name }}
+#   secrets:
+#     REGISTRY_PAT: ${{ secrets.VCPKG_REGISTRY_PAT }}
+#
+# What it does:
+#   1. Downloads the release tarball and computes SHA512
+#   2. Updates portfile.cmake SHA512 and vcpkg.json version
+#   3. Verifies the port installs correctly via vcpkg (dry-run gate)
+#   4. Opens a PR against kcenon/vcpkg-registry with updated port + version DB
+
 name: Sync vcpkg Registry
 
 on:
@@ -23,7 +39,7 @@ jobs:
   sync:
     name: Sync ${{ inputs.port-name }} to vcpkg-registry
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
     - name: Validate inputs
@@ -127,14 +143,36 @@ jobs:
           exit 1
         fi
 
-        # Update version field and reset port-version to 0
-        jq --arg version "${VERSION}" \
-          '.version = $version | .["port-version"] = 0' \
-          "${VCPKG_JSON}" > "${VCPKG_JSON}.tmp"
+        # Update version field (detect version-semver vs version) and reset port-version
+        if jq -e '.["version-semver"]' "${VCPKG_JSON}" > /dev/null 2>&1; then
+          jq --arg version "${VERSION}" \
+            '.["version-semver"] = $version | .["port-version"] = 0' \
+            "${VCPKG_JSON}" > "${VCPKG_JSON}.tmp"
+        else
+          jq --arg version "${VERSION}" \
+            '.version = $version | .["port-version"] = 0' \
+            "${VCPKG_JSON}" > "${VCPKG_JSON}.tmp"
+        fi
         mv "${VCPKG_JSON}.tmp" "${VCPKG_JSON}"
 
         echo "=== Updated vcpkg.json ==="
         cat "${VCPKG_JSON}"
+
+    - name: Verify port installs correctly
+      env:
+        PORT_NAME: ${{ inputs.port-name }}
+      run: |
+        # Bootstrap vcpkg
+        git clone --depth 1 https://github.com/microsoft/vcpkg.git /tmp/vcpkg
+        /tmp/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+        # Install the port using overlay-ports with updated portfile/vcpkg.json
+        echo "Verifying: vcpkg install ${PORT_NAME} with overlay-ports..."
+        /tmp/vcpkg/vcpkg install "${PORT_NAME}" \
+          --overlay-ports=source/vcpkg-ports \
+          --x-install-root=/tmp/vcpkg-packages
+
+        echo "Port installation verification passed"
 
     - name: Checkout vcpkg-registry
       uses: actions/checkout@v6
