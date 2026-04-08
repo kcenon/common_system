@@ -6,8 +6,5 @@
       "name": "kcenon-database-system",
       "default-features": false
     }
-  ],
-  "overrides": [
-    { "name": "kcenon-database-system", "version-semver": "0.1.1" }
   ]
 }
