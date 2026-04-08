@@ -9,6 +9,11 @@ vcpkg_from_github(
     HEAD_REF main
 )
 
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        yaml BUILD_WITH_YAML_CPP
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
@@ -17,6 +22,7 @@ vcpkg_cmake_configure(
         -DCOMMON_BUILD_EXAMPLES=OFF
         -DCOMMON_BUILD_BENCHMARKS=OFF
         -DCOMMON_BUILD_DOCS=OFF
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()
