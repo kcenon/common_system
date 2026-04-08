@@ -19,6 +19,7 @@
 #include <vector>
 
 using namespace kcenon::common;
+using namespace kcenon::common::config;
 
 int main(int argc, char* argv[])
 {
@@ -41,7 +42,7 @@ int main(int argc, char* argv[])
 
 		if (result.is_err())
 		{
-			std::cerr << "Parse error: " << result.error().message() << "\n";
+			std::cerr << "Parse error: " << result.error() << "\n";
 			return 1;
 		}
 
@@ -73,7 +74,7 @@ int main(int argc, char* argv[])
 		auto result = cli_config_parser::parse(argc, argv);
 		if (result.is_err())
 		{
-			std::cerr << "Parse error: " << result.error().message() << "\n";
+			std::cerr << "Parse error: " << result.error() << "\n";
 			cli_config_parser::print_help(argv[0]);
 			return 1;
 		}

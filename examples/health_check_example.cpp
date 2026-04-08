@@ -22,6 +22,7 @@
 #include <vector>
 
 using namespace kcenon::common;
+using namespace kcenon::common::interfaces;
 
 // Custom liveness check — is the service running?
 class app_liveness_check : public health_check

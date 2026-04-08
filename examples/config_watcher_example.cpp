@@ -22,13 +22,7 @@
 #include <thread>
 
 using namespace kcenon::common;
-
-void print_config_summary(const unified_config& cfg)
-{
-	std::cout << "   thread.pool_size: " << cfg.thread.pool_size << "\n";
-	std::cout << "   logger.level: " << cfg.logger.level << "\n";
-	std::cout << "   monitoring.enabled: " << (cfg.monitoring.enabled ? "true" : "false") << "\n";
-}
+using namespace kcenon::common::config;
 
 int main()
 {
@@ -65,13 +59,8 @@ int main()
 	watcher.on_error([](const std::string& error)
 					 { std::cerr << "   [Config error] " << error << "\n"; });
 
-	// Read current config
-	std::cout << "\n2. Current configuration:\n";
-	const auto& current = watcher.get_current();
-	print_config_summary(current);
-
 	// Start watching
-	std::cout << "\n3. Starting file watcher...\n";
+	std::cout << "\n2. Starting file watcher...\n";
 	auto start_result = watcher.start();
 	if (start_result.is_ok())
 	{
@@ -84,7 +73,7 @@ int main()
 	}
 
 	// Simulate a config change
-	std::cout << "\n4. Modifying config file...\n";
+	std::cout << "\n3. Modifying config file...\n";
 	{
 		std::ofstream f(config_path);
 		f << "thread:\n"
@@ -100,13 +89,13 @@ int main()
 	// Give the watcher time to detect the change
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-	// Check history
-	std::cout << "\n5. Config snapshot history:\n";
-	auto history = watcher.get_history();
-	std::cout << "   Snapshots available: " << history.size() << "\n";
+	// Manual reload
+	std::cout << "\n4. Manual reload...\n";
+	auto reload_result = watcher.reload();
+	std::cout << "   Reload: " << (reload_result.is_ok() ? "success" : "skipped") << "\n";
 
 	// Stop watching
-	std::cout << "\n6. Stopping watcher...\n";
+	std::cout << "\n5. Stopping watcher...\n";
 	watcher.stop();
 	std::cout << "   Watcher running = " << (watcher.is_running() ? "true" : "false") << "\n";
 

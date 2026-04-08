@@ -19,6 +19,7 @@
 #include <string>
 
 using namespace kcenon::common;
+using namespace kcenon::common::adapters;
 
 // A sample service class
 class DataService

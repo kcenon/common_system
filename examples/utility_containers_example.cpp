@@ -20,6 +20,7 @@
 #include <string>
 
 using namespace kcenon::common;
+using namespace kcenon::common::utils;
 
 // A sample resource for the object pool
 struct Connection

@@ -20,6 +20,7 @@
 #include <string>
 
 using namespace kcenon::common;
+using namespace kcenon::common::di;
 
 // --- Interfaces ---
 

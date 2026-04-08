@@ -20,6 +20,7 @@
 #include <thread>
 
 using namespace kcenon::common;
+using namespace kcenon::common::resilience;
 
 std::string state_name(circuit_state s)
 {
@@ -108,25 +109,12 @@ int main()
 	// Phase 4: Show stats
 	std::cout << "\n4. Circuit breaker stats:\n";
 	auto stats = breaker.get_stats();
-	for (const auto& [key, val] : stats)
+	for (auto it = stats.begin(); it != stats.end(); ++it)
 	{
+		const auto& name = it->first;
+		const auto& val = it->second;
 		std::visit(
-			[&key](const auto& v)
-			{
-				using T = std::decay_t<decltype(v)>;
-				if constexpr (std::is_same_v<T, int64_t>)
-				{
-					std::cout << "   " << key << ": " << v << "\n";
-				}
-				else if constexpr (std::is_same_v<T, double>)
-				{
-					std::cout << "   " << key << ": " << v << "\n";
-				}
-				else if constexpr (std::is_same_v<T, std::string>)
-				{
-					std::cout << "   " << key << ": " << v << "\n";
-				}
-			},
+			[&name](const auto& v) { std::cout << "   " << name << ": " << v << "\n"; },
 			val);
 	}
 
