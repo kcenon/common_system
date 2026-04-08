@@ -17,6 +17,10 @@
 #include <iostream>
 #include <string>
 
+#if KCENON_HAS_SOURCE_LOCATION
+#include <source_location>
+#endif
+
 // Helper to convert bool to string
 constexpr const char* yes_no(bool v) { return v ? "yes" : "no"; }
 
