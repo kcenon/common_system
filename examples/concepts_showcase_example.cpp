@@ -11,8 +11,8 @@
 ///
 /// @see kcenon::common::concepts
 
-#include <kcenon/common/concepts/core.h>
 #include <kcenon/common/patterns/result.h>
+#include <kcenon/common/concepts/core.h>
 
 #include <iostream>
 #include <string>
@@ -28,9 +28,9 @@ void inspect_result(const R& result, const std::string& label)
 			  << (result.is_ok() ? "OK" : "ERROR") << "\n";
 }
 
-// Constrained function: only accepts Unwrappable types
-template <concepts::Unwrappable U>
-auto safe_unwrap(const U& val, const typename U::value_type& fallback)
+// Unwrap with fallback using Result API directly
+template <typename T>
+T safe_unwrap(const Result<T>& val, const T& fallback)
 {
 	return val.unwrap_or(fallback);
 }
@@ -107,8 +107,8 @@ int main()
 	std::cout << "\n5. Compile-time type traits:\n";
 	std::cout << "   Result<int> is Resultable: "
 			  << concepts::Resultable<Result<int>> << "\n";
-	std::cout << "   Result<int> is Unwrappable: "
-			  << concepts::Unwrappable<Result<int>> << "\n";
+	std::cout << "   Result<int> is Mappable: "
+			  << concepts::Mappable<Result<int>> << "\n";
 	std::cout << "   int is Resultable: "
 			  << concepts::Resultable<int> << "\n";
 

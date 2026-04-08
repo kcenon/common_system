@@ -38,8 +38,7 @@ private:
 template <typename T>
 void use_service(const adapter<T>& svc)
 {
-	std::cout << "   Adapter depth: " << svc.get_adapter_depth() << "\n";
-	std::cout << "   Is adapter: " << (svc.is_adapter() ? "true" : "false") << "\n";
+	std::cout << "   Pointer valid: " << (svc.get() != nullptr ? "true" : "false") << "\n";
 	svc->process();
 }
 

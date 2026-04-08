@@ -34,8 +34,10 @@ public:
 
 	health_check_result check() override
 	{
-		// In a real app, check process health, memory, etc.
-		return health_check_result{health_status::healthy, "Application is running"};
+		health_check_result result;
+		result.status = health_status::healthy;
+		result.message = "Application is running";
+		return result;
 	}
 };
 
@@ -56,11 +58,18 @@ public:
 
 	health_check_result check() override
 	{
+		health_check_result result;
 		if (cache_warmed_)
 		{
-			return {health_status::healthy, "Cache is warmed"};
+			result.status = health_status::healthy;
+			result.message = "Cache is warmed";
 		}
-		return {health_status::degraded, "Cache warming in progress"};
+		else
+		{
+			result.status = health_status::degraded;
+			result.message = "Cache warming in progress";
+		}
+		return result;
 	}
 
 private:
@@ -79,11 +88,18 @@ public:
 
 	health_check_result check() override
 	{
+		health_check_result result;
 		if (connected_)
 		{
-			return {health_status::healthy, "Database connected"};
+			result.status = health_status::healthy;
+			result.message = "Database connected";
 		}
-		return {health_status::unhealthy, "Database connection failed"};
+		else
+		{
+			result.status = health_status::unhealthy;
+			result.message = "Database connection failed";
+		}
+		return result;
 	}
 
 private:

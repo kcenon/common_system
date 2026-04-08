@@ -12,10 +12,11 @@
 /// @see kcenon::common::config_watcher
 /// @see kcenon::common::unified_config
 
-#include <kcenon/common/config/config_watcher.h>
 #include <kcenon/common/config/unified_config.h>
+#include <kcenon/common/config/config_watcher.h>
 
 #include <chrono>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
