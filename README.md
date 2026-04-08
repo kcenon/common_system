@@ -14,8 +14,8 @@
 
 - [Overview](#overview)
 - [Key Features](#key-features)
-- [Requirements](#requirements)
 - [Quick Start](#quick-start)
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Architecture](#architecture)
 - [Core Concepts](#core-concepts)
@@ -63,6 +63,35 @@ A foundational C++20 header-only library providing essential interfaces and desi
 | **Config** | CLI Parser | Command-line argument parsing | Stable |
 | **Utils** | Circular Buffer / Object Pool | High-performance utility data structures | Stable |
 | **Concepts** | C++20 Concepts | Resultable, Unwrappable, callable, container, etc. | Stable |
+
+---
+
+## Quick Start
+
+```cpp
+#include <kcenon/common/patterns/result.h>
+
+using namespace kcenon::common;
+
+Result<Config> load_config(const std::string& path) {
+    if (!std::filesystem::exists(path)) {
+        return make_error<Config>(
+            error_codes::NOT_FOUND,
+            "Configuration file not found",
+            "config_loader"
+        );
+    }
+    auto config = parse_json_file(path);
+    return ok(config);
+}
+
+// Usage with monadic operations
+auto result = load_config("app.conf")
+    .and_then(validate_config)
+    .map(apply_defaults);
+```
+
+[Full Getting Started Guide](docs/guides/QUICK_START.md)
 
 ---
 
@@ -116,35 +145,6 @@ common_system (Foundation Layer - No Dependencies)
        +-- network_system (uses IExecutor)
        +-- database_system (uses Result<T> and IExecutor)
 ```
-
----
-
-## Quick Start
-
-```cpp
-#include <kcenon/common/patterns/result.h>
-
-using namespace kcenon::common;
-
-Result<Config> load_config(const std::string& path) {
-    if (!std::filesystem::exists(path)) {
-        return make_error<Config>(
-            error_codes::NOT_FOUND,
-            "Configuration file not found",
-            "config_loader"
-        );
-    }
-    auto config = parse_json_file(path);
-    return ok(config);
-}
-
-// Usage with monadic operations
-auto result = load_config("app.conf")
-    .and_then(validate_config)
-    .map(apply_defaults);
-```
-
-[Full Getting Started Guide](docs/guides/QUICK_START.md)
 
 ---
 
