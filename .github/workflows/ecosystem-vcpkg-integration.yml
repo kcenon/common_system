@@ -606,3 +606,55 @@ jobs:
             build/layer7/**/*.log
             build/layer7/vcpkg_installed/vcpkg/issue_body.md
           retention-days: 7
+
+  # ─── Summary gate (use as required status check) ─────────────────────────
+  ecosystem-summary:
+    name: "Ecosystem Integration Summary"
+    if: always()
+    needs:
+      - layer-0-common-system
+      - layer-1-thread-system
+      - layer-2-logger-system
+      - layer-3-container-system
+      - layer-4-network-system
+      - layer-5-database-system
+      - layer-6-monitoring-system
+      - layer-7-pacs-system
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check layer results
+        run: |
+          echo "## Ecosystem vcpkg Integration Results"
+          echo ""
+
+          results=(
+            "Layer 0 common_system:${{ needs.layer-0-common-system.result }}"
+            "Layer 1 thread_system:${{ needs.layer-1-thread-system.result }}"
+            "Layer 2 logger_system:${{ needs.layer-2-logger-system.result }}"
+            "Layer 3 container_system:${{ needs.layer-3-container-system.result }}"
+            "Layer 4 network_system:${{ needs.layer-4-network-system.result }}"
+            "Layer 5 database_system:${{ needs.layer-5-database-system.result }}"
+            "Layer 6 monitoring_system:${{ needs.layer-6-monitoring-system.result }}"
+            "Layer 7 pacs_system:${{ needs.layer-7-pacs-system.result }}"
+          )
+
+          failed=0
+          for entry in "${results[@]}"; do
+            layer="${entry%%:*}"
+            result="${entry##*:}"
+            if [ "$result" = "success" ]; then
+              echo "  $layer: passed"
+            else
+              echo "  $layer: $result"
+              failed=$((failed + 1))
+            fi
+          done
+
+          echo ""
+          if [ "$failed" -gt 0 ]; then
+            echo "::error::$failed layer(s) failed. Do not merge until all layers pass."
+            exit 1
+          else
+            echo "All 8 layers passed."
+          fi
