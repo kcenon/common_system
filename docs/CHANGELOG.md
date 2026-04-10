@@ -392,7 +392,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING**: `Result<T>::is_uninitialized()` method removed
   - This method was deprecated and always returned `false`
   - Use `is_err()` instead to check for error state
-  - See [Migration Guide](advanced/MIGRATION.md#migrating-from-is_uninitialized) for details
+  - See [Migration Guide](advanced/MIGRATION.md) for details
 - **BREAKING**: Deprecated Result factory functions removed (#180)
   - `Ok<T>(value)` - use lowercase `ok<T>(value)` instead
   - `Err<T>(message)` and `Err<T>(code, message, module)` - use `make_error<T>()` instead
