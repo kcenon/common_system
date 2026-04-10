@@ -172,86 +172,98 @@ namespace detail {
          */
         template<concepts::EventType EventType>
         void publish(const EventType& evt, event_priority = event_priority::normal) {
-            std::lock_guard<std::mutex> lock(mutex_);
+            // Snapshot handlers and error callback under the lock, then release
+            // before invoking handlers. This prevents reentrancy deadlock when
+            // a handler calls subscribe() or unsubscribe() on this bus.
+            std::vector<subscription_info> snapshot;
+            error_callback_t error_cb;
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                auto type_id = event_type_id<EventType>::id();
+                auto range = handlers_.equal_range(type_id);
+                snapshot.reserve(std::distance(range.first, range.second));
+                for (auto it = range.first; it != range.second; ++it) {
+                    snapshot.push_back(it->second);
+                }
+                error_cb = error_callback_;
+            }
 
             // Get type identifier without RTTI
             auto type_id = event_type_id<EventType>::id();
 
-            // Find and call all handlers for this event type
-            auto range = handlers_.equal_range(type_id);
-            for (auto it = range.first; it != range.second; ++it) {
+            // Invoke handlers outside the lock — safe for reentrancy
+            for (auto& entry : snapshot) {
                 try {
                     // Type safety check: verify expected type matches
-                    if (it->second.expected_type_id != type_id) {
-                        // Log type mismatch error
-                        if (error_callback_) {
-                            error_callback_("Type ID mismatch detected in event handler",
-                                          type_id, it->second.id);
+                    if (entry.expected_type_id != type_id) {
+                        if (error_cb) {
+                            error_cb("Type ID mismatch detected in event handler",
+                                     type_id, entry.id);
                         }
                         continue;
                     }
 
-                    // Invoke the handler
-                    auto& handler_wrapper = it->second.handler;
-                    if (handler_wrapper) {
-                        handler_wrapper(static_cast<const void*>(&evt));
+                    if (entry.handler) {
+                        entry.handler(static_cast<const void*>(&evt));
                     }
                 } catch (const std::exception& e) {
-                    // Log the error and continue processing other handlers
-                    if (error_callback_) {
+                    if (error_cb) {
                         std::string error_msg = "Exception in event handler: ";
                         error_msg += e.what();
-                        error_callback_(error_msg, type_id, it->second.id);
+                        error_cb(error_msg, type_id, entry.id);
                     }
-                    // Continue processing other handlers
                 } catch (...) {
-                    // Log unknown exception and continue processing other handlers
-                    if (error_callback_) {
-                        error_callback_("Unknown exception in event handler",
-                                      type_id, it->second.id);
+                    if (error_cb) {
+                        error_cb("Unknown exception in event handler",
+                                 type_id, entry.id);
                     }
-                    // Continue processing other handlers
                 }
             }
         }
 
         // For generic event (overload for type deduction)
         void publish(event&& evt, event_priority = event_priority::normal) {
-            std::lock_guard<std::mutex> lock(mutex_);
+            // Snapshot handlers and error callback under the lock
+            std::vector<subscription_info> snapshot;
+            error_callback_t error_cb;
+            {
+                std::lock_guard<std::mutex> lock(mutex_);
+                auto type_id = event_type_id<event>::id();
+                auto range = handlers_.equal_range(type_id);
+                snapshot.reserve(std::distance(range.first, range.second));
+                for (auto it = range.first; it != range.second; ++it) {
+                    snapshot.push_back(it->second);
+                }
+                error_cb = error_callback_;
+            }
 
             auto type_id = event_type_id<event>::id();
-            auto range = handlers_.equal_range(type_id);
-            for (auto it = range.first; it != range.second; ++it) {
+
+            // Invoke handlers outside the lock — safe for reentrancy
+            for (auto& entry : snapshot) {
                 try {
-                    // Type safety check: verify expected type matches
-                    if (it->second.expected_type_id != type_id) {
-                        // Log type mismatch error
-                        if (error_callback_) {
-                            error_callback_("Type ID mismatch detected in event handler",
-                                          type_id, it->second.id);
+                    if (entry.expected_type_id != type_id) {
+                        if (error_cb) {
+                            error_cb("Type ID mismatch detected in event handler",
+                                     type_id, entry.id);
                         }
                         continue;
                     }
 
-                    auto& handler_wrapper = it->second.handler;
-                    if (handler_wrapper) {
-                        handler_wrapper(static_cast<const void*>(&evt));
+                    if (entry.handler) {
+                        entry.handler(static_cast<const void*>(&evt));
                     }
                 } catch (const std::exception& e) {
-                    // Log the error and continue processing other handlers
-                    if (error_callback_) {
+                    if (error_cb) {
                         std::string error_msg = "Exception in event handler: ";
                         error_msg += e.what();
-                        error_callback_(error_msg, type_id, it->second.id);
+                        error_cb(error_msg, type_id, entry.id);
                     }
-                    // Continue processing other handlers
                 } catch (...) {
-                    // Log unknown exception and continue processing other handlers
-                    if (error_callback_) {
-                        error_callback_("Unknown exception in event handler",
-                                      type_id, it->second.id);
+                    if (error_cb) {
+                        error_cb("Unknown exception in event handler",
+                                 type_id, entry.id);
                     }
-                    // Continue processing other handlers
                 }
             }
         }
