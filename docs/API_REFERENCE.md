@@ -19,7 +19,7 @@ category: "API"
 ## Table of Contents
 
 1. [Namespace](#namespace)
-2. [Result<T> Pattern (Recommended)](#resultt-pattern-recommended)
+2. [Result\<T\> Pattern (Recommended)](#result-pattern-recommended)
 3. [Concepts](#concepts)
 4. [Interfaces](#interfaces)
 5. [Unified Logging](#unified-logging)
