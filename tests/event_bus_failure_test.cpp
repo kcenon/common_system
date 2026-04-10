@@ -358,3 +358,136 @@ TEST_F(EventBusFailureTest, FilterFunctionException) {
     EXPECT_GE(error_count, 1);
     EXPECT_GE(handler_calls, 3);  // At least one more handler called
 }
+
+// Test: Handler unsubscribes itself during publish (reentrancy safety)
+TEST_F(EventBusFailureTest, HandlerUnsubscribesItselfDuringPublish) {
+    std::atomic<int> call_count{0};
+    uint64_t self_unsub_id = 0;
+
+    // Handler that unsubscribes itself during publish
+    self_unsub_id = bus_->subscribe<TestEvent>([this, &call_count, &self_unsub_id](const TestEvent&) {
+        call_count++;
+        bus_->unsubscribe(self_unsub_id);  // Must not deadlock
+    });
+
+    // Another handler that should also be called
+    bus_->subscribe<TestEvent>([&call_count](const TestEvent&) {
+        call_count++;
+    });
+
+    // Must not deadlock — handlers are invoked outside the lock
+    bus_->publish(TestEvent{1, "reentrancy test"});
+
+    EXPECT_EQ(call_count, 2);
+
+    // Second publish — self-unsubscribed handler should not be called
+    call_count = 0;
+    bus_->publish(TestEvent{2, "after unsubscribe"});
+    EXPECT_EQ(call_count, 1);
+}
+
+// Test: Handler subscribes a new handler during publish (reentrancy safety)
+TEST_F(EventBusFailureTest, HandlerSubscribesNewHandlerDuringPublish) {
+    std::atomic<int> original_calls{0};
+    std::atomic<int> new_handler_calls{0};
+
+    // Handler that subscribes a new handler during publish
+    bus_->subscribe<TestEvent>([this, &original_calls, &new_handler_calls](const TestEvent&) {
+        original_calls++;
+        bus_->subscribe<TestEvent>([&new_handler_calls](const TestEvent&) {
+            new_handler_calls++;
+        });
+    });
+
+    // First publish — new handler should NOT be called (was not in snapshot)
+    bus_->publish(TestEvent{1, "first"});
+    EXPECT_EQ(original_calls, 1);
+    EXPECT_EQ(new_handler_calls, 0);
+
+    // Second publish — both original and new handler should be called
+    bus_->publish(TestEvent{2, "second"});
+    EXPECT_EQ(original_calls, 2);
+    EXPECT_EQ(new_handler_calls, 1);
+}
+
+// Test: Concurrent publish + subscribe/unsubscribe stress test
+TEST_F(EventBusFailureTest, ConcurrentPublishSubscribeUnsubscribeStress) {
+    std::atomic<bool> running{true};
+    std::atomic<int> publish_count{0};
+    std::atomic<int> subscribe_count{0};
+
+    constexpr int NUM_PUBLISHER_THREADS = 2;
+    constexpr int NUM_SUBSCRIBER_THREADS = 4;
+    constexpr int SUB_ITERATIONS = 200;
+
+    std::vector<std::thread> threads;
+
+    // Publisher threads
+    for (int i = 0; i < NUM_PUBLISHER_THREADS; ++i) {
+        threads.emplace_back([this, &running, &publish_count]() {
+            while (running) {
+                bus_->publish(TestEvent{static_cast<int>(publish_count++), "stress"});
+                std::this_thread::yield();
+            }
+        });
+    }
+
+    // Subscribe/unsubscribe threads — each handler may trigger reentrancy
+    for (int i = 0; i < NUM_SUBSCRIBER_THREADS; ++i) {
+        threads.emplace_back([this, &subscribe_count]() {
+            for (int j = 0; j < SUB_ITERATIONS; ++j) {
+                auto id = bus_->subscribe<TestEvent>([this, &subscribe_count](const TestEvent&) {
+                    subscribe_count++;
+                    // Reentrancy: subscribe during handler invocation
+                    if (subscribe_count % 10 == 0) {
+                        auto inner_id = bus_->subscribe<TestEvent>([](const TestEvent&) {});
+                        bus_->unsubscribe(inner_id);
+                    }
+                });
+                std::this_thread::yield();
+                bus_->unsubscribe(id);
+            }
+        });
+    }
+
+    // Run for a bounded time
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    running = false;
+
+    for (auto& t : threads) {
+        t.join();
+    }
+
+    // No deadlocks or crashes — test passes if we reach here
+    EXPECT_GT(publish_count, 0);
+    EXPECT_GT(subscribe_count, 0);
+}
+
+// Test: Generic event publish reentrancy safety
+TEST_F(EventBusFailureTest, GenericEventPublishReentrancy) {
+    std::atomic<int> call_count{0};
+    uint64_t self_unsub_id = 0;
+
+    // Subscribe to generic event
+    self_unsub_id = bus_->subscribe(std::function<void(const event&)>(
+        [this, &call_count, &self_unsub_id](const event&) {
+            call_count++;
+            bus_->unsubscribe(self_unsub_id);  // Must not deadlock
+        }
+    ));
+
+    bus_->subscribe(std::function<void(const event&)>(
+        [&call_count](const event&) {
+            call_count++;
+        }
+    ));
+
+    // Must not deadlock
+    bus_->publish(event{"test_type", "data"});
+    EXPECT_EQ(call_count, 2);
+
+    // After self-unsubscribe, only one handler remains
+    call_count = 0;
+    bus_->publish(event{"test_type", "data"});
+    EXPECT_EQ(call_count, 1);
+}

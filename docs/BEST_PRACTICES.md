@@ -109,7 +109,7 @@ if (is_ok(result)) {
 }
 ```
 
-See [RESULT_MIGRATION_GUIDE.md](guides/RESULT_MIGRATION_GUIDE.md#free-function-deprecation) for full details.
+See [RESULT_MIGRATION_GUIDE.md](guides/RESULT_MIGRATION_GUIDE.md) for full details.
 
 ## Recommended Patterns
 

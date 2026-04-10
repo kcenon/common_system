@@ -38,7 +38,7 @@ This guide provides comprehensive documentation for the adapter framework in com
   - [smart_adapter_factory](#smart_adapter_factory)
   - [Deprecation Status](#deprecation-status)
 - [New Unified Adapter System](#4-new-unified-adapter-system)
-  - [adapter<T>](#adaptert)
+  - [adapter\<T\>](#adapter)
   - [interface_adapter](#interface_adapter)
   - [adapter_factory](#adapter_factory)
   - [Zero-Cost Abstraction](#zero-cost-abstraction)
