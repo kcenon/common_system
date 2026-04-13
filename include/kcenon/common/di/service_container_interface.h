@@ -35,6 +35,7 @@
 
 #include "../patterns/result.h"
 #include "../concepts/service.h"
+#include "../error/error_codes.h"
 
 namespace kcenon::common {
 namespace di {
@@ -484,25 +485,29 @@ public:
 
 /**
  * @brief Error codes specific to dependency injection.
+ *
+ * These reference the centralized error code registry in error_codes.h
+ * (common_errors DI sub-range: -50 to -59) to prevent integer collisions
+ * with system-specific error code ranges.
  */
 namespace di_error_codes {
     /// Service not registered in container
-    constexpr int service_not_registered = -100;
+    constexpr int service_not_registered = error::codes::common_errors::di_service_not_registered;
 
     /// Circular dependency detected during resolution
-    constexpr int circular_dependency = -101;
+    constexpr int circular_dependency = error::codes::common_errors::di_circular_dependency;
 
     /// Service already registered (duplicate registration attempt)
-    constexpr int already_registered = -102;
+    constexpr int already_registered = error::codes::common_errors::di_already_registered;
 
     /// Factory threw an exception during instantiation
-    constexpr int factory_error = -103;
+    constexpr int factory_error = error::codes::common_errors::di_factory_error;
 
     /// Invalid service lifetime configuration
-    constexpr int invalid_lifetime = -104;
+    constexpr int invalid_lifetime = error::codes::common_errors::di_invalid_lifetime;
 
     /// Scoped service resolved from root container
-    constexpr int scoped_from_root = -105;
+    constexpr int scoped_from_root = error::codes::common_errors::di_scoped_from_root;
 }
 
 } // namespace di

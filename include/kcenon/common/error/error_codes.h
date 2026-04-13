@@ -69,6 +69,14 @@ namespace common_errors {
     constexpr int network_error = -10;
     constexpr int registry_frozen = -11;
     constexpr int internal_error = -99;
+
+    // DI (dependency injection) errors (-50 to -59)
+    constexpr int di_service_not_registered = -50;
+    constexpr int di_circular_dependency = -51;
+    constexpr int di_already_registered = -52;
+    constexpr int di_factory_error = -53;
+    constexpr int di_invalid_lifetime = -54;
+    constexpr int di_scoped_from_root = -55;
 } // namespace common_errors
 
 // ============================================================================
@@ -348,6 +356,12 @@ static_assert(codes::common_errors::invalid_argument >= -99 && codes::common_err
 static_assert(codes::common_errors::internal_error >= -99 && codes::common_errors::internal_error <= -1,
               "common error codes must be in range [-99, -1]");
 
+// Validate DI error sub-range (-50 to -59, within common)
+static_assert(codes::common_errors::di_service_not_registered == -50,
+              "DI error codes must start at -50");
+static_assert(codes::common_errors::di_scoped_from_root >= -59 && codes::common_errors::di_scoped_from_root <= -50,
+              "DI error codes must be in range [-59, -50]");
+
 // Validate pacs_system range (-700 to -799)
 static_assert(codes::pacs_system::base == -700,
               "pacs_system base must be -700");
@@ -379,6 +393,14 @@ inline std::string_view get_error_message(int code) {
         case codes::common_errors::network_error: return "Network error";
         case codes::common_errors::registry_frozen: return "Registry is frozen";
         case codes::common_errors::internal_error: return "Internal error";
+
+        // DI errors
+        case codes::common_errors::di_service_not_registered: return "Service not registered in container";
+        case codes::common_errors::di_circular_dependency: return "Circular dependency detected";
+        case codes::common_errors::di_already_registered: return "Service already registered";
+        case codes::common_errors::di_factory_error: return "Factory error during instantiation";
+        case codes::common_errors::di_invalid_lifetime: return "Invalid service lifetime configuration";
+        case codes::common_errors::di_scoped_from_root: return "Scoped service resolved from root container";
 
         // thread_system errors
         case codes::thread_system::pool_full: return "Thread pool full";

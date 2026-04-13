@@ -139,7 +139,7 @@ TEST(ErrorCodesTest, GetErrorMessageUnknownCode)
     EXPECT_EQ(get_error_message(-999), "Unknown error");
     EXPECT_EQ(get_error_message(-1000), "Unknown error");
     EXPECT_EQ(get_error_message(999), "Unknown error");
-    EXPECT_EQ(get_error_message(-50), "Unknown error");
+    EXPECT_EQ(get_error_message(-49), "Unknown error");
 }
 
 // ============================================================================
