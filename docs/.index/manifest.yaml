@@ -1,0 +1,124 @@
+# Common System Document Manifest — read this FIRST, then load only needed sections.
+# Pattern adapted from steamliner/docs/.index/ (4-file indexing system).
+_meta: {schema: "1.0.0", generated: "2026-04-12", docs: 62, project: "common_system", tier: 0}
+
+# ============================================================================
+# Core documents
+# ============================================================================
+core:
+  - {id: COM-DOC-IDX,  file: README.md,             title: "Project README",                        keywords: [index, overview, intro], lines: 254}
+  - {id: COM-DOC-KR,   file: README.kr.md,          title: "프로젝트 소개 (한국어)",                  keywords: [index, korean], lines: 178, mirrors: COM-DOC-IDX}
+  - {id: COM-ARCH-001, file: ARCHITECTURE.md,       title: "Architecture",                           keywords: [architecture, layered, tier-0, dependency-root], lines: 426}
+  - {id: COM-ARCH-KR,  file: ARCHITECTURE.kr.md,    title: "아키텍처 (한국어)",                       keywords: [architecture, korean], lines: 390, mirrors: COM-ARCH-001}
+  - {id: COM-API-001,  file: API_REFERENCE.md,      title: "API Reference",                          keywords: [api, interface, reference, public-api], lines: 907}
+  - {id: COM-API-KR,   file: API_REFERENCE.kr.md,   title: "API 참조 (한국어)",                       keywords: [api, korean], lines: 1068, mirrors: COM-API-001}
+  - {id: COM-API-QR,   file: API_QUICK_REFERENCE.md, title: "API Quick Reference",                    keywords: [api, cheatsheet, quick], lines: 263}
+  - {id: COM-FEAT-IDX, file: FEATURES.md,           title: "Features (index)",                       keywords: [features, index, redirect], lines: 23}
+  - {id: COM-FEAT-KR,  file: FEATURES.kr.md,        title: "기능 (한국어)",                          keywords: [features, korean], lines: 1300, mirrors: COM-FEAT-CORE}
+  - {id: COM-FEAT-CORE, file: FEATURES_CORE.md,     title: "Features — Core",                        keywords: [features, core, types, result, error, patterns], lines: 644}
+  - {id: COM-FEAT-DI,  file: FEATURES_DI_CONFIG.md, title: "Features — DI & Config",                 keywords: [features, di, dependency-injection, config], lines: 322}
+  - {id: COM-FEAT-INT, file: FEATURES_INTEGRATION.md, title: "Features — Integration",               keywords: [features, integration, ecosystem, cross-system], lines: 439}
+  - {id: COM-FEAT-TPL, file: FEATURES_TEMPLATE.md,  title: "Features — Template",                    keywords: [features, template], lines: 50}
+  - {id: COM-PROJ-001, file: PROJECT_STRUCTURE.md,  title: "Project Structure",                      keywords: [structure, directory, layout], lines: 756}
+  - {id: COM-PROJ-KR,  file: PROJECT_STRUCTURE.kr.md, title: "프로젝트 구조 (한국어)",                 keywords: [structure, korean], lines: 703, mirrors: COM-PROJ-001}
+  - {id: COM-CHG-001,  file: CHANGELOG.md,          title: "Changelog",                              keywords: [changelog, versions], lines: 530}
+  - {id: COM-CHG-KR,   file: CHANGELOG.kr.md,       title: "변경 이력 (한국어)",                      keywords: [changelog, korean], lines: 358, mirrors: COM-CHG-001}
+  - {id: COM-GS-001,   file: GETTING_STARTED.md,    title: "Getting Started",                        keywords: [getting-started, tutorial, install], lines: 446}
+
+# ============================================================================
+# Configuration
+# ============================================================================
+config:
+  - {id: COM-CFG-IDX,    file: CONFIG_GUIDE.md,        title: "Config Guide (index)",                keywords: [config, index], lines: 24}
+  - {id: COM-CFG-UNI,    file: CONFIG_UNIFIED.md,      title: "Unified Config",                      keywords: [config, unified, settings, schema], lines: 555}
+  - {id: COM-CFG-LOADER, file: CONFIG_LOADER.md,       title: "Config Loader",                       keywords: [config, loader, parsing, sources], lines: 643}
+  - {id: COM-CFG-CLI,    file: CONFIG_CLI_PARSER.md,   title: "CLI Parser",                          keywords: [config, cli, command-line, parser], lines: 184}
+  - {id: COM-CFG-WATCH,  file: CONFIG_WATCHER.md,      title: "Config Watcher",                      keywords: [config, watcher, hot-reload], lines: 310}
+
+# ============================================================================
+# Error / Result / Patterns
+# ============================================================================
+errors:
+  - {id: COM-ERR-CODES,   file: ERROR_CODES.md,             title: "Error Codes",                   keywords: [errors, codes, categories], lines: 771}
+  - {id: COM-ERR-REG,     file: ERROR_CODE_REGISTRY.md,     title: "Error Code Registry",           keywords: [errors, registry, catalog], lines: 329}
+  - {id: COM-ERR-REG-KR,  file: ERROR_CODE_REGISTRY.kr.md,  title: "오류 코드 레지스트리 (한국어)",    keywords: [errors, korean], lines: 329, mirrors: COM-ERR-REG}
+
+# ============================================================================
+# Feature Flags
+# ============================================================================
+feature_flags:
+  - {id: COM-FF-GUIDE, file: FEATURE_FLAGS_GUIDE.md,     title: "Feature Flags Guide (index)", keywords: [feature-flags, index], lines: 22}
+  - {id: COM-FF-REF,   file: FEATURE_FLAGS_REFERENCE.md, title: "Feature Flags Reference",     keywords: [feature-flags, reference, api], lines: 887}
+  - {id: COM-FF-USE,   file: FEATURE_FLAGS_USAGE.md,     title: "Feature Flags Usage",         keywords: [feature-flags, usage, examples], lines: 820}
+
+# ============================================================================
+# Integration
+# ============================================================================
+integration:
+  - {id: COM-INT-IDX,    file: INTEGRATION_GUIDE.md,        title: "Integration Guide (index)",        keywords: [integration, index], lines: 23}
+  - {id: COM-INT-KR,     file: INTEGRATION_GUIDE.kr.md,     title: "통합 가이드 (한국어)",                keywords: [integration, korean], lines: 2381, mirrors: COM-INT-IDX}
+  - {id: COM-INT-LC,     file: INTEGRATION_LIFECYCLE.md,    title: "Integration Lifecycle",            keywords: [integration, lifecycle, init, shutdown], lines: 653}
+  - {id: COM-INT-PAT,    file: INTEGRATION_PATTERNS.md,     title: "Integration Patterns",             keywords: [integration, patterns, cross-system], lines: 1163}
+  - {id: COM-INT-DEP,    file: INTEGRATION_DEPENDENCY_MAP.md, title: "Integration Dependency Map",     keywords: [integration, dependencies, map, graph], lines: 563}
+  - {id: COM-ADAPTER,    file: ADAPTER_GUIDE.md,            title: "Adapter Guide",                    keywords: [adapter, pattern, integration], lines: 1012}
+
+# ============================================================================
+# Production / Deployment / Observability / Security
+# ============================================================================
+production:
+  - {id: COM-PRD-IDX,    file: PRODUCTION_GUIDE.md,         title: "Production Guide (index)",         keywords: [production, index], lines: 28}
+  - {id: COM-PRD-CFG,    file: PRODUCTION_CONFIG.md,        title: "Production Config",                keywords: [production, config, tuning], lines: 602}
+  - {id: COM-PRD-OBS,    file: PRODUCTION_OBSERVABILITY.md, title: "Production Observability",         keywords: [production, observability, metrics, tracing, logs], lines: 814}
+  - {id: COM-PRD-SEC,    file: PRODUCTION_SECURITY.md,      title: "Production Security",              keywords: [production, security, hardening], lines: 583}
+  - {id: COM-PRD-QUAL,   file: PRODUCTION_QUALITY.md,       title: "Production Quality",               keywords: [production, quality, ci, sanitizers], lines: 834}
+  - {id: COM-PRD-QUAL-KR, file: PRODUCTION_QUALITY.kr.md,   title: "프로덕션 품질 (한국어)",              keywords: [production, quality, korean], lines: 493, mirrors: COM-PRD-QUAL}
+  - {id: COM-DEPLOY,     file: DEPLOYMENT_PATTERNS.md,      title: "Deployment Patterns",              keywords: [deployment, patterns, blue-green, canary], lines: 921}
+
+# ============================================================================
+# Benchmarks / Performance
+# ============================================================================
+performance:
+  - {id: COM-BENCH,     file: BENCHMARKS.md,           title: "Benchmarks",                 keywords: [benchmarks, performance], lines: 523}
+  - {id: COM-BENCH-KR,  file: BENCHMARKS.kr.md,        title: "벤치마크 (한국어)",            keywords: [benchmarks, korean], lines: 246, mirrors: COM-BENCH}
+  - {id: COM-ECO-BENCH, file: ECOSYSTEM_BENCHMARKS.md, title: "Ecosystem Benchmarks",       keywords: [benchmarks, ecosystem], lines: 238}
+
+# ============================================================================
+# Best practices / Guidelines
+# ============================================================================
+practices:
+  - {id: COM-BP,         file: BEST_PRACTICES.md,         title: "Best Practices",                keywords: [best-practices, guidelines], lines: 367}
+  - {id: COM-SING,       file: SINGLETON_GUIDELINES.md,   title: "Singleton Guidelines",          keywords: [singleton, patterns, guidelines], lines: 321}
+  - {id: COM-SING-KR,    file: SINGLETON_GUIDELINES.kr.md, title: "싱글톤 가이드라인 (한국어)",        keywords: [singleton, korean], lines: 321, mirrors: COM-SING}
+  - {id: COM-CROSS,      file: CROSS_REFERENCE_GUIDE.md,  title: "Cross Reference Guide",         keywords: [cross-reference, navigation], lines: 164}
+  - {id: COM-COMPAT,     file: COMPATIBILITY.md,          title: "Compatibility Matrix",          keywords: [compatibility, versions, platforms], lines: 303}
+  - {id: COM-COMPAT-KR,  file: COMPATIBILITY.kr.md,       title: "호환성 (한국어)",                 keywords: [compatibility, korean], lines: 303, mirrors: COM-COMPAT}
+  - {id: COM-DEPREC,     file: DEPRECATION.md,            title: "Deprecation Policy",            keywords: [deprecation, policy], lines: 471}
+  - {id: COM-DEPREC-KR,  file: DEPRECATION.kr.md,         title: "폐기 정책 (한국어)",              keywords: [deprecation, korean], lines: 260, mirrors: COM-DEPREC}
+  - {id: COM-RELEASE,    file: RELEASING.md,              title: "Releasing",                     keywords: [release, process], lines: 172}
+  - {id: COM-README-TPL, file: README_TEMPLATE.md,        title: "README Template",               keywords: [template, readme], lines: 255}
+  - {id: COM-IMPROVE,    file: IMPROVEMENT_PROPOSAL.md,   title: "Improvement Proposal",          keywords: [proposal, improvement], lines: 554}
+  - {id: COM-RUST,       file: RUST_PARITY.md,            title: "Rust Parity",                   keywords: [rust, parity, comparison], lines: 1481}
+
+# ============================================================================
+# Reference / Ecosystem / Compliance
+# ============================================================================
+reference:
+  - {id: COM-ECO,       file: ECOSYSTEM.md,              title: "Ecosystem",                  keywords: [ecosystem, systems], lines: 40}
+  - {id: COM-ECO-OV,    file: ECOSYSTEM_OVERVIEW.md,     title: "Ecosystem Overview",         keywords: [ecosystem, overview], lines: 39}
+  - {id: COM-SOUP,      file: SOUP.md,                   title: "SOUP",                       keywords: [soup, third-party], lines: 120}
+  - {id: COM-SOUP-LIST, file: SOUP-LIST.md,              title: "SOUP List",                  keywords: [soup, list], lines: 362}
+  - {id: COM-TRACE,     file: TRACEABILITY.md,           title: "Traceability",               keywords: [traceability, matrix], lines: 97}
+
+# ============================================================================
+# Load patterns
+# ============================================================================
+load_patterns:
+  quick_start:          [COM-DOC-IDX, COM-GS-001, COM-API-QR]
+  architecture_review:  [COM-ARCH-001, COM-PROJ-001, COM-FEAT-CORE]
+  api_deep:             [COM-API-001, COM-FEAT-CORE, COM-FEAT-DI]
+  config_work:          [COM-CFG-UNI, COM-CFG-LOADER, COM-CFG-WATCH]
+  error_handling:       [COM-ERR-CODES, COM-ERR-REG]
+  feature_flags_work:   [COM-FF-REF, COM-FF-USE]
+  integration_work:     [COM-INT-LC, COM-INT-PAT, COM-INT-DEP, COM-ADAPTER]
+  production_readiness: [COM-PRD-CFG, COM-PRD-OBS, COM-PRD-SEC, COM-PRD-QUAL, COM-DEPLOY]
+  quality_audit:        [COM-PRD-QUAL, COM-BENCH]

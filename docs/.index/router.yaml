@@ -1,0 +1,44 @@
+# Common System Query Router — match query to minimum document set.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+# ============================================================================
+# Intent routes (keyword -> bundle for topic-based queries)
+# ============================================================================
+intent_routes:
+  - {keywords: [getting started, tutorial, install, 시작, 설치], bundle: quickstart}
+  - {keywords: [api, reference, interface, method, 레퍼런스], bundle: api-core}
+  - {keywords: [architecture, layered, tier, design, 아키텍처, 설계], bundle: architecture}
+  - {keywords: [di, dependency injection, container, 의존성 주입], bundle: di-container}
+  - {keywords: [config, configuration, settings, 설정], bundle: configuration}
+  - {keywords: [config loader, load, parse, yaml, toml, ini], bundle: config-loader}
+  - {keywords: [config watcher, hot reload, live reload, 핫 리로드], bundle: config-watcher}
+  - {keywords: [cli, command line, argument, parser], bundle: cli-parser}
+  - {keywords: [error, result, code, exception, 오류, 에러], bundle: error-handling}
+  - {keywords: [feature flag, toggle, flag, 플래그], bundle: feature-flags}
+  - {keywords: [integration, lifecycle, init, shutdown, 통합, 생명주기], bundle: integration}
+  - {keywords: [adapter, pattern, wrapping, 어댑터], bundle: adapter}
+  - {keywords: [singleton, global, instance, 싱글톤], bundle: singleton}
+  - {keywords: [deployment, blue green, canary, rolling, 배포], bundle: deployment}
+  - {keywords: [observability, metrics, tracing, logs, 관측성], bundle: production-observability}
+  - {keywords: [security, hardening, auth, 보안], bundle: production-security}
+  - {keywords: [production, config, tuning, 프로덕션], bundle: production-config}
+  - {keywords: [benchmark, performance, throughput, latency, 성능], bundle: performance}
+  - {keywords: [rust, parity, comparison, 러스트], bundle: rust-parity}
+  - {keywords: [deprecation, deprecated, 폐기], bundle: deprecation}
+  - {keywords: [release, versioning, semver, 릴리스], bundle: release-process}
+  - {keywords: [compatibility, version matrix, 호환성], bundle: compatibility}
+  - {keywords: [cross system, ecosystem, 에코시스템], bundle: ecosystem}
+
+fallback:
+  primary: COM-DOC-IDX
+  secondary: [COM-API-QR, COM-FEAT-CORE]
+
+skip:
+  - ECOSYSTEM.md       # only 40 lines, cross-system pointer
+  - ECOSYSTEM_OVERVIEW.md  # 39 lines, overlap with ECOSYSTEM.md
+  - FEATURES.md        # 23 lines, index-only redirect
+  - CONFIG_GUIDE.md    # 24 lines, index-only
+  - FEATURE_FLAGS_GUIDE.md  # 22 lines, index-only
+  - INTEGRATION_GUIDE.md    # 23 lines, index-only
+  - PRODUCTION_GUIDE.md     # 28 lines, index-only
+  - FEATURES_TEMPLATE.md    # template, not content

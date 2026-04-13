@@ -1,0 +1,78 @@
+# Common System Change Impact Graph — when X changes, review Y.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+cascade:
+  COM-ARCH-001:
+    targets:
+      - {doc: COM-API-001,  why: "Architecture drives public API surface"}
+      - {doc: COM-PROJ-001, why: "Directory layout mirrors architecture"}
+      - {doc: COM-FEAT-CORE, why: "Feature catalog references architecture"}
+      - {doc: COM-INT-DEP,  why: "Integration dependency map follows architecture"}
+
+  COM-API-001:
+    targets:
+      - {doc: COM-API-QR,   why: "Quick reference must match full API"}
+      - {doc: COM-API-KR,   why: "Korean mirror"}
+      - {doc: COM-FEAT-CORE, why: "Feature examples reference API"}
+      - {doc: COM-GS-001,   why: "Getting Started uses API"}
+      - {doc: COM-CHG-001,  why: "API additions noted in changelog"}
+
+  COM-FEAT-CORE:
+    targets:
+      - {doc: COM-FEAT-KR,  why: "Korean mirror"}
+      - {doc: COM-API-001,  why: "Features implemented via API"}
+
+  COM-CFG-UNI:
+    targets:
+      - {doc: COM-CFG-LOADER, why: "Loader implements unified config"}
+      - {doc: COM-CFG-WATCH,  why: "Watcher observes unified config"}
+      - {doc: COM-CFG-CLI,    why: "CLI parser overrides unified config"}
+      - {doc: COM-PRD-CFG,    why: "Production config derives from unified"}
+
+  COM-ERR-CODES:
+    targets:
+      - {doc: COM-ERR-REG,    why: "Registry catalogs all error codes"}
+      - {doc: COM-ERR-REG-KR, why: "Korean mirror of registry"}
+      - {doc: COM-API-001,    why: "API returns error codes"}
+
+  COM-FF-REF:
+    targets:
+      - {doc: COM-FF-USE,     why: "Usage examples reference API"}
+      - {doc: COM-API-001,    why: "Feature flag API is part of public surface"}
+
+  COM-INT-PAT:
+    targets:
+      - {doc: COM-INT-LC,     why: "Patterns reference lifecycle"}
+      - {doc: COM-INT-DEP,    why: "Dependency map references patterns"}
+      - {doc: COM-ADAPTER,    why: "Adapter guide implements integration patterns"}
+
+  COM-PRD-QUAL:
+    targets:
+      - {doc: COM-PRD-QUAL-KR, why: "Korean mirror"}
+      - {doc: COM-ARCH-001,    why: "Quality claims depend on architecture"}
+      - {doc: COM-CHG-001,     why: "Quality improvements noted in changelog"}
+
+korean_pairs:
+  - {en: COM-DOC-IDX,  kr: COM-DOC-KR}
+  - {en: COM-ARCH-001, kr: COM-ARCH-KR}
+  - {en: COM-API-001,  kr: COM-API-KR}
+  - {en: COM-FEAT-CORE, kr: COM-FEAT-KR}
+  - {en: COM-PROJ-001, kr: COM-PROJ-KR}
+  - {en: COM-CHG-001,  kr: COM-CHG-KR}
+  - {en: COM-PRD-QUAL, kr: COM-PRD-QUAL-KR}
+  - {en: COM-BENCH,    kr: COM-BENCH-KR}
+  - {en: COM-ERR-REG,  kr: COM-ERR-REG-KR}
+  - {en: COM-SING,     kr: COM-SING-KR}
+  - {en: COM-COMPAT,   kr: COM-COMPAT-KR}
+  - {en: COM-DEPREC,   kr: COM-DEPREC-KR}
+  - {en: COM-INT-IDX,  kr: COM-INT-KR}
+
+# common_system is tier 0 — ALL other systems depend on it
+downstream_impact:
+  - {target: thread_system,    scope: "all types/errors/result/config"}
+  - {target: logger_system,    scope: "error codes, config, DI"}
+  - {target: container_system, scope: "concepts, result, error"}
+  - {target: monitoring_system, scope: "error, config, integration"}
+  - {target: database_system,  scope: "error, config, DI"}
+  - {target: network_system,   scope: "error, config, integration"}
+  - {target: pacs_system,      scope: "error, config, DI, integration"}

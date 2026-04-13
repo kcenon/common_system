@@ -1,0 +1,103 @@
+# Common System Document Bundles — load a bundle to get all context for a feature.
+_meta: {schema: "1.0.0", generated: "2026-04-12"}
+
+quickstart:
+  name: "Quickstart"
+  desc: "First-time setup and minimal example"
+  files: [README.md, GETTING_STARTED.md, API_QUICK_REFERENCE.md]
+
+architecture:
+  name: "Architecture Overview"
+  desc: "Layered architecture, tier-0 role, integration patterns"
+  files: [ARCHITECTURE.md, PROJECT_STRUCTURE.md, INTEGRATION_DEPENDENCY_MAP.md]
+
+api-core:
+  name: "Core API Reference"
+  files: [API_REFERENCE.md, API_QUICK_REFERENCE.md, FEATURES_CORE.md]
+
+di-container:
+  name: "Dependency Injection"
+  files: [FEATURES_DI_CONFIG.md, API_REFERENCE.md, SINGLETON_GUIDELINES.md]
+
+configuration:
+  name: "Configuration System"
+  desc: "Unified config with loader, watcher, CLI parser"
+  files: [CONFIG_UNIFIED.md, CONFIG_LOADER.md, CONFIG_WATCHER.md, CONFIG_CLI_PARSER.md]
+
+config-loader:
+  name: "Config Loader"
+  files: [CONFIG_LOADER.md, CONFIG_UNIFIED.md]
+
+config-watcher:
+  name: "Config Watcher (hot reload)"
+  files: [CONFIG_WATCHER.md, CONFIG_UNIFIED.md]
+
+cli-parser:
+  name: "CLI Parser"
+  files: [CONFIG_CLI_PARSER.md, CONFIG_UNIFIED.md]
+
+error-handling:
+  name: "Error Codes & Registry"
+  files: [ERROR_CODES.md, ERROR_CODE_REGISTRY.md]
+
+feature-flags:
+  name: "Feature Flags"
+  files: [FEATURE_FLAGS_REFERENCE.md, FEATURE_FLAGS_USAGE.md]
+
+integration:
+  name: "Integration Patterns"
+  desc: "Lifecycle, patterns, dependency map, adapters"
+  files: [INTEGRATION_LIFECYCLE.md, INTEGRATION_PATTERNS.md, INTEGRATION_DEPENDENCY_MAP.md, ADAPTER_GUIDE.md]
+
+adapter:
+  name: "Adapter Pattern"
+  files: [ADAPTER_GUIDE.md, INTEGRATION_PATTERNS.md]
+
+singleton:
+  name: "Singleton Guidelines"
+  files: [SINGLETON_GUIDELINES.md, FEATURES_DI_CONFIG.md]
+
+deployment:
+  name: "Deployment Patterns"
+  desc: "Blue-green, canary, rolling, and production config"
+  files: [DEPLOYMENT_PATTERNS.md, PRODUCTION_CONFIG.md]
+
+production-observability:
+  name: "Production Observability"
+  files: [PRODUCTION_OBSERVABILITY.md, BENCHMARKS.md]
+
+production-security:
+  name: "Production Security"
+  files: [PRODUCTION_SECURITY.md]
+
+production-config:
+  name: "Production Config & Tuning"
+  files: [PRODUCTION_CONFIG.md, CONFIG_UNIFIED.md]
+
+performance:
+  name: "Performance & Benchmarks"
+  files: [BENCHMARKS.md, ECOSYSTEM_BENCHMARKS.md]
+
+rust-parity:
+  name: "Rust Parity"
+  files: [RUST_PARITY.md]
+
+deprecation:
+  name: "Deprecation Policy"
+  files: [DEPRECATION.md]
+
+release-process:
+  name: "Release Process"
+  files: [RELEASING.md, CHANGELOG.md]
+
+compatibility:
+  name: "Compatibility Matrix"
+  files: [COMPATIBILITY.md]
+
+ecosystem:
+  name: "Ecosystem Overview"
+  files: [ECOSYSTEM.md, ECOSYSTEM_OVERVIEW.md, ECOSYSTEM_BENCHMARKS.md]
+
+compliance:
+  name: "Compliance (SOUP / Traceability)"
+  files: [SOUP.md, SOUP-LIST.md, TRACEABILITY.md]
