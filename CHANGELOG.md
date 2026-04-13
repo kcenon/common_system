@@ -7,24 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-04-13
+
 ### Added
 
 - End-to-end ecosystem vcpkg integration test workflow that validates all 8 ports in dependency order on Ubuntu and macOS ([#604](https://github.com/kcenon/common_system/issues/604))
 - Modernize Doxygen documentation with doxygen-awesome-css theme and standardized mainpage ([#581](https://github.com/kcenon/common_system/issues/581))
+- API stability guarantee: all public headers are now frozen under SemVer rules ([#640](https://github.com/kcenon/common_system/issues/640))
 
 ### Changed
 
 - Pin Doxygen version to 1.12.0 in reusable CI workflow for reproducible documentation builds ([#590](https://github.com/kcenon/common_system/issues/590))
 - Enable `WARN_NO_PARAMDOC` in Doxyfile for stricter parameter documentation checks ([#590](https://github.com/kcenon/common_system/issues/590))
+- Promote `typed_error_code` as the stable category-based error code type, removing planned rename to `error_code` ([#640](https://github.com/kcenon/common_system/issues/640))
 
 ### Fixed
 
 - Remove `const_cast` in `circuit_breaker::get_stats()` by making `failure_window` methods const-correct ([#492](https://github.com/kcenon/common_system/issues/492))
 - Return error from `service_container::clear()` when container is frozen ([#494](https://github.com/kcenon/common_system/issues/494))
-
-### Changed
-
-- Add v1.0.0 removal timeline to deprecated `error_code` type alias ([#493](https://github.com/kcenon/common_system/issues/493))
 
 ## [0.2.0] - 2026-03-11
 

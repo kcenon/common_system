@@ -256,10 +256,10 @@ private:
  * - Human-readable error messages
  * - Comparison between error codes from different systems
  *
- * @note This class is named typed_error_code to avoid conflicts with the
- *       existing error_code alias (error_code = error_info) in result/core.h.
- *       The alias is deprecated and will be removed in v1.0.0, at which point
- *       this class may be renamed to error_code.
+ * @note This class is the stable, category-based error code type since v1.0.0.
+ *       The legacy error_code alias (error_code = error_info) was removed prior
+ *       to v1.0. The name typed_error_code is retained to avoid breaking existing
+ *       downstream code that already uses this type.
  *
  * Example usage:
  * @code
