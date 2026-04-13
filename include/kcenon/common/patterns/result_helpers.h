@@ -49,29 +49,11 @@ template<typename T>
     return std::nullopt;
 }
 
-/**
- * @brief Try to unwrap a Result, returning early if error
- * @param expr The Result expression to unwrap
- * @return Reference to the value if successful
- *
- * Usage:
- * @code
- *   Result<int> get_value();
- *
- *   Result<std::string> process() {
- *       auto value = TRY_UNWRAP(get_value());
- *       return ok(std::to_string(value));
- *   }
- * @endcode
- */
-#define TRY_UNWRAP(expr) \
-    ({ \
-        auto&& _result = (expr); \
-        if (_result.is_err()) { \
-            return _result.error(); \
-        } \
-        std::move(_result).value(); \
-    })
+// TRY_UNWRAP macro removed: it used GCC statement expressions ({ }) which
+// are not supported on MSVC. Use the type-safe alternatives instead:
+//   - return_if_error() above for early-return on error
+//   - try_extract() below for extracting values
+//   - safe_execute() below for exception-to-Result conversion
 
 /**
  * @brief Safely extract value from Result or return error
