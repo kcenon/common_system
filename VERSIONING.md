@@ -56,6 +56,17 @@ tag are protected from unannounced breakage.
 
 Once `v1.0.0` is tagged, full SemVer guarantees apply.
 
+## v1.0 API Stability Milestone
+
+As of v1.0.0, common_system provides stable API guarantees:
+
+- All public headers under `include/kcenon/common/` are frozen
+- CMake targets (`common_system::common_system`, `kcenon::common_system`) are stable
+- `Result<T>` is the standard error handling pattern; `unwrap()` throws by design
+- `typed_error_code` is the stable category-based error code type
+- Downstream libraries (thread_system, container_system, etc.) may depend on this
+  stable foundation for their own v1.0 releases
+
 ## Release Process
 
 ### Step 1 — Update version numbers

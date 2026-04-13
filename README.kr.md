@@ -38,13 +38,20 @@
 - **C++20 모듈 지원**: 더 빠른 컴파일을 위한 선택적 모듈 기반 빌드
 - **생태계 기반**: thread_system, network_system, database_system 등을 지원
 
-**최신 업데이트** (2026-01):
-- 개별 모듈과의 완전한 분리
-- 포괄적인 Result<T> 패턴 구현
-- ABI 버전 검사를 포함한 IExecutor 인터페이스 표준화
-- 의존성 그래프 및 복구 핸들러를 포함한 상태 모니터링 시스템
-- 장애 허용 및 복원력을 위한 서킷 브레이커 패턴
-- 통합 통계 수집 및 모니터링을 위한 IStats 인터페이스
+**v1.0.0** — 안정 API 릴리스. 모든 공개 헤더가 SemVer 보증 하에 동결됩니다.
+주요 변경은 향후 메이저 버전(v2.0+)에서만 발생합니다.
+
+### API 안정성
+
+v1.0.0부터 common_system은 다음 보증을 제공합니다:
+
+- 동일 메이저 버전 내에서 공개 헤더에 대한 **호환성 파괴 변경 없음**
+- 메이저 버전 범프 없이 공개 함수, 클래스, 타입 별칭 **제거 없음**
+- **안정 CMake 타겟**: `common_system::common_system`, `kcenon::common_system`, `kcenon::common`
+- **안정 `#include` 경로**: `kcenon/common/` 하위 모든 헤더가 공개 API의 일부
+- **Result\<T\> 기반 오류 처리**: 공개 API는 예외 대신 `Result<T>`를 반환. `unwrap()` 메서드는 오류 결과에서 호출 시 의도적으로 예외를 발생(Rust 스타일 패닉 의미론)
+
+자세한 내용은 [VERSIONING.md](VERSIONING.md)를 참조하세요.
 
 ---
 
@@ -162,7 +169,7 @@ include(FetchContent)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v0.2.0
+    GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(common_system)
 

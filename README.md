@@ -39,13 +39,20 @@ A foundational C++20 header-only library providing essential interfaces and desi
 - **C++20 Module support**: Optional module-based build for faster compilation
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
-**Latest Updates** (2026-01):
-- Complete separation from individual modules
-- Comprehensive Result<T> pattern implementation
-- IExecutor interface standardization with ABI version checking
-- Health monitoring system with dependency graph and recovery handlers
-- Circuit breaker pattern for fault tolerance and resilience
-- IStats interface for unified statistics collection and monitoring
+**v1.0.0** — Stable API release. All public headers are frozen under SemVer guarantees.
+Breaking changes will only occur in future major versions (v2.0+).
+
+### API Stability
+
+Starting with v1.0.0, common_system provides the following guarantees:
+
+- **No breaking changes** to public headers within the same major version
+- **No removal** of public functions, classes, or type aliases without a major version bump
+- **Stable CMake targets**: `common_system::common_system`, `kcenon::common_system`, `kcenon::common`
+- **Stable `#include` paths**: All headers under `kcenon/common/` are part of the public API
+- **Result\<T\> as primary error handling**: Public APIs return `Result<T>` instead of throwing exceptions. The `unwrap()` method intentionally throws when called on an error result (Rust-style panic semantics)
+
+See [VERSIONING.md](VERSIONING.md) for the full versioning policy and release process.
 
 ---
 
@@ -169,7 +176,7 @@ include(FetchContent)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v0.2.0
+    GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(common_system)
 
