@@ -9,7 +9,7 @@ category: "PROJ"
 ---
 
 <!-- BSD 3-Clause License
-     Copyright (c) 2025, kcenon
+     Copyright (c) 2026, kcenon
      See the LICENSE file in the project root for full license information. -->
 
 # Releasing common_system

@@ -486,9 +486,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](docs/contributing/CONTRIB
 
 ### Quick Links
 
-- [Development Setup](docs/contributing/CONTRIBUTING.md#development-workflow)
-- [Code Style](docs/contributing/CONTRIBUTING.md#code-style)
-- [Pull Request Process](docs/contributing/CONTRIBUTING.md#development-workflow)
+- [Development Setup](docs/contributing/CONTRIBUTING.md#development-setup)
+- [Code Style](docs/contributing/CONTRIBUTING.md#code-style-guidelines)
+- [Pull Request Process](docs/contributing/CONTRIBUTING.md#submitting-changes)
 
 ### Support
 

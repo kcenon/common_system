@@ -17,7 +17,7 @@ category: "GUID"
 ## Prerequisites
 
 - **Compiler**: C++20 compatible (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
-- **Build System**: CMake 3.16+ (optional for header-only usage)
+- **Build System**: CMake 3.20+ (3.28+ required for C++20 modules; optional for header-only usage)
 
 ## Installation
 
@@ -287,9 +287,9 @@ int main() {
 
 ## Next Steps
 
-1. **[Error Handling Guide](../ERROR_HANDLING.md)** - Deep dive into Result<T> patterns and best practices
-2. **[RAII Guidelines](../RAII_GUIDELINES.md)** - Resource management patterns
-3. **[Integration Guide](../INTEGRATION.md)** - Using common_system with other libraries
+1. **[Error Handling Guide](./ERROR_HANDLING.md)** - Deep dive into Result<T> patterns and best practices
+2. **[RAII Guidelines](./RAII_GUIDELINES.md)** - Resource management patterns
+3. **[Integration Guide](./INTEGRATION.md)** - Using common_system with other libraries
 4. **[Architecture Guide](../ARCHITECTURE.md)** - System design and module interaction
 5. **[FAQ](./FAQ.md)** - Common questions and troubleshooting
 

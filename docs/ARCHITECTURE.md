@@ -18,7 +18,7 @@ category: "ARCH"
 
 > **Cross-reference**:
 > [API Reference](./API_REFERENCE.md) — Result&lt;T&gt;, interfaces, and utility APIs
-> [Integration Policy](./INTEGRATION_POLICY.md) — Rules for downstream system integration
+> [Integration Policy](./guides/INTEGRATION_POLICY.md) — Rules for downstream system integration
 > [Best Practices](./BEST_PRACTICES.md) — Coding conventions and patterns
 > [Cross-Reference Guide](./CROSS_REFERENCE_GUIDE.md) — Ecosystem cross-reference convention
 
@@ -419,8 +419,9 @@ graph TD
 
 ## References
 
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
-- [INTEGRATION.md](./INTEGRATION.md) - Integration examples
+- [INTEGRATION_POLICY.md](./guides/INTEGRATION_POLICY.md) - Integration policy
+- [INTEGRATION.md](./guides/INTEGRATION.md) - Integration examples
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Improvement tracking
 - [Module Migration Guide](guides/MODULE_MIGRATION.md) - C++20 module migration
 - [Cross-Reference Guide](./CROSS_REFERENCE_GUIDE.md) - Ecosystem cross-reference convention

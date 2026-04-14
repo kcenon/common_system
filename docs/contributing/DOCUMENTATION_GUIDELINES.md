@@ -12,6 +12,7 @@ category: "PROJ"
 
 > **SSOT**: This document is the single source of truth for **Documentation Structure Guidelines**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](DOCUMENTATION_GUIDELINES.kr.md)
 
 **Version:** 1.0.0

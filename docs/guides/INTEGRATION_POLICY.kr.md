@@ -141,5 +141,6 @@ cmake -B build -S . -DBUILD_WITH_COMMON_SYSTEM=OFF
 ## 참조
 
 - [INTEGRATION.md](./INTEGRATION.md) - 통합 가이드 및 예제
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - 시스템 아키텍처 개요
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - 시스템 아키텍처 개요
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 구현 추적

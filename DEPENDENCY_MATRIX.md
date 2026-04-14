@@ -5,7 +5,7 @@ This document serves as the single source of truth for dependency version manage
 SOUP (Software of Unknown Provenance) traceability, and license compliance.
 
 > **Maintained in**: common_system (Tier 0, ecosystem root)
-> **Related**: [SOUP-LIST.md](./SOUP-LIST.md) | [LICENSE-THIRD-PARTY](./LICENSE-THIRD-PARTY)
+> **Related**: [SOUP-LIST.md](./docs/SOUP-LIST.md) | [LICENSE-THIRD-PARTY](./LICENSE-THIRD-PARTY)
 
 ## Version Override Matrix
 

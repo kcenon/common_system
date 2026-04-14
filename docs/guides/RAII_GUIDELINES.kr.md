@@ -678,6 +678,7 @@ RAII 구현 시 이 체크리스트를 사용하세요:
 ## 참고 자료
 
 - [C++ Core Guidelines: Resource Management](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management)
+<!-- TODO: target file does not exist -->
 - [common_system Result<T> Documentation](./ERRORS.md)
 
 ---

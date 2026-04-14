@@ -642,5 +642,5 @@ auto pool = create_thread_pool(4);
 ## References
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration policy
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture overview
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - Architecture overview
 - Individual system READMEs for detailed API documentation
