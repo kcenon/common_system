@@ -173,3 +173,84 @@ Broken inter-file path references (target file simply does not exist at the refe
 ---
 
 *End of report*
+
+---
+
+## Post-Fix Re-Validation (2026-04-15)
+
+**Fix commit**: `5452f38 docs: fix 31 broken links, 4 version drifts, 12 cross-references`
+**Re-validation date**: 2026-04-15
+**Scope**: Phase 1 only (anchors + inter-file links)
+
+### Summary
+
+Counts below compare the prior Phase 1 Must-Fix link set (74 individual links expanded from items 1-22) against the current Phase 1 broken set.
+
+| Metric | Before Fix | After Fix | Delta |
+|--------|-----------:|----------:|------:|
+| Broken intra-file anchors (Must-Fix) | 8 | 0 | -8 |
+| Broken inter-file anchor mismatches (Must-Fix) | 4 | 0 | -4 |
+| Broken inter-file paths (Must-Fix) | 62 | 20 | -42 |
+| **Total Phase-1 Must-Fix** | **74** | **20** | **-54** |
+| Fixed | - | 54 | - |
+| Residual | - | 20 | - |
+| **Regressions** | - | **0** | - |
+
+Overall broken-link counts for the whole repo (125 .md files scanned, excluding DOC_REVIEW_REPORT.md noise):
+
+| Category | Current total | Prior Must-Fix | Prior full (incl. Should/Nice) |
+|----------|--------------:|---------------:|-------------------------------:|
+| Intra-file anchors | 15 | 8 | 8 (Must-Fix only enumerated) |
+| Inter-file anchor mismatches | 1 | 4 | 4 |
+| Inter-file paths | 57 | 62 | 101 |
+
+The extra 15 intra-file anchors and 57 inter-file paths present today that are not in the prior Must-Fix list were all confirmed via `git blame` to predate the fix commit (`5452f38`) — they were pre-existing issues that the prior reviewer simply missed, not regressions introduced by the fix.
+
+### Residual Must-Fix (still broken)
+
+All 20 residuals are inter-file path links to files that do not (yet) exist in the repository. The fix commit added `<!-- TODO: target file does not exist -->` HTML comments above each, marking them as traceable TODOs; the links themselves are not commented out and therefore remain classified as broken.
+
+1. `docs/ARCHITECTURE.md:425` - `./NEED_TO_FIX.md`
+2. `docs/ARCHITECTURE.kr.md:390` - `./NEED_TO_FIX.md`
+3. `docs/advanced/MIGRATION.md:781` - `./NEED_TO_FIX.md`
+4. `docs/advanced/MIGRATION.kr.md:746` - `./NEED_TO_FIX.md`
+5. `docs/guides/INTEGRATION_POLICY.md:146` - `./NEED_TO_FIX.md`
+6. `docs/guides/INTEGRATION_POLICY.kr.md:146` - `./NEED_TO_FIX.md`
+7. `docs/guides/RAII_GUIDELINES.md:682` - `./ERRORS.md`
+8. `docs/guides/RAII_GUIDELINES.kr.md:682` - `./ERRORS.md`
+9. `docs/performance/E2E_BENCHMARKS.md:1139` - `../OPTIMIZATION.md`
+10. `docs/guides/CONCEPTS_GUIDE.md:357` - `result_pattern.md`
+11. `docs/guides/CONCEPTS_GUIDE.md:359` - `event_bus.md`
+12. `docs/guides/CONCEPTS_GUIDE.md:361` - `dependency_injection.md`
+13. `docs/guides/CONCEPTS_GUIDE.kr.md:329` - `result_pattern_ko.md`
+14. `docs/guides/CONCEPTS_GUIDE.kr.md:331` - `event_bus_ko.md`
+15. `docs/guides/CONCEPTS_GUIDE.kr.md:333` - `dependency_injection_ko.md`
+16. `docs/README.kr.md:29` - `ARCHITECTURE_ISSUES.md`
+17. `docs/README.kr.md:40` - `CURRENT_STATE.md`
+18. `docs/README.kr.md:120` - `BASELINE.md`
+19. `docs/README.kr.md:127` - `STATIC_ANALYSIS_BASELINE.md`
+20. `docs/README.kr.md:140` - `IMPROVEMENTS.md`
+
+### Regressions Introduced by Fix (NEW breakages)
+
+**None - no regressions detected.**
+
+Every broken link present in the current scan but not in the prior Must-Fix list was confirmed via `git blame` to have been introduced by a commit other than `5452f38`. No line modified by the fix commit produced a newly broken reference.
+
+For completeness, the 26 pre-existing-but-previously-unreported broken links that my Phase 1 re-scan flagged (all confirmed via blame to predate the fix commit):
+
+- Intra-file anchor slugs with `↔`, `::`, or `<T>` in the heading that collapse under GitHub's slugger (8 in `docs/advanced/DEPENDENCY_MATRIX.md`, 3 in `docs/guides/ERROR_HANDLING.md`, 4 in `docs/guides/SMART_POINTER_GUIDELINES.md`) - introduced 2025-10-20 (`0e01824a`).
+- Benchmark file references in `docs/BENCHMARKS.md:498-501` (pluralization mismatch: link says `result_benchmarks.cpp` but file is `result_benchmark.cpp`) - introduced 2026-04-04 (`755d7252`).
+- `docs/CHANGELOG.md:523` and `docs/CHANGELOG.kr.md:351` - `[LICENSE](LICENSE)` resolves to `docs/LICENSE` which does not exist (file is at repo root) - introduced 2025-10-22 (`248733c0`).
+- `docs/guides/ERROR_HANDLING.md:854-856` and `docs/guides/ERROR_HANDLING.kr.md:718-719` - `../include/kcenon/common/...` paths resolve to `docs/include/...` rather than the real `../../include/...` - introduced 2025-10-09 / 2026-01-16.
+
+These are candidates for a follow-up Phase 1 pass but are out of scope for regression detection of the fix commit.
+
+### Verdict
+
+**PARTIAL-PASS**
+
+- 0 regressions caused by `5452f38`
+- 20 residuals remain (all inter-file path targets that do not yet exist; marked with TODO comments by the fix commit)
+- 54 of 74 prior Phase-1 Must-Fix items (73%) are now fixed
+
