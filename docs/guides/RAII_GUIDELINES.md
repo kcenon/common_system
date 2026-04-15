@@ -678,6 +678,7 @@ Use this checklist when implementing RAII:
 ## References
 
 - [C++ Core Guidelines: Resource Management](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management)
+<!-- TODO: target file does not exist -->
 - [common_system Result<T> Documentation](./ERRORS.md)
 
 ---

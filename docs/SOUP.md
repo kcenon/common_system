@@ -49,8 +49,8 @@ common_system is a header-only/compiled C++20 foundation library with **no requi
 
 | ID | Name | Manufacturer | Version | License | Usage | Qualification |
 |----|------|-------------|---------|---------|-------|--------------|
-| SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.14.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
-| SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.8.3 | Apache-2.0 | Performance benchmarking framework | Not required |
+| SOUP-T01 | [Google Test](https://github.com/google/googletest) | Google | 1.17.0 | BSD-3-Clause | Unit testing framework (includes GMock) | Required |
+| SOUP-T02 | [Google Benchmark](https://github.com/google/benchmark) | Google | 1.9.5 | Apache-2.0 | Performance benchmarking framework | Not required |
 | SOUP-T03 | [Doxygen](https://www.doxygen.nl/) | Dimitri van Heesch | 1.16.1 | GPL-2.0 | API documentation generation (build tool only) | Not required |
 
 ---
@@ -72,8 +72,8 @@ All SOUP versions are pinned in `vcpkg.json` via the `overrides` field:
 ```json
 {
   "overrides": [
-    { "name": "gtest", "version": "1.14.0" },
-    { "name": "benchmark", "version": "1.8.3" }
+    { "name": "gtest", "version": "1.17.0" },
+    { "name": "benchmark", "version": "1.9.5" }
   ]
 }
 ```

@@ -12,13 +12,14 @@ category: "API"
 
 > **SSOT**: This document is the single source of truth for **Error Code Registry**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](ERROR_CODES.kr.md)
 
 Comprehensive registry of all error codes across the kcenon ecosystem systems.
 
 **Purpose**: Centralized error code documentation, conflict prevention, and cross-system error handling guidance.
 
-**Last Updated**: 2026-02-08
+**Last Updated**: 2026-04-04
 **Maintained By**: kcenon team
 **Source**: `/include/kcenon/common/error/error_codes.h`
 
@@ -765,7 +766,7 @@ jobs:
 ---
 
 **Document Version**: 1.0.0
-**Last Updated**: 2026-02-08
+**Last Updated**: 2026-04-04
 **Authors**: kcenon team
 **Related Issues**: kcenon/common_system#331
 **Source File**: `/include/kcenon/common/error/error_codes.h`

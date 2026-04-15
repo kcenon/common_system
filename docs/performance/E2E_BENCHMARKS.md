@@ -1135,6 +1135,7 @@ if __name__ == '__main__':
 
 - [Individual System Benchmarks](../BENCHMARKS.md) - Component-level performance
 - [Integration Guide](../INTEGRATION_GUIDE.md) - Multi-system integration patterns
+<!-- TODO: target file does not exist -->
 - [Optimization Guidelines](../OPTIMIZATION.md) - Performance tuning best practices
 - [Architecture Overview](../ARCHITECTURE.md) - System design and trade-offs
 

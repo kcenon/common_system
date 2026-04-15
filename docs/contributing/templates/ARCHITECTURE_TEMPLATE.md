@@ -306,9 +306,9 @@ Brief description of security assumptions and threats considered.
 
 ## Related Documents
 
-- [API Reference](API_REFERENCE.md) - Complete API documentation
-- [Features](FEATURES.md) - Feature list
-- [Integration Guide](guides/INTEGRATION.md) - How to integrate
+- [API Reference](../../API_REFERENCE.md) - Complete API documentation
+- [Features](../../FEATURES.md) - Feature list
+- [Integration Guide](../../guides/INTEGRATION.md) - How to integrate
 
 ---
 

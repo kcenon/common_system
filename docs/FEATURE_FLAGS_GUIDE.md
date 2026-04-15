@@ -12,6 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **Feature Flags Framework Guide**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](FEATURE_FLAGS_GUIDE.kr.md)
 
 Complete guide for compile-time feature detection, runtime feature flags, and cross-system integration in common_system.

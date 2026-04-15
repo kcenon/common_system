@@ -642,5 +642,5 @@ auto pool = create_thread_pool(4);
 ## 참고 자료
 
 - [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - 아키텍처 개요
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - 아키텍처 개요
 - 개별 시스템 README - 상세 API 문서

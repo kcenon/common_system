@@ -440,9 +440,9 @@ if (result.is_err()) {
 
 ### 빠른 링크
 
-- [개발 환경 설정](docs/contributing/CONTRIBUTING.md#development-workflow)
-- [코드 스타일](docs/contributing/CONTRIBUTING.md#code-style)
-- [Pull Request 프로세스](docs/contributing/CONTRIBUTING.md#development-workflow)
+- [개발 환경 설정](docs/contributing/CONTRIBUTING.md#development-setup)
+- [코드 스타일](docs/contributing/CONTRIBUTING.md#code-style-guidelines)
+- [Pull Request 프로세스](docs/contributing/CONTRIBUTING.md#submitting-changes)
 
 ### 지원
 
