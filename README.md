@@ -215,6 +215,9 @@ int main() {
 }
 ```
 
+> For the full dual-build strategy, compiler/CMake matrix, and fallback behavior,
+> see the [C++20 Modules Guide](docs/guides/CXX20_MODULES.md).
+
 ---
 
 ## Architecture
