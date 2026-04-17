@@ -471,7 +471,8 @@ if (result.is_err()) {
 | | [Best Practices](docs/guides/BEST_PRACTICES.md) | Recommended usage patterns |
 | | [FAQ](docs/guides/FAQ.md) | Frequently asked questions |
 | | [Troubleshooting](docs/guides/TROUBLESHOOTING.md) | Common issues and solutions |
-| **Advanced** | [Architecture](docs/ARCHITECTURE.md) | System design and principles |
+| **Advanced** | [C++20 Modules Guide](docs/guides/CXX20_MODULES.md) | Dual-build strategy and toolchain matrix |
+| | [Architecture](docs/ARCHITECTURE.md) | System design and principles |
 | | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
 | | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
 | | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
