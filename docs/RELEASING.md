@@ -114,6 +114,64 @@ gh release create v0.2.0 \
   --generate-notes
 ```
 
+### 7. vcpkg Registry Sync (Automated)
+
+Publishing a GitHub Release triggers automatic propagation of the new version to
+`kcenon/vcpkg-registry`. No manual hash editing is required.
+
+| Step | Workflow | Source |
+|------|----------|--------|
+| Trigger on `release: published` | `on-release-sync-registry.yml` | `.github/workflows/on-release-sync-registry.yml` |
+| Compute SHA512, update port, open PR | `sync-vcpkg-registry.yml` (reusable) | `.github/workflows/sync-vcpkg-registry.yml` |
+
+What the reusable workflow does:
+
+1. Downloads the release tarball from `https://github.com/kcenon/common_system/archive/refs/tags/vX.Y.Z.tar.gz`
+2. Computes SHA512 via `sha512sum`
+3. Updates `vcpkg-ports/kcenon-common-system/portfile.cmake` with the new hash and
+   `vcpkg-ports/kcenon-common-system/vcpkg.json` with the new version
+4. Verifies the port installs via `vcpkg install` using overlay-ports (dry-run gate)
+5. Opens an auto-generated PR against `kcenon/vcpkg-registry` with the updated
+   port files and `versions/k-/kcenon-common-system.json` / `versions/baseline.json`
+   entries
+
+**Prerequisites (one-time setup):**
+
+- `VCPKG_REGISTRY_PAT` organization secret — PAT with write access to `kcenon/vcpkg-registry`
+- `vcpkg-ports/kcenon-common-system/portfile.cmake` must keep `REF "v${VERSION}"`
+  so the sync workflow does not need to patch the tag pattern
+
+**Verifying a release sync:**
+
+```bash
+# After `gh release create`, check that the sync workflow succeeded
+gh run list --repo kcenon/common_system \
+  --workflow on-release-sync-registry.yml --limit 3
+
+# Check that a PR was opened on the registry
+gh pr list --repo kcenon/vcpkg-registry --search "kcenon-common-system v0.2.0"
+```
+
+If the sync workflow fails, re-run it from the Actions tab — it is idempotent
+and will overwrite the in-flight `auto/kcenon-common-system-<version>` branch.
+
+### Reused by Downstream Ecosystem Repos
+
+The `sync-vcpkg-registry.yml` workflow is reusable. Ecosystem repositories
+(e.g. `thread_system`, `logger_system`) invoke it by adding their own
+`on-release-sync-registry.yml` that calls:
+
+```yaml
+uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@main
+with:
+  port-name: kcenon-<system-name>
+  version: ${{ github.event.release.tag_name }}
+secrets:
+  REGISTRY_PAT: ${{ secrets.VCPKG_REGISTRY_PAT }}
+```
+
+This keeps the SHA512 automation logic in one place for the whole ecosystem.
+
 ## Downstream Dependency Pinning
 
 Ecosystem projects should reference specific tags instead of `main`:
