@@ -433,6 +433,10 @@ graph TD
 > [network_system](https://github.com/kcenon/network_system) — Tier 4: Uses IExecutor, Result&lt;T&gt;
 > [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: Full ecosystem consumer
 
+### Ecosystem Version Baseline
+
+Downstream consumers should pin against a known-good set of port versions. The current baseline is published in [`docs/ECOSYSTEM_OVERVIEW.md#versions`](docs/ECOSYSTEM_OVERVIEW.md#versions) with a reproducible `vcpkg-configuration.json` snippet.
+
 ### Ecosystem CI Verification
 
 The [Ecosystem vcpkg Integration](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml) workflow validates that all 8 ecosystem ports install and build correctly as a consumer would experience them. It tests each port in bottom-up dependency order (Layer 0 through Layer 7) on Ubuntu and macOS, running on every PR that touches vcpkg ports and nightly at 03:00 UTC.
