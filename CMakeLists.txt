@@ -35,43 +35,62 @@ project(common_system VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 #
 # =============================================================================
 
-# C++20 as required standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+# -----------------------------------------------------------------------------
+# kcenon-cmake-template adoption
+# -----------------------------------------------------------------------------
+# common_system is the reference adopter of the template suite at
+# cmake/template/. See cmake/template/README.md for the canonical adoption
+# checklist; the calls below mirror that checklist 1-to-1.
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/template")
 
-# Export compile commands for IDE support
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include(options)
+include(compiler)
+include(dependencies)
+include(warnings)
+include(targets)
+include(install)
+include(testing)
+include(examples)
 
-# Include feature flags configuration module
+# Step 4: standard baseline
+kcenon_template_set_cpp_baseline(STANDARD 20)
+kcenon_template_set_default_build_type(TYPE Release)
+kcenon_template_enable_compile_commands()
+
+# Step 5a: pre-set cache defaults that diverge from the template defaults so
+# the subsequent option() calls inside `kcenon_template_define_standard_options`
+# act as no-ops while preserving common_system's historical behaviour
+# (examples ON by default, header-only ON by default).
+set(COMMON_BUILD_EXAMPLES ON CACHE BOOL "Build example programs")
+
+# Step 5b: standard options
+kcenon_template_define_standard_options(COMMON)
+
+# Step 5c: project-specific options
+option(COMMON_BUILD_INTEGRATION_TESTS "Build integration tests for common_system" ON)
+option(COMMON_HEADER_ONLY              "Use as header-only library"                ON)
+option(ENABLE_COVERAGE                 "Enable code coverage"                      OFF)
+option(BUILD_WITH_YAML_CPP             "Enable YAML configuration file support"    OFF)
+
+# Step 6: warnings (header-only INTERFACE targets are skipped by the helper)
+kcenon_template_init_warnings(COMMON)
+
+# -----------------------------------------------------------------------------
+# common_system-specific helpers (not part of the template)
+# -----------------------------------------------------------------------------
 include(cmake/features.cmake)
-
-# Include compiler requirements check
 include(cmake/KcenonCompilerRequirements.cmake)
 kcenon_check_compiler_requirements()
 
-# Options
-option(COMMON_BUILD_TESTS "Build unit tests for common_system" ON)
-option(COMMON_BUILD_INTEGRATION_TESTS "Build integration tests for common_system" ON)
-option(COMMON_BUILD_EXAMPLES "Build examples for common_system" ON)
-option(COMMON_BUILD_DOCS "Generate documentation" OFF)
-option(COMMON_BUILD_BENCHMARKS "Build performance benchmarks" OFF)
-option(COMMON_HEADER_ONLY "Use as header-only library" ON)
-option(ENABLE_COVERAGE "Enable code coverage" OFF)
-option(BUILD_WITH_YAML_CPP "Enable YAML configuration file support" OFF)
-
+# -----------------------------------------------------------------------------
 # Event Bus ABI Configuration
-# The event bus now uses a standalone implementation without external dependencies
-# This eliminates the circular dependency with monitoring_system
+# -----------------------------------------------------------------------------
+# The event bus uses a standalone implementation without external
+# dependencies, eliminating the circular dependency with monitoring_system.
 set(EVENT_BUS_ABI_VERSION 1 CACHE STRING "Event bus ABI version (1=standalone)")
-
 message(STATUS "Event Bus ABI Version: ${EVENT_BUS_ABI_VERSION} (standalone implementation)")
 
-# Generate ABI version header
 string(TIMESTAMP CMAKE_CONFIGURE_TIMESTAMP "%Y-%m-%d %H:%M:%S UTC" UTC)
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release")
-endif()
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/include/kcenon/common/config/abi_version.h.in"
@@ -88,35 +107,38 @@ configure_file(
 message(STATUS "Generated ABI version header: ${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h")
 message(STATUS "Generated ABI version source: ${CMAKE_CURRENT_BINARY_DIR}/src/config/abi_version.cpp")
 
-# Respect global BUILD_INTEGRATION_TESTS flag if set
+# Honour the umbrella BUILD_INTEGRATION_TESTS flag if set by a parent build.
 if(DEFINED BUILD_INTEGRATION_TESTS)
     if(BUILD_INTEGRATION_TESTS)
         set(_COMMON_BUILD_IT_VALUE ON)
     else()
         set(_COMMON_BUILD_IT_VALUE OFF)
     endif()
-    set(COMMON_BUILD_INTEGRATION_TESTS ${_COMMON_BUILD_IT_VALUE} CACHE BOOL "Build integration tests for common_system" FORCE)
+    set(COMMON_BUILD_INTEGRATION_TESTS ${_COMMON_BUILD_IT_VALUE} CACHE BOOL
+        "Build integration tests for common_system" FORCE)
 endif()
 
-# Create interface library (header-only by default)
+# -----------------------------------------------------------------------------
+# Step 7: target definitions (header-only INTERFACE library + aliases)
+# -----------------------------------------------------------------------------
 add_library(common_system INTERFACE)
-add_library(kcenon::common ALIAS common_system)
-add_library(kcenon::common_system ALIAS common_system)
-add_library(common_system::common_system ALIAS common_system)
-
-# Set include directories
-target_include_directories(common_system INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+kcenon_template_create_aliases(common_system
+    kcenon::common
+    kcenon::common_system
+    common_system::common_system
 )
 
-# C++ feature requirements
-target_compile_features(common_system INTERFACE cxx_std_20)
+kcenon_template_setup_target_includes(common_system INTERFACE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    INSTALL_DIR "include"
+)
+target_include_directories(common_system INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+)
 
-# Define ABI version for event bus
-# Define KCENON_WITH_COMMON_SYSTEM to indicate common_system types are available
-# This prevents ABI incompatibility in downstream projects
+kcenon_template_set_cxx_feature_std(common_system INTERFACE 20)
+
+# Define ABI version + KCENON_WITH_COMMON_SYSTEM marker for downstream projects
 target_compile_definitions(common_system INTERFACE
     EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
     KCENON_WITH_COMMON_SYSTEM=1
@@ -134,209 +156,149 @@ if(BUILD_WITH_YAML_CPP)
     endif()
 endif()
 
-# Optional: If not header-only, add source files
+# Optional: static-library variant when not header-only
 if(NOT COMMON_HEADER_ONLY)
-    # Convert to static library
     add_library(common_system_static STATIC
         ${CMAKE_CURRENT_BINARY_DIR}/src/config/abi_version.cpp
     )
-
-    target_include_directories(common_system_static PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+    kcenon_template_setup_target_includes(common_system_static PUBLIC
+        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        INSTALL_DIR "include"
     )
-
-    target_compile_features(common_system_static PUBLIC cxx_std_20)
-
+    target_include_directories(common_system_static PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+    )
+    kcenon_template_set_cxx_feature_std(common_system_static PUBLIC 20)
     target_compile_definitions(common_system_static PUBLIC
         EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
         KCENON_WITH_COMMON_SYSTEM=1
     )
+    kcenon_template_apply_warnings(common_system_static)
 endif()
 
-# =============================================================================
+# -----------------------------------------------------------------------------
 # C++20 Module Support (Phase 2)
-# =============================================================================
-# Enable C++20 modules with CMake 3.28+ when building with module-capable compilers.
-# This provides an alternative to the header-only interface.
+# -----------------------------------------------------------------------------
+# Enable C++20 modules with CMake 3.28+ when building with module-capable
+# compilers. This provides an alternative to the header-only interface.
 #
-# Usage:
-#   cmake -DCOMMON_BUILD_MODULES=ON ..
-#
-# Requirements:
-#   - CMake 3.28 or later
-#   - Clang 16+, GCC 14+, or MSVC 2022 17.4+
-# =============================================================================
-
-option(COMMON_BUILD_MODULES "Build C++20 module version of common_system" OFF)
-
+# Usage:   cmake -DCOMMON_BUILD_MODULES=ON ..
+# Needs:   CMake 3.28+, Clang 16+ / GCC 14+ / MSVC 2022 17.4+
+# -----------------------------------------------------------------------------
 if(COMMON_BUILD_MODULES)
-    # Check CMake version
     if(CMAKE_VERSION VERSION_LESS "3.28")
         message(WARNING "C++20 modules require CMake 3.28+. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
-    # Check compiler version requirements for modules
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
         message(WARNING "AppleClang does not support C++20 module dependency scanning. "
                         "Use Clang ${KCENON_MIN_CLANG_MODULE_VERSION}+, "
                         "GCC ${KCENON_MIN_GCC_MODULE_VERSION}+, or "
                         "MSVC ${KCENON_MIN_MSVC_MODULE_VERSION}+. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
-    # Check generator (modules require Ninja or Visual Studio 17.4+)
     elseif(NOT CMAKE_GENERATOR MATCHES "Ninja" AND NOT CMAKE_GENERATOR MATCHES "Visual Studio")
         message(WARNING "C++20 modules require Ninja or Visual Studio generator. "
                         "Current generator: ${CMAKE_GENERATOR}. Disabling module build.")
         set(COMMON_BUILD_MODULES OFF)
     else()
-        # Verify module-capable compiler version
         kcenon_check_compiler_requirements(MODULES)
         message(STATUS "C++20 module build enabled")
 
-        # Create module library target
         add_library(common_system_modules)
         add_library(kcenon::common_modules ALIAS common_system_modules)
+        kcenon_template_set_cxx_feature_std(common_system_modules PUBLIC 20)
 
-        # Set C++20 standard for module target
-        target_compile_features(common_system_modules PUBLIC cxx_std_20)
-
-        # Enable module scanning
         set_target_properties(common_system_modules PROPERTIES
             CXX_SCAN_FOR_MODULES ON
         )
 
-        # Add module source files
         target_sources(common_system_modules
             PUBLIC FILE_SET CXX_MODULES
             FILES
-                # Primary module
                 src/modules/common.cppm
-                # Tier 1: Core partitions
                 src/modules/utils.cppm
                 src/modules/error.cppm
-                # Tier 2: Foundation partitions
                 src/modules/result.cppm
                 src/modules/result/core.cppm
                 src/modules/result/utilities.cppm
                 src/modules/concepts.cppm
-                # Tier 3: Infrastructure partitions
                 src/modules/interfaces.cppm
                 src/modules/interfaces/logger.cppm
                 src/modules/interfaces/executor.cppm
                 src/modules/interfaces/core.cppm
                 src/modules/config.cppm
                 src/modules/di.cppm
-                # Tier 4: Application partitions
                 src/modules/patterns.cppm
                 src/modules/logging.cppm
         )
 
-        # Include directories for module target
+        kcenon_template_setup_target_includes(common_system_modules PUBLIC
+            "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            INSTALL_DIR "include"
+        )
         target_include_directories(common_system_modules PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-            $<INSTALL_INTERFACE:include>
         )
 
-        # Compile definitions
         target_compile_definitions(common_system_modules PUBLIC
             EVENT_BUS_ABI_VERSION=${EVENT_BUS_ABI_VERSION}
             KCENON_WITH_COMMON_SYSTEM=1
             KCENON_USE_MODULES=1
         )
 
+        kcenon_template_apply_warnings(common_system_modules)
+
         message(STATUS "C++20 module target: common_system_modules")
     endif()
 endif()
 
-# Installation rules
-include(GNUInstallDirs)
-
-# Install headers
-install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+# -----------------------------------------------------------------------------
+# Step 8: install rules
+# -----------------------------------------------------------------------------
+kcenon_template_install_headers("${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PATTERNS "*.h" "*.hpp"
 )
 
 # Install generated abi_version.h (produced by configure_file, lives in build tree)
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/include/kcenon/common/config/abi_version.h"
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/kcenon/common/config
+    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kcenon/common/config"
 )
 
-# Install CMake config files
-install(TARGETS common_system
-    EXPORT common_system-targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+kcenon_template_install_package(
+    PACKAGE_NAME    common_system
+    NAMESPACE       common_system
+    TARGETS         common_system
+    CONFIG_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common_system-config.cmake.in"
+    EXTRA_FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/features.cmake"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KcenonCompilerRequirements.cmake"
 )
 
-install(EXPORT common_system-targets
-    FILE common_system-targets.cmake
-    NAMESPACE common_system::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
-)
-
-# Create Config.cmake file
-include(CMakePackageConfigHelpers)
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/common_system-config.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
-)
-
-write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config-version.cmake"
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/common_system-config-version.cmake"
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/features.cmake"
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/KcenonCompilerRequirements.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/common_system
-)
-
-# Export for build tree
-export(EXPORT common_system-targets
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/common_system-targets.cmake"
-    NAMESPACE common_system::
-)
-
-# Tests
+# -----------------------------------------------------------------------------
+# Step 9: tests
+# -----------------------------------------------------------------------------
 if(COMMON_BUILD_TESTS OR COMMON_BUILD_INTEGRATION_TESTS)
-    enable_testing()
-    # Only add tests directory if GTest is available
-    # Pinned GTest version for SOUP traceability (ecosystem standard: v1.14.0)
-    find_package(GTest QUIET)
-    if(GTest_FOUND)
-        if(DEFINED GTest_VERSION)
-            message(STATUS "GTest version: ${GTest_VERSION} (ecosystem pinned: 1.14.0)")
-        else()
-            message(STATUS "GTest found (version unknown, ecosystem pinned: 1.14.0)")
-        endif()
+    kcenon_template_setup_testing()
+    if(KCENON_TEMPLATE_GTEST_FOUND)
         if(COMMON_BUILD_TESTS)
             add_subdirectory(tests)
         endif()
         if(COMMON_BUILD_INTEGRATION_TESTS)
             add_subdirectory(integration_tests)
         endif()
-    else()
-        message(STATUS "GTest not found, skipping tests")
     endif()
 endif()
 
-# Examples
-if(COMMON_BUILD_EXAMPLES)
+# -----------------------------------------------------------------------------
+# Step 10: examples
+# -----------------------------------------------------------------------------
+if(COMMON_BUILD_EXAMPLES AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/CMakeLists.txt")
     add_subdirectory(examples)
 endif()
 
-# Benchmarks
+# -----------------------------------------------------------------------------
+# Benchmarks (project-specific, not standardised by the template)
+# -----------------------------------------------------------------------------
 if(COMMON_BUILD_BENCHMARKS)
     find_package(benchmark QUIET)
     if(benchmark_FOUND)
@@ -346,7 +308,9 @@ if(COMMON_BUILD_BENCHMARKS)
     endif()
 endif()
 
-# Documentation
+# -----------------------------------------------------------------------------
+# Documentation (project-specific Doxygen target)
+# -----------------------------------------------------------------------------
 if(COMMON_BUILD_DOCS)
     find_package(Doxygen)
     if(DOXYGEN_FOUND)
@@ -364,7 +328,9 @@ if(COMMON_BUILD_DOCS)
     endif()
 endif()
 
-# Coverage support
+# -----------------------------------------------------------------------------
+# Coverage support (project-specific, applies to INTERFACE library)
+# -----------------------------------------------------------------------------
 if(ENABLE_COVERAGE)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(common_system INTERFACE --coverage)
@@ -375,7 +341,9 @@ if(ENABLE_COVERAGE)
     endif()
 endif()
 
-# Print configuration summary
+# -----------------------------------------------------------------------------
+# Configuration summary
+# -----------------------------------------------------------------------------
 message(STATUS "")
 message(STATUS "=== common_system Configuration ===")
 message(STATUS "Version:             ${PROJECT_VERSION}")
