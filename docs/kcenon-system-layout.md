@@ -186,10 +186,15 @@ inputs.
 
 ### Cross-build CI
 
-Structural changes that touch `cmake/` or `include/` are validated by the ecosystem
-cross-build CI workflow tracked in
-[#660](https://github.com/kcenon/common_system/issues/660), which fetches every sibling
-system at its default branch and verifies the dependency graph still builds.
+Structural changes that touch `cmake/` or `include/` are validated by the
+[`ecosystem-cross-build`](../.github/workflows/ecosystem-cross-build.yml) workflow,
+which fetches every sibling system at its default branch and rebuilds the dependency
+graph in tier order (common → thread/container/database → logger/network → monitoring
+→ pacs) against this PR's common_system. A `skip-cross-build` PR label bypasses the
+gate for emergency releases — document the rationale in the PR body when used.
+
+History: workflow extracted in
+[#660](https://github.com/kcenon/common_system/issues/660).
 
 ## Forwarding
 
