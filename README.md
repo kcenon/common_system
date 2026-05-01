@@ -266,6 +266,10 @@ include/kcenon/common/
 
 [Complete Architecture Guide](docs/ARCHITECTURE.md)
 
+### Layout Standard
+
+The kcenon ecosystem follows a canonical directory, build-system, and test-infrastructure layout defined in [kcenon-system-layout.md](docs/kcenon-system-layout.md). This standard governs all eight ecosystem systems and is owned by `common_system` as the foundation tier.
+
 ---
 
 ## Core Concepts
