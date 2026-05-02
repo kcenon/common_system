@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- Standard amendment v1.0 → v1.1: document `cmake/template/` exception for the layout-standard owner ([#671](https://github.com/kcenon/common_system/issues/671))
+
 ## [1.0.0] - 2026-04-13
 
 ### Added
