@@ -2,7 +2,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Version** | 1.0 |
+| **Version** | 1.1 |
 | **Status** | Active |
 | **Scope** | All 8 systems in the kcenon ecosystem |
 | **Owner** | common_system (this repository) |
@@ -237,6 +237,19 @@ deferred per [kcenon/common_system#657](https://github.com/kcenon/common_system/
 Non-Goals. New tests added to `pacs_system` SHOULD still prefer GTest unless a strong
 reason exists; review-time decision.
 
+### common_system: cmake/template/ sub-path
+
+`common_system` owns and vends the reusable CMake template ([#659](https://github.com/kcenon/common_system/issues/659)).
+Its canonical modules reside under `cmake/template/` rather than directly under `cmake/`,
+allowing the template to carry its own `VERSION` file and be copied verbatim by
+downstream systems. The root `CMakeLists.txt` adds `cmake/template` to
+`CMAKE_MODULE_PATH` so all `include(options)`, `include(compiler)`, etc. calls
+resolve to `cmake/template/<name>.cmake`. This layout is functionally equivalent
+to the canonical `cmake/<name>.cmake` layout and is a documented owner exception.
+
+All other systems MUST place their (copied) modules under `cmake/` directly, not
+under `cmake/template/`.
+
 ### Per-system deviations during migration
 
 While a system is mid-migration, it MAY transiently violate parts of this standard. The
@@ -262,7 +275,7 @@ This standard follows SemVer:
   Adoption is non-blocking for existing systems until their next migration phase.
 - **PATCH** — clarifications, typo fixes, non-normative wording.
 
-The current version is **v1.0**.
+The current version is **v1.1**.
 
 ## Discovery
 
