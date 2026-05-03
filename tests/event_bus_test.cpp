@@ -1,5 +1,5 @@
 /**
- * @file improved_event_bus_test.cpp
+ * @file event_bus_test.cpp
  * @brief Tests for improved Event Bus with filtering functionality
  * @date 2025-11-19
  */
