@@ -742,9 +742,6 @@ set_tests_properties(common_source_location_test PROPERTIES
     LABELS "unit;utils"
 )
 
-# Enable testing
-enable_testing()
-
 # Coverage flags for GCC/Clang
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     option(ENABLE_COVERAGE "Enable coverage reporting" OFF)

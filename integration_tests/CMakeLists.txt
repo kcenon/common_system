@@ -80,9 +80,6 @@ set_target_properties(common_integration_tests PROPERTIES
 include(GoogleTest)
 gtest_discover_tests(common_integration_tests)
 
-# Enable testing
-enable_testing()
-
 # =============================================================================
 # APPLY STRICT WARNING FLAGS
 # =============================================================================
