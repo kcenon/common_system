@@ -29,9 +29,9 @@ find_package(Threads REQUIRED)
 
 # Create test executable
 add_executable(common_system_tests
-    improved_result_test.cpp
+    result_test.cpp
     executor_test.cpp
-    improved_event_bus_test.cpp
+    event_bus_test.cpp
     main.cpp
 )
 
@@ -741,9 +741,6 @@ set_tests_properties(common_source_location_test PROPERTIES
     TIMEOUT 60
     LABELS "unit;utils"
 )
-
-# Enable testing
-enable_testing()
 
 # Coverage flags for GCC/Clang
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
