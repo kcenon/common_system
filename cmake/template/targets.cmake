@@ -21,6 +21,14 @@
 #       Attach BUILD_INTERFACE include from <build_dir> and INSTALL_INTERFACE
 #       include from <install_dir> (default: include) to <target>.
 #
+#   kcenon_template_add_build_interface_includes(<target> <visibility> <dir>...)
+#       Attach BUILD_INTERFACE-only include directories to <target> for each
+#       <dir>. Use this when an include directory must be visible during the
+#       build but should NOT be exported via INSTALL_INTERFACE (e.g., build-only
+#       test fixtures, generated code that should not be installed). For the
+#       common case where BUILD_INTERFACE and INSTALL_INTERFACE are paired, use
+#       `kcenon_template_setup_target_includes` instead.
+#
 #   kcenon_template_set_cxx_feature_std(<target> <visibility> <standard>)
 #       Apply target_compile_features for the requested C++ standard, e.g.
 #       `kcenon_template_set_cxx_feature_std(my_lib INTERFACE 20)`.
@@ -51,6 +59,23 @@ function(kcenon_template_setup_target_includes target visibility build_dir)
         $<BUILD_INTERFACE:${build_dir}>
         $<INSTALL_INTERFACE:${ARG_INSTALL_DIR}>
     )
+endfunction()
+
+function(kcenon_template_add_build_interface_includes target visibility)
+    if(NOT TARGET ${target})
+        message(FATAL_ERROR
+            "kcenon_template_add_build_interface_includes: target '${target}' does not exist")
+    endif()
+    if(ARGC LESS 3)
+        message(FATAL_ERROR
+            "kcenon_template_add_build_interface_includes: at least one <dir> argument is required")
+    endif()
+
+    foreach(_dir IN LISTS ARGN)
+        target_include_directories(${target} ${visibility}
+            $<BUILD_INTERFACE:${_dir}>
+        )
+    endforeach()
 endfunction()
 
 function(kcenon_template_set_cxx_feature_std target visibility standard)

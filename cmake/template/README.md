@@ -108,6 +108,14 @@ For a new system adopting the template:
 
        kcenon_template_apply_warnings(${PROJECT_NAME}_core)
 
+   For include directories that should be visible only at build time and NOT
+   exported (e.g., build-only test fixtures, generated code that is not
+   installed), use the BUILD_INTERFACE-only helper:
+
+       kcenon_template_add_build_interface_includes(${PROJECT_NAME}_test PRIVATE
+           "${CMAKE_CURRENT_BINARY_DIR}/generated"
+           "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
+
 8. **Register install rules** with one helper call:
 
        kcenon_template_install_headers("${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -147,7 +155,7 @@ For a new system adopting the template:
 ## Version Policy
 
 Template versioning follows [Semantic Versioning](https://semver.org/) and is
-recorded in `cmake/template/VERSION` (currently `1.0.0`).
+recorded in `cmake/template/VERSION` (currently `1.1.0`).
 
 | Bump  | Trigger                                                                            |
 |-------|-------------------------------------------------------------------------------------|
