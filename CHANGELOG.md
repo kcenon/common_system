@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `cmake/template/targets.cmake`: `kcenon_template_add_build_interface_includes(<target> <visibility> <dir>...)` helper for attaching `BUILD_INTERFACE`-only include directories without pairing with `INSTALL_INTERFACE`. Template VERSION bumped to 1.1.0 (MINOR per template versioning policy: new helper added) ([#667](https://github.com/kcenon/common_system/issues/667))
+
 ### Documentation
 
 - Standard amendment v1.0 → v1.1: document `cmake/template/` exception for the layout-standard owner ([#671](https://github.com/kcenon/common_system/issues/671))
