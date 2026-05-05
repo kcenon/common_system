@@ -1,0 +1,7 @@
+<map id="kcenon::common::di::unified_bootstrapper::shutdown" name="kcenon::common::di::unified_bootstrapper::shutdown">
+<area shape="rect" id="Node000001" title="Shutdown the unified system gracefully." alt="" coords="217,23,381,77"/>
+<area shape="rect" id="Node000002" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="60,5,115,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,38,114,25,115,19,204,33"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a414fa6bda0fcc1f2543123a2e41aa8d7" title="Request graceful shutdown." alt="" coords="5,55,169,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,67,170,72,169,67,203,62"/>
+</map>

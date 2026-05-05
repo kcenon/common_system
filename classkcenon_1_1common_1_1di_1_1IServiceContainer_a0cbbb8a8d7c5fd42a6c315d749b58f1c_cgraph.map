@@ -1,0 +1,11 @@
+<map id="kcenon::common::di::IServiceContainer::resolve_or_null" name="kcenon::common::di::IServiceContainer::resolve_or_null">
+<area shape="rect" id="Node000001" title="Try to resolve a service, returning nullptr if not found." alt="" coords="5,55,160,110"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a3bcf47fa3e841f33961bd90b4f574dbc" title="Resolve a service by its interface type." alt="" coords="208,55,363,110"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,80,194,80,194,85,160,85"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="411,5,589,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="363,59,410,46,412,52,364,65"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="421,70,579,95"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="363,80,407,80,407,85,363,85"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a0ec4bd7264a9b002f194c49e9ce1d0e4" title="Internal service resolution (type&#45;erased)." alt="" coords="423,119,577,174"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="364,103,411,117,409,122,362,108"/>
+</map>

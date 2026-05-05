@@ -1,0 +1,10 @@
+<map id="kcenon::common::interfaces::composite_health_check::check" name="kcenon::common::interfaces::composite_health_check::check">
+<area shape="rect" id="Node000001" title="Execute all child health checks and aggregate results." alt="" coords="260,91,497,131"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="425,80,409,73,379,70,353,72,337,77,331,83,334,90,329,92,326,82,334,72,352,67,379,65,410,67,427,75"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1composite__health__check.html#abef7632b3f894e95214b153185a11bed" title="Add a child health check." alt="" coords="5,5,212,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="295,90,202,63,204,58,297,85"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1composite__health__check.html#ac3b640691497cf6a30c727108906e282" title="Get all child check names." alt="" coords="5,84,212,139"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="246,114,212,114,212,109,246,109"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1composite__health__check.html#a4ae8c353c41958722760c0f2962c4567" title="Remove a child health check by name." alt="" coords="5,163,212,217"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="297,138,204,165,202,160,295,133"/>
+</map>

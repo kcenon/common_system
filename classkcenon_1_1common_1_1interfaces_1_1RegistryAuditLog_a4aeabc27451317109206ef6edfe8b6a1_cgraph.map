@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::RegistryAuditLog::set_enabled" name="kcenon::common::interfaces::RegistryAuditLog::set_enabled">
+<area shape="rect" id="Node000001" title="Enable or disable audit logging." alt="" coords="5,5,212,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a9a504751885f24d6dc8f7809e3e20fc0" title=" " alt="" coords="260,5,467,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,30,246,30,246,35,212,35"/>
+</map>

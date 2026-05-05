@@ -1,0 +1,9 @@
+<map id="include/kcenon/common/interfaces/stats.h" name="include/kcenon/common/interfaces/stats.h">
+<area shape="rect" id="Node000001" title="Convenience header for statistics interfaces." alt="" coords="112,5,293,45"/>
+<area shape="rect" id="Node000002" href="$circuit__breaker_8h.html" title="Circuit breaker pattern for fault tolerance and resilience." alt="" coords="103,93,303,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,59,205,93,200,93,200,59"/>
+<area shape="rect" id="Node000003" href="$circuit__breaker__example_8cpp.html" title=" " alt="" coords="5,181,192,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="171,144,123,183,120,179,167,140"/>
+<area shape="rect" id="Node000004" href="$resilience_8h.html" title="Umbrella header for resilience patterns." alt="" coords="216,181,397,221"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="238,140,285,179,282,183,235,144"/>
+</map>

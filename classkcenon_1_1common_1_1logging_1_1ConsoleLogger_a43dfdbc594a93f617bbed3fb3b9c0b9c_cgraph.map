@@ -1,0 +1,11 @@
+<map id="kcenon::common::logging::ConsoleLogger::log" name="kcenon::common::logging::ConsoleLogger::log">
+<area shape="rect" id="Node000001" title="Log a message with specified level." alt="" coords="5,63,196,103"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1logging_1_1ConsoleLogger.html#a660679e1b4e5fd0a337d908288bae601" title="Check if logging is enabled for the specified level." alt="" coords="245,5,449,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,60,247,46,248,51,188,65"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="268,70,427,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,80,254,80,254,85,196,85"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1interfaces.html#ad66bab9fedac640ae2f37cf07da8135e" title="Convert log level to string." alt="" coords="244,120,451,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,100,248,114,247,120,187,105"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a949338c18262cdfac1f5112d86f44da8" title="Convert an enum value to its string representation." alt="" coords="499,120,677,160"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="451,137,485,137,485,143,451,143"/>
+</map>

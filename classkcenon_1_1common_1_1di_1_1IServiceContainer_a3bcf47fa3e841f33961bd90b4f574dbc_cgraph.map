@@ -1,0 +1,9 @@
+<map id="kcenon::common::di::IServiceContainer::resolve" name="kcenon::common::di::IServiceContainer::resolve">
+<area shape="rect" id="Node000001" title="Resolve a service by its interface type." alt="" coords="5,55,160,110"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="208,5,387,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,59,208,46,209,52,161,65"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="218,70,377,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,80,204,80,204,85,161,85"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a0ec4bd7264a9b002f194c49e9ce1d0e4" title="Internal service resolution (type&#45;erased)." alt="" coords="220,119,375,174"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="161,103,208,117,206,122,160,108"/>
+</map>

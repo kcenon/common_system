@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['reason_5fphrase_0',['reason_phrase',['../structkcenon_1_1common_1_1interfaces_1_1http__response.html#af08bce7beb09205b40b7bf0a6c9f0740',1,'kcenon::common::interfaces::http_response']]],
+  ['receive_5ffailed_1',['receive_failed',['../namespacekcenon_1_1common_1_1error_1_1codes_1_1network__system.html#ab8a0ad3b150eaced65bdbe22e26eaaff',1,'kcenon::common::error::codes::network_system']]],
+  ['recovery_5fattempts_2',['recovery_attempts',['../structkcenon_1_1common_1_1interfaces_1_1health__monitor__stats.html#af93d1aace7408b92d6b56209a1cf077a',1,'kcenon::common::interfaces::health_monitor_stats']]],
+  ['recovery_5fhandlers_5f_3',['recovery_handlers_',['../classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#ad817d9e6705aae4f6ec1235f6d7946d6',1,'kcenon::common::interfaces::health_monitor']]],
+  ['register_5fsignal_5fhandlers_4',['register_signal_handlers',['../structkcenon_1_1common_1_1di_1_1bootstrapper__options.html#a5d1215f882669283bc25193118fe1230',1,'kcenon::common::di::bootstrapper_options']]],
+  ['registration_5ffn_5',['registration_fn',['../structkcenon_1_1common_1_1di_1_1unified__bootstrapper_1_1module__entry.html#a141e6e4197cd496b33617f9680d35b00',1,'kcenon::common::di::unified_bootstrapper::module_entry']]],
+  ['registry_5ffrozen_6',['REGISTRY_FROZEN',['../namespacekcenon_1_1common_1_1error__codes.html#a464ae12c1e59ecb96807c8aed804f17b',1,'kcenon::common::error_codes']]],
+  ['registry_5ffrozen_7',['registry_frozen',['../namespacekcenon_1_1common_1_1error_1_1codes_1_1common__errors.html#a0ad7569585f44be8896d2d7780b0b87c',1,'kcenon::common::error::codes::common_errors']]],
+  ['reload_5ffailed_8',['reload_failed',['../namespacekcenon_1_1common_1_1config_1_1watcher__error__codes.html#a67da60d1817dd488b7f19103487dc9a3',1,'kcenon::common::config::watcher_error_codes']]],
+  ['required_9',['required',['../structkcenon_1_1common_1_1config_1_1config__entry.html#a35f3e02fc4befd83f67095b5a0356b44',1,'kcenon::common::config::config_entry::required'],['../structkcenon_1_1common_1_1config_1_1cli__option.html#a26f125a1ef33499d20575e53a9593813',1,'kcenon::common::config::cli_option::required']]],
+  ['resolution_5forder_5f_10',['resolution_order_',['../classkcenon_1_1common_1_1di_1_1service__container.html#adce844e990239372b6bb45dbb2712c09',1,'kcenon::common::di::service_container']]],
+  ['resolution_5fstack_5f_11',['resolution_stack_',['../classkcenon_1_1common_1_1di_1_1service__container.html#a0d107df2fcf168eda5f41130df433a66',1,'kcenon::common::di::service_container']]],
+  ['result_5f_12',['result_',['../classcalculation__job.html#a9db578c1a112ef80154dea182bf71cf7',1,'calculation_job']]],
+  ['retrieve_5ffailed_13',['retrieve_failed',['../namespacekcenon_1_1common_1_1error_1_1codes_1_1pacs__system.html#a0860bb24c095a745228f5ec4c5f8096b',1,'kcenon::common::error::codes::pacs_system']]],
+  ['rollback_5ffailed_14',['rollback_failed',['../namespacekcenon_1_1common_1_1config_1_1watcher__error__codes.html#a320141a0a29ef2b5c29744e3c5ac1113',1,'kcenon::common::config::watcher_error_codes']]],
+  ['running_5f_15',['running_',['../classkcenon_1_1common_1_1config_1_1config__watcher.html#a28e8de23d2f58197c408998884588ce2',1,'kcenon::common::config::config_watcher::running_'],['../classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a1d77f6888d855b73a922c666ea3dd696',1,'kcenon::common::interfaces::health_monitor::running_'],['../classkcenon_1_1common_1_1simple__event__bus.html#aa63cc7922632c9b31e96eb88f144df7e',1,'kcenon::common::simple_event_bus::running_'],['../classkcenon_1_1common_1_1patterns_1_1SimpleEventBus.html#a32c261ad51d07f9696ffa07bf76b0ec9',1,'kcenon::common::patterns::SimpleEventBus::running_'],['../classmock__executor.html#acccc4d731b1aa690f56c1a91a087cb2b',1,'mock_executor::running_']]]
+];

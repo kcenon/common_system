@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::health_dependency_graph::check_with_dependencies" name="kcenon::common::interfaces::health_dependency_graph::check_with_dependencies">
+<area shape="rect" id="Node000001" title="Execute health check with its dependencies." alt="" coords="540,30,747,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a570035e1b10ca85e8ca6e5a1236942b7" title="Execute a specific health check." alt="" coords="285,5,492,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="526,45,492,41,493,36,527,40"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#af4b19e20f43c9609d22f5a3e1d7cad6e" title="Refresh all health checks." alt="" coords="285,69,492,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="527,75,493,79,492,74,526,69"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#ad1956eeb958289857e4cb066413b6d04" title="Register a health check." alt="" coords="5,5,237,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="271,28,237,28,237,23,271,23"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="kcenon::common::err" name="kcenon::common::err">
+<area shape="rect" id="Node000001" title="Factory function to create error VoidResult." alt="" coords="336,85,496,111"/>
+<area shape="rect" id="Node000002" href="$classmock__executor.html#a189c07fb5e1b034fa96f125ac5a1eddf" title="Execute a job with Result&#45;based error handling." alt="" coords="108,5,288,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="368,83,287,53,234,33,236,28,289,47,370,78"/>
+<area shape="rect" id="Node000003" href="$executor__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,56,60,81"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="322,94,60,73,60,68,323,88"/>
+<area shape="rect" id="Node000004" href="$classmock__executor.html#a1bcb6f29ec02515e19e838ae650000a4" title="Execute a job with delay." alt="" coords="108,106,288,146"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="323,113,288,117,288,112,322,107"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#aa88899347c418be2f2ec62277263849b" title="Create an error result from existing error_info." alt="" coords="109,170,287,210"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="379,119,289,160,258,172,256,167,287,156,376,114"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="144,37,61,63,59,58,142,32"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="126,104,59,80,61,75,128,99"/>
+</map>

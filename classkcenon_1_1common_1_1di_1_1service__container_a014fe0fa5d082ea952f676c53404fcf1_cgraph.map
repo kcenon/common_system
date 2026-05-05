@@ -1,0 +1,40 @@
+<map id="kcenon::common::di::service_container::register_factory_internal" name="kcenon::common::di::service_container::register_factory_internal">
+<area shape="rect" id="Node000001" title="Internal factory registration (type&#45;erased)." alt="" coords="5,267,196,321"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a0aeec6af1734087f6ad1737990af00b6" title="Check if a service is already registered and log audit event if so." alt="" coords="257,267,454,321"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,291,243,291,243,297,196,297"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1common_1_1source__location.html#a5fd7c0b9f341514229ccd072b922e57b" title=" " alt="" coords="529,221,714,261"/>
+<area shape="poly" id="edge20_Node000001_Node000003" title=" " alt="" coords="190,264,244,253,385,239,515,236,515,241,385,244,244,258,191,269"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a4725bb12d65c196bea2967dd702c76ae" title="Log a registry event." alt="" coords="515,157,728,197"/>
+<area shape="poly" id="edge21_Node000001_Node000006" title=" " alt="" coords="150,264,194,243,243,225,308,208,375,196,500,181,501,186,376,201,310,214,245,230,197,248,152,269"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="518,428,725,453"/>
+<area shape="poly" id="edge22_Node000001_Node000012" title=" " alt="" coords="127,320,178,368,210,392,245,410,309,430,377,442,443,447,504,447,504,453,443,452,376,447,308,435,243,415,207,396,174,373,124,324"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1common_1_1di_1_1service__container.html#aa88e3771e49a2df6aa1691ae7e6a28d5" title="Check if container is frozen and log audit event if so." alt="" coords="244,345,467,400"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="191,319,254,339,252,344,189,324"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="454,272,515,259,516,264,455,277"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="401,264,454,235,514,206,533,199,535,204,516,211,456,239,403,269"/>
+<area shape="rect" id="Node000011" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="532,285,711,325"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="454,295,518,298,518,303,454,301"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="450,319,468,332,485,354,493,375,500,396,516,415,524,420,521,424,513,419,495,398,488,377,481,356,465,336,447,324"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1common_1_1source__location.html#aa50891e5f2765b0347e60affe5a58d46" title=" " alt="" coords="793,285,978,325"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="705,258,790,279,789,284,704,263"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1common_1_1source__location.html#a1c02d811711fb5f63b1e066b6ef86fa5" title=" " alt="" coords="790,221,981,261"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="714,238,777,238,777,243,714,243"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a8a375905bb26e9309a4b2cb4e41a1835" title=" " alt="" coords="782,77,989,132"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="695,154,771,133,772,138,696,159"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#aa7d54860d21f911867d2684b1b899139" title=" " alt="" coords="776,157,995,197"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="728,174,763,174,763,179,728,179"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a6dc271e618f78d162852bb23b9e82562" title="Check if audit logging is enabled." alt="" coords="776,13,995,53"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="643,154,701,109,737,84,775,62,791,55,793,60,777,67,739,88,704,113,647,159"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a9a504751885f24d6dc8f7809e3e20fc0" title=" " alt="" coords="1043,5,1249,60"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="995,30,1029,30,1029,35,995,35"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="794,453,977,493"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="725,451,780,457,780,463,725,456"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="794,389,977,429"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="725,426,780,419,780,424,725,431"/>
+<area shape="poly" id="edge15_Node000015_Node000003" title=" " alt="" coords="447,343,465,332,480,317,488,302,497,286,513,271,523,265,525,269,516,275,501,289,493,304,484,320,468,336,450,347"/>
+<area shape="poly" id="edge17_Node000015_Node000006" title=" " alt="" coords="451,343,465,332,477,317,483,302,488,271,492,239,500,223,513,207,518,203,521,207,517,211,504,225,497,240,493,271,489,303,481,320,469,336,454,347"/>
+<area shape="poly" id="edge18_Node000015_Node000011" title=" " alt="" coords="462,343,528,326,530,331,463,348"/>
+<area shape="poly" id="edge19_Node000015_Node000012" title=" " alt="" coords="453,397,515,414,549,422,548,427,514,419,451,403"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a85dc57d964e6dcdbe88ceb20c43c6a23" title="Check if the container is frozen." alt="" coords="544,349,699,404"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="467,372,530,373,530,378,467,377"/>
+</map>

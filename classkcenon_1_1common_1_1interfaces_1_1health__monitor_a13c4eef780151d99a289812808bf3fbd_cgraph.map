@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::health_monitor::get_check_names" name="kcenon::common::interfaces::health_monitor::get_check_names">
+<area shape="rect" id="Node000001" title="Get all registered check names." alt="" coords="5,13,260,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#adaf68d42a570ae2751dbed6d2249d76b" title="Get all node names." alt="" coords="308,5,515,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,30,294,30,294,35,260,35"/>
+</map>

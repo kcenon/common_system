@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::NullLogger::log" name="kcenon::common::interfaces::NullLogger::log">
+<area shape="rect" id="Node000001" title="Log a message with specified level." alt="" coords="5,37,212,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="260,45,467,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,55,246,55,246,60,212,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="515,5,697,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="460,42,501,36,501,42,460,47"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="515,69,697,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="460,67,501,73,501,78,460,73"/>
+</map>

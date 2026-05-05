@@ -1,0 +1,9 @@
+<map id="kcenon::common::di::service_scope::clear" name="kcenon::common::di::service_scope::clear">
+<area shape="rect" id="Node000001" title="Clear all registrations." alt="" coords="5,37,168,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="216,45,423,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,55,202,55,202,60,168,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="471,5,653,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="416,42,457,36,457,42,416,47"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="471,69,653,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="416,67,457,73,457,78,416,73"/>
+</map>

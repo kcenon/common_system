@@ -1,0 +1,26 @@
+<map id="kcenon::common::bootstrap::SystemBootstrapper" name="kcenon::common::bootstrap::SystemBootstrapper">
+<area shape="rect" id="Node000001" title="Fluent API for system initialization and logger registration." alt="" coords="359,620,587,1149"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="167,448,334,543"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="272,542,297,595,353,693,349,696,292,597,267,544"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="44,291,241,371"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="138,371,139,397,146,423,158,439,153,442,142,425,133,398,133,371"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="31,148,110,213"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="75,213,80,239,89,266,95,276,91,279,84,268,75,241,70,214"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,136,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="73,99,73,148,68,148,68,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="134,148,271,213"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="187,227,161,291,156,289,182,225"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="174,13,205,78"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="191,78,193,124,194,131,189,132,188,124,186,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="282,13,313,78"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="292,79,283,103,270,125,260,138,256,135,266,123,278,100,287,77"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="371,298,493,363"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="359,340,328,346,298,358,271,374,249,396,240,421,240,448,235,448,234,420,244,393,267,370,296,353,327,341,357,334"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="387,455,565,535"/>
+<area shape="poly" id="edge11_Node000011_Node000009" title=" " alt="" coords="448,376,453,394,469,455,464,456,448,395,443,377"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="421,148,443,213"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="435,214,435,282,429,282,429,214"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="478,536,477,567,477,603,472,603,472,567,472,536"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="606,463,690,528"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="643,529,621,597,597,654,592,652,616,595,638,527"/>
+</map>

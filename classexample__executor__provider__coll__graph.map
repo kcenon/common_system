@@ -1,0 +1,13 @@
+<map id="example_executor_provider" name="example_executor_provider">
+<area shape="rect" id="Node000001" title=" " alt="" coords="29,793,223,879"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutorProvider.html" title="Interface for modules that provide executor implementations." alt="" coords="5,551,204,731"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,744,124,793,119,793,113,745"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="229,593,402,688"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="272,690,180,783,177,779,268,686"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutor.html" title="Abstract interface for task execution systems." alt="" coords="151,133,349,473"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,473,306,577,301,578,280,474"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="373,271,522,336"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="432,350,336,594,331,592,427,348"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="436,5,459,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="450,71,450,255,445,255,445,71"/>
+</map>

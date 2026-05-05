@@ -1,0 +1,21 @@
+<map id="kcenon::common::di::service_container::resolve_internal" name="kcenon::common::di::service_container::resolve_internal">
+<area shape="rect" id="Node000001" title="Internal service resolution (type&#45;erased)." alt="" coords="5,215,160,270"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a70c68eb04143cbd63a3ab4c38b091afc" title="Resolve a service with circular dependency detection." alt="" coords="208,215,389,270"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,240,194,240,194,245,160,245"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a50ecd7a8e36097a6fee4259f70bf9836" title="Get current resolution stack as string for error messages." alt="" coords="437,5,603,75"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="320,213,371,155,436,91,449,81,452,85,439,95,374,158,324,217"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1service__container.html#af79dcc747ebf8d8e987827c8a92547cc" title="Safely invoke a factory function with exception handling." alt="" coords="439,150,601,205"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="389,213,425,202,427,208,390,218"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="651,127,829,167"/>
+<area shape="poly" id="edge7_Node000002_Node000005" title=" " alt="" coords="323,213,372,170,403,150,436,135,487,123,539,118,590,119,638,123,637,129,590,124,539,123,488,128,438,140,406,155,376,174,327,217"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="661,195,819,221"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="390,233,646,213,647,218,390,238"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a44cb2bff0a187e45f0fa708661f3fb3a" title="Check if currently resolving this type (circular dependency check)." alt="" coords="443,281,597,335"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="390,267,430,279,429,284,389,272"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1di_1_1service__container.html#af9e12f9226346f25221c4814b31d02ae" title="Pop type from resolution stack." alt="" coords="443,359,597,414"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="334,268,382,307,439,346,447,350,444,355,436,350,379,311,330,272"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a8e6ef062755155aec4a72b876bccadd2" title="Push type onto resolution stack." alt="" coords="443,438,597,493"/>
+<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="317,269,366,345,400,387,439,425,444,428,440,432,436,429,396,390,362,348,313,272"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="601,163,637,158,637,164,601,169"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="601,186,647,192,647,198,601,191"/>
+</map>

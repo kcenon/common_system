@@ -1,0 +1,19 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,145,60,171"/>
+<area shape="rect" id="Node000002" href="$concepts__showcase__example_8cpp.html#a58c020e516e5b190651fbb217cae0e6b" title=" " alt="" coords="141,5,254,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="36,144,61,94,81,66,106,41,126,30,129,35,110,45,85,69,65,97,41,146"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="108,55,287,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="49,143,107,105,121,98,123,103,109,110,52,147"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="118,120,277,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="60,151,104,144,105,150,60,157"/>
+<area shape="rect" id="Node000005" href="$concepts__showcase__example_8cpp.html#a449d229f3cf2cdf2a5664535a78159b0" title=" " alt="" coords="161,169,233,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="60,159,148,172,147,177,60,164"/>
+<area shape="rect" id="Node000006" href="$concepts__showcase__example_8cpp.html#a54e096f5ff47ebb4ccc6dc31685eeaed" title=" " alt="" coords="145,219,250,244"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="52,169,78,187,109,204,132,213,130,218,107,208,76,191,49,173"/>
+<area shape="rect" id="Node000009" href="$concepts__showcase__example_8cpp.html#a3340f86dc1b99236dc9058db5f76f046" title=" " alt="" coords="133,268,261,293"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="43,169,68,211,87,234,110,253,122,260,119,265,106,258,83,238,64,214,38,172"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1Result.html#af69cb1d69a1b197fede62e3375fdcd8e" title="Get value or return default." alt="" coords="335,211,517,251"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="251,229,321,229,321,234,251,234"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1Result.html#ae1c46f3fbe20b6e91dd1667c6ec6c33f" title="Check if result contains a successful value." alt="" coords="565,211,748,251"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="517,229,552,229,552,234,517,234"/>
+</map>

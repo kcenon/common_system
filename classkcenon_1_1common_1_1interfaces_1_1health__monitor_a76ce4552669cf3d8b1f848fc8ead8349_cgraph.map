@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::health_monitor::get_overall_status_string" name="kcenon::common::interfaces::health_monitor::get_overall_status_string">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,41,216,96"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#add0f85a71658c4b1110bacc8ffcbd2cb" title=" " alt="" coords="264,5,475,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,51,250,47,251,52,216,57"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common_1_1interfaces.html#ad66bab9fedac640ae2f37cf07da8135e" title="Convert log level to string." alt="" coords="266,85,473,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,81,253,86,252,91,216,86"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a949338c18262cdfac1f5112d86f44da8" title="Convert an enum value to its string representation." alt="" coords="523,85,701,125"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="473,102,509,102,509,107,473,107"/>
+</map>

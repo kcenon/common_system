@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::null_metric_collector" name="kcenon::common::interfaces::null_metric_collector">
+<area shape="rect" id="Node000001" title="No&#45;op implementation for when metrics are disabled." alt="" coords="5,248,204,423"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IMetricCollector.html" title="Abstract interface for collecting metrics across modules." alt="" coords="5,5,204,200"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,214,107,248,102,248,102,214"/>
+</map>

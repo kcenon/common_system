@@ -1,0 +1,5 @@
+<map id="kcenon::common::logging::ConsoleLogger" name="kcenon::common::logging::ConsoleLogger">
+<area shape="rect" id="Node000001" title="Simple console logger implementation." alt="" coords="13,333,196,533"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1ILogger.html" title="Standard interface for logging implementations." alt="" coords="5,5,204,285"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,299,107,333,102,333,102,299"/>
+</map>

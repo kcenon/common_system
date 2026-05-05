@@ -1,0 +1,20 @@
+<map id="include/kcenon/common/concepts/service.h" name="include/kcenon/common/concepts/service.h">
+<area shape="rect" id="Node000001" title="C++20 concepts for dependency injection and service container." alt="" coords="335,5,516,45"/>
+<area shape="rect" id="Node000002" href="$concepts_8h.html" title="Unified header for all C++20 concepts in common_system." alt="" coords="129,101,311,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="373,53,263,103,260,98,370,48"/>
+<area shape="rect" id="Node000003" href="$service__container__interface_8h.html" title="Service container interfaces for dependency injection." alt="" coords="335,93,516,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="428,59,428,93,423,93,423,59"/>
+<area shape="rect" id="Node000008" href="$unified__bootstrapper_8h.html" title="Unified system bootstrapper for initialization and shutdown." alt="" coords="501,284,688,324"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="481,50,507,68,530,92,559,142,578,196,590,246,596,284,590,284,585,247,573,197,554,144,526,95,504,73,478,54"/>
+<area shape="rect" id="Node000004" href="$service__container_8h.html" title="Implementation of the service container for dependency injection." alt="" coords="320,196,501,236"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="422,162,416,196,411,196,416,161"/>
+<area shape="rect" id="Node000005" href="$service__container__example_8cpp.html" title=" " alt="" coords="5,284,211,324"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="332,242,175,287,174,281,330,237"/>
+<area shape="rect" id="Node000006" href="$system__bootstrapper_8h.html" title="SystemBootstrapper implementation for runtime binding." alt="" coords="235,284,477,324"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="393,249,370,285,366,282,389,246"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="465,239,556,282,553,286,462,244"/>
+<area shape="rect" id="Node000007" href="$common_8h.html" title="Aggregated public header for Common System." alt="" coords="265,372,447,412"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="359,338,359,372,353,372,353,338"/>
+<area shape="rect" id="Node000009" href="$main_8cpp.html" title=" " alt="" coords="505,372,684,412"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="597,338,597,372,592,372,592,338"/>
+</map>

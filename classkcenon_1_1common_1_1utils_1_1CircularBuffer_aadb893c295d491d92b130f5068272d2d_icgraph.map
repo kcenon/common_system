@@ -1,0 +1,16 @@
+<map id="kcenon::common::utils::CircularBuffer::advance" name="kcenon::common::utils::CircularBuffer::advance">
+<area shape="rect" id="Node000001" title=" " alt="" coords="545,69,728,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#aaf0baefd79668adca38b75e2c96f872d" title=" " alt="" coords="327,62,497,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,92,497,92,497,87,532,87"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a5aa446f1ad8263592f891d2a4af7916e" title=" " alt="" coords="108,5,279,45"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="560,68,497,53,383,38,279,31,279,25,384,33,498,48,561,63"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a43017e25e38a21b627a84a350bae1393" title=" " alt="" coords="108,133,279,173"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="564,116,498,132,384,147,279,154,279,149,383,142,497,127,563,111"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a73a78af1f30e873af63e4f163dc45e78" title=" " alt="" coords="108,69,279,109"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="313,92,279,92,279,87,313,87"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="313,63,261,48,263,43,314,58"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="314,121,263,136,261,131,313,116"/>
+<area shape="rect" id="Node000004" href="$utility__containers__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,45,60,70"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,72,60,65,61,60,95,67"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="95,48,61,55,60,49,94,42"/>
+</map>

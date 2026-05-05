@@ -1,0 +1,13 @@
+<map id="kcenon::common::di::unified_bootstrapper::register_module" name="kcenon::common::di::unified_bootstrapper::register_module">
+<area shape="rect" id="Node000001" title="Register a module&#39;s service registration function." alt="" coords="5,77,169,132"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a84c4752ee985166ef458dc61626066f8" title="Get the global service container instance." alt="" coords="243,5,398,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,77,229,58,231,63,170,82"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="231,85,410,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,102,218,102,218,107,169,107"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="217,149,424,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,122,218,134,255,143,254,149,217,139,169,127"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="472,110,655,150"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="417,147,458,141,459,146,418,152"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="472,174,655,214"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="418,172,459,178,458,183,417,177"/>
+</map>

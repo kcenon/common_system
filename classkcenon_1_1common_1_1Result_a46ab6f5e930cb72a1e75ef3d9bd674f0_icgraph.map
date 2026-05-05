@@ -1,0 +1,5 @@
+<map id="kcenon::common::Result::uninitialized" name="kcenon::common::Result::uninitialized">
+<area shape="rect" id="Node000001" title="Create an explicitly uninitialized result (use with caution)" alt="" coords="273,5,456,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a59c1599134bc523ddbdde0b9504e8c0d" title="Map a function over a successful result." alt="" coords="5,13,225,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,28,225,28,225,23,260,23"/>
+</map>

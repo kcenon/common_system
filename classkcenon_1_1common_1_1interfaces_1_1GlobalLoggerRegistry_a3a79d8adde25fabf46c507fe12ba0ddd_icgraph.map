@@ -1,0 +1,17 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::clear" name="kcenon::common::interfaces::GlobalLoggerRegistry::clear">
+<area shape="rect" id="Node000001" title="Clear all registered loggers and factories." alt="" coords="825,69,1035,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a416e9fd173411a9fd1d0230fc7d57c8e" title="Clear all loggers from GlobalLoggerRegistry." alt="" coords="573,62,777,117"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="812,92,777,92,777,87,812,87"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a1cbc4ee14ba6fd89408946192e4762ea" title="Register all loggers with GlobalLoggerRegistry." alt="" coords="297,13,519,67"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="559,71,518,63,519,58,560,65"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a5656c3dcd7a7a2b320df65f7c55e5fbe" title="Shutdown the system." alt="" coords="291,105,525,145"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="560,107,526,112,525,107,560,102"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#aa5f0272e260c981dce32436aac02794d" title="Initialize the system." alt="" coords="11,5,237,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="284,36,237,34,238,29,284,31"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a385c980491500d6b34029561755a02d7" title=" " alt="" coords="5,69,243,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="277,111,243,107,243,102,278,106"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a49d3fac057aff9ce6e5159fe01cea2f8" title="Reset the bootstrapper to initial state." alt="" coords="22,133,226,173"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="277,141,227,146,226,141,277,136"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a67ba22e11495f4c6dfaaf3b87269870f" title="Destructor with automatic shutdown." alt="" coords="22,198,226,253"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="341,153,244,188,208,200,206,195,242,183,339,148"/>
+</map>

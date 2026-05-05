@@ -1,0 +1,9 @@
+<map id="kcenon::common::resilience::failure_window::reset" name="kcenon::common::resilience::failure_window::reset">
+<area shape="rect" id="Node000001" title="Clear all recorded failures." alt="" coords="765,13,971,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a7ac865c772bac7f00d19f4e3d50e6460" title="Transition to CLOSED state. Must be called with mutex locked." alt="" coords="512,5,717,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="751,35,718,35,718,30,751,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#aecea9b2c6a44bbb6f2e94e435a03fd4a" title="Record a successful operation. May trigger state transition from HALF_OPEN to CLOSED." alt="" coords="259,5,464,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="498,35,464,35,464,30,498,30"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker_1_1guard.html#a80b44511cdec1fc19afd332de65a7248" title="Explicitly mark operation as successful. Prevents automatic failure recording on destruction." alt="" coords="5,5,211,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,35,211,35,211,30,245,30"/>
+</map>

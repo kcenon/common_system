@@ -1,0 +1,16 @@
+<map id="src/modules/logging.cppm" name="src/modules/logging.cppm">
+<area shape="rect" id="Node000001" title="C++20 module partition for logging utilities." alt="" coords="197,5,390,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,85,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="254,33,99,77,98,72,253,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,79,187,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="271,33,185,75,183,70,269,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="211,79,285,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="288,32,265,69,260,66,284,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="309,79,368,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="303,30,326,66,322,69,299,32"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="393,79,490,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="318,28,406,70,404,75,316,33"/>
+<area shape="rect" id="Node000007" href="$common_8cppm.html" title="Primary C++20 module for common_system." alt="" coords="514,79,758,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="349,28,568,73,567,78,348,33"/>
+<area shape="poly" id="edge7_Node000007_Node000007" title=" " alt="" coords="704,76,758,77,777,82,785,91,778,100,763,105,718,107,717,102,762,100,775,96,779,91,774,87,758,82,704,81"/>
+</map>

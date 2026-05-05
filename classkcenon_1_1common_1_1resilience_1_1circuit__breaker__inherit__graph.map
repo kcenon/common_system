@@ -1,0 +1,5 @@
+<map id="kcenon::common::resilience::circuit_breaker" name="kcenon::common::resilience::circuit_breaker">
+<area shape="rect" id="Node000001" title="Thread&#45;safe circuit breaker for fault tolerance." alt="" coords="6,213,203,668"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html" title="Interface for components that expose statistics." alt="" coords="5,5,204,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,179,107,213,102,213,102,179"/>
+</map>

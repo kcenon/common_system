@@ -1,0 +1,8 @@
+<map id="include/kcenon/common/interfaces/monitoring/health_dependency_graph.h" name="include/kcenon/common/interfaces/monitoring/health_dependency_graph.h">
+<area shape="rect" id="Node000001" title="DAG&#45;based health check dependency management." alt="" coords="5,5,215,60"/>
+<area shape="rect" id="Node000002" href="$interfaces_2monitoring_8h.html" title="Umbrella header for monitoring interfaces." alt="" coords="19,211,201,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,73,74,109,69,135,74,162,84,187,97,209,93,212,79,189,69,163,64,135,69,107,83,71"/>
+<area shape="rect" id="Node000003" href="$health__monitor_8h.html" title="Health monitoring system with dependency management." alt="" coords="83,108,265,163"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,70,160,106,155,109,132,73"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="150,176,125,212,121,209,146,173"/>
+</map>

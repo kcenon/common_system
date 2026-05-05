@@ -1,0 +1,7 @@
+<map id="kcenon::common::common_error_category::instance" name="kcenon::common::common_error_category::instance">
+<area shape="rect" id="Node000001" title="Returns the singleton instance of common_error_category." alt="" coords="232,37,431,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1typed__error__code.html#af8197a90f79cefb4d901b3435a4badc0" title="Clears the error code to success state." alt="" coords="5,5,184,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,45,184,40,185,35,219,39"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a255a516e63c0ec875e564dd36a1a22b4" title="Creates a typed_error_code from common_error_category::codes enum." alt="" coords="5,69,184,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,75,185,80,184,75,218,70"/>
+</map>

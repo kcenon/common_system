@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::IServiceContainer::register_instance_internal" name="kcenon::common::di::IServiceContainer::register_instance_internal">
+<area shape="rect" id="Node000001" title="Internal instance registration (type&#45;erased)." alt="" coords="208,5,407,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a97dbef167bde62c68c99576789ddf34d" title="Register a pre&#45;existing instance as a singleton." alt="" coords="5,5,160,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,35,160,35,160,30,194,30"/>
+</map>

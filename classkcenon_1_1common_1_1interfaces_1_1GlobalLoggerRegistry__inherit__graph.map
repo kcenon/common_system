@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry" name="kcenon::common::interfaces::GlobalLoggerRegistry">
+<area shape="rect" id="Node000001" title="Thread&#45;safe singleton registry for managing logger instances." alt="" coords="5,353,204,868"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1ILoggerRegistry.html" title="Phase 2: Global logger registry interface." alt="" coords="5,5,204,305"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,319,107,353,102,353,102,319"/>
+</map>

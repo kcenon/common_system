@@ -1,0 +1,16 @@
+<map id="kcenon::common::logging::is_enabled" name="kcenon::common::logging::is_enabled">
+<area shape="rect" id="Node000001" title="Check if a log level is enabled for the default logger." alt="" coords="5,131,196,171"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common_1_1interfaces.html#aa135ed0b04261f3bd00a14d2eefceb98" title="Get the default logger from the global registry." alt="" coords="244,131,451,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,149,230,149,230,154,196,154"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#ae02949b4310e80d0cd1ef05426239d56" title="Get the default logger." alt="" coords="499,72,705,127"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="445,129,485,120,486,126,446,134"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a02c8b4e1a985960aca55e21ff2267d55" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="499,175,705,229"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="449,169,486,176,485,181,448,174"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a34c41dbebdc9777c1d13df6c3b66c559" title="Create default logger from factory if available." alt="" coords="753,5,960,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="705,70,739,61,741,66,706,75"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a7359ad05bf4d6d0bf11a094cbc3f3ebd" title="Get the shared NullLogger instance." alt="" coords="753,84,960,139"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="706,102,740,103,740,108,705,107"/>
+<area shape="poly" id="edge7_Node000006_Node000006" title=" " alt="" coords="553,175,553,164,562,156,578,150,602,148,631,151,647,159,644,164,629,156,602,153,579,155,565,160,558,166,558,175"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#af1a784a19fb001281f6f340c8aa9dd7a" title=" " alt="" coords="753,175,960,229"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="705,199,740,199,740,205,705,205"/>
+</map>

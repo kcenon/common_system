@@ -1,0 +1,34 @@
+<map id="kcenon::common::bootstrap::SystemBootstrapper::operator=" name="kcenon::common::bootstrap::SystemBootstrapper::operator=">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,248,243,288"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a5656c3dcd7a7a2b320df65f7c55e5fbe" title="Shutdown the system." alt="" coords="291,248,525,288"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,265,277,265,277,271,243,271"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a416e9fd173411a9fd1d0230fc7d57c8e" title="Clear all loggers from GlobalLoggerRegistry." alt="" coords="583,201,787,255"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="525,248,569,242,569,247,526,254"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a93b9cfe62a6b5affdc008a98768bdb17" title="Execute all shutdown callbacks in reverse order." alt="" coords="573,279,796,334"/>
+<area shape="poly" id="edge16_Node000002_Node000016" title=" " alt="" coords="526,282,560,287,559,292,525,287"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a3a79d8adde25fabf46c507fe12ba0ddd" title="Clear all registered loggers and factories." alt="" coords="844,153,1053,193"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="786,204,838,194,839,199,788,209"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a02c8b4e1a985960aca55e21ff2267d55" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="845,254,1052,309"/>
+<area shape="poly" id="edge13_Node000003_Node000014" title=" " alt="" coords="788,246,833,255,832,260,787,251"/>
+<area shape="rect" id="Node000005" href="$structkcenon_1_1common_1_1source__location.html#a5fd7c0b9f341514229ccd072b922e57b" title=" " alt="" coords="1115,69,1301,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1006,151,1101,119,1125,111,1127,116,1102,124,1008,156"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a512ed5329574658b99ff28ee12e7d67e" title="Check if the registry is frozen." alt="" coords="1105,134,1311,189"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="1054,166,1091,164,1091,169,1054,171"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a4725bb12d65c196bea2967dd702c76ae" title="Log a registry event." alt="" coords="1101,213,1315,253"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="1036,191,1108,208,1107,213,1035,196"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1common_1_1source__location.html#aa50891e5f2765b0347e60affe5a58d46" title=" " alt="" coords="1379,5,1565,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1291,67,1375,46,1377,51,1292,72"/>
+<area shape="rect" id="Node000007" href="$structkcenon_1_1common_1_1source__location.html#a1c02d811711fb5f63b1e066b6ef86fa5" title=" " alt="" coords="1377,69,1567,109"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1301,87,1363,87,1363,92,1301,92"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a8a375905bb26e9309a4b2cb4e41a1835" title=" " alt="" coords="1369,134,1575,189"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1281,211,1358,190,1359,195,1283,216"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#aa7d54860d21f911867d2684b1b899139" title=" " alt="" coords="1363,213,1581,253"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="1315,231,1349,231,1349,236,1315,236"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a6dc271e618f78d162852bb23b9e82562" title="Check if audit logging is enabled." alt="" coords="1363,277,1581,317"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="1292,251,1377,272,1375,277,1291,256"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a9a504751885f24d6dc8f7809e3e20fc0" title=" " alt="" coords="1629,270,1836,325"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="1582,295,1615,295,1615,300,1582,300"/>
+<area shape="poly" id="edge15_Node000014_Node000014" title=" " alt="" coords="898,254,899,244,908,235,924,229,949,227,978,230,994,238,992,243,976,236,949,233,925,235,910,239,904,246,904,254"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#af1a784a19fb001281f6f340c8aa9dd7a" title=" " alt="" coords="1105,278,1311,333"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="1052,288,1091,292,1091,297,1052,294"/>
+</map>

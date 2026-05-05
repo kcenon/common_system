@@ -1,0 +1,12 @@
+<map id="kcenon::common::interfaces::health_monitor::get_health_report" name="kcenon::common::interfaces::health_monitor::get_health_report">
+<area shape="rect" id="Node000001" title="Get a formatted health report." alt="" coords="5,53,257,93"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a76ce4552669cf3d8b1f848fc8ead8349" title=" " alt="" coords="305,12,516,67"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,55,291,51,292,56,258,60"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1interfaces.html#ad66bab9fedac640ae2f37cf07da8135e" title="Convert log level to string." alt="" coords="566,85,773,125"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="258,77,552,95,552,100,257,83"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#add0f85a71658c4b1110bacc8ffcbd2cb" title=" " alt="" coords="564,5,775,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="516,34,550,33,551,38,516,39"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="517,63,577,79,576,84,515,68"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a949338c18262cdfac1f5112d86f44da8" title="Convert an enum value to its string representation." alt="" coords="823,85,1001,125"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="773,102,809,102,809,107,773,107"/>
+</map>

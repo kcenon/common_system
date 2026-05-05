@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::freeze" name="kcenon::common::interfaces::GlobalLoggerRegistry::freeze">
+<area shape="rect" id="Node000001" title="Freeze the registry to prevent further modifications." alt="" coords="280,5,499,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#aa5f0272e260c981dce32436aac02794d" title="Initialize the system." alt="" coords="5,5,232,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="266,28,232,28,232,23,266,23"/>
+</map>

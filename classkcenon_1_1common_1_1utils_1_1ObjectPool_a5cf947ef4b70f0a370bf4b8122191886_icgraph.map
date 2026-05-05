@@ -1,0 +1,7 @@
+<map id="kcenon::common::utils::ObjectPool::acquire" name="kcenon::common::utils::ObjectPool::acquire">
+<area shape="rect" id="Node000001" title="Acquire an object constructed with the provided arguments." alt="" coords="224,35,395,75"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#adfddfda1df9ad0a20cac6d188e74803d" title=" " alt="" coords="5,5,176,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,44,176,39,177,34,211,39"/>
+<area shape="rect" id="Node000003" href="$utility__containers__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="63,70,118,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,70,119,82,118,77,210,65"/>
+</map>

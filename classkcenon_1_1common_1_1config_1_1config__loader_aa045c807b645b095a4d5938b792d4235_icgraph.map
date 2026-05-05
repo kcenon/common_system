@@ -1,0 +1,13 @@
+<map id="kcenon::common::config::config_loader::load" name="kcenon::common::config::config_loader::load">
+<area shape="rect" id="Node000001" title="Load configuration from a YAML file." alt="" coords="585,85,767,125"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#aa8595af6b31d44961f36b06cc1d81862" title="Construct a config_watcher for the specified file." alt="" coords="347,5,528,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="595,83,528,63,529,57,597,78"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#ada3aa379cebe7a7a594b4eb3eaba432a" title="Perform the actual configuration reload." alt="" coords="337,85,537,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="572,107,538,107,538,102,572,102"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1config_1_1cli__config__parser.html#a224d96444e96617c5a3109734a466dc9" title="Load configuration with CLI overrides." alt="" coords="347,149,528,204"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="597,131,529,152,528,147,595,126"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#a5a97d18557ca5e2f4597b9ca19761035" title="Manually trigger a configuration reload." alt="" coords="108,85,289,125"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="324,107,290,107,290,102,324,102"/>
+<area shape="rect" id="Node000005" href="$config__watcher__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,92,60,117"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,107,60,107,60,102,94,102"/>
+</map>

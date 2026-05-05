@@ -1,0 +1,7 @@
+<map id="kcenon::common::resilience::failure_window::record_failure" name="kcenon::common::resilience::failure_window::record_failure">
+<area shape="rect" id="Node000001" title="Record a new failure at current time." alt="" coords="512,5,717,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a5537ade523f40485c285914cf68a4225" title="Record a failed operation. May trigger state transition to OPEN or back to OPEN from HALF_OPEN." alt="" coords="259,5,464,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="498,35,464,35,464,30,498,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker_1_1guard.html#a4d612c9f3e4876bf4164dd4a67eaf39b" title=" " alt="" coords="5,5,211,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,35,211,35,211,30,245,30"/>
+</map>

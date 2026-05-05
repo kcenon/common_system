@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::lambda_health_check" name="kcenon::common::interfaces::lambda_health_check">
+<area shape="rect" id="Node000001" title="Health check implementation using a lambda function." alt="" coords="27,477,225,717"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__check.html" title="Abstract base class for health checks." alt="" coords="5,135,204,415"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,428,121,477,115,477,112,429"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="228,242,307,307"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,309,218,416,196,464,191,462,213,414,254,307"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="202,5,333,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="270,99,270,242,265,242,265,99"/>
+</map>

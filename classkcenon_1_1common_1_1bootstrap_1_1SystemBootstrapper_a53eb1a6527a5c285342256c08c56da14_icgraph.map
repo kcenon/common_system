@@ -1,0 +1,5 @@
+<map id="kcenon::common::bootstrap::SystemBootstrapper::is_initialized" name="kcenon::common::bootstrap::SystemBootstrapper::is_initialized">
+<area shape="rect" id="Node000001" title="Check if the system is initialized." alt="" coords="257,5,461,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a49d3fac057aff9ce6e5159fe01cea2f8" title="Reset the bootstrapper to initial state." alt="" coords="5,13,209,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,35,210,35,210,30,244,30"/>
+</map>

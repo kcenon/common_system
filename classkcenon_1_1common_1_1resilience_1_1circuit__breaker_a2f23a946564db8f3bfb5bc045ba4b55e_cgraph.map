@@ -1,0 +1,9 @@
+<map id="kcenon::common::resilience::circuit_breaker::to_json" name="kcenon::common::resilience::circuit_breaker::to_json">
+<area shape="rect" id="Node000001" title="Get statistics as JSON string." alt="" coords="5,37,211,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#a7b4e5d738a96a77540ec00597992b84e" title="Get a complete statistics snapshot with metadata." alt="" coords="259,37,465,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,55,245,55,245,60,211,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#ac41ffab96f6337468c252e51d0115959" title="Get current statistics as key&#45;value pairs." alt="" coords="513,5,720,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="465,42,499,37,500,43,466,47"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#a21a9418fca87bf1fae84c222659d181a" title="Get component name for identification." alt="" coords="513,69,720,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="466,68,500,72,499,77,465,73"/>
+</map>

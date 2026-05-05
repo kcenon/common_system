@@ -1,0 +1,21 @@
+<map id="examples/adapter_pattern_example.cpp" name="examples/adapter_pattern_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="256,5,451,45"/>
+<area shape="rect" id="Node000002" href="$adapter_8h.html" title="Adapter traits and base class for type&#45;erased cross&#45;system wrappers." alt="" coords="191,93,382,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="341,47,312,84,308,81,336,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,181,83,207"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="294,48,238,69,181,96,119,136,69,175,66,170,116,131,179,91,236,64,292,43"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="524,181,583,207"/>
+<area shape="poly" id="edge10_Node000001_Node000007" title=" " alt="" coords="368,44,402,86,447,131,481,154,515,173,513,178,478,159,444,135,398,90,364,47"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="457,101,537,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="386,43,468,91,465,96,384,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,181,173,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,136,175,177,172,172,250,131"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="229,136,93,180,92,174,228,131"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="197,181,272,207"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="276,135,252,171,248,168,272,132"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="297,181,383,207"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="302,132,326,168,322,171,297,135"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="351,131,512,178,510,183,350,136"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="407,181,499,207"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="328,131,418,173,415,178,325,136"/>
+</map>

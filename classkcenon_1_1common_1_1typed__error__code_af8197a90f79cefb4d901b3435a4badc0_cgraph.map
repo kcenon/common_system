@@ -1,0 +1,5 @@
+<map id="kcenon::common::typed_error_code::clear" name="kcenon::common::typed_error_code::clear">
+<area shape="rect" id="Node000001" title="Clears the error code to success state." alt="" coords="5,5,184,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1common__error__category.html#aedb2aeb541963c6aae482b1b17893a7c" title="Returns the singleton instance of common_error_category." alt="" coords="232,5,431,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,23,218,23,218,28,184,28"/>
+</map>

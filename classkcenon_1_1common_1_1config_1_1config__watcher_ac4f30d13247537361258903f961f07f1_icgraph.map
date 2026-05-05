@@ -1,0 +1,7 @@
+<map id="kcenon::common::config::config_watcher::watch_loop" name="kcenon::common::config::config_watcher::watch_loop">
+<area shape="rect" id="Node000001" title="Main watch loop &#45; dispatches to platform&#45;specific implementation." alt="" coords="337,5,548,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#a922fb9ef2e2c9ae2adf4349355026cf9" title="Start watching the configuration file for changes." alt="" coords="108,5,289,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="324,28,289,28,289,23,324,23"/>
+<area shape="rect" id="Node000003" href="$config__watcher__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

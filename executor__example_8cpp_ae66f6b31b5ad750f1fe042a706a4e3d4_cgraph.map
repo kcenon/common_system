@@ -1,0 +1,36 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,260,60,285"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a4cbbe7a2c8cef0bbb6f98f59375012da" title="Factory function to create error VoidResult." alt="" coords="382,35,542,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="31,259,32,216,41,156,51,125,64,94,82,67,106,44,143,23,182,10,224,4,266,3,346,12,412,28,411,33,345,17,266,8,224,9,184,16,145,28,110,48,86,70,69,97,56,127,46,158,38,217,36,260"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a0169b66b74b0ea7d87cb9682ff3d6ce5" title="Get error reference." alt="" coords="371,134,553,174"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="44,258,71,232,107,209,169,186,234,170,298,160,356,154,357,159,299,165,235,175,171,191,109,214,74,237,47,262"/>
+<area shape="rect" id="Node000004" href="$classmock__executor.html#a189c07fb5e1b034fa96f125ac5a1eddf" title="Execute a job with Result&#45;based error handling." alt="" coords="119,59,299,84"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="33,259,39,226,52,182,73,135,88,113,106,95,115,88,118,93,110,99,92,117,78,138,57,184,44,228,38,260"/>
+<area shape="rect" id="Node000006" href="$classmock__executor.html#a1bcb6f29ec02515e19e838ae650000a4" title="Execute a job with delay." alt="" coords="119,109,299,149"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="38,259,63,214,83,188,106,165,126,152,129,157,110,170,87,192,68,217,42,261"/>
+<area shape="rect" id="Node000007" href="$classexample__executor__provider.html#a7b24c24f2e0afb3e9013147eba09a971" title="Get the default executor instance." alt="" coords="108,223,311,263"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="60,266,94,260,95,265,60,271"/>
+<area shape="rect" id="Node000009" href="$classmock__executor.html#a901972466c499b0f49210140c2e51c42" title="Check if the executor is running." alt="" coords="111,288,307,313"/>
+<area shape="poly" id="edge13_Node000001_Node000009" title=" " alt="" coords="60,274,116,283,115,289,60,280"/>
+<area shape="rect" id="Node000010" href="$classmock__executor.html#a8d345686e9c61434da07f7d3d3e38a02" title="Get the number of pending tasks." alt="" coords="119,338,300,378"/>
+<area shape="poly" id="edge14_Node000001_Node000010" title=" " alt="" coords="51,284,78,303,109,322,128,331,126,336,107,327,75,308,48,288"/>
+<area shape="rect" id="Node000011" href="$executor__example_8cpp.html#a09c0ca29bd23401b5155c2f8296fbf99" title=" " alt="" coords="134,403,285,428"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="41,285,65,335,85,364,110,388,122,396,120,400,106,392,80,367,60,338,36,287"/>
+<area shape="rect" id="Node000014" href="$classmock__executor.html#a7898ec9a8c085d85bf2c80b09744285d" title="Shutdown the executor gracefully." alt="" coords="113,452,305,477"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="38,285,45,317,58,358,79,402,93,422,110,439,115,443,112,447,106,443,89,425,74,405,53,360,40,318,33,286"/>
+<area shape="rect" id="Node000015" href="$classmock__executor.html#a04a890f429ac2df2325e429de4d9ec4f" title="Get the number of worker threads." alt="" coords="123,502,296,542"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="37,285,41,325,52,379,74,438,90,464,110,488,114,492,111,496,106,492,86,468,69,440,47,381,36,325,32,286"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="299,60,368,54,368,59,300,66"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="271,82,312,94,360,118,382,127,380,132,358,123,310,99,269,87"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="383,84,541,109"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="300,78,369,85,368,90,299,83"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="274,106,310,93,333,81,358,69,382,61,384,66,360,74,336,85,312,98,276,111"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="300,135,357,141,356,146,299,140"/>
+<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="299,115,368,106,369,111,300,120"/>
+<area shape="rect" id="Node000008" href="$classexample__executor__provider.html#a47e0d1b2d85f7854a8d5558c049251e5" title="Create a new executor with specific configuration." alt="" coords="361,223,563,263"/>
+<area shape="poly" id="edge12_Node000007_Node000008" title=" " alt="" coords="311,241,347,241,347,246,311,246"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutor.html#a818df7798bc1421ebaf0d383d6ac00ad" title="Execute a job with Result&#45;based error handling." alt="" coords="359,363,565,403"/>
+<area shape="poly" id="edge16_Node000011_Node000012" title=" " alt="" coords="285,403,345,396,345,401,285,409"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutor.html#a420bf39db34c4bc65ecff20a44f624e1" title="Get the number of worker threads." alt="" coords="359,427,565,467"/>
+<area shape="poly" id="edge17_Node000011_Node000013" title=" " alt="" coords="285,422,345,430,345,435,285,428"/>
+</map>

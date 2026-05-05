@@ -1,0 +1,37 @@
+<map id="include/kcenon/common/patterns/event_bus.h" name="include/kcenon/common/patterns/event_bus.h">
+<area shape="rect" id="Node000001" title="Event bus abstraction and common events." alt="" coords="532,5,713,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,181,64,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,32,420,38,294,50,180,68,136,81,103,96,84,111,68,130,46,169,42,167,64,127,80,107,100,91,134,76,179,63,294,44,419,33,532,27"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="88,181,155,207"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="532,35,413,44,283,57,175,75,138,85,119,95,111,111,108,130,114,168,109,169,103,130,105,110,115,91,136,80,173,70,282,52,412,39,531,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="447,101,513,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="593,48,512,96,509,91,590,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="295,181,382,207"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="533,47,476,67,421,96,401,112,383,132,354,171,350,168,378,129,397,109,419,91,474,62,531,42"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="537,101,615,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="615,47,591,90,587,87,610,44"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="639,101,703,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="636,44,660,87,655,90,631,47"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="727,101,793,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="654,43,731,91,729,96,651,48"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="818,101,942,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="680,43,834,94,832,99,678,48"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="967,101,1052,126"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="714,39,830,61,955,91,966,94,965,99,954,96,829,66,713,44"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1077,101,1139,126"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="714,31,879,51,972,68,1065,91,1072,93,1071,98,1063,96,971,74,878,57,713,36"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1163,101,1239,126"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="714,29,916,48,1035,66,1153,91,1163,94,1161,99,1151,96,1034,72,916,54,714,34"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1263,101,1350,126"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="714,27,824,34,959,46,1106,64,1253,91,1265,94,1263,99,1251,96,1105,69,958,51,823,39,714,33"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="407,181,487,207"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="533,39,505,47,479,59,456,74,437,95,430,112,429,131,438,168,433,169,423,131,424,111,432,92,452,70,477,54,504,42,531,34"/>
+<area shape="rect" id="Node000015" href="$event_8h.html" title="C++20 concepts for event bus types." alt="" coords="129,93,321,133"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="536,48,326,93,325,88,535,43"/>
+<area shape="poly" id="edge18_Node000015_Node000002" title=" " alt="" coords="181,136,76,179,74,174,179,131"/>
+<area shape="poly" id="edge19_Node000015_Node000003" title=" " alt="" coords="202,136,149,175,146,171,199,131"/>
+<area shape="poly" id="edge17_Node000015_Node000005" title=" " alt="" coords="254,131,312,171,309,175,251,136"/>
+<area shape="poly" id="edge15_Node000015_Node000014" title=" " alt="" coords="279,131,402,174,400,179,277,136"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="179,181,271,207"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="228,134,228,167,223,167,223,134"/>
+</map>

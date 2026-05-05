@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::unified_bootstrapper::services" name="kcenon::common::di::unified_bootstrapper::services">
+<area shape="rect" id="Node000001" title="Get the service container." alt="" coords="5,5,169,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a84c4752ee985166ef458dc61626066f8" title="Get the global service container instance." alt="" coords="217,5,372,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,30,203,30,203,35,170,35"/>
+</map>

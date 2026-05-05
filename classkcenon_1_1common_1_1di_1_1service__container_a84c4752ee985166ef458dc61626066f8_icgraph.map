@@ -1,0 +1,26 @@
+<map id="kcenon::common::di::service_container::global" name="kcenon::common::di::service_container::global">
+<area shape="rect" id="Node000001" title="Get the global service container instance." alt="" coords="595,170,749,225"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#aa5f0272e260c981dce32436aac02794d" title="Initialize the system." alt="" coords="320,5,547,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="641,161,599,112,573,87,545,66,508,48,511,43,548,62,577,83,603,108,645,157"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#aeda5e02f04c8a871b548d7f6379f895c" title="Initialize the unified system." alt="" coords="108,157,272,211"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="631,163,592,133,546,110,484,94,434,89,383,95,321,111,271,132,228,159,225,154,268,127,319,105,382,90,434,84,485,89,548,106,595,128,635,158"/>
+<area shape="rect" id="Node000005" href="$service__container__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="406,121,461,146"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="581,170,546,160,461,141,462,136,547,155,582,165"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a8c170d46f5b9f92fdf93ebbf98daf882" title="Register a module&#39;s service registration function." alt="" coords="351,249,515,303"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="582,230,516,252,515,247,580,225"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#abb989c897e80a3b4c3950b74a53c4e96" title="Register optional services based on options." alt="" coords="333,170,534,225"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="580,200,534,200,534,195,580,195"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#ab03603e40ac9008dc693de03aa03e0a9" title="Get the service container." alt="" coords="108,314,272,369"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="645,238,603,282,577,302,548,318,478,341,405,353,334,356,272,353,272,348,334,350,404,347,477,336,546,314,574,298,599,278,641,234"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#adbac84d0feaad0b42c26bc9eb8eda947" title="Shutdown the unified system gracefully." alt="" coords="351,379,515,434"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="651,238,608,301,580,333,548,362,517,381,514,377,545,358,576,330,604,298,647,235"/>
+<area shape="rect" id="Node000004" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="5,329,60,354"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="115,221,110,226,86,252,67,280,42,330,37,327,62,278,82,248,106,222,112,217"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a019f0e89c9bdf5ab2347c2271b1bb99f" title="Register a class&#45;based module registrar." alt="" coords="108,235,272,290"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="337,273,272,270,272,264,337,268"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="319,194,272,191,272,186,319,188"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="94,344,60,344,60,339,94,339"/>
+<area shape="poly" id="edge12_Node000010_Node000004" title=" " alt="" coords="337,412,226,406,166,398,107,384,77,371,51,356,54,352,79,367,109,379,167,392,227,401,338,407"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a414fa6bda0fcc1f2543123a2e41aa8d7" title="Request graceful shutdown." alt="" coords="108,445,272,499"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="339,435,273,453,272,447,337,430"/>
+</map>

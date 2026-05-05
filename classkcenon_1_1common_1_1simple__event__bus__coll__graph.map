@@ -1,0 +1,23 @@
+<map id="kcenon::common::simple_event_bus" name="kcenon::common::simple_event_bus">
+<area shape="rect" id="Node000001" title="Simple synchronous event bus for testing when monitoring is disabled." alt="" coords="285,488,463,808"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,345,89,411"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,409,104,423,273,562,270,566,100,427,83,413"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,331,389,425"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="275,425,297,472,292,474,270,427"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1common_1_1simple__event__bus_1_1subscription__info.html" title=" " alt="" coords="45,133,252,253"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="142,253,144,280,152,306,160,317,155,320,148,308,139,281,137,254"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="277,153,455,233"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="283,244,267,260,255,278,247,304,246,331,241,330,242,303,250,276,263,257,279,240"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="353,5,376,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="368,71,368,137,363,137,362,71"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="483,5,505,71"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="484,51,439,96,404,141,399,138,435,93,481,47"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="486,161,611,226"/>
+<area shape="poly" id="edge9_Node000009_Node000007" title=" " alt="" coords="508,62,522,94,538,144,533,145,517,96,503,64"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="413,345,583,411"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="486,412,457,475,452,472,481,410"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="540,240,522,307,510,346,505,344,517,306,535,239"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="608,345,753,411"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="590,235,623,276,666,343,661,346,618,279,585,238"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="646,413,477,560,474,556,643,409"/>
+</map>

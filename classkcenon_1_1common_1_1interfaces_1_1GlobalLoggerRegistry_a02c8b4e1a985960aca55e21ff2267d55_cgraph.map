@@ -1,0 +1,6 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::instance" name="kcenon::common::interfaces::GlobalLoggerRegistry::instance">
+<area shape="rect" id="Node000001" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="5,29,212,84"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="59,29,60,19,69,10,85,5,109,3,137,6,153,14,151,18,136,11,109,8,86,10,71,15,65,21,65,29"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#af1a784a19fb001281f6f340c8aa9dd7a" title=" " alt="" coords="260,29,467,84"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,54,246,54,246,59,212,59"/>
+</map>

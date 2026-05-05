@@ -1,0 +1,22 @@
+<map id="kcenon::common::logging::log" name="kcenon::common::logging::log">
+<area shape="rect" id="Node000001" title="Log a message with the specified level and source location." alt="" coords="5,225,224,251"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common_1_1interfaces.html#aa135ed0b04261f3bd00a14d2eefceb98" title="Get the default logger from the global registry." alt="" coords="272,182,479,222"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,223,258,216,259,221,207,228"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="272,261,479,287"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="207,248,270,257,269,262,207,253"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#ae02949b4310e80d0cd1ef05426239d56" title="Get the default logger." alt="" coords="527,72,733,127"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="421,179,526,136,541,129,543,134,528,140,423,184"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a02c8b4e1a985960aca55e21ff2267d55" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="527,175,733,229"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="479,199,513,199,513,205,479,205"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a34c41dbebdc9777c1d13df6c3b66c559" title="Create default logger from factory if available." alt="" coords="781,5,988,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="733,70,767,61,769,66,734,75"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a7359ad05bf4d6d0bf11a094cbc3f3ebd" title="Get the shared NullLogger instance." alt="" coords="781,84,988,139"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="734,102,768,103,768,108,733,107"/>
+<area shape="poly" id="edge7_Node000006_Node000006" title=" " alt="" coords="581,175,581,164,590,156,606,150,630,148,659,151,675,159,672,164,657,156,630,153,607,155,593,160,586,166,586,175"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#af1a784a19fb001281f6f340c8aa9dd7a" title=" " alt="" coords="781,175,988,229"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="733,199,768,199,768,205,733,205"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="539,254,721,294"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="479,271,525,271,525,277,479,277"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="539,318,721,358"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="428,284,537,312,536,317,426,289"/>
+</map>

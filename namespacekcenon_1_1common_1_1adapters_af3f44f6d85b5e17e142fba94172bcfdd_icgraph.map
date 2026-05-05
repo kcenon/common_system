@@ -1,0 +1,5 @@
+<map id="kcenon::common::adapters::make_shared_adapter" name="kcenon::common::adapters::make_shared_adapter">
+<area shape="rect" id="Node000001" title="Factory function to create adapter wrapping shared_ptr." alt="" coords="108,5,307,45"/>
+<area shape="rect" id="Node000002" href="$adapter__pattern__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

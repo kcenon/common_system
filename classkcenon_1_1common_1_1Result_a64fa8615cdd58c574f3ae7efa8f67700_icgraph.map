@@ -1,0 +1,17 @@
+<map id="kcenon::common::Result::err" name="kcenon::common::Result::err">
+<area shape="rect" id="Node000001" title="Create an error result from error_info (static factory)" alt="" coords="621,141,831,166"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a694e4563e805588838251929513b92a6" title="Convert a string to its enum value (case&#45;insensitive)" alt="" coords="393,69,571,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="663,140,558,112,560,107,664,134"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1Result.html#a371d5d3959846844a54e5f74380806aa" title="Get mutable value from result (throws if error)" alt="" coords="391,133,573,173"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="608,156,574,156,574,151,608,151"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1Result.html#af174695447da8c3f3f2b96a39f1f7019" title="Get value from result (throws if error)" alt="" coords="391,197,573,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="664,172,560,200,558,195,663,167"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common_1_1interfaces.html#a14c991d7cf5ae7e91bcb2f4d6a720e2b" title="Parse log level from string (case&#45;insensitive)" alt="" coords="122,5,329,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="387,69,305,48,307,43,389,63"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1interfaces.html#a11921cddc2d99d4a3a163b14bbd5f57f" title="Convert string to health check type." alt="" coords="108,69,343,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="379,92,343,92,343,87,379,87"/>
+<area shape="rect" id="Node000006" href="$namespacekcenon_1_1common_1_1interfaces.html#a9b304791e7b9d3c6bbb525e081867651" title="Convert string to metric type." alt="" coords="122,133,329,173"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="389,115,307,136,305,131,387,110"/>
+<area shape="rect" id="Node000005" href="$health__check__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,77,60,102"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,92,60,92,60,87,94,87"/>
+</map>

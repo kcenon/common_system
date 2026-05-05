@@ -1,0 +1,9 @@
+<map id="kcenon::common::di::IServiceContainer::register_factory_internal" name="kcenon::common::di::IServiceContainer::register_factory_internal">
+<area shape="rect" id="Node000001" title="Internal factory registration (type&#45;erased)." alt="" coords="237,84,428,139"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#adb8b0ca3706d09dc78dadca6d4d9b02f" title="Register a factory function for creating service instances." alt="" coords="20,5,175,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,82,174,61,176,56,238,77"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a0e7911dd0bc1c037f8df03c6e88c5a7e" title="Register a simple factory function without container access." alt="" coords="5,84,189,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,114,190,114,190,109,223,109"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a72e7f43e80606969702d8a25a38b1948" title="Register a service type with its implementation." alt="" coords="20,163,175,217"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,146,176,167,174,162,236,141"/>
+</map>

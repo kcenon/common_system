@@ -1,0 +1,11 @@
+<map id="kcenon::common::Result::unwrap_or" name="kcenon::common::Result::unwrap_or">
+<area shape="rect" id="Node000001" title="Get value or return default." alt="" coords="491,31,673,71"/>
+<area shape="rect" id="Node000002" href="$concepts__showcase__example_8cpp.html#a54e096f5ff47ebb4ccc6dc31685eeaed" title=" " alt="" coords="299,8,404,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,40,404,30,404,25,477,35"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a4b8c6dc10092478b622652bedd40dc6c" title="Get value or return default (C++23 std::expected compatible)" alt="" coords="260,59,443,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="478,67,443,71,443,66,477,61"/>
+<area shape="rect" id="Node000003" href="$concepts__showcase__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="81,5,136,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="285,23,136,21,136,16,285,17"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#ae56546419eea733a0be9659eb25e2b0f" title=" " alt="" coords="5,55,212,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="246,83,212,84,212,78,246,78"/>
+</map>

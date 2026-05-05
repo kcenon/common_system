@@ -1,0 +1,5 @@
+<map id="mock_executor" name="mock_executor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="30,393,179,739"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutor.html" title="Abstract interface for task execution systems." alt="" coords="5,5,204,345"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,359,107,393,102,393,102,359"/>
+</map>

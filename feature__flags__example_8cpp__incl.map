@@ -1,0 +1,17 @@
+<map id="examples/feature_flags_example.cpp" name="examples/feature_flags_example.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="159,5,334,45"/>
+<area shape="rect" id="Node000002" href="$feature__flags_8h.html" title="Unified feature flags header for common_system." alt="" coords="9,93,183,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="215,48,142,89,140,84,212,43"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="207,101,287,126"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="249,46,249,87,244,87,244,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="311,101,369,126"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="269,44,319,89,315,93,266,48"/>
+<area shape="rect" id="Node000003" href="$feature__flags__core_8h.html" title="Core KCENON_* macro definitions for feature detection." alt="" coords="19,255,173,280"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="58,136,36,150,18,167,9,186,8,195,12,205,31,229,56,246,53,251,27,233,7,208,3,196,4,185,14,164,33,146,55,131"/>
+<area shape="rect" id="Node000004" href="$feature__detection_8h.html" title="Compiler and standard library feature detection." alt="" coords="21,181,171,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="99,134,99,167,93,167,93,134"/>
+<area shape="rect" id="Node000005" href="$feature__system__deps_8h.html" title="System module integration flags." alt="" coords="195,181,370,207"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="142,131,244,173,242,178,140,136"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="99,207,99,241,93,241,93,207"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="254,209,140,252,138,247,252,204"/>
+</map>

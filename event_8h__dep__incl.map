@@ -1,0 +1,11 @@
+<map id="include/kcenon/common/concepts/event.h" name="include/kcenon/common/concepts/event.h">
+<area shape="rect" id="Node000001" title="C++20 concepts for event bus types." alt="" coords="108,5,289,45"/>
+<area shape="rect" id="Node000002" href="$concepts_8h.html" title="Unified header for all C++20 concepts in common_system." alt="" coords="5,93,187,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,56,120,95,117,91,164,52"/>
+<area shape="rect" id="Node000003" href="$event__bus_8h.html" title="Event bus abstraction and common events." alt="" coords="211,93,392,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="234,52,280,91,277,95,230,56"/>
+<area shape="rect" id="Node000004" href="$event__bus__example_8cpp.html" title=" " alt="" coords="125,181,283,221"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="271,144,227,183,224,179,268,140"/>
+<area shape="rect" id="Node000005" href="$common_8h.html" title="Aggregated public header for Common System." alt="" coords="307,181,488,221"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="335,141,378,179,374,183,331,145"/>
+</map>

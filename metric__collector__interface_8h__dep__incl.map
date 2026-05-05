@@ -1,0 +1,5 @@
+<map id="include/kcenon/common/interfaces/monitoring/metric_collector_interface.h" name="include/kcenon/common/interfaces/monitoring/metric_collector_interface.h">
+<area shape="rect" id="Node000001" title="Unified metric collection interface for cross&#45;module metric reporting." alt="" coords="5,5,213,60"/>
+<area shape="rect" id="Node000002" href="$interfaces_2monitoring_8h.html" title="Umbrella header for monitoring interfaces." alt="" coords="19,108,200,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,74,112,108,107,108,107,74"/>
+</map>

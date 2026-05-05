@@ -1,0 +1,7 @@
+<map id="kcenon::common::adapters::interface_adapter&lt; Interface, Implementation &gt;" name="kcenon::common::adapters::interface_adapter&lt; Interface, Implementation &gt;">
+<area shape="rect" id="Node000001" title="Interface adapter with type safety and depth tracking." alt="" coords="11,193,226,548"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,43,77,108"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,121,75,193,70,194,51,122"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1adapters_1_1adapter__base.html" title="Base class for adapter interface to eliminate RTTI dependency." alt="" coords="102,5,293,145"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,159,169,194,163,193,173,158"/>
+</map>

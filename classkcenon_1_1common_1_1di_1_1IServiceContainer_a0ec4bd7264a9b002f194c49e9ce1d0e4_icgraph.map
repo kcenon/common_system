@@ -1,0 +1,7 @@
+<map id="kcenon::common::di::IServiceContainer::resolve_internal" name="kcenon::common::di::IServiceContainer::resolve_internal">
+<area shape="rect" id="Node000001" title="Internal service resolution (type&#45;erased)." alt="" coords="411,5,565,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a3bcf47fa3e841f33961bd90b4f574dbc" title="Resolve a service by its interface type." alt="" coords="208,5,363,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,35,363,35,363,30,397,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a0cbbb8a8d7c5fd42a6c315d749b58f1c" title="Try to resolve a service, returning nullptr if not found." alt="" coords="5,5,160,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="194,35,161,35,161,30,194,30"/>
+</map>

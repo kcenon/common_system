@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::health_dependency_graph::would_create_cycle_internal" name="kcenon::common::interfaces::health_dependency_graph::would_create_cycle_internal">
+<area shape="rect" id="Node000001" title=" " alt="" coords="555,45,769,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#a170ababd8214f5548f57e54b0aefff24" title="Add a dependency between two nodes." alt="" coords="300,5,507,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="541,57,507,51,507,46,541,51"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#acc8d058c0a6d1b42e18b98f8a4593051" title="Check if adding a dependency would create a cycle." alt="" coords="300,84,507,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="541,93,507,99,507,93,541,88"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a5805220f9e808be3e907ecec7f8e975b" title="Add a dependency between health checks." alt="" coords="5,13,252,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="286,35,252,35,252,30,286,30"/>
+</map>

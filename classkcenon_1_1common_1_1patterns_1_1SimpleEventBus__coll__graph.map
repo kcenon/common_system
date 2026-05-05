@@ -1,0 +1,28 @@
+<map id="kcenon::common::patterns::SimpleEventBus" name="kcenon::common::patterns::SimpleEventBus">
+<area shape="rect" id="Node000001" title="Thread&#45;safe event bus for publish/subscribe pattern." alt="" coords="233,655,421,915"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,497,140,563"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,561,223,677,219,680,103,565"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="164,497,309,563"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="250,562,278,638,273,640,245,564"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="255,325,381,391"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="299,404,254,498,250,496,295,402"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="334,497,505,563"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="346,401,403,495,398,498,341,404"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="644,5,667,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="644,43,579,54,483,73,390,101,355,117,332,135,320,154,311,175,302,221,303,267,309,308,303,309,298,268,297,221,306,174,315,152,328,132,352,113,388,96,482,68,578,48,644,38"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="621,151,743,216"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="656,71,659,109,666,134,661,136,654,110,651,71"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="774,143,918,223"/>
+<area shape="poly" id="edge14_Node000011_Node000005" title=" " alt="" coords="669,45,736,93,786,131,783,135,732,97,666,50"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="410,564,383,640,378,638,405,562"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="529,468,720,592"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="555,594,436,695,432,691,551,590"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="489,311,717,405"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="612,405,618,451,612,452,607,406"/>
+<area shape="rect" id="Node000009" href="$structkcenon_1_1common_1_1patterns_1_1SimpleEventBus_1_1HandlerEntry.html" title=" " alt="" coords="375,133,597,233"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="495,233,504,260,516,285,525,297,521,300,512,288,499,262,490,234"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="629,227,607,258,600,284,599,311,594,310,595,283,602,256,625,224"/>
+<area shape="poly" id="edge12_Node000007_Node000011" title=" " alt="" coords="844,238,830,288,801,340,766,388,693,470,689,466,762,385,797,337,825,286,839,236"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="860,5,883,71"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="868,71,858,128,853,127,863,71"/>
+</map>

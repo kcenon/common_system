@@ -1,0 +1,12 @@
+<map id="kcenon::common::adapters::adapter" name="kcenon::common::adapters::adapter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="355,64,553,104"/>
+<area shape="rect" id="Node000002" href="$adapter__pattern__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,43,60,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="405,60,358,38,306,22,251,12,207,8,164,11,109,22,80,32,55,45,53,41,78,27,107,17,163,6,207,3,252,7,307,17,360,33,407,55"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common_1_1adapters.html#a19934a7305370051f6daffdc8bd01b21" title="Factory function to create adapter with in&#45;place construction." alt="" coords="108,32,307,72"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="341,72,307,67,307,62,342,66"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1adapters.html#af3f44f6d85b5e17e142fba94172bcfdd" title="Factory function to create adapter wrapping shared_ptr." alt="" coords="108,96,307,136"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,101,307,105,307,100,341,96"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common_1_1adapters.html#a2bf6a9e901e02cfcf4142d027e371471" title="Factory function to create adapter wrapping unique_ptr." alt="" coords="108,160,307,200"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="398,112,308,150,274,162,272,157,306,145,396,107"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="130,94,107,86,59,68,61,63,109,81,131,89"/>
+</map>

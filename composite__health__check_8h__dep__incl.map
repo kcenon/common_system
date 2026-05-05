@@ -1,0 +1,5 @@
+<map id="include/kcenon/common/interfaces/monitoring/composite_health_check.h" name="include/kcenon/common/interfaces/monitoring/composite_health_check.h">
+<area shape="rect" id="Node000001" title="Composite health check that aggregates multiple health checks." alt="" coords="5,5,204,60"/>
+<area shape="rect" id="Node000002" href="$interfaces_2monitoring_8h.html" title="Umbrella header for monitoring interfaces." alt="" coords="14,108,195,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,74,107,108,102,108,102,74"/>
+</map>

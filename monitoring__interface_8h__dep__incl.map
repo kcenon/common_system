@@ -1,0 +1,22 @@
+<map id="include/kcenon/common/interfaces/monitoring_interface.h" name="include/kcenon/common/interfaces/monitoring_interface.h">
+<area shape="rect" id="Node000001" title="Standard monitoring interface for all systems." alt="" coords="352,5,533,60"/>
+<area shape="rect" id="Node000002" href="$health__check_8h.html" title="Base classes and types for health checking functionality." alt="" coords="352,108,533,163"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="445,74,445,108,440,108,440,74"/>
+<area shape="rect" id="Node000003" href="$health__check__example_8cpp.html" title=" " alt="" coords="5,218,181,258"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="340,169,160,220,158,215,338,164"/>
+<area shape="rect" id="Node000004" href="$interfaces_2monitoring_8h.html" title="Umbrella header for monitoring interfaces." alt="" coords="479,416,660,456"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="381,171,318,211,288,235,262,260,243,286,232,313,232,340,246,366,260,378,282,389,341,406,410,418,479,426,478,431,409,424,339,411,280,394,257,383,242,370,227,341,227,312,238,284,258,256,285,231,315,207,378,167"/>
+<area shape="rect" id="Node000005" href="$composite__health__check_8h.html" title="Composite health check that aggregates multiple health checks." alt="" coords="255,313,454,368"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="428,176,369,314,364,312,424,174"/>
+<area shape="rect" id="Node000006" href="$health__check__builder_8h.html" title="Builder pattern for creating health checks." alt="" coords="479,313,660,368"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="469,173,555,311,550,314,464,176"/>
+<area shape="rect" id="Node000007" href="$health__dependency__graph_8h.html" title="DAG&#45;based health check dependency management." alt="" coords="578,211,787,265"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="518,165,621,208,619,213,516,170"/>
+<area shape="rect" id="Node000008" href="$health__monitor_8h.html" title="Health monitoring system with dependency management." alt="" coords="735,313,916,368"/>
+<area shape="poly" id="edge12_Node000002_Node000008" title=" " alt="" coords="547,143,621,152,696,166,760,185,784,196,802,209,818,233,827,261,831,313,825,313,822,262,813,235,798,213,782,200,758,190,694,171,620,158,546,148"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="428,371,527,414,525,418,426,376"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="572,382,572,416,567,416,567,382"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="691,279,689,324,684,348,674,369,649,398,617,418,615,414,645,394,670,367,679,346,684,323,685,279"/>
+<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="733,271,789,311,786,315,729,275"/>
+<area shape="poly" id="edge11_Node000008_Node000004" title=" " alt="" coords="742,375,622,419,620,413,740,370"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="kcenon::common::logging::ConsoleLogger::is_enabled" name="kcenon::common::logging::ConsoleLogger::is_enabled">
+<area shape="rect" id="Node000001" title="Check if logging is enabled for the specified level." alt="" coords="244,37,448,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1logging_1_1ConsoleLogger.html#aa995110d44d296c241a751cfcf2abcc7" title="Log a structured entry." alt="" coords="5,5,196,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,45,196,40,197,35,231,40"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1logging_1_1ConsoleLogger.html#a43dfdbc594a93f617bbed3fb3b9c0b9c" title="Log a message with specified level." alt="" coords="5,69,196,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,75,197,80,196,74,230,70"/>
+</map>

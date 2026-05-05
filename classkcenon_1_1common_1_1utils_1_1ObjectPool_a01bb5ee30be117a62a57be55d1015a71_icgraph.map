@@ -1,0 +1,5 @@
+<map id="kcenon::common::utils::ObjectPool::release" name="kcenon::common::utils::ObjectPool::release">
+<area shape="rect" id="Node000001" title="Return raw storage to the pool (destructor already run)." alt="" coords="224,5,395,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#a589991c1cc8fcdcc5ea7145a3f9d55bb" title="Acquire an object constructed with the provided arguments." alt="" coords="5,5,176,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,28,176,28,176,23,210,23"/>
+</map>

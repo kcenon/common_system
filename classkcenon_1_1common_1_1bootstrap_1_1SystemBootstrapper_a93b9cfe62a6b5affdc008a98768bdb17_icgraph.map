@@ -1,0 +1,11 @@
+<map id="kcenon::common::bootstrap::SystemBootstrapper::execute_shutdown_callbacks" name="kcenon::common::bootstrap::SystemBootstrapper::execute_shutdown_callbacks">
+<area shape="rect" id="Node000001" title="Execute all shutdown callbacks in reverse order." alt="" coords="573,62,796,117"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a5656c3dcd7a7a2b320df65f7c55e5fbe" title="Shutdown the system." alt="" coords="291,69,525,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="559,92,526,92,526,87,559,87"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a385c980491500d6b34029561755a02d7" title=" " alt="" coords="5,5,243,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="305,69,213,48,214,43,306,64"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a49d3fac057aff9ce6e5159fe01cea2f8" title="Reset the bootstrapper to initial state." alt="" coords="22,69,226,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="277,92,226,92,226,87,277,87"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a67ba22e11495f4c6dfaaf3b87269870f" title="Destructor with automatic shutdown." alt="" coords="22,134,226,189"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="316,115,227,138,226,133,314,110"/>
+</map>

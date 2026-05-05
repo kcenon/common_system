@@ -1,0 +1,16 @@
+<map id="kcenon::common::config::config_watcher::start" name="kcenon::common::config::config_watcher::start">
+<area shape="rect" id="Node000001" title="Start watching the configuration file for changes." alt="" coords="5,103,187,143"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#a2a0217c55ed5c9e3e27d98cb7e582b87" title="Initialize platform&#45;specific file watching." alt="" coords="249,5,431,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,101,252,62,254,67,152,106"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="495,26,674,66"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="186,108,445,69,481,62,482,68,446,74,187,113"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="237,136,443,161"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="187,130,223,134,222,139,187,135"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#ac4f30d13247537361258903f961f07f1" title="Main watch loop &#45; dispatches to platform&#45;specific implementation." alt="" coords="235,186,445,226"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="153,141,236,170,262,179,261,184,234,175,151,146"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="431,35,482,38,482,43,431,40"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="493,115,676,155"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="443,140,480,138,480,144,444,146"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="493,179,676,219"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="403,159,480,175,479,180,402,164"/>
+</map>

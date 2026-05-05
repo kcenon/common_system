@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::ILogger::log" name="kcenon::common::interfaces::ILogger::log">
+<area shape="rect" id="Node000001" title="Log a message with specified level." alt="" coords="260,5,467,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1ILogger.html#a441cb4a3f8b803051f4d7b060f3ee756" title="Log a message with source location information (C++20)" alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,28,212,28,212,23,247,23"/>
+</map>

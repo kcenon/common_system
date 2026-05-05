@@ -1,0 +1,10 @@
+<map id="include/kcenon/common/interfaces/executor_interface.h" name="include/kcenon/common/interfaces/executor_interface.h">
+<area shape="rect" id="Node000001" title="Executor interfaces for task submission and management." alt="" coords="189,5,371,60"/>
+<area shape="rect" id="Node000002" href="$executor__example_8cpp.html" title=" " alt="" coords="5,123,243,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,70,143,125,140,120,226,65"/>
+<area shape="rect" id="Node000003" href="$common_8h.html" title="Aggregated public header for Common System." alt="" coords="253,211,435,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="287,73,295,117,308,162,333,209,328,212,303,164,290,118,282,74"/>
+<area shape="rect" id="Node000004" href="$thread__pool__interface_8h.html" title="Thread pool interface extending executor functionality." alt="" coords="317,108,499,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,66,376,106,373,110,322,70"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="384,176,359,212,355,209,380,173"/>
+</map>

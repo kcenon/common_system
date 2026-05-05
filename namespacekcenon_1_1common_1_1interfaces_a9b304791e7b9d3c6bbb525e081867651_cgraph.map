@@ -1,0 +1,16 @@
+<map id="kcenon::common::interfaces::metric_type_from_string" name="kcenon::common::interfaces::metric_type_from_string">
+<area shape="rect" id="Node000001" title="Convert string to metric type." alt="" coords="5,71,212,111"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a694e4563e805588838251929513b92a6" title="Convert a string to its enum value (case&#45;insensitive)" alt="" coords="260,71,439,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,88,246,88,246,93,212,93"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a64fa8615cdd58c574f3ae7efa8f67700" title="Create an error result from error_info (static factory)" alt="" coords="487,53,696,78"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,79,473,75,473,80,439,84"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="488,102,695,127"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="439,97,475,100,474,106,438,102"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a0169b66b74b0ea7d87cb9682ff3d6ce5" title="Get error reference." alt="" coords="744,5,927,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="669,50,730,40,731,45,670,55"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="744,69,927,109"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="696,73,730,76,730,82,696,78"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="695,101,730,98,730,103,695,107"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="744,133,927,173"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="672,125,731,134,730,139,672,130"/>
+</map>

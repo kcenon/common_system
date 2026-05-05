@@ -1,0 +1,9 @@
+<map id="include/kcenon/common/patterns/result/compat.h" name="include/kcenon/common/patterns/result/compat.h">
+<area shape="rect" id="Node000001" title="Backward compatibility layer for error codes." alt="" coords="5,5,192,45"/>
+<area shape="rect" id="Node000002" href="$error__codes_8h.html" title="Centralized error code registry for all systems." alt="" coords="16,93,181,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,46,101,79,96,79,96,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="19,181,77,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,135,65,171,61,168,84,132"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="102,181,199,207"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="113,132,138,168,133,171,109,135"/>
+</map>

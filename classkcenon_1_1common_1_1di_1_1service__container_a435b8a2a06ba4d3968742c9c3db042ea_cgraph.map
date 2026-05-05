@@ -1,0 +1,29 @@
+<map id="kcenon::common::di::service_container::unregister_internal" name="kcenon::common::di::service_container::unregister_internal">
+<area shape="rect" id="Node000001" title="Internal unregistration (type&#45;erased)." alt="" coords="5,206,160,261"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1common_1_1source__location.html#a5fd7c0b9f341514229ccd072b922e57b" title=" " alt="" coords="222,69,407,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,204,150,160,207,119,220,112,222,117,209,124,154,164,110,208"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a85dc57d964e6dcdbe88ceb20c43c6a23" title="Check if the container is frozen." alt="" coords="237,134,392,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="160,207,224,187,225,192,161,212"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a4725bb12d65c196bea2967dd702c76ae" title="Log a registry event." alt="" coords="208,213,421,253"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="160,231,194,231,194,236,160,236"/>
+<area shape="rect" id="Node000011" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="225,277,404,317"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="161,252,229,271,228,276,160,257"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="211,349,418,374"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="115,259,158,294,209,327,246,342,244,347,207,332,155,298,111,263"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1common_1_1source__location.html#aa50891e5f2765b0347e60affe5a58d46" title=" " alt="" coords="486,5,671,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="397,67,482,46,483,51,399,72"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1common_1_1source__location.html#a1c02d811711fb5f63b1e066b6ef86fa5" title=" " alt="" coords="483,69,674,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="407,87,470,87,470,92,407,92"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a8a375905bb26e9309a4b2cb4e41a1835" title=" " alt="" coords="475,134,682,189"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="388,211,464,190,466,195,390,216"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#aa7d54860d21f911867d2684b1b899139" title=" " alt="" coords="469,213,688,253"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="422,231,456,231,456,236,422,236"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a6dc271e618f78d162852bb23b9e82562" title="Check if audit logging is enabled." alt="" coords="469,277,688,317"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="399,251,483,272,482,277,397,256"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a9a504751885f24d6dc8f7809e3e20fc0" title=" " alt="" coords="736,270,943,325"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="688,295,722,295,722,300,688,300"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="487,341,670,381"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="418,359,473,359,473,364,418,364"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="487,405,670,445"/>
+<area shape="poly" id="edge13_Node000012_Node000014" title=" " alt="" coords="369,372,483,399,481,405,368,377"/>
+</map>

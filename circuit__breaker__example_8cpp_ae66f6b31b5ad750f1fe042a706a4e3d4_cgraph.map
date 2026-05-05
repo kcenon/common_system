@@ -1,0 +1,25 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,212,60,237"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#aa80127bd0df0025c110d27eac44694a9" title="Check if request should be allowed through the circuit." alt="" coords="113,44,318,99"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="37,210,62,161,82,133,106,108,112,104,115,108,110,112,86,136,66,164,41,213"/>
+<area shape="rect" id="Node000005" href="$circuit__breaker__example_8cpp.html#ada722dcd53df4a73fdd46e4c95481850" title=" " alt="" coords="135,123,295,148"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="43,210,70,184,107,158,126,150,128,155,109,163,74,188,47,214"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ab44d727002e0fb4c834d80386290fdd3" title="Get current circuit state." alt="" coords="113,173,318,213"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="60,217,98,210,99,216,61,223"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ae08b9ff9fcf6695129180178aab01c02" title="Get current statistics as key&#45;value pairs." alt="" coords="113,237,318,277"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="61,227,99,234,98,239,60,232"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a7da0a7a7820540d25d15245df8d7b06f" title="Create RAII guard for automatic recording." alt="" coords="108,301,323,341"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="48,236,74,261,109,286,123,293,120,298,107,291,71,266,44,240"/>
+<area shape="rect" id="Node000012" href="$circuit__breaker__example_8cpp.html#aa597e0fc4fe194027893a18d24492745" title=" " alt="" coords="166,365,265,391"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="40,236,63,292,83,324,110,351,130,362,153,369,151,375,128,367,106,355,79,327,58,295,35,239"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#af67b467c39dd072a5d54f733039bd62c" title="Check if circuit should attempt reset to HALF_OPEN. Must be called with mutex locked." alt="" coords="393,5,598,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,55,378,46,379,51,319,60"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a628f469c52f76fd480fa5f439b4043e4" title="Transition to HALF_OPEN state. Must be called with mutex locked." alt="" coords="393,84,598,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="319,83,379,92,378,97,318,89"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a07f0d7f82a392c6724f9011300d460a1" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="371,219,620,259"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="318,248,357,245,357,251,319,253"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1common_1_1resilience.html#abb5fae6129771b7265580922083cdbee" title="Convert circuit state to human&#45;readable string." alt="" coords="393,283,598,323"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="319,271,379,281,378,287,318,276"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="668,212,873,267"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="620,237,654,237,654,242,620,242"/>
+</map>

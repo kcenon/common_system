@@ -1,0 +1,14 @@
+<map id="kcenon::common::config::config_change_event" name="kcenon::common::config::config_change_event">
+<area shape="rect" id="Node000001" title="Information about a configuration change event." alt="" coords="5,404,179,524"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="208,276,387,341"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="256,344,186,396,183,392,253,339"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="83,148,162,213"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="108,215,95,244,85,277,80,332,82,387,77,388,74,332,80,275,90,242,103,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="164,211,216,250,237,265,234,269,213,254,161,215"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="57,5,188,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="125,99,125,148,120,148,120,99"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="237,148,358,213"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="300,227,300,276,295,276,295,227"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="286,13,309,78"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="300,78,300,131,295,131,295,78"/>
+</map>

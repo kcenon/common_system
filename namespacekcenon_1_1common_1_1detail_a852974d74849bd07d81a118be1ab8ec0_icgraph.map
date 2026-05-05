@@ -1,0 +1,5 @@
+<map id="kcenon::common::detail::get_event_bus_abi_version" name="kcenon::common::detail::get_event_bus_abi_version">
+<area shape="rect" id="Node000001" title="Get the ABI version of the event_bus implementation." alt="" coords="232,5,439,45"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a8e1158208855950dde18ac088a1a95ef" title="Verify ABI compatibility between modules." alt="" coords="5,5,184,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,28,184,28,184,23,218,23"/>
+</map>

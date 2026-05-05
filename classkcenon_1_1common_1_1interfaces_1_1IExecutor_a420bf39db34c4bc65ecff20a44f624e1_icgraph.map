@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::IExecutor::worker_count" name="kcenon::common::interfaces::IExecutor::worker_count">
+<area shape="rect" id="Node000001" title="Get the number of worker threads." alt="" coords="307,5,513,45"/>
+<area shape="rect" id="Node000002" href="$executor__example_8cpp.html#a09c0ca29bd23401b5155c2f8296fbf99" title=" " alt="" coords="108,13,259,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="293,28,259,28,259,23,293,23"/>
+<area shape="rect" id="Node000003" href="$executor__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>
