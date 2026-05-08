@@ -59,6 +59,7 @@ include(targets)
 include(install)
 include(testing)
 include(examples)
+include(summary)
 
 # -----------------------------------------------------------------------------
 # Step 4: standard baseline

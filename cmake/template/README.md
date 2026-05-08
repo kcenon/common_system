@@ -23,10 +23,11 @@ cmake/template/
 ├── targets.cmake        # Target-creation conventions and helpers
 ├── install.cmake        # Install rules and config-package generation
 ├── testing.cmake        # Test framework (Google Test) registration helpers
-└── examples.cmake       # Example registration helpers
+├── examples.cmake       # Example registration helpers
+└── summary.cmake        # Build-configuration summary printer
 ```
 
-The eight `*.cmake` modules correspond 1-to-1 to the modules listed in the
+The nine `*.cmake` modules correspond 1-to-1 to the modules listed in the
 layout standard table. Their order in the root `CMakeLists.txt` is not
 arbitrary — see *Adoption Checklist* below for the canonical sequence.
 
@@ -75,6 +76,7 @@ For a new system adopting the template:
        include(install)
        include(testing)
        include(examples)
+       include(summary)
 
 4. **Set the standard baseline** before declaring options:
 
@@ -143,19 +145,32 @@ For a new system adopting the template:
         kcenon_template_add_example_dirs(<PREFIX>
             SUBDIRS examples/hello examples/dump)
 
-11. **Build and run tests** to verify the adoption:
+11. **Print the build summary** at the end of the root `CMakeLists.txt`
+    (after tests/examples are registered, before any closing `endif()`):
+
+        kcenon_template_print_summary(
+            PROJECT  ${PROJECT_NAME}
+            OPTIONS  <PREFIX>_BUILD_TESTS
+                     <PREFIX>_BUILD_EXAMPLES
+                     <PREFIX>_BUILD_BENCHMARKS
+                     <PREFIX>_BUILD_DOCS)
+
+    Optional `BANNER`, `TARGETS`, and `DEPENDENCIES <var=display>` lists
+    extend the block — see `summary.cmake` for the full signature.
+
+12. **Build and run tests** to verify the adoption:
 
         cmake --preset debug
         cmake --build build-debug
         cd build-debug && ctest --output-on-failure
 
-12. **Record the template version** in your project's CHANGELOG entry so
+13. **Record the template version** in your project's CHANGELOG entry so
     future upgrades can be traced.
 
 ## Version Policy
 
 Template versioning follows [Semantic Versioning](https://semver.org/) and is
-recorded in `cmake/template/VERSION` (currently `1.1.0`).
+recorded in `cmake/template/VERSION` (currently `1.2.0`).
 
 | Bump  | Trigger                                                                            |
 |-------|-------------------------------------------------------------------------------------|
