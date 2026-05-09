@@ -24,10 +24,11 @@ cmake/template/
 ├── install.cmake        # Install rules and config-package generation
 ├── testing.cmake        # Test framework (Google Test) registration helpers
 ├── examples.cmake       # Example registration helpers
-└── summary.cmake        # Build-configuration summary printer
+├── summary.cmake        # Build-configuration summary printer
+└── safety.cmake         # Defensive guards (e.g. mock-flag/Release-build)
 ```
 
-The nine `*.cmake` modules correspond 1-to-1 to the modules listed in the
+The ten `*.cmake` modules correspond 1-to-1 to the modules listed in the
 layout standard table. Their order in the root `CMakeLists.txt` is not
 arbitrary — see *Adoption Checklist* below for the canonical sequence.
 
@@ -77,6 +78,7 @@ For a new system adopting the template:
        include(testing)
        include(examples)
        include(summary)
+       include(safety)
 
 4. **Set the standard baseline** before declaring options:
 
@@ -167,10 +169,39 @@ For a new system adopting the template:
 13. **Record the template version** in your project's CHANGELOG entry so
     future upgrades can be traced.
 
+## Safety helpers
+
+`safety.cmake` collects defensive guards that prevent dangerous build
+configurations from reaching production artifacts. These helpers encode
+idioms that downstream systems would otherwise have to re-implement (and
+occasionally forget).
+
+### `kcenon_template_forbid_in_release(<flag_var> [REASON <text>])`
+
+Emit `FATAL_ERROR` if `<flag_var>` is truthy and `CMAKE_BUILD_TYPE STREQUAL
+"Release"`. Use this for mock SDK flags, in-process test stubs, and similar
+developer-only options that must never ship in Release builds.
+
+```cmake
+option(PACS_USE_MOCK_S3 "Use in-process S3 mock" OFF)
+kcenon_template_forbid_in_release(PACS_USE_MOCK_S3
+    REASON "Mock S3 transport must not ship in Release builds.")
+```
+
+The helper is multi-config-aware: on multi-config generators (Visual Studio,
+Xcode, Ninja Multi-Config) `CMAKE_BUILD_TYPE` is empty at configure time
+because the build type is selected per-build, not per-configure. In that
+case the configure-time check is skipped — per-config enforcement on
+multi-config generators must be expressed as a generator-expression guard
+at the call site if required.
+
+The `REASON` argument is optional; when omitted the helper emits a generic
+"`<flag> cannot be enabled in Release builds.`" message.
+
 ## Version Policy
 
 Template versioning follows [Semantic Versioning](https://semver.org/) and is
-recorded in `cmake/template/VERSION` (currently `1.2.0`).
+recorded in `cmake/template/VERSION` (currently `1.3.0`).
 
 | Bump  | Trigger                                                                            |
 |-------|-------------------------------------------------------------------------------------|
