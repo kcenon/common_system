@@ -60,6 +60,7 @@ include(install)
 include(testing)
 include(examples)
 include(summary)
+include(safety)
 
 # -----------------------------------------------------------------------------
 # Step 4: standard baseline

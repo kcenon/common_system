@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `cmake/template/safety.cmake`: new module hosting defensive build-config guards. Provides `kcenon_template_forbid_in_release(<flag_var> [REASON <text>])` for the "prohibit a mock-only flag in Release builds" idiom. Multi-config-aware (skips the configure-time check when `CMAKE_BUILD_TYPE` is empty). Template VERSION bumped to 1.3.0 (MINOR per template versioning policy: new module added) ([#669](https://github.com/kcenon/common_system/issues/669))
 - `cmake/template/targets.cmake`: `kcenon_template_add_build_interface_includes(<target> <visibility> <dir>...)` helper for attaching `BUILD_INTERFACE`-only include directories without pairing with `INSTALL_INTERFACE`. Template VERSION bumped to 1.1.0 (MINOR per template versioning policy: new helper added) ([#667](https://github.com/kcenon/common_system/issues/667))
 
 ### Documentation
