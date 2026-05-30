@@ -1,3 +1,8 @@
+# SSOT: Canonical Doxygen build/deploy logic for common_system.
+# This is a REUSABLE workflow (workflow_call only) — it has no event triggers
+# of its own. The thin caller `build-Doxygen.yaml` wires repository events
+# (push/pull_request/workflow_dispatch) to this workflow. Do not duplicate the
+# build/deploy steps in the caller; keep all generation logic here.
 name: Doxygen Documentation
 
 on:
