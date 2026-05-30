@@ -7,6 +7,10 @@ codecov:
 coverage:
   precision: 2
   round: down
+  # range lower bound (40) is the enforced gate floor (see project target below);
+  # the upper bound (80) is the long-term aspiration from the gradual-improvement
+  # plan, NOT the current measured/enforced value. The README quotes this same
+  # floor + target so the advertised number stays consistent with this gate.
   range: "40...80"
   status:
     project:
