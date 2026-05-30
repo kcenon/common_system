@@ -87,5 +87,5 @@ sanitizers, benchmarks, CVE scan, SBOM, Doxygen docs.
 - C++20 required (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
 - C++20 modules experimental (CMake 3.28+, Clang 16+/GCC 14+; Apple Clang unsupported)
 - `Result<T>` is NOT thread-safe for concurrent modification (concurrent reads safe)
-- Pre-1.0 (v0.2.0): API may change between minor versions
+- v1.0.0: stable API; changes follow semantic versioning
 - Platform: Linux, macOS, Windows; UWP/Xbox excluded
