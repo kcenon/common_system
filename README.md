@@ -35,7 +35,7 @@ A foundational C++20 header-only library providing essential interfaces and desi
 
 **Key Value Propositions**:
 - **Zero-overhead abstractions**: Template-based interfaces with compile-time resolution
-- **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
+- **Well-tested**: coverage enforced by a 40% project / 60% patch Codecov gate (80% is the long-term target; see `codecov.yml`), zero sanitizer warnings, full CI/CD
 - **Header-only design**: No library linking, no dependencies, instant integration
 - **C++20 Module support**: Optional module-based build for faster compilation
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
@@ -399,7 +399,7 @@ cmake --build build
 - Zero-overhead abstractions - compiler optimizes away all abstraction layers
 
 **Quality Metrics**:
-- **Test coverage**: 80%+ (target: 85%)
+- **Test coverage**: enforced Codecov gate floor of 40% project / 60% patch; 80% is the long-term target per the gradual-improvement plan in `codecov.yml`. The live measured value is shown by the Codecov badge at the top of this file.
 - **Sanitizer tests**: 18/18 passing with zero warnings
 - **Cross-platform**: Ubuntu, macOS, Windows
 - **Zero memory leaks**: AddressSanitizer verified
@@ -488,7 +488,7 @@ if (result.is_err()) {
 | | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
 | | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
 | | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
-| **Contributing** | [Contributing](CONTRIBUTING.md) | How to contribute |
+| **Contributing** | [Contributing](docs/contributing/CONTRIBUTING.md) | How to contribute |
 | | [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) | Error code management |
 
 ---
