@@ -5,8 +5,16 @@
 #   Provide an optional C++20 named-modules build of common_system. Only
 #   activates when COMMON_BUILD_MODULES is ON and the toolchain supports it
 #   (CMake >= 3.28, Ninja or Visual Studio generator, Clang 16+ / GCC 14+ /
-#   MSVC 2022 17.4+). On unsupported toolchains the module build is silently
-#   disabled with a warning, so this module is safe to always include.
+#   MSVC 2022 17.4+). When COMMON_BUILD_MODULES is requested on an unsupported
+#   toolchain, the module build is disabled and a message(WARNING) is emitted
+#   below; when COMMON_BUILD_MODULES is OFF this file returns immediately and
+#   no diagnostic is produced. Either way it is safe to always include.
+#
+#   NOTE (#690): macOS/AppleClang never builds the module target. In CI only
+#   the module-build job sets COMMON_BUILD_MODULES=ON, and its matrix omits
+#   macOS, so the warning below is never reached on macOS. The dedicated
+#   module-build-coverage job in .github/workflows/ci.yml surfaces that gap
+#   explicitly. Consolidation plan: docs/adr/ADR-004-result-eventbus-consolidation.md.
 #
 # Required input variables
 #   COMMON_BUILD_MODULES   - Cache option declared by the template
