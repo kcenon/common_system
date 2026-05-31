@@ -488,7 +488,7 @@ if (result.is_err()) {
 | | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
 | | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
 | | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
-| **Contributing** | [Contributing](CONTRIBUTING.md) | How to contribute |
+| **Contributing** | [Contributing](docs/contributing/CONTRIBUTING.md) | How to contribute |
 | | [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) | Error code management |
 
 ---
