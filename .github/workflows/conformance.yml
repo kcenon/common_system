@@ -1,0 +1,31 @@
+name: Conformance
+
+# Wave 0 ecosystem SSOT gate. Runs the cross-system conformance linter
+# (scripts/conformance_lint.py) on every push and pull request. This workflow
+# is intended to be copied verbatim into the other kcenon ecosystem repositories
+# so that one identical gate governs all of them.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    name: cross-system conformance linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Run conformance linter
+        run: python3 scripts/conformance_lint.py
