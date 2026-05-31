@@ -1,5 +1,14 @@
 # Contributing to Common System
 
+<!-- SSOT: The single source of truth for contribution guidelines is
+     docs/contributing/CONTRIBUTING.md (registry doc_id COM-PROJ-017).
+     This root file is a brief quick-start redirect; keep substantive
+     contribution policy in the canonical document to avoid drift. -->
+
+> **Canonical document:** The full contribution guide is maintained at
+> [`docs/contributing/CONTRIBUTING.md`](docs/contributing/CONTRIBUTING.md)
+> (the single source of truth). This page is a brief quick-start summary.
+
 Thank you for considering contributing to Common System\! This document provides guidelines and instructions for contributors.
 
 ## Table of Contents

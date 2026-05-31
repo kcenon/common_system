@@ -1,5 +1,14 @@
 # Changelog
 
+<!-- SSOT: This root CHANGELOG.md is the single source of truth for the
+     English changelog. The Korean translation lives at docs/CHANGELOG.kr.md.
+     The docs/ tree also carries a registry-tracked English copy
+     (docs/CHANGELOG.md, doc_id COM-PROJ-002) for the documentation portal;
+     this root file is canonical and the docs copy mirrors it. -->
+
+> **SSOT:** This file is the single source of truth for the English changelog.
+> **Language:** **English** | [한국어](docs/CHANGELOG.kr.md)
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
