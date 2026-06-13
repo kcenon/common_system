@@ -72,6 +72,14 @@ namespace common_errors {
     constexpr int network_error = -10;
     constexpr int registry_frozen = -11;
     constexpr int internal_error = -99;
+
+    // DI (dependency injection) errors (-50 to -59)
+    constexpr int di_service_not_registered = -50;
+    constexpr int di_circular_dependency = -51;
+    constexpr int di_already_registered = -52;
+    constexpr int di_factory_error = -53;
+    constexpr int di_invalid_lifetime = -54;
+    constexpr int di_scoped_from_root = -55;
 } // namespace common_errors
 
 // ============================================================================
@@ -304,6 +312,14 @@ inline std::string_view get_error_message(int code) {
         case codes::common_errors::registry_frozen: return "Registry is frozen";
         case codes::common_errors::internal_error: return "Internal error";
 
+        // DI errors
+        case codes::common_errors::di_service_not_registered: return "Service not registered in container";
+        case codes::common_errors::di_circular_dependency: return "Circular dependency detected";
+        case codes::common_errors::di_already_registered: return "Service already registered";
+        case codes::common_errors::di_factory_error: return "Factory error during instantiation";
+        case codes::common_errors::di_invalid_lifetime: return "Invalid service lifetime configuration";
+        case codes::common_errors::di_scoped_from_root: return "Scoped service resolved from root container";
+
         // thread_system errors
         case codes::thread_system::pool_full: return "Thread pool full";
         case codes::thread_system::pool_shutdown: return "Thread pool shutdown";
@@ -360,7 +376,10 @@ inline std::string_view get_error_message(int code) {
  * @return Category name
  */
 inline std::string_view get_category_name(int code) {
-    if (code >= 0) return "Success";
+    if (code == codes::common_errors::success) return "Success";
+    // Positive codes are out of range: this registry assigns categories only
+    // to negative error codes, so any code > 0 is not a valid error code.
+    if (code > 0) return "Invalid";
     if (code > static_cast<int>(category::thread_system)) return "Common";
     if (code > static_cast<int>(category::logger_system)) return "ThreadSystem";
     if (code > static_cast<int>(category::monitoring_system)) return "LoggerSystem";
