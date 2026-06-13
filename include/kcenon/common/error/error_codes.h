@@ -458,7 +458,10 @@ inline std::string_view get_error_message(int code) {
  * @return Category name
  */
 inline std::string_view get_category_name(int code) {
-    if (code >= 0) return "Success";
+    if (code == codes::common_errors::success) return "Success";
+    // Positive codes are out of range: this registry assigns categories only
+    // to negative error codes, so any code > 0 is not a valid error code.
+    if (code > 0) return "Invalid";
     if (code > static_cast<int>(category::thread_system)) return "Common";
     if (code > static_cast<int>(category::logger_system)) return "ThreadSystem";
     if (code > static_cast<int>(category::monitoring_system)) return "LoggerSystem";
