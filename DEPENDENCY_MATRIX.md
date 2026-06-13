@@ -17,15 +17,15 @@ does not use that dependency.
 | GTest | BSD-3-Clause | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 | 1.17.0 | **1.17.0** |
 | Benchmark | Apache-2.0 | 1.9.5 | 1.9.5 | 1.9.5 | 1.9.5 | — | 1.9.5 | 1.9.5 | **1.9.5** |
 | ASIO | BSL-1.0 | — | — | — | — | — | 1.30.2 | 1.30.2 | **1.30.2** |
-| OpenSSL | Apache-2.0 | — | — | 3.3.0 | — | — | 3.3.0 | 3.3.0 | **3.3.0** |
+| OpenSSL | Apache-2.0 | — | — | 3.4.1 | — | — | 3.4.1 | 3.4.1 | **3.4.1** |
 | zlib | zlib | — | — | — | — | — | — | 1.3.1 | **1.3.1** |
 | LZ4 | BSD-2-Clause | — | — | — | — | — | — | 1.9.4 | **1.9.4** |
-| spdlog | MIT | — | 1.13.0 | 1.13.0 | — | — | 1.13.0 | — | **1.13.0** |
-| gRPC | Apache-2.0 | — | — | 1.51.1 | — | 1.51.1 | — | — | **1.51.1** |
-| Protobuf | BSD-3-Clause | — | — | 3.21.12 | — | 3.21.12 | — | — | **3.21.12** |
-| OTel C++ | Apache-2.0 | — | — | 1.14.2 | — | — | — | — | **1.14.2** |
+| spdlog | MIT | — | 1.15.3 | 1.15.3 | — | — | 1.15.3 | — | **1.15.3** |
+| gRPC | Apache-2.0 | — | — | 1.60.0 | — | 1.60.0 | — | — | **1.60.0** |
+| Protobuf | BSD-3-Clause | — | — | 4.25.1 | — | 4.25.1 | — | — | **4.25.1** |
+| OTel C++ | Apache-2.0 | — | — | 1.18.0 | — | — | — | — | **1.18.0** |
 | libiconv | LGPL-2.1 | — | 1.17 | — | — | — | — | — | **1.17** (dynamic linking) |
-| libpqxx | BSD-3-Clause | — | — | — | — | — | 7.9.0 | — | **7.9.0** |
+| libpqxx | BSD-3-Clause | — | — | — | — | — | 7.9.2 | — | **7.9.2** |
 | libpq | PostgreSQL | — | — | — | — | — | 16.2 | — | **16.2** |
 | sqlite3 | Public Domain | — | — | — | — | — | 3.45.3 | — | **3.45.3** |
 | mongo-cxx-driver | Apache-2.0 | — | — | — | — | — | 3.10.1 | — | **3.10.1** (experimental) |
@@ -157,17 +157,17 @@ All references must use tagged versions — never `main` branch. See [VERSIONING
 | Library | Latest Release | FetchContent GIT_TAG | vcpkg REF |
 |---------|---------------|----------------------|-----------|
 | common_system | `v0.2.0` | `v0.2.0` | `v0.2.0` |
-| thread_system | `v0.3.0` | `v0.3.0` | `v0.3.0` |
-| container_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| logger_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
+| thread_system | `v1.0.0` | `v1.0.0` | `v1.0.0` |
+| container_system | `v1.0.0` | `v1.0.0` | `v1.0.0` |
+| logger_system | `v0.1.3` | `v0.1.3` | `v0.1.3` |
 | monitoring_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| database_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| network_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
-| pacs_system | — (no release yet) | — (pending first tag) | — (pending first tag) |
+| database_system | `v1.0.0` | `v1.0.0` | `v1.0.0` |
+| network_system | `v0.1.1` | `v0.1.1` | `v0.1.1` |
+| pacs_system | `v0.1.0` | `v0.1.0` | `v0.1.0` |
 
 > Update this table after each tagged release per [VERSIONING.md § Ecosystem Compatibility Matrix](./VERSIONING.md).
 > Tracking issue: [#401](https://github.com/kcenon/common_system/issues/401)
-> Verified against GitHub releases/tags on 2026-03-14 (Asia/Seoul).
+> Verified against GitHub releases/tags on 2026-06-13 (Asia/Seoul); reflects current vcpkg.json overrides + git tags.
 
 ## Maintenance
 
@@ -180,4 +180,4 @@ This matrix should be updated when:
 ---
 
 *Part of the SBOM improvement initiative: [common_system#390](https://github.com/kcenon/common_system/issues/390)*
-*Generated from SBOM analysis on 2026-03-06*
+*Generated from SBOM analysis on 2026-06-13; reflects current vcpkg.json overrides + git tags.*
