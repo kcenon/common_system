@@ -141,5 +141,6 @@ cmake -B build -S . -DBUILD_WITH_COMMON_SYSTEM=OFF
 ## References
 
 - [INTEGRATION.md](./INTEGRATION.md) - Integration guide and examples
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture overview
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture overview
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Implementation tracking

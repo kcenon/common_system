@@ -9,7 +9,7 @@ category: "PROJ"
 ---
 
 <!-- BSD 3-Clause License
-     Copyright (c) 2025, kcenon
+     Copyright (c) 2026, kcenon
      See the LICENSE file in the project root for full license information. -->
 
 # Contributing to common_system
@@ -268,7 +268,7 @@ Use `#pragma once` followed by comments:
 
 ```cpp
 // BSD 3-Clause License
-// Copyright (c) 2025, kcenon
+// Copyright (c) 2026, kcenon
 // See the LICENSE file in the project root for full license information.
 
 /**
@@ -926,7 +926,7 @@ Before submitting a pull request:
 6. **License Header**: Ensure files have correct license header
    ```cpp
    // BSD 3-Clause License
-   // Copyright (c) 2025, kcenon
+   // Copyright (c) 2026, kcenon
    // See the LICENSE file in the project root for full license information.
    ```
 
@@ -995,9 +995,9 @@ Reviewers may request:
 - **Discussions**: Use GitHub Discussions for design questions
 - **Documentation**: See docs/ folder for comprehensive guides
   - [Architecture Guide](../ARCHITECTURE.md)
-  - [Error Handling](../ERROR_HANDLING.md)
-  - [RAII Guidelines](../RAII_GUIDELINES.md)
-  - [Smart Pointer Guidelines](../SMART_POINTER_GUIDELINES.md)
+  - [Error Handling](../guides/ERROR_HANDLING.md)
+  - [RAII Guidelines](../guides/RAII_GUIDELINES.md)
+  - [Smart Pointer Guidelines](../guides/SMART_POINTER_GUIDELINES.md)
 
 ## License
 

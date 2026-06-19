@@ -28,9 +28,9 @@ Brief description of what this guide covers and what the reader will learn.
 
 - [Prerequisites](#prerequisites)
 - [Overview](#overview)
-- [Step 1: First Step](#step-1-first-step)
-- [Step 2: Second Step](#step-2-second-step)
-- [Step 3: Third Step](#step-3-third-step)
+- [Step 1: First Step](#step-1-first-step-title)
+- [Step 2: Second Step](#step-2-second-step-title)
+- [Step 3: Third Step](#step-3-third-step-title)
 - [Verification](#verification)
 - [Troubleshooting](#troubleshooting)
 - [Next Steps](#next-steps)

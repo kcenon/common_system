@@ -23,6 +23,7 @@
 - [Examples](#examples)
 - [Performance](#performance)
 - [Ecosystem Integration](#ecosystem-integration)
+- [Compliance](#compliance)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -34,7 +35,7 @@ A foundational C++20 header-only library providing essential interfaces and desi
 
 **Key Value Propositions**:
 - **Zero-overhead abstractions**: Template-based interfaces with compile-time resolution
-- **Well-tested**: 80%+ test coverage, zero sanitizer warnings, full CI/CD
+- **Well-tested**: coverage enforced by a 40% project / 60% patch Codecov gate (80% is the long-term target; see `codecov.yml`), zero sanitizer warnings, full CI/CD
 - **Header-only design**: No library linking, no dependencies, instant integration
 - **C++20 Module support**: Optional module-based build for faster compilation
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
@@ -176,7 +177,7 @@ include(FetchContent)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v1.0.0
+    GIT_TAG v0.2.0
 )
 FetchContent_MakeAvailable(common_system)
 
@@ -214,6 +215,9 @@ int main() {
     return 0;
 }
 ```
+
+> For the full dual-build strategy, compiler/CMake matrix, and fallback behavior,
+> see the [C++20 Modules Guide](docs/guides/CXX20_MODULES.md).
 
 ---
 
@@ -261,6 +265,10 @@ include/kcenon/common/
 ```
 
 [Complete Architecture Guide](docs/ARCHITECTURE.md)
+
+### Layout Standard
+
+The kcenon ecosystem follows a canonical directory, build-system, and test-infrastructure layout defined in [kcenon-system-layout.md](docs/kcenon-system-layout.md). This standard governs all eight ecosystem systems and is owned by `common_system` as the foundation tier.
 
 ---
 
@@ -391,7 +399,7 @@ cmake --build build
 - Zero-overhead abstractions - compiler optimizes away all abstraction layers
 
 **Quality Metrics**:
-- **Test coverage**: 80%+ (target: 85%)
+- **Test coverage**: enforced Codecov gate floor of 40% project / 60% patch; 80% is the long-term target per the gradual-improvement plan in `codecov.yml`. The live measured value is shown by the Codecov badge at the top of this file.
 - **Sanitizer tests**: 18/18 passing with zero warnings
 - **Cross-platform**: Ubuntu, macOS, Windows
 - **Zero memory leaks**: AddressSanitizer verified
@@ -428,6 +436,10 @@ graph TD
 > [database_system](https://github.com/kcenon/database_system) — Tier 3: Uses Result&lt;T&gt;, IExecutor
 > [network_system](https://github.com/kcenon/network_system) — Tier 4: Uses IExecutor, Result&lt;T&gt;
 > [pacs_system](https://github.com/kcenon/pacs_system) — Tier 5: Full ecosystem consumer
+
+### Ecosystem Version Baseline
+
+Downstream consumers should pin against a known-good set of port versions. The current baseline is published in [`docs/ECOSYSTEM_OVERVIEW.md#versions`](docs/ECOSYSTEM_OVERVIEW.md#versions) with a reproducible `vcpkg-configuration.json` snippet.
 
 ### Ecosystem CI Verification
 
@@ -471,12 +483,23 @@ if (result.is_err()) {
 | | [Best Practices](docs/guides/BEST_PRACTICES.md) | Recommended usage patterns |
 | | [FAQ](docs/guides/FAQ.md) | Frequently asked questions |
 | | [Troubleshooting](docs/guides/TROUBLESHOOTING.md) | Common issues and solutions |
-| **Advanced** | [Architecture](docs/ARCHITECTURE.md) | System design and principles |
+| **Advanced** | [C++20 Modules Guide](docs/guides/CXX20_MODULES.md) | Dual-build strategy and toolchain matrix |
+| | [Architecture](docs/ARCHITECTURE.md) | System design and principles |
 | | [Migration](docs/advanced/MIGRATION.md) | Version upgrade guide |
 | | [IExecutor Migration](docs/advanced/IEXECUTOR_MIGRATION_GUIDE.md) | Executor API migration |
 | | [Runtime Binding](docs/architecture/RUNTIME_BINDING.md) | Core design pattern |
-| **Contributing** | [Contributing](CONTRIBUTING.md) | How to contribute |
+| **Contributing** | [Contributing](docs/contributing/CONTRIBUTING.md) | How to contribute |
 | | [Error Code Guidelines](docs/guides/ERROR_CODE_GUIDELINES.md) | Error code management |
+
+---
+
+## Compliance
+
+`common_system` and its ecosystem siblings provide technical primitives that organizations may use as part of their compliance programs. The libraries are not themselves certified; adopters integrate them and supply the organizational controls.
+
+- [ISO Standards Overview](docs/compliance/ISO_OVERVIEW.md) — ecosystem-level index of every ISO standard the kcenon systems touch, with links to per-system mapping documents.
+
+Per-system compliance docs are published under each repository's `docs/compliance/` directory (e.g., [logger_system ISO/IEC 27001 mapping](https://github.com/kcenon/logger_system/blob/develop/docs/compliance/iso-27001.md)). See the overview for the full list.
 
 ---
 
@@ -486,9 +509,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](docs/contributing/CONTRIB
 
 ### Quick Links
 
-- [Development Setup](docs/contributing/CONTRIBUTING.md#development-workflow)
-- [Code Style](docs/contributing/CONTRIBUTING.md#code-style)
-- [Pull Request Process](docs/contributing/CONTRIBUTING.md#development-workflow)
+- [Development Setup](docs/contributing/CONTRIBUTING.md#development-setup)
+- [Code Style](docs/contributing/CONTRIBUTING.md#code-style-guidelines)
+- [Pull Request Process](docs/contributing/CONTRIBUTING.md#submitting-changes)
 
 ### Support
 

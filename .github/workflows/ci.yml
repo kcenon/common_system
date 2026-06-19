@@ -206,8 +206,30 @@ jobs:
         echo "✅ Build succeeded with -Werror flag"
         echo "All code compiles without warnings"
 
+  # C++20 Module Build Coverage Gap (explicit, always-visible)
+  # The module-build job below cannot run on macOS because AppleClang does not
+  # support C++20 module dependency scanning (it is omitted from the matrix).
+  # This job makes that omission an explicit warning instead of a silent matrix
+  # gap, so a green CI run does not hide the fact that the macOS module export
+  # surface was never verified.
+  # See #690 and docs/adr/ADR-004-result-eventbus-consolidation.md.
+  module-build-coverage:
+    name: Module Build Coverage Gap
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - name: Surface macOS / AppleClang module-build skip
+        run: |
+          echo "::warning title=C++20 modules not built on macOS::The C++20 named-modules target (COMMON_BUILD_MODULES=ON) is exercised only on Ubuntu/Clang-16 and Windows/MSVC. macOS/AppleClang is omitted because AppleClang lacks C++20 module dependency scanning, so the module export surface is NOT verified on macOS. Tracking: #690 (docs/adr/ADR-004-result-eventbus-consolidation.md)."
+          echo "Module build coverage:"
+          echo "  ubuntu-22.04 / clang-16 : modules BUILT"
+          echo "  windows-2022 / msvc     : modules BUILT"
+          echo "  macos-*      / appleclang: modules SKIPPED (toolchain limitation)"
+
   # C++20 Module Build Verification
-  # Note: AppleClang does not support C++20 modules, so macOS is excluded
+  # Note: AppleClang does not support C++20 modules, so macOS is excluded.
+  #       The dedicated module-build-coverage job above surfaces this gap as an
+  #       explicit warning. See #690 / docs/adr/ADR-004-result-eventbus-consolidation.md.
   # Note: GCC 14 excluded due to Internal Compiler Error (ICE) with virtual destructors in modules
   #       GCC bug: segfault in ~IExecutor() when importing interface partitions
   # Note: Module builds may fail during stabilization phase - using continue-on-error

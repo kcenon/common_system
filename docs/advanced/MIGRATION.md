@@ -690,8 +690,8 @@ After migration:
 
 If you encounter issues:
 
-1. Check [INTEGRATION.md](./INTEGRATION.md) for examples
-2. Review [ARCHITECTURE.md](./ARCHITECTURE.md) for system design
+1. Check [INTEGRATION.md](../guides/INTEGRATION.md) for examples
+2. Review [ARCHITECTURE.md](../ARCHITECTURE.md) for system design
 3. Check existing Issues on GitHub
 4. Create a new Issue with:
    - System versions
@@ -774,7 +774,8 @@ cmake --build build
 
 ## References
 
-- [INTEGRATION.md](./INTEGRATION.md) - Integration guide with examples
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - Integration tiers and policy
+- [INTEGRATION.md](../guides/INTEGRATION.md) - Integration guide with examples
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - System architecture
+- [INTEGRATION_POLICY.md](../guides/INTEGRATION_POLICY.md) - Integration tiers and policy
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - Project improvement tracking

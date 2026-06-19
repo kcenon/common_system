@@ -655,8 +655,8 @@ cmake -B build -S . -DCMAKE_PREFIX_PATH=/path/to/systems
 
 문제가 발생하면:
 
-1. [INTEGRATION.md](./INTEGRATION.md)에서 예제 확인
-2. [ARCHITECTURE.md](./ARCHITECTURE.md)에서 시스템 디자인 검토
+1. [INTEGRATION.md](../guides/INTEGRATION.md)에서 예제 확인
+2. [ARCHITECTURE.md](../ARCHITECTURE.md)에서 시스템 디자인 검토
 3. GitHub에서 기존 이슈 확인
 4. 다음 정보와 함께 새 이슈 생성:
    - 시스템 버전
@@ -739,7 +739,8 @@ cmake --build build
 
 ## 참고 자료
 
-- [INTEGRATION.md](./INTEGRATION.md) - 예제를 포함한 통합 가이드
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - 시스템 아키텍처
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 tier 및 정책
+- [INTEGRATION.md](../guides/INTEGRATION.md) - 예제를 포함한 통합 가이드
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - 시스템 아키텍처
+- [INTEGRATION_POLICY.md](../guides/INTEGRATION_POLICY.md) - 통합 tier 및 정책
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 프로젝트 개선 추적

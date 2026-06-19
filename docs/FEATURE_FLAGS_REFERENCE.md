@@ -12,6 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is part of the [Feature Flags Framework Guide](FEATURE_FLAGS_GUIDE.md).
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](FEATURE_FLAGS_GUIDE.kr.md)
 
 Header-level API reference for all feature flag macros, detection logic, and system dependency flags.

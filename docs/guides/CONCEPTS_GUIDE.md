@@ -353,6 +353,9 @@ bus.subscribe<MyEvent>([](MyEvent&) { return 42; });  // Error!
 ## Related Documentation
 
 - [API Reference](../API_REFERENCE.md)
+<!-- TODO: target file does not exist -->
 - [Result Pattern Guide](result_pattern.md)
+<!-- TODO: target file does not exist -->
 - [Event Bus Guide](event_bus.md)
+<!-- TODO: target file does not exist -->
 - [Dependency Injection Guide](dependency_injection.md)

@@ -12,6 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **Adapter Framework Guide**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](ADAPTER_GUIDE.kr.md)
 
 **Complete Guide**: Type-Safe Adapters, Interface Adaptation, and Cross-System Integration
@@ -38,7 +39,7 @@ This guide provides comprehensive documentation for the adapter framework in com
   - [smart_adapter_factory](#smart_adapter_factory)
   - [Deprecation Status](#deprecation-status)
 - [New Unified Adapter System](#4-new-unified-adapter-system)
-  - [adapter\<T\>](#adapter)
+  - [adapter\<T\>](#adaptert)
   - [interface_adapter](#interface_adapter)
   - [adapter_factory](#adapter_factory)
   - [Zero-Cost Abstraction](#zero-cost-abstraction)

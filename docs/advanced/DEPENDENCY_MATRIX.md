@@ -52,7 +52,7 @@ category: "PROJ"
   - [Long-term Actions (Week 2-4)](#long-term-actions-week-2-4)
 - [Success Metrics](#success-metrics)
   - [Phase 4 Goals](#phase-4-goals)
-  - [Current Score: 75% ✅](#current-score-75-)
+  - [Current Score: 75% ✅](#current-score-75)
 - [Conclusion](#conclusion)
   - [Key Findings](#key-findings)
   - [Recommended Next Steps](#recommended-next-steps)

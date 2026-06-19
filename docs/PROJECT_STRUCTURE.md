@@ -38,7 +38,7 @@ The common_system is organized as a **header-only library** with supporting buil
 
 - **Header-only**: All core functionality in `include/` directory
 - **Zero dependencies**: No external libraries required for core functionality
-- **CMake-based**: Modern CMake 3.16+ build system
+- **CMake-based**: Modern CMake 3.20+ build system
 - **Comprehensive testing**: Unit tests, integration tests, and benchmarks
 - **Well-documented**: Doxygen API docs and user guides
 

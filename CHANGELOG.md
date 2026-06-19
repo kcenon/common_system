@@ -1,11 +1,29 @@
 # Changelog
 
+<!-- SSOT: This root CHANGELOG.md is the single source of truth for the
+     English changelog. The Korean translation lives at docs/CHANGELOG.kr.md.
+     The docs/ tree also carries a registry-tracked English copy
+     (docs/CHANGELOG.md, doc_id COM-PROJ-002) for the documentation portal;
+     this root file is canonical and the docs copy mirrors it. -->
+
+> **SSOT:** This file is the single source of truth for the English changelog.
+> **Language:** **English** | [한국어](docs/CHANGELOG.kr.md)
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- `cmake/template/safety.cmake`: new module hosting defensive build-config guards. Provides `kcenon_template_forbid_in_release(<flag_var> [REASON <text>])` for the "prohibit a mock-only flag in Release builds" idiom. Multi-config-aware (skips the configure-time check when `CMAKE_BUILD_TYPE` is empty). Template VERSION bumped to 1.3.0 (MINOR per template versioning policy: new module added) ([#669](https://github.com/kcenon/common_system/issues/669))
+- `cmake/template/targets.cmake`: `kcenon_template_add_build_interface_includes(<target> <visibility> <dir>...)` helper for attaching `BUILD_INTERFACE`-only include directories without pairing with `INSTALL_INTERFACE`. Template VERSION bumped to 1.1.0 (MINOR per template versioning policy: new helper added) ([#667](https://github.com/kcenon/common_system/issues/667))
+
+### Documentation
+
+- Standard amendment v1.0 → v1.1: document `cmake/template/` exception for the layout-standard owner ([#671](https://github.com/kcenon/common_system/issues/671))
 
 ## [1.0.0] - 2026-04-13
 

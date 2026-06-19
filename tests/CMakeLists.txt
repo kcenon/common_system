@@ -29,9 +29,9 @@ find_package(Threads REQUIRED)
 
 # Create test executable
 add_executable(common_system_tests
-    improved_result_test.cpp
+    result_test.cpp
     executor_test.cpp
-    improved_event_bus_test.cpp
+    event_bus_test.cpp
     main.cpp
 )
 
@@ -721,6 +721,27 @@ set_tests_properties(common_error_codes_test PROPERTIES
     LABELS "unit;error"
 )
 
+# Error registry contract gate (Issue #699)
+add_executable(common_error_registry_contract_test
+    error_registry_contract_test.cpp
+)
+
+target_link_libraries(common_error_registry_contract_test PRIVATE
+    kcenon::common
+    GTest::gtest
+    GTest::gtest_main
+    Threads::Threads
+)
+
+target_compile_features(common_error_registry_contract_test PRIVATE cxx_std_17)
+
+add_test(NAME common_error_registry_contract_test COMMAND common_error_registry_contract_test)
+
+set_tests_properties(common_error_registry_contract_test PROPERTIES
+    TIMEOUT 60
+    LABELS "unit;error"
+)
+
 # Source location tests (Issue #359)
 add_executable(common_source_location_test
     source_location_test.cpp
@@ -741,9 +762,6 @@ set_tests_properties(common_source_location_test PROPERTIES
     TIMEOUT 60
     LABELS "unit;utils"
 )
-
-# Enable testing
-enable_testing()
 
 # Coverage flags for GCC/Clang
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -795,6 +813,7 @@ set(COMMON_TEST_TARGETS
     common_database_interface_test
     common_failure_window_test
     common_error_codes_test
+    common_error_registry_contract_test
     common_source_location_test
 )
 

@@ -12,6 +12,7 @@ category: "GUID"
 
 > **SSOT**: This document is the single source of truth for **Troubleshooting Guide - common_system**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](TROUBLESHOOTING.kr.md)
 
 A comprehensive troubleshooting guide for the common_system header-only library. This document covers the most common issues encountered when using, integrating, and debugging header-only C++ libraries.

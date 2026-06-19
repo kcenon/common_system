@@ -12,11 +12,14 @@ category: "PROJ"
 
 > **SSOT**: This document is the single source of truth for **Rust/C++ Feature Parity Matrix**.
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](RUST_PARITY.kr.md)
 
 **Complete (Parts 1-3)**: Overall Parity Status, API Mapping, Feature Comparison, Interop, and Roadmap
 
 **Status**: ✅ **Part 1 Complete** | ✅ **Part 2 Complete** | ✅ **Part 3 Complete**
+
+**Current as of**: 2026-04-04
 
 This document provides a comprehensive comparison between the C++ implementations and Rust ports of the kcenon ecosystem systems. It helps developers choose the right language for their projects and understand migration paths.
 

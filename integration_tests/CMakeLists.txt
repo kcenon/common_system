@@ -37,11 +37,25 @@ target_link_libraries(integration_test_framework INTERFACE
     GTest::gtest_main
 )
 
-# Collect all integration test sources
-file(GLOB SCENARIO_TESTS scenarios/*.cpp)
-file(GLOB FAILURE_TESTS failures/*.cpp)
-file(GLOB PERFORMANCE_TESTS performance/*.cpp)
-file(GLOB STRESS_TESTS stress/*.cpp)
+# Collect all integration test sources.
+# Note: enumerated explicitly per layout standard rule R-19 (no file(GLOB)).
+# Add new files here when extending integration coverage.
+set(SCENARIO_TESTS
+    scenarios/event_bus_integration_test.cpp
+    scenarios/full_system_integration_test.cpp
+    scenarios/result_pattern_integration_test.cpp
+    scenarios/runtime_binding_integration_test.cpp
+)
+set(FAILURE_TESTS
+    failures/error_handling_test.cpp
+)
+set(PERFORMANCE_TESTS
+    performance/memory_pressure_test.cpp
+    performance/result_performance_test.cpp
+)
+set(STRESS_TESTS
+    stress/stress_test.cpp
+)
 
 # Add integration test executable (renamed to avoid conflicts with other systems)
 add_executable(common_integration_tests
@@ -65,9 +79,6 @@ set_target_properties(common_integration_tests PROPERTIES
 # Register with CTest
 include(GoogleTest)
 gtest_discover_tests(common_integration_tests)
-
-# Enable testing
-enable_testing()
 
 # =============================================================================
 # APPLY STRICT WARNING FLAGS

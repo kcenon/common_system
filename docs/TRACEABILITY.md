@@ -18,9 +18,9 @@ category: "QUAL"
 
 | Feature ID | Feature | Test File(s) | Module/Directory | Status |
 |-----------|---------|-------------|-----------------|--------|
-| COM-FEAT-001 | Result\<T\> Pattern | tests/improved_result_test.cpp, tests/result_helpers_test.cpp, integration_tests/scenarios/result_pattern_integration_test.cpp, integration_tests/performance/result_performance_test.cpp | include/kcenon/common/patterns/result/ | Covered |
+| COM-FEAT-001 | Result\<T\> Pattern | tests/result_test.cpp, tests/result_helpers_test.cpp, integration_tests/scenarios/result_pattern_integration_test.cpp, integration_tests/performance/result_performance_test.cpp | include/kcenon/common/patterns/result/ | Covered |
 | COM-FEAT-002 | IExecutor Interface | tests/executor_test.cpp | include/kcenon/common/interfaces/ | Covered |
-| COM-FEAT-003 | Event Bus | tests/improved_event_bus_test.cpp, tests/event_bus_failure_test.cpp, integration_tests/scenarios/event_bus_integration_test.cpp | include/kcenon/common/patterns/ | Covered |
+| COM-FEAT-003 | Event Bus | tests/event_bus_test.cpp, tests/event_bus_failure_test.cpp, integration_tests/scenarios/event_bus_integration_test.cpp | include/kcenon/common/patterns/ | Covered |
 | COM-FEAT-004 | Circuit Breaker | tests/circuit_breaker_test.cpp | include/kcenon/common/resilience/ | Covered |
 | COM-FEAT-005 | Circular Buffer | tests/circular_buffer_test.cpp | include/kcenon/common/utils/ | Covered |
 | COM-FEAT-006 | Object Pool | tests/object_pool_test.cpp | include/kcenon/common/utils/ | Covered |

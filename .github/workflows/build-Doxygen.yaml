@@ -1,3 +1,7 @@
+# Thin CALLER for the canonical Doxygen workflow.
+# This file only maps repository events to the reusable workflow `doxygen.yml`
+# (the single source of truth for documentation build/deploy). Keep this file
+# trigger-only; do not add build steps here — edit `doxygen.yml` instead.
 name: Generate-Documentation
 
 on:

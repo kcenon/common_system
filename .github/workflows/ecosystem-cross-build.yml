@@ -1,0 +1,536 @@
+# =============================================================================
+# Ecosystem Cross-Build
+# -----------------------------------------------------------------------------
+# Validates that a structural change in common_system (cmake/, include/) does
+# not silently break the seven sibling systems. Each sibling is fetched at its
+# default branch and built against THIS PR's common_system, in dependency order.
+#
+# Why this is separate from `ecosystem-vcpkg-integration.yml`:
+#   - vcpkg integration validates released vcpkg ports as a consumer.
+#   - This workflow validates source-level cross-impact: the PR's common_system
+#     against each sibling's HEAD source tree.
+#
+# Escape hatch: add the `skip-cross-build` label to the PR. Use only for
+# emergency releases and document the rationale in the PR body.
+#
+# Dependency graph (build order, root → leaf):
+#
+#     common_system                         (Tier 0 — this PR)
+#         |
+#         +-- thread_system   container_system   database_system   (Tier 1)
+#                |
+#                +-- logger_system   network_system                 (Tier 2)
+#                                |
+#                                +-- monitoring_system              (Tier 3)
+#                                            |
+#                                            +-- pacs_system        (Tier 4)
+#
+# Tracked by: kcenon/common_system#660
+# =============================================================================
+
+name: Ecosystem Cross-Build
+
+on:
+  push:
+    branches: [develop, main]
+    paths:
+      - 'cmake/**'
+      - 'include/**'
+      - 'CMakeLists.txt'
+      - 'CMakePresets.json'
+      - '.github/workflows/ecosystem-cross-build.yml'
+  pull_request:
+    branches: [develop, main]
+    paths:
+      - 'cmake/**'
+      - 'include/**'
+      - 'CMakeLists.txt'
+      - 'CMakePresets.json'
+      - '.github/workflows/ecosystem-cross-build.yml'
+  workflow_dispatch:
+    inputs:
+      sibling_ref:
+        description: 'Override sibling git ref (default: main for each sibling)'
+        required: false
+        default: ''
+  repository_dispatch:
+    types: [ecosystem-structural-change]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+env:
+  CMAKE_BUILD_TYPE: Release
+  INSTALL_PREFIX: ${{ github.workspace }}/install
+
+jobs:
+  # ─── Skip-cross-build escape hatch ─────────────────────────────────────────
+  precheck:
+    name: "Pre-check (skip-cross-build label)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      skip: ${{ steps.label.outputs.skip }}
+      sibling_ref: ${{ steps.ref.outputs.sibling_ref }}
+    steps:
+      - name: Resolve sibling ref override
+        id: ref
+        run: |
+          ref="${{ github.event.inputs.sibling_ref }}"
+          if [ -z "$ref" ]; then ref="main"; fi
+          echo "sibling_ref=${ref}" >> "$GITHUB_OUTPUT"
+          echo "Sibling ref: ${ref}"
+      - name: Check for skip-cross-build label
+        id: label
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            labels=$(gh pr view ${{ github.event.pull_request.number }} \
+              --repo ${{ github.repository }} \
+              --json labels -q '.labels[].name' || echo "")
+            if echo "$labels" | grep -qx 'skip-cross-build'; then
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              echo "::notice::skip-cross-build label found — bypassing matrix."
+            else
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─── Tier 0: common_system (this PR) ───────────────────────────────────────
+  tier-0-common:
+    name: "Tier 0: common_system (this PR)"
+    needs: precheck
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - name: Configure & install common_system
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DCOMMON_HEADER_ONLY=ON \
+            -DCOMMON_BUILD_TESTS=OFF \
+            -DCOMMON_BUILD_EXAMPLES=OFF \
+            -DCOMMON_BUILD_BENCHMARKS=OFF \
+            -DCOMMON_BUILD_DOCS=OFF
+          cmake --build build --target install
+      - name: Upload install tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: install-common
+          path: install
+          retention-days: 1
+
+  # ─── Tier 1: parallel siblings that depend only on common ──────────────────
+  tier-1-thread-build:
+    name: "Tier 1: thread_system"
+    needs: [precheck, tier-0-common]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-common, path: install }
+      - name: Clone thread_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/thread_system.git sibling
+      - name: Configure & install thread_system against this PR's common_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF \
+            -DTHREAD_BUILD_TESTS=OFF -DTHREAD_BUILD_EXAMPLES=OFF \
+            -DTHREAD_BUILD_BENCHMARKS=OFF -DTHREAD_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        with: { name: install-after-thread, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-thread-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  tier-1-container:
+    name: "Tier 1: container_system"
+    needs: [precheck, tier-0-common]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-common, path: install }
+      - name: Clone container_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/container_system.git sibling
+      - name: Configure & install container_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF \
+            -DCONTAINER_BUILD_TESTS=OFF -DCONTAINER_BUILD_EXAMPLES=OFF \
+            -DCONTAINER_BUILD_BENCHMARKS=OFF -DCONTAINER_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        with: { name: install-after-container, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-container-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  tier-1-database:
+    name: "Tier 1: database_system"
+    needs: [precheck, tier-0-common]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    continue-on-error: true  # Often pulls native DB clients via vcpkg; not blocking initial rollout.
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libpq-dev libsqlite3-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-common, path: install }
+      - name: Clone database_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/database_system.git sibling
+      - name: Configure & install database_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF \
+            -DDATABASE_BUILD_TESTS=OFF -DDATABASE_BUILD_EXAMPLES=OFF \
+            -DDATABASE_BUILD_BENCHMARKS=OFF -DDATABASE_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with: { name: install-after-database, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-database-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ─── Tier 2: logger (needs thread), network (needs thread) ─────────────────
+  tier-2-logger:
+    name: "Tier 2: logger_system"
+    needs: [precheck, tier-1-thread-build]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-thread, path: install }
+      - name: Clone logger_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/logger_system.git sibling
+      - name: Configure & install logger_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF -DBUILD_BENCHMARKS=OFF \
+            -DLOGGER_BUILD_TESTS=OFF -DLOGGER_BUILD_EXAMPLES=OFF \
+            -DLOGGER_BUILD_BENCHMARKS=OFF -DLOGGER_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        with: { name: install-after-logger, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-logger-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  tier-2-network:
+    name: "Tier 2: network_system"
+    needs: [precheck, tier-1-thread-build]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-thread, path: install }
+      - name: Clone network_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/network_system.git sibling
+      - name: Configure & install network_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF \
+            -DNETWORK_BUILD_TESTS=OFF -DNETWORK_BUILD_EXAMPLES=OFF \
+            -DNETWORK_BUILD_BENCHMARKS=OFF -DNETWORK_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        with: { name: install-after-network, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-network-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ─── Tier 3: monitoring (needs logger + network) ───────────────────────────
+  tier-3-monitoring:
+    name: "Tier 3: monitoring_system"
+    needs: [precheck, tier-2-logger, tier-2-network]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-logger, path: install }
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-network, path: install }
+      - name: Clone monitoring_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/monitoring_system.git sibling
+      - name: Configure & install monitoring_system
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DCMAKE_INSTALL_PREFIX="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF \
+            -DMONITORING_BUILD_TESTS=OFF -DMONITORING_BUILD_EXAMPLES=OFF \
+            -DMONITORING_BUILD_BENCHMARKS=OFF -DMONITORING_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+          cmake --build build --target install 2>&1 | tee build.log
+      - uses: actions/upload-artifact@v4
+        with: { name: install-after-monitoring, path: install, retention-days: 1 }
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-monitoring-logs
+          path: |
+            sibling/configure.log
+            sibling/build.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ─── Tier 4: pacs (needs monitoring + container + database) ────────────────
+  # Marked continue-on-error during initial rollout: pacs has heavy native deps
+  # (DCMTK, Crow, AWS/Azure SDKs) that aren't pre-installed on ubuntu-24.04 and
+  # are typically supplied via vcpkg in pacs's own CI. Once pacs's structural
+  # dep-resolution lands in this image (or a vcpkg fast-path is added here),
+  # remove `continue-on-error` to make this job blocking.
+  tier-4-pacs:
+    name: "Tier 4: pacs_system"
+    needs: [precheck, tier-3-monitoring, tier-1-container, tier-1-database]
+    if: needs.precheck.outputs.skip != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    continue-on-error: true
+    steps:
+      - name: Install build deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
+          echo "CC=gcc-13" >> "$GITHUB_ENV"
+          echo "CXX=g++-13" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-monitoring, path: install }
+      - uses: actions/download-artifact@v4
+        with: { name: install-after-container, path: install }
+      - uses: actions/download-artifact@v4
+        if: ${{ !cancelled() }}
+        with: { name: install-after-database, path: install }
+        continue-on-error: true
+      - name: Clone pacs_system
+        run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/pacs_system.git sibling
+      - name: Configure pacs_system (configure-only — full build needs DCMTK)
+        working-directory: sibling
+        run: |
+          set -e
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
+            -DCMAKE_PREFIX_PATH="${INSTALL_PREFIX}" \
+            -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF \
+            -DPACS_BUILD_TESTS=OFF -DPACS_BUILD_EXAMPLES=OFF \
+            -DPACS_BUILD_BENCHMARKS=OFF -DPACS_BUILD_DOCS=OFF \
+            -DBUILD_TESTING=OFF 2>&1 | tee configure.log
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cross-build-pacs-logs
+          path: |
+            sibling/configure.log
+            sibling/build/CMakeFiles/CMakeOutput.log
+            sibling/build/CMakeFiles/CMakeError.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # ─── Summary gate (use as required status check) ───────────────────────────
+  summary:
+    name: "Cross-Build Summary"
+    if: always() && needs.precheck.outputs.skip != 'true'
+    needs:
+      - precheck
+      - tier-0-common
+      - tier-1-thread-build
+      - tier-1-container
+      - tier-1-database
+      - tier-2-logger
+      - tier-2-network
+      - tier-3-monitoring
+      - tier-4-pacs
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Aggregate per-tier results
+        run: |
+          echo "## Ecosystem Cross-Build Results"
+          echo ""
+          declare -a results=(
+            "Tier 0 common_system        :${{ needs.tier-0-common.result }}            :blocking"
+            "Tier 1 thread_system        :${{ needs.tier-1-thread-build.result }}      :blocking"
+            "Tier 1 container_system     :${{ needs.tier-1-container.result }}         :blocking"
+            "Tier 1 database_system      :${{ needs.tier-1-database.result }}          :advisory"
+            "Tier 2 logger_system        :${{ needs.tier-2-logger.result }}            :blocking"
+            "Tier 2 network_system       :${{ needs.tier-2-network.result }}           :blocking"
+            "Tier 3 monitoring_system    :${{ needs.tier-3-monitoring.result }}        :blocking"
+            "Tier 4 pacs_system          :${{ needs.tier-4-pacs.result }}              :advisory"
+          )
+          failed=0
+          for entry in "${results[@]}"; do
+            name=$(echo "$entry" | cut -d':' -f1 | xargs)
+            result=$(echo "$entry" | cut -d':' -f2 | xargs)
+            policy=$(echo "$entry" | cut -d':' -f3 | xargs)
+            printf "  %-32s %-12s [%s]\n" "$name" "$result" "$policy"
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ] && [ "$policy" = "blocking" ]; then
+              failed=$((failed + 1))
+            fi
+          done
+          echo ""
+          if [ "$failed" -gt 0 ]; then
+            echo "::error::$failed blocking tier(s) failed. Inspect 'cross-build-<system>-logs' artifacts for repro commands."
+            echo ""
+            echo "To reproduce a failure locally:"
+            echo "  1. git clone https://github.com/kcenon/common_system.git && cd common_system"
+            echo "  2. git checkout <this-PR-branch>"
+            echo "  3. cmake -B build -DCMAKE_INSTALL_PREFIX=\$PWD/install -DCOMMON_HEADER_ONLY=ON -DCOMMON_BUILD_TESTS=OFF"
+            echo "  4. cmake --build build --target install"
+            echo "  5. git clone https://github.com/kcenon/<failing-sibling>.git ../sibling"
+            echo "  6. cmake -S ../sibling -B ../sibling/build -DCMAKE_PREFIX_PATH=\$PWD/install -DBUILD_TESTS=OFF"
+            echo "  7. cmake --build ../sibling/build"
+            exit 1
+          fi
+          echo "All blocking tiers passed."
+
+  # ─── Skip-path acknowledgement (escape hatch was used) ─────────────────────
+  skip-acknowledged:
+    name: "Cross-Build (skipped via label)"
+    needs: precheck
+    if: needs.precheck.outputs.skip == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Acknowledge skip
+        run: |
+          echo "::notice::Ecosystem cross-build skipped via 'skip-cross-build' label."
+          echo "This bypass is for emergency releases only. Document the rationale in the PR body."

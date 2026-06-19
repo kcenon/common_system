@@ -12,6 +12,7 @@ category: "ARCH"
 
 > **SSOT**: This document is the single source of truth for **Common System - Project Structure**.
 
+<!-- TODO: target file does not exist -->
 **English | [한국어](STRUCTURE.kr.md)**
 
 ---
@@ -658,9 +659,9 @@ class MyService {
 
 ## References
 
-- [README.md](README.md) - Project overview
-- [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture documentation
-- [INTEGRATION.md](INTEGRATION.md) - Integration guide
-- [ERROR_HANDLING.md](docs/ERROR_HANDLING.md) - Error handling guide
-- [SMART_POINTER_GUIDELINES.md](docs/SMART_POINTER_GUIDELINES.md) - Smart pointer best practices
-- [RAII_GUIDELINES.md](docs/RAII_GUIDELINES.md) - RAII best practices
+- [README.md](../../README.md) - Project overview
+- [ARCHITECTURE.md](../ARCHITECTURE.md) - Architecture documentation
+- [INTEGRATION.md](../guides/INTEGRATION.md) - Integration guide
+- [ERROR_HANDLING.md](../guides/ERROR_HANDLING.md) - Error handling guide
+- [SMART_POINTER_GUIDELINES.md](../guides/SMART_POINTER_GUIDELINES.md) - Smart pointer best practices
+- [RAII_GUIDELINES.md](../guides/RAII_GUIDELINES.md) - RAII best practices

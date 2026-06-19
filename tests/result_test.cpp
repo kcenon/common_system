@@ -1,5 +1,5 @@
 /**
- * @file improved_result_test.cpp
+ * @file result_test.cpp
  * @brief Member method API tests for Result<T> pattern (RECOMMENDED)
  *
  * This test file validates the member method API for Result<T> operations.

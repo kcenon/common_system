@@ -325,6 +325,9 @@ container.register_type<NonPolymorphic, Impl>();  // 오류!
 ## 관련 문서
 
 - [API 레퍼런스](../API_REFERENCE.kr.md)
+<!-- TODO: target file does not exist -->
 - [Result 패턴 가이드](result_pattern_ko.md)
+<!-- TODO: target file does not exist -->
 - [Event Bus 가이드](event_bus_ko.md)
+<!-- TODO: target file does not exist -->
 - [의존성 주입 가이드](dependency_injection_ko.md)

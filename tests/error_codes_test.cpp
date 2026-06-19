@@ -148,9 +148,29 @@ TEST(ErrorCodesTest, GetErrorMessageUnknownCode)
 
 TEST(ErrorCodesTest, GetCategoryNameSuccess)
 {
+    // Only the success sentinel (0) is classified as "Success".
+    EXPECT_EQ(get_category_name(codes::common_errors::success), "Success");
     EXPECT_EQ(get_category_name(0), "Success");
-    EXPECT_EQ(get_category_name(1), "Success");
-    EXPECT_EQ(get_category_name(100), "Success");
+}
+
+// Regression test for issue #698: positive codes were misclassified as
+// "Success", masking real errors. The category registry only spans negative
+// codes, so any positive value must be reported as "Invalid", never "Success".
+TEST(ErrorCodesTest, GetCategoryNamePositiveCodesAreInvalid)
+{
+    // monitoring-style positive code (monitoring emits 1000-4999)
+    EXPECT_NE(get_category_name(1000), "Success");
+    EXPECT_EQ(get_category_name(1000), "Invalid");
+
+    // container-style positive code (container static_cast into shared code)
+    EXPECT_NE(get_category_name(100), "Success");
+    EXPECT_EQ(get_category_name(100), "Invalid");
+
+    EXPECT_EQ(get_category_name(1), "Invalid");
+
+    // The negative ladder must remain untouched by the positive-code fix.
+    EXPECT_EQ(get_category_name(codes::thread_system::pool_full), "ThreadSystem");
+    EXPECT_EQ(get_category_name(-100), "ThreadSystem");
 }
 
 TEST(ErrorCodesTest, GetCategoryNameCommon)

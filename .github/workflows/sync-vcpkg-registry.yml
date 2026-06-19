@@ -103,6 +103,44 @@ jobs:
         echo "SHA512: ${SHA512}"
         rm -f /tmp/source.tar.gz
 
+    - name: Verify SHA512 against actual GitHub archive
+      env:
+        VERSION: ${{ steps.meta.outputs.version }}
+        REPO: ${{ steps.meta.outputs.repo }}
+        NEW_SHA: ${{ steps.sha.outputs.sha512 }}
+      run: |
+        # Re-download the archive from GitHub and recompute SHA512 to guard
+        # against any drift between the value the workflow is about to write
+        # to portfile.cmake and the bytes a vcpkg consumer will actually fetch.
+        # See kcenon/common_system#675 (parent EPIC #674) and microsoft/vcpkg#51511.
+        set -euo pipefail
+        TAG="v${VERSION}"
+        ARCHIVE_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
+        VERIFY_FILE="/tmp/verify-archive.tar.gz"
+
+        echo "Re-fetching ${ARCHIVE_URL} for independent verification..."
+        # Use --fail so curl returns non-zero on HTTP errors; download to a
+        # file (rather than piping into sha512sum) so a fetch failure cannot
+        # silently produce the empty-input hash cf83e1357eefb8bdf...
+        if ! curl -fsSL --retry 3 --retry-delay 2 -o "${VERIFY_FILE}" "${ARCHIVE_URL}"; then
+          echo "::error::Failed to download release archive for verification: ${ARCHIVE_URL}"
+          exit 1
+        fi
+
+        ACTUAL_SHA=$(sha512sum "${VERIFY_FILE}" | awk '{print $1}')
+        rm -f "${VERIFY_FILE}"
+
+        if [[ "${NEW_SHA}" != "${ACTUAL_SHA}" ]]; then
+          echo "::error::SHA512 mismatch detected for ${TAG}"
+          echo "::error::Workflow computed: ${NEW_SHA}"
+          echo "::error::GitHub archive:    ${ACTUAL_SHA}"
+          echo "::error::Refusing to commit a portfile that would not install."
+          exit 1
+        fi
+
+        echo "SHA512 verified against ${ARCHIVE_URL}"
+        echo "  ${ACTUAL_SHA}"
+
     - name: Update portfile.cmake with new SHA512 and REF
       env:
         PORT_NAME: ${{ inputs.port-name }}

@@ -384,7 +384,8 @@ target_link_libraries(your_app PRIVATE kcenon::common_modules)
 
 ## 참고 자료
 
-- [INTEGRATION_POLICY.md](./INTEGRATION_POLICY.md) - 통합 정책
-- [INTEGRATION.md](./INTEGRATION.md) - 통합 예제
+- [INTEGRATION_POLICY.md](./guides/INTEGRATION_POLICY.md) - 통합 정책
+- [INTEGRATION.md](./guides/INTEGRATION.md) - 통합 예제
+<!-- TODO: target file does not exist -->
 - [NEED_TO_FIX.md](./NEED_TO_FIX.md) - 개선 추적
 - [모듈 마이그레이션 가이드](guides/MODULE_MIGRATION.kr.md) - C++20 모듈 마이그레이션

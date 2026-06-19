@@ -93,7 +93,7 @@ void example() {
 
 **Related:**
 - [Feature 2](#feature-2-feature-name) - Related feature
-- [API Reference](API_REFERENCE.md#feature-1) - Detailed API
+- [API Reference](../../API_REFERENCE.md#feature-1) - Detailed API
 
 ---
 
@@ -309,15 +309,15 @@ To request a new feature, please:
 **Removed Features:**
 - Feature C: Alternative approach
 
-See [Migration Guide](advanced/MIGRATION.md) for detailed instructions.
+See [Migration Guide](../../advanced/MIGRATION.md) for detailed instructions.
 
 ---
 
 ## Related Documents
 
-- [Architecture](ARCHITECTURE.md) - System design
-- [API Reference](API_REFERENCE.md) - Detailed API
-- [Quick Start](guides/QUICK_START.md) - Getting started
+- [Architecture](../../ARCHITECTURE.md) - System design
+- [API Reference](../../API_REFERENCE.md) - Detailed API
+- [Quick Start](../../guides/QUICK_START.md) - Getting started
 
 ---
 

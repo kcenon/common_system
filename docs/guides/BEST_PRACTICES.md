@@ -1304,11 +1304,11 @@ TEST(SharedPtrTest, NoCircularReference) {
 
 ## Related Documentation
 
-- [Error Handling Guidelines](../ERROR_HANDLING.md)
-- [RAII Guidelines](../RAII_GUIDELINES.md)
-- [Smart Pointer Guidelines](../SMART_POINTER_GUIDELINES.md)
-- [IExecutor Migration Guide](../IEXECUTOR_MIGRATION_GUIDE.md)
-- [Error Code Guidelines](../ERROR_CODE_GUIDELINES.md)
+- [Error Handling Guidelines](./ERROR_HANDLING.md)
+- [RAII Guidelines](./RAII_GUIDELINES.md)
+- [Smart Pointer Guidelines](./SMART_POINTER_GUIDELINES.md)
+- [IExecutor Migration Guide](../advanced/IEXECUTOR_MIGRATION_GUIDE.md)
+- [Error Code Guidelines](./ERROR_CODE_GUIDELINES.md)
 
 ---
 

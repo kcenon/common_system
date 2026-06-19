@@ -10,6 +10,7 @@ category: "GUID"
 
 # Configuration Subsystem Guide
 
+<!-- TODO: target file does not exist -->
 > **Language:** **English** | [한국어](CONFIG_GUIDE.kr.md)
 
 Complete guide for the configuration subsystem in common_system: unified configuration management, hot-reload file watching, CLI argument parsing, and YAML configuration loading.
