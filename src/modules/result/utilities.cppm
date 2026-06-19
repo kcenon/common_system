@@ -34,8 +34,6 @@ export namespace kcenon::common {
 // ============================================================================
 
 namespace error_codes {
-    using namespace error::codes::common_errors;
-
     // Uppercase aliases for backward compatibility
     constexpr int SUCCESS = error::codes::common_errors::success;
     constexpr int INVALID_ARGUMENT = error::codes::common_errors::invalid_argument;
