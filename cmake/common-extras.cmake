@@ -43,6 +43,14 @@ if(COMMON_BUILD_BENCHMARKS)
 endif()
 
 # -----------------------------------------------------------------------------
+# Fuzz targets (libFuzzer + Clang, opt-in via BUILD_FUZZERS)
+# -----------------------------------------------------------------------------
+option(BUILD_FUZZERS "Build libFuzzer fuzz targets (requires Clang)" OFF)
+if(BUILD_FUZZERS AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/fuzz/CMakeLists.txt")
+    add_subdirectory(fuzz)
+endif()
+
+# -----------------------------------------------------------------------------
 # Documentation (project-specific Doxygen target)
 # -----------------------------------------------------------------------------
 if(COMMON_BUILD_DOCS)
