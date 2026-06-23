@@ -37,8 +37,8 @@ jobs:
             -DCMAKE_CXX_COMPILER=clang++ \
             -DCMAKE_BUILD_TYPE=Debug \
             -DBUILD_FUZZERS=ON \
-            -DCOMMON_SYSTEM_BUILD_TESTS=OFF \
-            -DCOMMON_SYSTEM_BUILD_EXAMPLES=OFF
+            -DCOMMON_BUILD_TESTS=OFF \
+            -DCOMMON_BUILD_EXAMPLES=OFF
 
       - name: Build
         run: cmake --build build-fuzz --target ${{ matrix.target }}
