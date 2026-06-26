@@ -129,7 +129,7 @@ jobs:
             -DCOMMON_BUILD_DOCS=OFF
           cmake --build build --target install
       - name: Upload install tree
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: install-common
           path: install
@@ -166,11 +166,11 @@ jobs:
             -DTHREAD_BUILD_BENCHMARKS=OFF -DTHREAD_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: install-after-thread, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-thread-logs
           path: |
@@ -211,11 +211,11 @@ jobs:
             -DCONTAINER_BUILD_BENCHMARKS=OFF -DCONTAINER_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: install-after-container, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-container-logs
           path: |
@@ -257,12 +257,12 @@ jobs:
             -DDATABASE_BUILD_BENCHMARKS=OFF -DDATABASE_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: success()
         with: { name: install-after-database, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-database-logs
           path: |
@@ -304,11 +304,11 @@ jobs:
             -DLOGGER_BUILD_BENCHMARKS=OFF -DLOGGER_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: install-after-logger, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-logger-logs
           path: |
@@ -349,11 +349,11 @@ jobs:
             -DNETWORK_BUILD_BENCHMARKS=OFF -DNETWORK_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: install-after-network, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-network-logs
           path: |
@@ -397,11 +397,11 @@ jobs:
             -DMONITORING_BUILD_BENCHMARKS=OFF -DMONITORING_BUILD_DOCS=OFF \
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
           cmake --build build --target install 2>&1 | tee build.log
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: install-after-monitoring, path: install, retention-days: 1 }
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-monitoring-logs
           path: |
@@ -455,7 +455,7 @@ jobs:
             -DBUILD_TESTING=OFF 2>&1 | tee configure.log
       - name: Upload failure logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cross-build-pacs-logs
           path: |
