@@ -149,7 +149,7 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-common, path: install }
       - name: Clone thread_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/thread_system.git sibling
@@ -194,7 +194,7 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-common, path: install }
       - name: Clone container_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/container_system.git sibling
@@ -240,7 +240,7 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libpq-dev libsqlite3-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-common, path: install }
       - name: Clone database_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/database_system.git sibling
@@ -287,7 +287,7 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-thread, path: install }
       - name: Clone logger_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/logger_system.git sibling
@@ -332,7 +332,7 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-thread, path: install }
       - name: Clone network_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/network_system.git sibling
@@ -378,9 +378,9 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-logger, path: install }
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-network, path: install }
       - name: Clone monitoring_system
         run: git clone --depth 1 --branch "${{ needs.precheck.outputs.sibling_ref }}" https://github.com/kcenon/monitoring_system.git sibling
@@ -432,11 +432,11 @@ jobs:
           sudo apt-get install -y -qq cmake ninja-build g++-13 libgtest-dev libfmt-dev libboost-all-dev libssl-dev
           echo "CC=gcc-13" >> "$GITHUB_ENV"
           echo "CXX=g++-13" >> "$GITHUB_ENV"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-monitoring, path: install }
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { name: install-after-container, path: install }
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         if: ${{ !cancelled() }}
         with: { name: install-after-database, path: install }
         continue-on-error: true
