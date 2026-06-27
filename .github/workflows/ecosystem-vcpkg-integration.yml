@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -111,7 +111,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -184,7 +184,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -257,7 +257,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -330,7 +330,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -403,7 +403,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -476,7 +476,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -552,7 +552,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup vcpkg
         uses: kcenon/common_system/.github/actions/setup-vcpkg@main

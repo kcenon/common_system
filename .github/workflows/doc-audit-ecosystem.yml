@@ -29,13 +29,13 @@ jobs:
 
     steps:
       - name: Checkout audit tool
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: common_system
           sparse-checkout: tools/doc-audit
 
       - name: Checkout target repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: kcenon/${{ matrix.repo }}
           path: ${{ matrix.repo }}

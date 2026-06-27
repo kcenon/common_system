@@ -77,7 +77,7 @@ jobs:
         echo "Repo: kcenon/${SYSTEM_NAME}"
 
     - name: Checkout source repository
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         path: source
 
@@ -213,7 +213,7 @@ jobs:
         echo "Port installation verification passed"
 
     - name: Checkout vcpkg-registry
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         repository: kcenon/vcpkg-registry
         token: ${{ secrets.REGISTRY_PAT }}
