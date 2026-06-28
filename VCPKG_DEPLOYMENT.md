@@ -109,7 +109,7 @@ Every project in the ecosystem MUST use the following `vcpkg-configuration.json`
     {
       "kind": "git",
       "repository": "https://github.com/kcenon/vcpkg-registry.git",
-      "baseline": "77cc46d5ba5e2aef1581f2ec674f83e1ac906b43",
+      "baseline": "1be52cbd3f11369cf9eb983c02c4404df3155cc3",
       "packages": [
         "kcenon-*"
       ]
@@ -147,7 +147,7 @@ All projects MUST share the same two baselines:
 | Registry | Baseline | Purpose |
 |----------|----------|---------|
 | `builtin` (microsoft/vcpkg) | `d90a9b159c08169f39adcd1b0f1ac0ca12c4b96c` | Pins third-party package versions |
-| `kcenon/vcpkg-registry` | `77cc46d5ba5e2aef1581f2ec674f83e1ac906b43` | Pins ecosystem package versions |
+| `kcenon/vcpkg-registry` | `1be52cbd3f11369cf9eb983c02c4404df3155cc3` | Pins ecosystem package versions |
 
 Mismatched baselines across projects will cause version conflicts in CI and local builds.
 

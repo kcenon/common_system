@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout common_system
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup vcpkg
       uses: kcenon/common_system/.github/actions/setup-vcpkg@main
@@ -43,7 +43,7 @@ jobs:
             {
               "kind": "git",
               "repository": "https://github.com/kcenon/vcpkg-registry.git",
-              "baseline": "77cc46d5ba5e2aef1581f2ec674f83e1ac906b43",
+              "baseline": "1be52cbd3f11369cf9eb983c02c4404df3155cc3",
               "packages": ["kcenon-*"]
             }
           ]
@@ -60,7 +60,7 @@ jobs:
         find_package(common_system CONFIG REQUIRED)
 
         add_executable(consume_test main.cpp)
-        target_link_libraries(consume_test PRIVATE common_system::common_system)
+        target_link_libraries(consume_test PRIVATE kcenon::common_system)
         CMAKE
 
         cat > /tmp/consume-test/main.cpp << 'CPPEOF'
@@ -101,7 +101,7 @@ jobs:
     - name: Build test project
       run: |
         cmake --build /tmp/consume-test/build --config Release 2>&1 || {
-          echo "::error::Build failed - linking against common_system::common_system may be broken"
+          echo "::error::Build failed - linking against kcenon::common_system may be broken"
           exit 1
         }
 

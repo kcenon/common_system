@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           submodules: ${{ inputs.checkout-submodules }}
           fetch-depth: 1
@@ -40,7 +40,7 @@ jobs:
 
       - name: Checkout common_system dependency
         if: ${{ inputs.checkout-common-system }}
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: kcenon/common_system
           path: common_system
