@@ -1,0 +1,11 @@
+<map id="kcenon::common::di::unified_bootstrapper::unregister_shutdown_hook" name="kcenon::common::di::unified_bootstrapper::unregister_shutdown_hook">
+<area shape="rect" id="Node000001" title="Unregister a shutdown hook." alt="" coords="5,27,211,82"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="273,5,451,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,40,259,35,260,40,211,45"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="259,70,465,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,63,245,67,245,72,211,69"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="513,31,696,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="458,67,499,62,500,67,459,73"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="513,95,696,135"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="459,93,500,98,499,104,458,98"/>
+</map>

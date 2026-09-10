@@ -1,0 +1,52 @@
+<map id="kcenon::common::config::config_watcher::config_watcher" name="kcenon::common::config::config_watcher::config_watcher">
+<area shape="rect" id="Node000001" title="Construct a config_watcher for the specified file." alt="" coords="5,349,187,403"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#ac74caea9af2b06b9f12bc7bc1a393e44" title="Add a configuration to history." alt="" coords="235,283,416,338"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,348,221,338,222,343,188,353"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a0a77a9dcc6270f2d7e73bd74ff4610f3" title="Get default configuration." alt="" coords="693,280,875,320"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="186,367,416,347,679,313,680,318,416,352,187,372"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#aa045c807b645b095a4d5938b792d4235" title="Load configuration from a YAML file." alt="" coords="235,489,416,529"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="146,401,280,480,277,485,143,406"/>
+<area shape="rect" id="Node000004" href="$structkcenon_1_1common_1_1config_1_1unified__config.html#a2fa445c02225837f05228eccaecc643b" title="Create a configuration with all default values." alt="" coords="935,5,1117,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="789,279,805,233,832,173,870,110,894,81,921,55,928,50,931,55,924,59,898,84,874,113,836,175,810,235,794,281"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a1a283df76bf318af3b11e6b35f139aa4" title="Load configuration from a YAML string." alt="" coords="464,482,645,537"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="416,507,450,507,450,512,416,512"/>
+<area shape="rect" id="Node000008" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="937,907,1115,947"/>
+<area shape="poly" id="edge27_Node000005_Node000008" title=" " alt="" coords="342,528,392,595,472,688,521,737,575,785,633,829,695,866,751,889,810,905,869,916,923,922,923,927,868,921,809,910,749,894,692,870,630,833,572,789,517,741,468,691,388,598,338,531"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="576,480,643,393,665,359,675,345,692,330,700,324,703,329,695,334,679,348,669,362,648,396,580,483"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a0ec97da68a624507d6617e4db4e8e57b" title="Expand environment variables in a string." alt="" coords="693,514,875,569"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="646,519,680,524,679,529,645,525"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="576,536,628,608,707,705,755,756,808,806,864,852,924,892,936,899,934,904,921,897,861,857,804,810,751,760,703,708,624,611,572,539"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#aacf58c6e7999e27ffca15719f0754d51" title="Apply environment variable overrides to configuration." alt="" coords="693,345,875,399"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="600,480,724,404,727,409,603,484"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="923,463,1129,489"/>
+<area shape="poly" id="edge18_Node000006_Node000015" title=" " alt="" coords="646,500,909,482,909,487,646,506"/>
+<area shape="rect" id="Node000018" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a10413a117e5fb8d0d307dbf9a1526867" title="Validate a configuration." alt="" coords="693,624,875,664"/>
+<area shape="poly" id="edge19_Node000006_Node000018" title=" " alt="" coords="604,535,739,615,736,619,601,539"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a3aafd47921d2c0033ea5fb0526e79640" title=" " alt="" coords="935,306,1117,361"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="874,355,921,347,922,353,875,360"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a2cd28ed91beb1a15f63374c1acab7cce" title=" " alt="" coords="935,385,1117,439"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="875,384,922,392,921,397,874,390"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ae1d28ef74e5dd16c9390b2e3434ddb89" title=" " alt="" coords="935,70,1117,125"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="859,343,873,330,888,305,895,281,895,233,894,209,896,185,903,160,921,134,923,132,927,136,925,138,908,162,901,186,899,209,901,233,901,282,893,308,877,334,863,347"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ad01da329d8f2028b52b46d3e7719edcd" title=" " alt="" coords="935,149,1117,203"/>
+<area shape="poly" id="edge13_Node000009_Node000013" title=" " alt="" coords="858,342,873,330,884,316,890,301,896,272,901,243,908,228,921,213,924,210,928,214,925,216,913,231,906,245,901,273,896,303,889,318,877,334,861,347"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a33a95c377c29e4ae441a1cfe2af9d7f7" title=" " alt="" coords="935,227,1117,282"/>
+<area shape="poly" id="edge14_Node000009_Node000014" title=" " alt="" coords="850,342,873,330,897,310,921,291,932,285,934,290,924,296,900,314,876,334,853,347"/>
+<area shape="poly" id="edge15_Node000009_Node000015" title=" " alt="" coords="828,397,873,424,924,448,950,457,948,462,922,453,871,429,825,402"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="1177,424,1360,464"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="1122,461,1163,455,1164,460,1123,466"/>
+<area shape="rect" id="Node000017" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="1177,488,1360,528"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="1123,486,1164,492,1163,497,1122,491"/>
+<area shape="poly" id="edge20_Node000018_Node000008" title=" " alt="" coords="814,662,847,692,877,731,888,754,894,777,896,817,901,855,909,874,925,893,929,897,925,901,921,896,905,876,896,856,891,818,888,778,883,756,872,733,843,696,810,666"/>
+<area shape="poly" id="edge21_Node000018_Node000015" title=" " alt="" coords="820,622,847,603,873,580,887,558,894,538,903,519,921,499,932,492,935,497,924,503,907,521,899,540,892,561,877,583,850,607,823,626"/>
+<area shape="rect" id="Node000019" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#aaa9435e9f6208de802ad892a42772b14" title=" " alt="" coords="935,670,1117,725"/>
+<area shape="poly" id="edge22_Node000018_Node000019" title=" " alt="" coords="875,661,923,672,922,677,874,667"/>
+<area shape="rect" id="Node000020" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a7e9b7355f9cfb3d0f0235abbc99c168c" title=" " alt="" coords="935,749,1117,803"/>
+<area shape="poly" id="edge23_Node000018_Node000020" title=" " alt="" coords="813,662,863,698,924,735,935,741,933,745,921,740,860,703,809,666"/>
+<area shape="rect" id="Node000021" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ac952c1aff3c56e12e159ff76f10c8ff0" title=" " alt="" coords="935,827,1117,882"/>
+<area shape="poly" id="edge24_Node000018_Node000021" title=" " alt="" coords="811,662,844,693,877,730,891,754,899,775,907,794,925,814,929,818,926,822,921,818,903,797,894,777,886,757,873,734,840,697,807,666"/>
+<area shape="rect" id="Node000022" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ac9fe7e3b01ab3f71f7acb83323c75834" title=" " alt="" coords="935,513,1117,567"/>
+<area shape="poly" id="edge25_Node000018_Node000022" title=" " alt="" coords="825,622,922,578,940,570,942,575,924,582,828,626"/>
+<area shape="rect" id="Node000023" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#acf0956c2cdc78923595b82f77b735ecb" title=" " alt="" coords="935,591,1117,646"/>
+<area shape="poly" id="edge26_Node000018_Node000023" title=" " alt="" coords="875,632,921,627,922,632,875,637"/>
+</map>

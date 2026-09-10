@@ -1,0 +1,14 @@
+<map id="kcenon::common::enum_from_string" name="kcenon::common::enum_from_string">
+<area shape="rect" id="Node000001" title="Convert a string to its enum value (case&#45;insensitive)" alt="" coords="5,71,184,111"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a64fa8615cdd58c574f3ae7efa8f67700" title="Create an error result from error_info (static factory)" alt="" coords="232,53,441,78"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,79,218,75,218,80,184,84"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="233,102,440,127"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="184,97,220,100,219,106,184,102"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a0169b66b74b0ea7d87cb9682ff3d6ce5" title="Get error reference." alt="" coords="489,5,672,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="415,50,475,40,476,45,415,55"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="489,69,672,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="442,73,476,76,475,82,441,78"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="440,101,475,98,476,103,441,107"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="489,133,672,173"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="418,125,476,134,475,139,417,130"/>
+</map>

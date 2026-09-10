@@ -1,0 +1,22 @@
+<map id="include/kcenon/common/adapters/adapters.h" name="include/kcenon/common/adapters/adapters.h">
+<area shape="rect" id="Node000001" title="Unified adapter utilities for type&#45;safe and zero&#45;cost adaptation." alt="" coords="293,5,475,45"/>
+<area shape="rect" id="Node000002" href="$adapter_8h.html" title="Adapter traits and base class for type&#45;erased cross&#45;system wrappers." alt="" coords="291,167,373,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="379,47,361,94,342,154,337,152,356,92,374,45"/>
+<area shape="rect" id="Node000009" href="$smart__adapter_8h.html" title="Smart adapter factory (legacy)" alt="" coords="371,93,499,119"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="399,44,422,80,417,83,394,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="299,240,365,265"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="335,192,335,226,329,226,329,192"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="507,240,584,265"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="367,189,499,233,497,238,365,195"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,240,80,265"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="291,193,94,242,93,236,290,188"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="105,240,191,265"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="303,195,192,237,190,232,301,190"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="216,240,275,265"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="320,194,272,233,268,229,316,190"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="390,240,482,265"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="350,190,409,230,406,234,347,194"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="420,121,362,161,359,156,417,116"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="446,117,530,227,526,230,442,121"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="437,119,438,226,433,226,432,119"/>
+</map>

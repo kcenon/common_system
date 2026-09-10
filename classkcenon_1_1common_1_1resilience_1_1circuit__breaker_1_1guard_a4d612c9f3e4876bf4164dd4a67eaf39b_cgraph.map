@@ -1,0 +1,13 @@
+<map id="kcenon::common::resilience::circuit_breaker::guard::~guard" name="kcenon::common::resilience::circuit_breaker::guard::~guard">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,77,211,132"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a5537ade523f40485c285914cf68a4225" title="Record a failed operation. May trigger state transition to OPEN or back to OPEN from HALF_OPEN." alt="" coords="259,77,464,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,102,245,102,245,107,211,107"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a07f0d7f82a392c6724f9011300d460a1" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="512,13,761,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="464,75,511,62,544,54,545,59,513,67,465,80"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a5ed8a1ecc7d25696dac343b7bdfa3255" title="Record a new failure at current time." alt="" coords="534,77,739,132"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="464,102,520,102,520,107,464,107"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ac2bfeb044d85861737df9e3f5ea2c12a" title="Transition to OPEN state. Must be called with mutex locked." alt="" coords="534,156,739,211"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="458,130,528,149,526,155,457,135"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="809,5,1015,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="762,30,796,30,796,35,762,35"/>
+</map>

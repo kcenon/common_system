@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::IUdpClient" name="kcenon::common::interfaces::IUdpClient">
+<area shape="rect" id="Node000001" title="Abstract interface for UDP client implementations." alt="" coords="5,5,204,360"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1null__udp__client.html" title="Null implementation for when UDP transport is disabled." alt="" coords="5,408,204,603"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,374,107,408,102,408,102,374"/>
+</map>

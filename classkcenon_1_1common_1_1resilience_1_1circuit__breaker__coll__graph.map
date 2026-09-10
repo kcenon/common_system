@@ -1,0 +1,23 @@
+<map id="kcenon::common::resilience::circuit_breaker" name="kcenon::common::resilience::circuit_breaker">
+<area shape="rect" id="Node000001" title="Thread&#45;safe circuit breaker for fault tolerance." alt="" coords="375,697,573,1072"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html" title="Interface for components that expose statistics." alt="" coords="5,465,204,625"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,633,377,791,373,795,200,637"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1common_1_1resilience_1_1circuit__breaker__config.html" title="Configuration parameters for circuit breaker." alt="" coords="229,465,426,625"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,624,389,681,384,683,359,626"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="404,351,547,431"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="478,431,477,681,472,681,473,431"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="414,133,539,199"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="479,212,478,350,473,350,474,212"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="539,5,561,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="541,60,506,120,501,117,536,58"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="563,133,683,199"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="564,58,599,117,594,120,559,60"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html" title="Thread&#45;safe sliding window for failure tracking." alt="" coords="548,455,749,635"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="605,636,580,684,576,681,600,634"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="532,261,715,327"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="625,327,624,376,627,430,628,438,623,439,622,431,619,376,619,327"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="626,213,626,261,621,261,621,213"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="748,261,832,327"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="797,327,803,387,803,466,792,553,780,596,763,636,728,691,684,740,636,783,588,819,585,815,633,779,680,736,724,687,758,633,775,594,787,552,798,466,798,387,792,327"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="750,325,723,352,689,440,684,438,718,349,746,321"/>
+</map>

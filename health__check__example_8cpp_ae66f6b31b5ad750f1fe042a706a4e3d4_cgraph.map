@@ -1,0 +1,28 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,141,60,166"/>
+<area shape="rect" id="Node000002" href="$classdatabase__dependency__check.html#a4def538b6fdfc2f33936b015d721bd2d" title="Perform the health check." alt="" coords="141,5,309,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="38,139,64,98,83,75,106,55,127,44,130,48,110,60,87,79,68,101,43,142"/>
+<area shape="rect" id="Node000003" href="$classdatabase__dependency__check.html#aee0571f2fcf7937665fbf7390fe81259" title="Get the unique name of this health check." alt="" coords="141,69,309,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="59,139,107,119,132,111,133,116,109,124,61,143"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1interfaces.html#a11921cddc2d99d4a3a163b14bbd5f57f" title="Convert string to health check type." alt="" coords="108,133,343,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="60,151,94,151,94,156,60,156"/>
+<area shape="rect" id="Node000011" href="$health__check__example_8cpp.html#aafd7e73bfda2606342fb80369fcc28f0" title=" " alt="" coords="172,198,279,223"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="61,164,109,183,159,196,158,201,107,188,59,169"/>
+<area shape="rect" id="Node000012" href="$namespacekcenon_1_1common_1_1interfaces.html#ad66bab9fedac640ae2f37cf07da8135e" title="Convert log level to string." alt="" coords="122,248,329,288"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="44,165,71,199,89,217,109,232,123,240,121,245,107,237,86,221,67,202,40,168"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a694e4563e805588838251929513b92a6" title="Convert a string to its enum value (case&#45;insensitive)" alt="" coords="391,133,569,173"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="343,151,377,151,377,156,343,156"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#a64fa8615cdd58c574f3ae7efa8f67700" title="Create an error result from error_info (static factory)" alt="" coords="617,117,827,142"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="569,142,603,138,604,144,570,147"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="619,166,825,191"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="570,160,605,164,605,169,569,165"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1Result.html#a0169b66b74b0ea7d87cb9682ff3d6ce5" title="Get error reference." alt="" coords="875,69,1057,109"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="800,114,861,104,862,109,801,119"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="875,133,1057,173"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="827,137,861,140,861,146,826,142"/>
+<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="825,165,861,162,861,167,826,171"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="875,197,1057,237"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="803,189,861,198,861,203,802,194"/>
+<area shape="rect" id="Node000013" href="$namespacekcenon_1_1common.html#a949338c18262cdfac1f5112d86f44da8" title="Convert an enum value to its string representation." alt="" coords="391,248,569,288"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="329,265,377,265,377,271,329,271"/>
+</map>

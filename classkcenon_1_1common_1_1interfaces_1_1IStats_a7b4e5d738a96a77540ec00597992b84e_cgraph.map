@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::IStats::get_snapshot" name="kcenon::common::interfaces::IStats::get_snapshot">
+<area shape="rect" id="Node000001" title="Get a complete statistics snapshot with metadata." alt="" coords="5,37,212,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#ac41ffab96f6337468c252e51d0115959" title="Get current statistics as key&#45;value pairs." alt="" coords="260,5,467,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,42,246,37,247,43,212,47"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#a21a9418fca87bf1fae84c222659d181a" title="Get component name for identification." alt="" coords="260,69,467,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,68,247,72,246,77,212,73"/>
+</map>

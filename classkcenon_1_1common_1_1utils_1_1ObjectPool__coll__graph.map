@@ -1,0 +1,20 @@
+<map id="kcenon::common::utils::ObjectPool&lt; T &gt;" name="kcenon::common::utils::ObjectPool&lt; T &gt;">
+<area shape="rect" id="Node000001" title="Thread&#45;safe object pool that reuses raw storage for expensive objects." alt="" coords="78,389,275,769"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,261,89,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,326,86,373,81,375,59,328"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="113,261,240,327"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,327,179,373,174,373,174,327"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="251,5,273,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="251,43,209,48,149,62,118,74,88,90,62,110,40,135,32,151,30,165,33,180,40,197,66,231,101,256,98,261,63,234,36,200,27,182,24,166,27,149,36,132,58,106,86,85,116,69,148,57,208,43,250,37"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="127,133,242,199"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="253,56,224,96,210,120,206,117,220,93,248,52"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="266,133,415,199"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="276,54,302,93,316,117,312,120,297,96,271,57"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="440,133,561,199"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="275,43,428,123,425,128,272,48"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="184,213,181,261,176,261,179,212"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="264,261,423,327"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="327,329,286,398,281,395,322,326"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="344,199,345,245,340,245,339,199"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="461,210,428,239,395,263,392,259,424,235,457,206"/>
+</map>

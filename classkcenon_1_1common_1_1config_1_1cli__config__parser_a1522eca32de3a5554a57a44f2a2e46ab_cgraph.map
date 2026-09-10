@@ -1,0 +1,18 @@
+<map id="kcenon::common::config::cli_config_parser::parse" name="kcenon::common::config::cli_config_parser::parse">
+<area shape="rect" id="Node000001" title="Parse command&#45;line arguments." alt="" coords="5,156,188,196"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="505,133,683,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,169,236,167,491,155,491,160,236,172,188,174"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="242,77,449,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,153,235,121,289,104,291,109,237,127,150,158"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1config_1_1cli__config__parser.html#abe8605dff59c2b47122081eb6e2d7786" title="Parse a key=value string." alt="" coords="254,181,437,235"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="189,185,240,192,240,197,188,190"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1config_1_1cli__config__parser.html#a07fb4d905503687b4ae56576ccf7965a" title="Check if a string starts with a prefix." alt="" coords="236,260,455,300"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="134,194,182,220,237,246,257,253,255,258,235,250,180,225,131,199"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="503,69,685,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="449,87,489,87,489,92,449,92"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="503,5,685,45"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="395,74,502,46,503,51,397,79"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="436,185,491,173,492,178,437,191"/>
+<area shape="rect" id="Node000007" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="515,198,673,223"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="437,206,501,207,501,212,437,212"/>
+</map>

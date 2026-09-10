@@ -1,0 +1,15 @@
+<map id="kcenon::common::detail::event_type_id::id" name="kcenon::common::detail::event_type_id::id">
+<area shape="rect" id="Node000001" title=" " alt="" coords="475,101,653,141"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1simple__event__bus.html#aec8185b931126355092d05d8844e075b" title="Publish an event to all subscribed handlers." alt="" coords="240,5,427,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="509,98,426,60,394,48,396,43,428,55,512,93"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1simple__event__bus.html#a71f8c416a7f769c1076392ce52290955" title=" " alt="" coords="240,69,427,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="461,110,426,105,427,100,462,104"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1simple__event__bus.html#ab8f3bfe6e5afa3d347323e6941ed4563" title="Subscribe to events of a specific type." alt="" coords="240,133,427,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="462,138,427,143,426,138,461,133"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1simple__event__bus.html#ae0e74eae232eac70fa5b72477b9b255a" title=" " alt="" coords="240,197,427,237"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="512,150,428,188,396,200,394,195,426,183,509,145"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1simple__event__bus.html#a6b67c5506f41c1948cc587d8c66fc418" title="Subscribe to events with a filter function." alt="" coords="5,87,192,142"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="226,138,192,133,193,127,227,133"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1simple__event__bus.html#a9a4ebf2c46fd0414e078b2d145666405" title=" " alt="" coords="5,166,192,221"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="227,174,193,180,192,175,226,169"/>
+</map>

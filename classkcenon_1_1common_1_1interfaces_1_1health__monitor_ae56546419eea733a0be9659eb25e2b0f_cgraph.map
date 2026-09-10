@@ -1,0 +1,13 @@
+<map id="kcenon::common::interfaces::health_monitor::~health_monitor" name="kcenon::common::interfaces::health_monitor::~health_monitor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,30,212,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#ae6badb188af62a9ceb2f58f9ecd4dfad" title="Stop the health monitoring." alt="" coords="260,5,467,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,42,246,37,247,43,212,47"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a4b8c6dc10092478b622652bedd40dc6c" title="Get value or return default (C++23 std::expected compatible)" alt="" coords="272,69,455,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,68,259,74,258,79,212,73"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="527,13,685,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="467,23,513,23,513,28,467,28"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#af69cb1d69a1b197fede62e3375fdcd8e" title="Get value or return default." alt="" coords="515,69,697,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="455,87,501,87,501,92,455,92"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#ae1c46f3fbe20b6e91dd1667c6ec6c33f" title="Check if result contains a successful value." alt="" coords="745,69,928,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="697,87,732,87,732,92,697,92"/>
+</map>

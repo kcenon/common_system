@@ -1,0 +1,5 @@
+<map id="kcenon::common::adapters::safe_unwrap" name="kcenon::common::adapters::safe_unwrap">
+<area shape="rect" id="Node000001" title="Helper function to safely unwrap an adapter." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1adapters_1_1adapter__factory.html#a53f9e231c8b487f5ec2a861b2934efe6" title="Try to unwrap an interface to get underlying implementation." alt="" coords="252,5,465,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,23,238,23,238,28,204,28"/>
+</map>

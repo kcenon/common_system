@@ -1,0 +1,29 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::is_frozen" name="kcenon::common::interfaces::GlobalLoggerRegistry::is_frozen">
+<area shape="rect" id="Node000001" title="Check if the registry is frozen." alt="" coords="1083,253,1289,307"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a3a79d8adde25fabf46c507fe12ba0ddd" title="Clear all registered loggers and factories." alt="" coords="825,69,1035,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1155,243,1103,181,1070,150,1033,124,1010,112,1012,107,1036,119,1073,146,1107,178,1159,240"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a87cf1e6f48bc1b6de1b9592bb3db7c1b" title="Register a factory for lazy logger creation." alt="" coords="827,134,1033,189"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1123,248,1034,204,1004,191,1006,186,1036,199,1125,244"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#ac92f44b84a3b056694524a40e1ebcdc0" title="Register a logger with a name." alt="" coords="827,213,1033,267"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1069,264,1033,259,1034,254,1069,259"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a591b3341c314c34ec132e08d195aa40a" title="Set a factory for the default logger." alt="" coords="827,291,1033,346"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1069,300,1034,306,1033,300,1069,295"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#aaa6fe09a952a002e36877d3a7013d351" title="Set the default logger." alt="" coords="827,370,1033,425"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1125,316,1036,361,1009,372,1007,367,1034,356,1123,312"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a358b3913b876103784e07462e9fc150d" title="Remove a logger by name." alt="" coords="827,449,1033,503"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1158,320,1106,381,1072,412,1036,440,1016,451,1013,446,1033,435,1069,408,1102,377,1154,317"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a416e9fd173411a9fd1d0230fc7d57c8e" title="Clear all loggers from GlobalLoggerRegistry." alt="" coords="573,62,777,117"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="812,92,777,92,777,87,812,87"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a1cbc4ee14ba6fd89408946192e4762ea" title="Register all loggers with GlobalLoggerRegistry." alt="" coords="297,13,519,67"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="559,71,518,63,519,58,560,65"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a5656c3dcd7a7a2b320df65f7c55e5fbe" title="Shutdown the system." alt="" coords="291,105,525,145"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="560,107,526,112,525,107,560,102"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#aa5f0272e260c981dce32436aac02794d" title="Initialize the system." alt="" coords="11,5,237,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="284,36,237,34,238,29,284,31"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a385c980491500d6b34029561755a02d7" title=" " alt="" coords="5,69,243,109"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="277,111,243,107,243,102,278,106"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a49d3fac057aff9ce6e5159fe01cea2f8" title="Reset the bootstrapper to initial state." alt="" coords="22,133,226,173"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="277,141,227,146,226,141,277,136"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a67ba22e11495f4c6dfaaf3b87269870f" title="Destructor with automatic shutdown." alt="" coords="22,198,226,253"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="341,153,244,188,208,200,206,195,242,183,339,148"/>
+</map>

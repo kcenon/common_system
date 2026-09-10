@@ -1,0 +1,13 @@
+<map id="include/kcenon/common/concepts/transport.h" name="include/kcenon/common/concepts/transport.h">
+<area shape="rect" id="Node000001" title="C++20 concepts for transport client interfaces." alt="" coords="136,5,317,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,85,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,48,86,90,84,85,182,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,93,176,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="208,48,167,86,163,82,205,44"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="200,93,253,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,46,229,79,224,79,224,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="277,93,336,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="248,44,287,82,283,85,244,47"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="361,93,453,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="271,43,369,85,367,90,269,48"/>
+</map>

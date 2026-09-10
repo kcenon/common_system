@@ -1,0 +1,9 @@
+<map id="kcenon::common::try_catch_void" name="kcenon::common::try_catch_void">
+<area shape="rect" id="Node000001" title="Convert exception to VoidResult with automatic error code mapping." alt="" coords="5,69,165,109"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1exception__mapper.html#ae1201d66e102b16871cb409edc2920aa" title="Map generic exception." alt="" coords="219,5,461,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,67,246,46,247,51,166,72"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1exception__mapper.html#a3bca1bcb05922c208c3dadfc32bf82d8" title="Map unknown exception (catch&#45;all)" alt="" coords="213,69,467,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,87,199,87,199,92,165,92"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="261,134,419,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="164,107,214,119,260,129,259,134,213,124,163,112"/>
+</map>

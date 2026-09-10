@@ -1,0 +1,19 @@
+<map id="include/kcenon/common/adapters/smart_adapter.h" name="include/kcenon/common/adapters/smart_adapter.h">
+<area shape="rect" id="Node000001" title="Smart adapter factory (legacy)" alt="" coords="57,5,250,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,167,83,192"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,47,62,157,58,154,137,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,167,199,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,46,156,153,151,153,151,46"/>
+<area shape="rect" id="Node000004" href="$adapter_8h.html" title="Adapter traits and base class for type&#45;erased cross&#45;system wrappers." alt="" coords="225,93,308,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="182,43,240,83,237,87,179,48"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="232,121,94,165,92,160,230,116"/>
+<area shape="poly" id="edge9_Node000004_Node000003" title=" " alt="" coords="250,121,185,162,182,157,247,116"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="417,167,484,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="297,116,409,159,407,164,295,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="508,167,583,192"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="309,115,495,163,494,168,308,120"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="223,167,310,192"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="269,119,269,153,264,153,264,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="335,167,393,192"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="284,117,338,156,335,160,281,121"/>
+</map>

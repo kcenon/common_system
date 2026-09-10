@@ -1,0 +1,15 @@
+<map id="kcenon::common::di::unified_bootstrapper::register_module" name="kcenon::common::di::unified_bootstrapper::register_module">
+<area shape="rect" id="Node000001" title="Register a class&#45;based module registrar." alt="" coords="5,77,169,132"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a8c170d46f5b9f92fdf93ebbf98daf882" title="Register a module&#39;s service registration function." alt="" coords="217,77,381,132"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,102,204,102,204,107,170,107"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a84c4752ee985166ef458dc61626066f8" title="Get the global service container instance." alt="" coords="455,5,610,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="381,77,441,58,443,63,382,82"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="443,85,622,125"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="381,102,430,102,430,107,381,107"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="429,149,636,175"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="382,122,430,134,467,143,466,149,429,139,381,127"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="684,110,867,150"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="629,147,670,141,671,146,630,152"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="684,174,867,214"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="630,172,671,178,670,183,629,177"/>
+</map>

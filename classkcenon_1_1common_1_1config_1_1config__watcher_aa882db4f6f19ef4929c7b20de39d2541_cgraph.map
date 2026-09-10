@@ -1,0 +1,7 @@
+<map id="kcenon::common::config::config_watcher::stop" name="kcenon::common::config::config_watcher::stop">
+<area shape="rect" id="Node000001" title="Stop watching the configuration file." alt="" coords="5,53,187,93"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#aeb833fd92d299cb40c1a01e14947e7f6" title="Cleanup platform&#45;specific resources (call after thread join)." alt="" coords="235,5,421,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,54,221,48,222,54,188,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#a6e28d14e321cc7541d25f280bc791d48" title="Signal the watch thread to wake up and exit." alt="" coords="237,84,419,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,85,225,91,224,97,187,90"/>
+</map>

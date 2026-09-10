@@ -1,0 +1,15 @@
+<map id="kcenon::common::config::CliConfigParser" name="kcenon::common::config::CliConfigParser">
+<area shape="rect" id="Node000001" title="Simple command&#45;line argument parser." alt="" coords="91,647,264,767"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="103,489,252,584"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,584,180,630,175,630,175,584"/>
+<area shape="rect" id="Node000003" href="$structkcenon_1_1common_1_1config_1_1cli__option.html" title="Definition for a CLI option." alt="" coords="5,292,179,412"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,411,144,464,148,473,143,476,139,466,115,413"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="53,135,131,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,200,95,276,89,276,89,200"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="27,5,157,85"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,99,95,134,89,134,89,99"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="203,319,325,385"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="250,399,221,466,208,490,204,488,216,464,245,397"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="253,135,275,200"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="267,200,267,303,261,303,261,200"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="kcenon::common::config::config_watcher::notify_change" name="kcenon::common::config::config_watcher::notify_change">
+<area shape="rect" id="Node000001" title="Notify all registered change callbacks." alt="" coords="241,5,423,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1config_1_1config__watcher.html#a26a8679a5d7b36c1ab4684ba6e49626e" title="Rollback to a previous configuration version." alt="" coords="5,13,193,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,35,193,35,193,30,227,30"/>
+</map>

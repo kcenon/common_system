@@ -1,0 +1,15 @@
+<map id="kcenon::common::utils::SPSCCircularBuffer&lt; T, Capacity &gt;" name="kcenon::common::utils::SPSCCircularBuffer&lt; T, Capacity &gt;">
+<area shape="rect" id="Node000001" title="Lock&#45;free circular buffer for single&#45;producer single&#45;consumer (SPSC)." alt="" coords="130,404,293,659"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,261,204,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,326,150,388,145,390,117,328"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="164,5,187,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="165,45,136,55,98,73,60,99,44,116,31,135,24,151,22,165,31,198,44,224,61,247,57,250,39,226,26,200,17,165,19,150,26,132,40,112,56,95,95,69,133,50,163,40"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="118,133,233,199"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="178,71,178,117,173,117,173,71"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="257,133,382,199"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="188,43,221,64,260,93,286,119,282,123,256,97,218,68,185,48"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="153,212,125,262,120,260,149,209"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="228,261,411,327"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="307,328,279,390,274,388,302,326"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="322,213,322,261,317,261,317,213"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="kcenon::common::interfaces::http_request" name="kcenon::common::interfaces::http_request">
+<area shape="rect" id="Node000001" title="Represents an HTTP request." alt="" coords="208,433,407,693"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="371,148,449,213"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="424,213,430,237,430,267,412,345,384,419,379,417,407,343,425,266,425,238,419,214"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="230,291,385,371"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="373,216,352,239,330,277,326,274,348,236,369,212"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="345,5,475,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="413,99,413,148,407,148,407,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="310,371,310,417,305,417,305,371"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="151,148,277,213"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="203,227,203,247,208,265,232,292,228,295,204,268,197,248,198,227"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="271,13,293,78"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="274,79,255,125,250,135,245,132,250,123,270,77"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="109,13,132,78"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="135,65,172,122,180,133,176,136,168,126,130,68"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="5,148,127,213"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="111,58,89,80,70,110,65,132,60,131,65,108,84,77,107,54"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="20,298,179,363"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="130,362,199,438,195,442,126,365"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="79,227,95,297,90,298,74,228"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="kcenon::common::resilience::to_string" name="kcenon::common::resilience::to_string">
+<area shape="rect" id="Node000001" title="Convert circuit state to human&#45;readable string." alt="" coords="361,5,567,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ae08b9ff9fcf6695129180178aab01c02" title="Get current statistics as key&#45;value pairs." alt="" coords="108,5,313,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="347,28,314,28,314,23,347,23"/>
+<area shape="rect" id="Node000003" href="$circuit__breaker__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

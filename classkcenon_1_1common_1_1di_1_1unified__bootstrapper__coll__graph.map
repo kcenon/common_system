@@ -1,0 +1,31 @@
+<map id="kcenon::common::di::unified_bootstrapper" name="kcenon::common::di::unified_bootstrapper">
+<area shape="rect" id="Node000001" title="Coordinates system initialization and shutdown." alt="" coords="345,792,554,1361"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="27,627,173,693"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,691,179,766,336,949,332,952,175,770,119,694"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,287,131,353"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="66,366,62,466,64,524,72,581,87,626,82,628,67,582,59,524,57,466,61,366"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="131,135,154,200"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="134,193,93,274,89,271,129,190"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="155,287,277,353"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="157,191,196,271,191,274,152,193"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="261,627,345,693"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,692,346,776,341,778,311,694"/>
+<area shape="rect" id="Node000006" href="$structkcenon_1_1common_1_1di_1_1bootstrapper__options.html" title="Configuration options for the unified bootstrapper." alt="" coords="734,401,922,581"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="811,583,781,675,761,723,737,769,699,826,657,879,568,974,564,971,653,876,695,822,732,767,756,721,776,673,805,581"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="669,135,747,200"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="749,195,780,224,805,262,824,323,833,385,827,385,819,324,800,264,776,228,746,199"/>
+<area shape="rect" id="Node000010" href="$structkcenon_1_1common_1_1di_1_1unified__bootstrapper_1_1shutdown__hook__entry.html" title=" " alt="" coords="625,273,791,367"/>
+<area shape="poly" id="edge10_Node000010_Node000007" title=" " alt="" coords="711,200,711,256,705,256,705,200"/>
+<area shape="rect" id="Node000013" href="$structkcenon_1_1common_1_1di_1_1unified__bootstrapper_1_1module__entry.html" title=" " alt="" coords="445,263,601,377"/>
+<area shape="poly" id="edge15_Node000013_Node000007" title=" " alt="" coords="671,202,607,254,603,250,667,198"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="643,5,773,85"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="711,99,711,134,705,134,705,99"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="554,605,729,715"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="619,716,563,836,558,834,614,714"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="666,369,648,402,636,449,631,498,633,589,628,589,625,498,631,448,643,400,662,366"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="281,359,301,378,317,400,327,426,330,451,323,497,320,518,320,539,326,559,342,579,357,588,380,594,437,597,497,598,543,603,555,607,553,612,542,608,497,603,437,603,379,599,355,593,338,583,322,561,315,540,314,518,318,496,325,451,322,428,312,403,297,382,278,363"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="369,605,530,715"/>
+<area shape="poly" id="edge16_Node000012_Node000011" title=" " alt="" coords="183,365,165,402,148,454,137,498,136,518,140,538,149,558,164,579,179,589,200,594,255,598,314,598,358,603,369,607,367,612,357,608,313,603,255,603,199,600,177,594,161,583,144,561,135,539,131,518,131,497,143,453,160,400,179,363"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="452,715,452,775,447,775,447,715"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="533,377,536,423,535,475,529,530,515,582,510,592,505,590,509,580,524,529,530,475,530,423,528,378"/>
+</map>

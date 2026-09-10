@@ -1,0 +1,11 @@
+<map id="kcenon::common::di::IServiceContainer" name="kcenon::common::di::IServiceContainer">
+<area shape="rect" id="Node000001" title="Abstract interface for dependency injection containers." alt="" coords="177,5,385,480"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceScope.html" title="Scoped service container for request&#45;level isolation." alt="" coords="36,795,183,915"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,494,197,529,127,796,121,794,192,527,202,492"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1ServiceContainer.html" title="Simple thread&#45;safe service container implementation." alt="" coords="207,748,356,963"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="284,494,284,748,279,748,279,494"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1service__container.html" title="Concrete implementation of IServiceContainer." alt="" coords="380,528,612,1183"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="372,492,384,527,379,528,366,494"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__scope.html" title="Scoped service container implementation." alt="" coords="5,1231,213,1651"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,929,112,1230,107,1230,107,929"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="kcenon::common::resilience::failure_window::cleanup_expired_failures" name="kcenon::common::resilience::failure_window::cleanup_expired_failures">
+<area shape="rect" id="Node000001" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="809,66,1015,121"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a07f0d7f82a392c6724f9011300d460a1" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="512,41,761,81"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="795,82,761,79,762,73,796,77"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a0713a146e7a16bcabcc07167794cd94d" title="Check if window is empty (no recent failures)." alt="" coords="534,105,739,145"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="796,109,740,116,739,111,795,104"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ae08b9ff9fcf6695129180178aab01c02" title="Get current statistics as key&#45;value pairs." alt="" coords="259,5,464,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="498,46,464,41,465,36,499,41"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a5537ade523f40485c285914cf68a4225" title="Record a failed operation. May trigger state transition to OPEN or back to OPEN from HALF_OPEN." alt="" coords="259,70,464,125"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="499,82,465,87,464,81,498,77"/>
+<area shape="rect" id="Node000004" href="$circuit__breaker__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="81,13,135,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="245,28,135,28,135,23,245,23"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker_1_1guard.html#a4d612c9f3e4876bf4164dd4a67eaf39b" title=" " alt="" coords="5,70,211,125"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="245,100,211,100,211,95,245,95"/>
+</map>

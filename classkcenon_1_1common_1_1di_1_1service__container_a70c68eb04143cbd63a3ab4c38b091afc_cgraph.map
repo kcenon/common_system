@@ -1,0 +1,19 @@
+<map id="kcenon::common::di::service_container::resolve_with_detection" name="kcenon::common::di::service_container::resolve_with_detection">
+<area shape="rect" id="Node000001" title="Resolve a service with circular dependency detection." alt="" coords="5,215,187,270"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a50ecd7a8e36097a6fee4259f70bf9836" title="Get current resolution stack as string for error messages." alt="" coords="235,5,400,75"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,213,168,155,233,91,246,81,250,85,236,95,172,158,121,217"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__container.html#af79dcc747ebf8d8e987827c8a92547cc" title="Safely invoke a factory function with exception handling." alt="" coords="237,150,398,205"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="186,213,223,202,224,208,188,218"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="448,127,627,167"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="121,213,170,170,200,150,234,135,284,123,336,118,387,119,435,123,434,129,387,124,336,123,285,128,236,140,203,155,173,174,124,217"/>
+<area shape="rect" id="Node000005" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="458,195,617,221"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="187,233,444,213,444,218,187,238"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a44cb2bff0a187e45f0fa708661f3fb3a" title="Check if currently resolving this type (circular dependency check)." alt="" coords="240,281,395,335"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="188,267,228,279,226,284,186,272"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1di_1_1service__container.html#af9e12f9226346f25221c4814b31d02ae" title="Pop type from resolution stack." alt="" coords="240,359,395,414"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="131,268,179,307,236,346,244,350,241,355,233,350,176,311,128,272"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a8e6ef062755155aec4a72b876bccadd2" title="Push type onto resolution stack." alt="" coords="240,438,395,493"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="114,269,163,345,197,387,236,425,241,428,238,432,233,429,193,390,159,348,110,272"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="398,163,434,158,435,164,399,169"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="399,186,445,192,444,198,398,191"/>
+</map>

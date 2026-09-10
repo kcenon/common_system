@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::create_from_factory" name="kcenon::common::interfaces::GlobalLoggerRegistry::create_from_factory">
+<area shape="rect" id="Node000001" title="Create logger from factory if available." alt="" coords="515,5,721,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#acfe6a50d2403679133b32727da354d5b" title="Get a logger by name." alt="" coords="260,5,467,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="501,35,467,35,467,30,501,30"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common_1_1interfaces.html#a080809533e29a6e271ea48d2a89cc8e7" title="Get a named logger from the global registry." alt="" coords="5,13,212,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="247,35,212,35,212,30,247,30"/>
+</map>

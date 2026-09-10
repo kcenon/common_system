@@ -1,0 +1,10 @@
+<map id="include/kcenon/common/adapters/adapter.h" name="include/kcenon/common/adapters/adapter.h">
+<area shape="rect" id="Node000001" title="Adapter traits and base class for type&#45;erased cross&#45;system wrappers." alt="" coords="147,5,328,45"/>
+<area shape="rect" id="Node000002" href="$adapter__pattern__example_8cpp.html" title=" " alt="" coords="5,93,200,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,55,134,95,131,91,194,51"/>
+<area shape="rect" id="Node000003" href="$adapters_8h.html" title="Unified adapter utilities for type&#45;safe and zero&#45;cost adaptation." alt="" coords="213,181,395,221"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,59,254,95,266,132,293,180,288,182,262,134,249,96,240,60"/>
+<area shape="rect" id="Node000004" href="$smart__adapter_8h.html" title="Smart adapter factory (legacy)" alt="" coords="275,93,469,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="280,51,344,91,341,95,277,55"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="351,146,321,183,317,179,346,143"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="calculation_job" name="calculation_job">
+<area shape="rect" id="Node000001" title=" " alt="" coords="95,544,232,669"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IJob.html" title="Abstract job interface for task execution." alt="" coords="5,261,204,481"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,494,150,543,145,544,133,495"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="228,339,363,404"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,405,208,531,204,529,275,403"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="233,133,358,199"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="298,212,298,339,293,339,293,212"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="284,5,307,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="298,71,298,117,293,117,293,71"/>
+</map>

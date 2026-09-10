@@ -1,0 +1,11 @@
+<map id="kcenon::common::di::service_container::check_frozen_for_registration" name="kcenon::common::di::service_container::check_frozen_for_registration">
+<area shape="rect" id="Node000001" title="Check if container is frozen and log audit event if so." alt="" coords="480,45,703,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a014fe0fa5d082ea952f676c53404fcf1" title="Internal factory registration (type&#45;erased)." alt="" coords="237,5,428,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="466,56,428,50,429,45,467,51"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a72d186c5efa0c6f5d0778be2e200819f" title="Internal instance registration (type&#45;erased)." alt="" coords="233,84,432,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="467,94,433,99,432,94,466,89"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a820d69330f6fce98e133543f6f870fe2" title="Internal factory registration (type&#45;erased)." alt="" coords="5,5,185,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="224,35,185,35,185,30,224,30"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a70a63b470b90d74b6b500e48a28124c7" title="Internal instance registration (type&#45;erased)." alt="" coords="5,84,185,139"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="220,114,185,114,185,109,220,109"/>
+</map>

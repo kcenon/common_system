@@ -1,0 +1,11 @@
+<map id="kcenon::common::resilience::circuit_breaker::record_failure" name="kcenon::common::resilience::circuit_breaker::record_failure">
+<area shape="rect" id="Node000001" title="Record a failed operation. May trigger state transition to OPEN or back to OPEN from HALF_OPEN." alt="" coords="5,77,211,132"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a07f0d7f82a392c6724f9011300d460a1" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="259,13,508,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="210,75,258,62,290,54,292,59,259,67,212,80"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a5ed8a1ecc7d25696dac343b7bdfa3255" title="Record a new failure at current time." alt="" coords="281,77,486,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,102,267,102,267,107,211,107"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#ac2bfeb044d85861737df9e3f5ea2c12a" title="Transition to OPEN state. Must be called with mutex locked." alt="" coords="281,156,486,211"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="205,130,274,149,273,155,204,135"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="556,5,761,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="508,30,542,30,542,35,508,35"/>
+</map>

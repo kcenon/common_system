@@ -1,0 +1,25 @@
+<map id="include/kcenon/common/interfaces/registry_audit_log.h" name="include/kcenon/common/interfaces/registry_audit_log.h">
+<area shape="rect" id="Node000001" title="Audit logging for registry operations." alt="" coords="288,5,470,60"/>
+<area shape="rect" id="Node000002" href="$source__location_8h.html" title="C++17&#45;compatible source_location implementation." alt="" coords="6,108,186,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="294,63,148,107,146,102,292,58"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="211,108,278,133"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="339,62,275,103,272,98,337,58"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="302,108,368,133"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="368,61,350,97,345,94,363,59"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="392,108,456,133"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="395,59,414,95,410,97,391,61"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="480,108,539,133"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="420,58,482,98,479,103,418,62"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="564,108,626,133"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="446,58,554,100,552,105,444,63"/>
+<area shape="rect" id="Node000003" href="$feature__flags_8h.html" title="Unified feature flags header for common_system." alt="" coords="9,181,184,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,134,99,168,94,168,94,134"/>
+<area shape="rect" id="Node000004" href="$feature__flags__core_8h.html" title="Core KCENON_* macro definitions for feature detection." alt="" coords="19,328,174,353"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="68,209,37,228,23,241,12,256,9,274,19,291,36,307,57,319,54,324,33,311,14,295,4,275,7,254,19,237,34,224,66,204"/>
+<area shape="rect" id="Node000005" href="$feature__detection_8h.html" title="Compiler and standard library feature detection." alt="" coords="22,255,171,280"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="99,207,99,241,94,241,94,207"/>
+<area shape="rect" id="Node000006" href="$feature__system__deps_8h.html" title="System module integration flags." alt="" coords="196,255,370,280"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="127,204,241,247,239,252,125,209"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="99,280,99,314,94,314,94,280"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="254,283,141,325,139,321,252,278"/>
+</map>

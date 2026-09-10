@@ -1,0 +1,15 @@
+<map id="include/kcenon/common/di/service_container_interface.h" name="include/kcenon/common/di/service_container_interface.h">
+<area shape="rect" id="Node000001" title="Service container interfaces for dependency injection." alt="" coords="265,5,447,60"/>
+<area shape="rect" id="Node000002" href="$service__container_8h.html" title="Implementation of the service container for dependency injection." alt="" coords="265,108,447,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,74,359,108,353,108,353,74"/>
+<area shape="rect" id="Node000003" href="$service__container__example_8cpp.html" title=" " alt="" coords="5,196,211,236"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="289,155,163,199,161,193,288,150"/>
+<area shape="rect" id="Node000004" href="$system__bootstrapper_8h.html" title="SystemBootstrapper implementation for runtime binding." alt="" coords="235,196,477,236"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="359,162,359,196,353,196,353,162"/>
+<area shape="rect" id="Node000006" href="$unified__bootstrapper_8h.html" title="Unified system bootstrapper for initialization and shutdown." alt="" coords="501,196,688,236"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="422,150,543,193,542,198,421,155"/>
+<area shape="rect" id="Node000005" href="$common_8h.html" title="Aggregated public header for Common System." alt="" coords="265,284,447,324"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="359,250,359,284,353,284,353,250"/>
+<area shape="rect" id="Node000007" href="$main_8cpp.html" title=" " alt="" coords="505,284,684,324"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="597,250,597,284,592,284,592,250"/>
+</map>

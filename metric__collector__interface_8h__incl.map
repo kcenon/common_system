@@ -1,0 +1,13 @@
+<map id="include/kcenon/common/interfaces/monitoring/metric_collector_interface.h" name="include/kcenon/common/interfaces/monitoring/metric_collector_interface.h">
+<area shape="rect" id="Node000001" title="Unified metric collection interface for cross&#45;module metric reporting." alt="" coords="123,5,331,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,108,72,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,62,77,105,75,100,168,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,108,173,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,62,159,100,155,96,197,58"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="197,108,256,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,60,229,94,224,94,224,60"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="281,108,378,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="260,58,307,97,303,101,256,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="402,108,526,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="300,58,420,101,419,106,298,63"/>
+</map>

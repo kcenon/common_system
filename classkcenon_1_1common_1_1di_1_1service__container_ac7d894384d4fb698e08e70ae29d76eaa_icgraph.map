@@ -1,0 +1,12 @@
+<map id="kcenon::common::di::service_container::clear" name="kcenon::common::di::service_container::clear">
+<area shape="rect" id="Node000001" title="Clear all registrations." alt="" coords="429,45,584,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#aeda5e02f04c8a871b548d7f6379f895c" title="Initialize the unified system." alt="" coords="217,5,381,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="415,58,381,51,382,46,416,53"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#adbac84d0feaad0b42c26bc9eb8eda947" title="Shutdown the unified system gracefully." alt="" coords="217,84,381,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="416,92,382,99,381,93,415,87"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="60,28,115,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="204,39,115,42,115,37,204,34"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="203,82,114,52,116,47,205,77"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a414fa6bda0fcc1f2543123a2e41aa8d7" title="Request graceful shutdown." alt="" coords="5,84,169,139"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="204,114,169,114,169,109,204,109"/>
+</map>

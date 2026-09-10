@@ -1,0 +1,6 @@
+<map id="kcenon::common::interfaces::IThreadPool" name="kcenon::common::interfaces::IThreadPool">
+<area shape="rect" id="Node000001" title="Extended interface for thread pool implementations." alt="" coords="5,393,204,673"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IExecutor.html" title="Abstract interface for task execution systems." alt="" coords="5,5,204,345"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,359,99,393,93,393,93,359"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="116,359,116,393,111,393,111,359"/>
+</map>

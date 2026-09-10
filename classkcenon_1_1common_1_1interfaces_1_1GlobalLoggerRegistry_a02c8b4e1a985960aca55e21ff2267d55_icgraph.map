@@ -1,0 +1,62 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::instance" name="kcenon::common::interfaces::GlobalLoggerRegistry::instance">
+<area shape="rect" id="Node000001" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="828,362,1035,417"/>
+<area shape="poly" id="edge30_Node000001_Node000001" title=" " alt="" coords="974,351,958,344,931,341,909,343,894,347,887,354,887,362,882,362,882,352,891,343,908,337,931,335,960,338,976,346"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a416e9fd173411a9fd1d0230fc7d57c8e" title="Clear all loggers from GlobalLoggerRegistry." alt="" coords="575,182,779,237"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="879,356,715,239,718,235,882,352"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a1cbc4ee14ba6fd89408946192e4762ea" title="Register all loggers with GlobalLoggerRegistry." alt="" coords="297,110,519,165"/>
+<area shape="poly" id="edge31_Node000001_Node000003" title=" " alt="" coords="913,350,893,306,864,257,826,209,803,189,779,172,748,156,716,145,649,130,581,124,519,126,519,120,582,119,650,125,718,139,750,152,781,167,807,185,829,206,868,254,897,304,918,348"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#aa5f0272e260c981dce32436aac02794d" title="Initialize the system." alt="" coords="11,5,237,45"/>
+<area shape="poly" id="edge29_Node000001_Node000004" title=" " alt="" coords="916,350,898,298,870,238,830,179,806,152,778,130,714,93,645,65,573,44,500,29,428,21,358,17,238,18,238,12,359,11,428,15,501,24,574,39,647,60,717,88,782,126,809,149,834,175,874,235,903,296,921,348"/>
+<area shape="rect" id="Node000009" href="$namespacekcenon_1_1common_1_1interfaces.html#aa135ed0b04261f3bd00a14d2eefceb98" title="Get the default logger from the global registry." alt="" coords="573,533,780,573"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="877,427,710,536,707,531,875,422"/>
+<area shape="rect" id="Node000028" href="$namespacekcenon_1_1common_1_1interfaces.html#a080809533e29a6e271ea48d2a89cc8e7" title="Get a named logger from the global registry." alt="" coords="573,597,780,637"/>
+<area shape="poly" id="edge27_Node000001_Node000028" title=" " alt="" coords="912,430,890,467,860,510,824,552,782,588,760,600,757,595,778,583,820,548,856,506,885,464,908,427"/>
+<area shape="rect" id="Node000029" href="$namespacekcenon_1_1common_1_1interfaces.html#a68e3d88d2022edbff9d046ed72b2aa33" title="Get the global logger registry instance." alt="" coords="573,661,780,701"/>
+<area shape="poly" id="edge28_Node000001_Node000029" title=" " alt="" coords="920,431,900,481,871,540,831,600,808,627,782,651,763,663,760,659,778,647,804,624,827,597,866,538,895,479,915,429"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="560,181,510,167,511,162,562,176"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a5656c3dcd7a7a2b320df65f7c55e5fbe" title="Shutdown the system." alt="" coords="291,189,525,229"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="561,212,525,212,525,207,561,207"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="344,106,242,60,206,48,208,43,244,55,346,101"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a385c980491500d6b34029561755a02d7" title=" " alt="" coords="5,69,243,109"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="303,186,289,178,273,164,264,150,256,136,241,124,218,112,220,107,244,119,260,133,269,147,278,161,292,174,306,181"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a49d3fac057aff9ce6e5159fe01cea2f8" title="Reset the bootstrapper to initial state." alt="" coords="22,133,226,173"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="292,189,225,176,226,171,293,184"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1bootstrap_1_1SystemBootstrapper.html#a67ba22e11495f4c6dfaaf3b87269870f" title="Destructor with automatic shutdown." alt="" coords="22,198,226,253"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="277,219,226,222,226,217,277,214"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1common_1_1logging.html#abf46994342b26f4c71b3465fadeabb5f" title="Flush all buffered log messages for the default logger." alt="" coords="313,640,503,680"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="587,581,575,588,561,598,551,609,542,620,527,630,499,642,497,638,524,626,538,616,547,605,557,594,572,583,585,576"/>
+<area shape="rect" id="Node000011" href="$namespacekcenon_1_1common_1_1logging.html#adc2978cd72e2a23343381ef47ecdbbef" title="Flush all buffered log messages for a named logger." alt="" coords="313,704,503,744"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="581,583,575,587,564,600,558,613,552,639,547,667,539,681,527,694,505,708,502,704,524,690,535,678,542,665,547,638,552,611,560,597,571,583,577,579"/>
+<area shape="rect" id="Node000012" href="$namespacekcenon_1_1common_1_1logging.html#a09dd9bc4d6029b30bbbaf30e0d345add" title="Check if a log level is enabled for the default logger." alt="" coords="313,768,503,808"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="579,584,575,587,560,608,553,628,552,671,551,714,544,736,527,758,505,774,502,769,523,754,539,734,546,713,547,671,548,628,555,605,571,584,575,580"/>
+<area shape="rect" id="Node000013" href="$namespacekcenon_1_1common_1_1logging.html#ae5664094ad84ac46e41437d71f6cd958" title="Check if a log level is enabled for a named logger." alt="" coords="313,476,503,516"/>
+<area shape="poly" id="edge12_Node000009_Node000013" title=" " alt="" coords="568,533,502,519,503,513,569,528"/>
+<area shape="rect" id="Node000014" href="$namespacekcenon_1_1common_1_1logging.html#a870ff3543bc18af88bcc72996583f58f" title="Log a message with the specified level and source location." alt="" coords="299,541,517,566"/>
+<area shape="poly" id="edge13_Node000009_Node000014" title=" " alt="" coords="559,556,518,556,518,551,559,551"/>
+<area shape="rect" id="Node000027" href="$namespacekcenon_1_1common_1_1logging.html#a14d557783da8b5ea6027fd7ed130d15a" title="Log a message to a named logger with source location." alt="" coords="299,590,517,615"/>
+<area shape="poly" id="edge26_Node000009_Node000027" title=" " alt="" coords="561,577,478,593,477,587,560,572"/>
+<area shape="rect" id="Node000015" href="$namespacekcenon_1_1common_1_1logging.html#a462ab56547649a9aa63ee360db3351ad" title="Log a critical&#45;level message." alt="" coords="29,533,219,573"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="285,556,219,556,219,551,285,551"/>
+<area shape="rect" id="Node000016" href="$namespacekcenon_1_1common_1_1logging.html#a565305ef4a5579998c664686a46b7653" title="Log a critical&#45;level message to a named logger." alt="" coords="29,597,219,637"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="335,572,291,581,210,600,209,595,290,576,334,566"/>
+<area shape="rect" id="Node000017" href="$namespacekcenon_1_1common_1_1logging.html#a220fdefda6c956bf40ca1906f4cbcc36" title="Log a debug&#45;level message." alt="" coords="29,661,219,701"/>
+<area shape="poly" id="edge16_Node000014_Node000017" title=" " alt="" coords="305,574,292,581,276,597,269,615,261,633,244,651,221,665,218,660,241,647,257,631,264,613,272,594,289,577,302,569"/>
+<area shape="rect" id="Node000018" href="$namespacekcenon_1_1common_1_1logging.html#aa10a6941368c5a8c96655ce7cff25cf1" title="Log a debug&#45;level message to a named logger." alt="" coords="29,725,219,765"/>
+<area shape="poly" id="edge17_Node000014_Node000018" title=" " alt="" coords="300,575,293,581,279,596,272,612,269,646,266,681,258,698,244,715,221,731,218,727,241,711,254,696,261,679,264,645,267,611,275,593,289,577,296,571"/>
+<area shape="rect" id="Node000019" href="$namespacekcenon_1_1common_1_1logging.html#a7ea496403c24e8af59f33d5fd3f5530d" title="Log an error&#45;level message." alt="" coords="29,789,219,829"/>
+<area shape="poly" id="edge18_Node000014_Node000019" title=" " alt="" coords="299,575,293,580,275,604,267,628,266,652,269,677,271,702,270,728,263,754,245,779,221,796,218,792,241,775,258,752,265,727,266,703,263,678,261,652,262,627,270,602,289,577,295,571"/>
+<area shape="rect" id="Node000020" href="$namespacekcenon_1_1common_1_1logging.html#ac57562cd5527ebda6f5719766ba195d9" title="Log an error&#45;level message to a named logger." alt="" coords="29,853,219,893"/>
+<area shape="poly" id="edge19_Node000014_Node000020" title=" " alt="" coords="298,576,293,580,271,612,262,644,263,676,268,709,274,742,275,776,267,810,245,843,221,861,218,856,241,839,262,807,270,775,269,743,263,710,258,676,257,643,266,610,289,577,294,572"/>
+<area shape="rect" id="Node000021" href="$namespacekcenon_1_1common_1_1logging.html#ae1729e904f39e9488a83d971bdce18e5" title="Log an info&#45;level message." alt="" coords="29,917,219,957"/>
+<area shape="poly" id="edge20_Node000014_Node000021" title=" " alt="" coords="297,576,293,580,277,600,266,620,257,660,260,700,268,741,277,782,280,823,271,865,260,886,245,907,221,925,218,921,241,903,256,883,266,863,274,823,272,782,263,742,255,701,252,659,261,618,272,597,289,577,293,572"/>
+<area shape="rect" id="Node000022" href="$namespacekcenon_1_1common_1_1logging.html#aaa70c0d0dce1d7e49f403bd4139ffcac" title="Log an info&#45;level message to a named logger." alt="" coords="29,981,219,1021"/>
+<area shape="poly" id="edge21_Node000014_Node000022" title=" " alt="" coords="297,576,293,580,274,604,262,628,255,652,252,676,257,724,268,772,280,821,285,871,282,896,275,921,263,946,245,971,221,989,218,985,241,967,258,943,270,919,277,895,279,871,274,822,263,774,251,725,247,676,250,651,257,626,270,601,289,577,293,572"/>
+<area shape="rect" id="Node000023" href="$namespacekcenon_1_1common_1_1logging.html#ad1e838c974641d56bfcbe643101b9e96" title="Log a trace&#45;level message." alt="" coords="29,277,219,317"/>
+<area shape="poly" id="edge22_Node000014_Node000023" title=" " alt="" coords="295,535,289,530,270,505,262,480,261,454,263,429,266,404,265,379,258,355,241,331,218,315,221,311,245,327,263,353,270,379,271,404,269,430,266,454,267,479,275,503,293,526,299,531"/>
+<area shape="rect" id="Node000024" href="$namespacekcenon_1_1common_1_1logging.html#a8503fec84ed59c7c7d31d4388f86ff43" title="Log a trace&#45;level message to a named logger." alt="" coords="29,341,219,381"/>
+<area shape="poly" id="edge23_Node000014_Node000024" title=" " alt="" coords="296,536,289,530,275,513,267,496,264,461,261,427,254,411,241,395,218,380,221,376,244,391,258,408,266,426,269,461,272,495,279,511,293,526,300,532"/>
+<area shape="rect" id="Node000025" href="$namespacekcenon_1_1common_1_1logging.html#a021b7ea8010417a5ad5b4e71671e1ed8" title="Log a warning&#45;level message." alt="" coords="29,405,219,445"/>
+<area shape="poly" id="edge24_Node000014_Node000025" title=" " alt="" coords="302,538,289,530,272,513,264,494,257,476,241,459,218,447,221,442,244,455,261,473,269,492,276,510,292,526,305,533"/>
+<area shape="rect" id="Node000026" href="$namespacekcenon_1_1common_1_1logging.html#a7b1be6b7725fb6e8e4d6b822ee735864" title="Log a warning&#45;level message to a named logger." alt="" coords="29,469,219,509"/>
+<area shape="poly" id="edge25_Node000014_Node000026" title=" " alt="" coords="334,540,290,531,209,512,210,507,291,525,335,535"/>
+</map>

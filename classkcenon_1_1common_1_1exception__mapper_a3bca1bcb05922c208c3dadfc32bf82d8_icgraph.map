@@ -1,0 +1,9 @@
+<map id="kcenon::common::exception_mapper::map_unknown_exception" name="kcenon::common::exception_mapper::map_unknown_exception">
+<area shape="rect" id="Node000001" title="Map unknown exception (catch&#45;all)" alt="" coords="316,37,569,77"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a3a4075a654d4ba04810318b60e7bd76f" title="Convert exception to Result with automatic error code mapping." alt="" coords="108,5,268,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,42,268,38,269,33,303,37"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common.html#afafd0955d7632ec5ef73919a1658e12c" title="Convert exception to VoidResult with automatic error code mapping." alt="" coords="108,69,268,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="303,78,269,82,268,77,302,72"/>
+<area shape="rect" id="Node000003" href="$result__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,13,60,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,60,28,60,23,94,23"/>
+</map>

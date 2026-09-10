@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::service_container" name="kcenon::common::di::service_container">
+<area shape="rect" id="Node000001" title="Concrete implementation of IServiceContainer." alt="" coords="5,528,237,1183"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html" title="Abstract interface for dependency injection containers." alt="" coords="17,5,225,480"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,494,124,528,119,528,119,494"/>
+</map>

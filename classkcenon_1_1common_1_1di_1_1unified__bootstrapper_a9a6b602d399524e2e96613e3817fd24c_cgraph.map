@@ -1,0 +1,9 @@
+<map id="kcenon::common::di::unified_bootstrapper::register_core_services" name="kcenon::common::di::unified_bootstrapper::register_core_services">
+<area shape="rect" id="Node000001" title="Register core services that are always required." alt="" coords="5,30,181,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="229,45,436,70"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,55,216,55,216,60,181,60"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="484,5,667,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="429,42,470,36,471,42,430,47"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="484,69,667,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="430,67,471,73,470,78,429,73"/>
+</map>

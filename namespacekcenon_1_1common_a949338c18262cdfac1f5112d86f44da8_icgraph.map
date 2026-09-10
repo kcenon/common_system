@@ -1,0 +1,22 @@
+<map id="kcenon::common::enum_to_string" name="kcenon::common::enum_to_string">
+<area shape="rect" id="Node000001" title="Convert an enum value to its string representation." alt="" coords="819,101,997,141"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common_1_1interfaces.html#a172cce304e56eb16c1df4d888910ac73" title="Convert health check type to string." alt="" coords="564,5,771,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="854,98,770,60,736,48,738,43,772,55,856,93"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common_1_1interfaces.html#aa42c0aa7625342dc10906318656108c5" title="Convert health status to string." alt="" coords="564,69,771,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="804,110,771,106,771,100,805,105"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1interfaces.html#ad66bab9fedac640ae2f37cf07da8135e" title="Convert log level to string." alt="" coords="564,133,771,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="805,138,771,142,771,137,804,132"/>
+<area shape="rect" id="Node000010" href="$namespacekcenon_1_1common_1_1interfaces.html#abaea7adc36c80177cbf4def25e18870c" title="Convert metric type to string." alt="" coords="564,197,771,237"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="856,150,772,188,738,200,736,195,770,183,854,145"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a8c9268a91d99e4b9735ddcf39fd649e8" title="Get a formatted health report." alt="" coords="5,29,257,69"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="570,129,562,123,545,102,539,80,532,60,515,44,476,26,435,15,392,10,349,9,267,17,197,32,196,27,266,12,349,3,392,4,436,10,478,21,517,39,536,57,544,79,550,100,566,119,573,124"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a76ce4552669cf3d8b1f848fc8ead8349" title=" " alt="" coords="305,54,516,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="582,132,508,111,509,106,583,127"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1logging_1_1ConsoleLogger.html#aa995110d44d296c241a751cfcf2abcc7" title="Log a structured entry." alt="" coords="315,133,506,173"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="550,156,506,156,506,151,550,151"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1logging_1_1ConsoleLogger.html#a43dfdbc594a93f617bbed3fb3b9c0b9c" title="Log a message with specified level." alt="" coords="315,197,506,237"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="574,179,492,200,491,195,573,174"/>
+<area shape="rect" id="Node000009" href="$health__check__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="383,262,438,287"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="574,182,566,187,551,203,543,219,534,236,517,252,478,269,439,276,438,271,476,264,515,247,530,232,538,216,546,200,562,183,571,177"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="291,70,257,66,258,61,292,65"/>
+</map>

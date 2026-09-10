@@ -1,0 +1,5 @@
+<map id="kcenon::common::resilience::failure_window::get_failure_count" name="kcenon::common::resilience::failure_window::get_failure_count">
+<area shape="rect" id="Node000001" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="5,13,255,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="303,5,508,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,30,289,30,289,35,255,35"/>
+</map>

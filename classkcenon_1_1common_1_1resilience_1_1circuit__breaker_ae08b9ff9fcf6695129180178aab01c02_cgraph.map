@@ -1,0 +1,9 @@
+<map id="kcenon::common::resilience::circuit_breaker::get_stats" name="kcenon::common::resilience::circuit_breaker::get_stats">
+<area shape="rect" id="Node000001" title="Get current statistics as key&#45;value pairs." alt="" coords="5,45,211,85"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a07f0d7f82a392c6724f9011300d460a1" title="Get current failure count within window. Removes expired failures before counting." alt="" coords="259,13,508,53"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,50,245,46,245,51,211,55"/>
+<area shape="rect" id="Node000004" href="$namespacekcenon_1_1common_1_1resilience.html#abb5fae6129771b7265580922083cdbee" title="Convert circuit state to human&#45;readable string." alt="" coords="281,77,486,117"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,74,267,81,267,86,211,79"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="556,5,761,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="508,30,542,30,542,35,508,35"/>
+</map>

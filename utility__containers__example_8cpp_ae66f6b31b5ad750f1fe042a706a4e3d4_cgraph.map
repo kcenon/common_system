@@ -1,0 +1,41 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,365,60,390"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#a5cf947ef4b70f0a370bf4b8122191886" title="Acquire an object constructed with the provided arguments." alt="" coords="118,5,289,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,364,40,300,55,208,77,117,91,81,106,56,110,52,114,55,110,59,95,83,82,118,61,209,46,301,38,365"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#acfad4a7939c9d281f2fd1f174a3eabc2" title=" " alt="" coords="118,69,289,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="31,364,33,318,43,253,52,218,65,182,83,149,106,120,110,116,114,120,110,123,88,152,70,185,57,219,48,254,39,319,36,364"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#afb9497a6c466f06e35a2efe95f2a1bf1" title="Destroy all cached instances and release memory." alt="" coords="118,133,289,173"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="33,364,38,329,51,281,72,229,88,205,106,183,111,179,114,183,110,187,92,208,77,231,56,282,43,330,38,365"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#acc820d756c0d75a7f0eb9b0b8cc504c2" title=" " alt="" coords="118,197,289,237"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="36,363,59,308,80,275,106,247,113,242,116,247,110,251,84,279,64,310,40,365"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#aecd8a97be8e3b90842658077390c5354" title=" " alt="" coords="118,261,289,301"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="44,362,71,337,107,311,119,304,122,309,109,316,75,341,48,366"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a73a78af1f30e873af63e4f163dc45e78" title=" " alt="" coords="118,517,289,557"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="40,389,64,444,84,476,110,503,116,508,113,512,106,507,80,479,59,447,36,391"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1utils_1_1SPSCCircularBuffer.html#ad1ee8ec345ce1b147b0cc7d4f5625068" title="Pop a value (consumer thread only)." alt="" coords="111,389,295,429"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="61,380,98,387,97,392,60,385"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a5aa446f1ad8263592f891d2a4af7916e" title=" " alt="" coords="118,581,289,621"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="38,390,43,425,56,472,77,523,92,547,110,567,114,571,111,575,106,571,88,550,72,526,51,474,38,426,33,391"/>
+<area shape="rect" id="Node000015" href="$classkcenon_1_1common_1_1utils_1_1SPSCCircularBuffer.html#a0e3ed892e29c26c2fab6e5464981a2ac" title="Push a value (producer thread only)." alt="" coords="108,453,299,493"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="48,388,75,414,109,439,122,445,119,450,107,444,71,418,44,392"/>
+<area shape="rect" id="Node000016" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#a872c2ab8106a55272d311d8b20b8ce84" title="Add count additional blocks to the pool." alt="" coords="118,325,289,365"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="60,370,104,361,105,367,61,375"/>
+<area shape="rect" id="Node000017" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#a69c809535b6e54b77581f5f2bac56215" title=" " alt="" coords="118,645,289,685"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="36,390,39,436,48,500,57,535,70,570,88,603,110,632,114,635,110,639,106,635,83,606,65,572,52,537,43,501,33,436,31,391"/>
+<area shape="rect" id="Node000018" href="$classkcenon_1_1common_1_1utils_1_1SPSCCircularBuffer.html#a22031fbd928ce3bd5b866f2041bb4736" title=" " alt="" coords="110,709,297,749"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="38,390,46,454,61,546,82,636,95,672,110,696,114,699,110,703,106,699,91,674,77,638,55,547,40,455,33,391"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1utils_1_1ObjectPool.html#a058f9b2676f0be33dcbc4356416826fe" title=" " alt="" coords="347,302,517,357"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="283,43,300,55,326,81,348,110,383,173,408,236,424,288,419,289,403,237,379,176,343,113,322,85,297,59,280,48"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#aaf0baefd79668adca38b75e2c96f872d" title=" " alt="" coords="347,503,517,558"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="289,532,333,531,333,536,289,538"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#aadb893c295d491d92b130f5068272d2d" title=" " alt="" coords="565,583,748,623"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="519,556,581,576,580,581,517,561"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1utils_1_1SPSCCircularBuffer.html#ae52d41d5bf87d5fb7c66ef55ec1eb758" title=" " alt="" coords="347,398,517,453"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="296,413,333,416,333,421,296,418"/>
+<area shape="poly" id="edge15_Node000013_Node000009" title=" " alt="" coords="268,579,333,558,334,564,270,584"/>
+<area shape="poly" id="edge13_Node000013_Node000010" title=" " alt="" coords="265,619,347,647,432,656,517,647,557,638,595,625,596,630,558,643,518,652,432,661,346,652,263,624"/>
+<area shape="rect" id="Node000014" href="$classkcenon_1_1common_1_1utils_1_1CircularBuffer.html#aee3c9cf5d2a69308b3a13cb3806e1f61" title=" " alt="" coords="347,582,517,637"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="289,602,333,603,333,609,289,607"/>
+<area shape="poly" id="edge17_Node000015_Node000012" title=" " alt="" coords="299,451,333,443,334,449,300,456"/>
+<area shape="poly" id="edge19_Node000016_Node000003" title=" " alt="" coords="289,337,333,334,333,339,289,342"/>
+</map>

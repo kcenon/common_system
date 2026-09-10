@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::RegistryAuditLog::event_count" name="kcenon::common::interfaces::RegistryAuditLog::event_count">
+<area shape="rect" id="Node000001" title="Get the number of logged events." alt="" coords="5,49,235,89"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#a8a375905bb26e9309a4b2cb4e41a1835" title=" " alt="" coords="289,5,495,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,51,275,45,276,51,235,56"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1RegistryAuditLog.html#aa7d54860d21f911867d2684b1b899139" title=" " alt="" coords="283,85,501,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,81,270,86,269,91,234,86"/>
+</map>

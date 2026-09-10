@@ -1,0 +1,11 @@
+<map id="include/kcenon/common/config/config_loader.h" name="include/kcenon/common/config/config_loader.h">
+<area shape="rect" id="Node000001" title="YAML&#45;based configuration loader for the unified system." alt="" coords="113,5,295,45"/>
+<area shape="rect" id="Node000002" href="$cli__config__parser_8h.html" title="Command&#45;line interface configuration parser." alt="" coords="5,93,195,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,56,125,95,121,91,169,52"/>
+<area shape="rect" id="Node000004" href="$config__watcher_8h.html" title="Configuration hot&#45;reload support with file system watching." alt="" coords="219,93,400,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,52,288,91,284,95,236,56"/>
+<area shape="rect" id="Node000003" href="$cli__parser__example_8cpp.html" title=" " alt="" coords="23,181,177,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,147,103,181,97,181,97,147"/>
+<area shape="rect" id="Node000005" href="$config__watcher__example_8cpp.html" title=" " alt="" coords="215,181,403,221"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="312,147,312,181,307,181,307,147"/>
+</map>

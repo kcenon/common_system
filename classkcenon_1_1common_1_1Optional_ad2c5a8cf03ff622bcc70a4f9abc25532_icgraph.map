@@ -1,0 +1,7 @@
+<map id="kcenon::common::Optional::has_value" name="kcenon::common::Optional::has_value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="288,27,485,67"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Optional.html#acc1a9040e86baefd4e1f91851577ca39" title=" " alt="" coords="5,5,240,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,38,237,33,237,28,275,32"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Optional.html#a9f22bfa8f9597f1bd5a5311ef0da6b97" title="Get value from optional (throws if None)" alt="" coords="24,55,221,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="275,62,222,68,221,62,274,57"/>
+</map>

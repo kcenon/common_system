@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::GlobalLoggerRegistry::get_default_logger" name="kcenon::common::interfaces::GlobalLoggerRegistry::get_default_logger">
+<area shape="rect" id="Node000001" title="Get the default logger." alt="" coords="5,45,212,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a34c41dbebdc9777c1d13df6c3b66c559" title="Create default logger from factory if available." alt="" coords="260,5,467,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,54,246,48,247,54,213,59"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a7359ad05bf4d6d0bf11a094cbc3f3ebd" title="Get the shared NullLogger instance." alt="" coords="260,84,467,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,86,247,91,246,96,212,91"/>
+</map>

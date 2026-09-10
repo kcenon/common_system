@@ -1,0 +1,12 @@
+<map id="kcenon::common::utils::CircularBuffer&lt; T, Capacity &gt;" name="kcenon::common::utils::CircularBuffer&lt; T, Capacity &gt;">
+<area shape="rect" id="Node000001" title="Thread&#45;safe fixed&#45;size circular buffer." alt="" coords="10,389,173,844"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,261,89,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="54,327,61,373,55,373,49,328"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,261,293,327"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,328,178,375,173,373,190,326"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="163,5,185,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="170,71,163,131,163,165,167,198,183,246,178,247,162,199,158,165,158,130,165,70"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="254,133,369,199"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="188,48,267,120,263,124,184,52"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="277,211,233,263,229,259,273,207"/>
+</map>

@@ -1,0 +1,21 @@
+<map id="kcenon::common::config::config_loader::validate" name="kcenon::common::config::config_loader::validate">
+<area shape="rect" id="Node000001" title="Validate a configuration." alt="" coords="5,205,187,245"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="249,5,427,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,204,155,132,191,92,233,56,246,49,248,54,236,61,195,95,159,136,111,207"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a8493d2278a35b57737ec4255664a1251" title="Create a successful result with value (static factory)" alt="" coords="235,70,441,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,203,164,154,197,128,233,106,253,97,255,102,236,110,200,132,168,158,117,207"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#aaa9435e9f6208de802ad892a42772b14" title=" " alt="" coords="247,119,429,174"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="158,203,239,176,241,181,159,208"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#a7e9b7355f9cfb3d0f0235abbc99c168c" title=" " alt="" coords="247,198,429,253"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="187,223,234,223,234,228,187,228"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ac952c1aff3c56e12e159ff76f10c8ff0" title=" " alt="" coords="247,277,429,331"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="159,243,241,270,239,275,158,248"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#ac9fe7e3b01ab3f71f7acb83323c75834" title=" " alt="" coords="247,355,429,410"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="118,243,169,292,201,318,236,342,246,347,243,352,233,346,198,323,165,296,114,247"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1config_1_1config__loader.html#acf0956c2cdc78923595b82f77b735ecb" title=" " alt="" coords="247,434,429,489"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="109,244,128,282,156,329,192,378,236,421,241,424,238,429,233,425,188,381,151,332,123,284,104,247"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a321302047771a6d24ac7c7c11bfffbe8" title="Default constructor is deleted to enforce explicit initialization." alt="" coords="489,31,672,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="434,67,475,62,476,67,435,73"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#aa85bf5b9943c8b1fca2f5f09296cf3f0" title="Get value reference (const)" alt="" coords="489,95,672,135"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="435,93,476,98,475,104,434,98"/>
+</map>

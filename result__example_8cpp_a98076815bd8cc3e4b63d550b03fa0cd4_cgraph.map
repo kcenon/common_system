@@ -1,0 +1,7 @@
+<map id="read_file" name="read_file">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,42,84,67"/>
+<area shape="rect" id="Node000002" href="$namespacekcenon_1_1common.html#a21fb913a617034934a6230a9a9441249" title="Create an error result with code and message." alt="" coords="132,5,311,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,46,118,40,119,45,85,51"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="142,70,301,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="85,58,129,65,128,71,84,63"/>
+</map>

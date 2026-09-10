@@ -1,0 +1,68 @@
+<map id="include/kcenon/common/interfaces/transport/udp_client_interface.h" name="include/kcenon/common/interfaces/transport/udp_client_interface.h">
+<area shape="rect" id="Node000001" title="UDP client interface for transport abstraction." alt="" coords="1304,5,1485,60"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,115,72,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1304,38,1037,43,685,56,337,78,193,92,85,111,76,113,74,108,83,105,192,87,336,72,685,51,1037,38,1304,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,115,163,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1304,39,1056,47,732,61,413,82,281,95,182,111,170,114,168,109,181,105,281,90,413,76,731,55,1055,41,1304,34"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="787,431,874,456"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1304,40,1014,56,832,70,648,88,476,111,334,138,279,154,237,171,211,189,205,198,203,208,203,283,202,339,209,360,227,380,446,404,774,434,774,440,445,409,224,385,204,362,197,339,197,283,197,207,200,196,207,185,235,166,277,149,333,133,475,105,647,83,832,65,1014,51,1304,35"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1488,115,1565,141"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1433,58,1501,105,1498,110,1430,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1357,350,1432,375"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1397,60,1397,336,1392,336,1392,60"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1589,115,1643,141"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1463,58,1578,106,1582,107,1580,112,1576,110,1461,62"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1231,431,1289,456"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1412,59,1442,122,1457,162,1470,207,1477,253,1477,299,1467,344,1446,384,1416,412,1379,430,1340,440,1304,444,1303,439,1339,435,1377,425,1413,408,1442,381,1462,342,1472,299,1471,253,1464,208,1452,164,1437,124,1407,61"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1667,115,1730,141"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1487,54,1569,78,1656,105,1661,108,1660,113,1654,111,1568,83,1485,60"/>
+<area shape="rect" id="Node000010" href="$result_8h.html" title="Umbrella header for Result&lt;T&gt; type and related utilities." alt="" coords="639,108,827,148"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1304,49,841,114,840,109,1303,44"/>
+<area shape="rect" id="Node000011" href="$patterns_2result_2core_8h.html" title="Consolidated core types for Result&lt;T&gt; pattern." alt="" coords="626,269,729,295"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="729,149,689,257,684,256,724,148"/>
+<area shape="rect" id="Node000024" href="$utilities_8h.html" title="Utility functions and macros for Result&lt;T&gt; pattern." alt="" coords="521,196,645,221"/>
+<area shape="poly" id="edge29_Node000010_Node000024" title=" " alt="" coords="698,150,619,192,616,187,696,146"/>
+<area shape="rect" id="Node000025" href="$compat_8h.html" title="Backward compatibility layer for error codes." alt="" coords="753,269,836,295"/>
+<area shape="poly" id="edge39_Node000010_Node000025" title=" " alt="" coords="744,147,787,255,782,257,739,150"/>
+<area shape="poly" id="edge11_Node000011_Node000006" title=" " alt="" coords="729,290,742,292,832,302,910,306,1041,309,1173,315,1249,324,1339,340,1352,343,1351,348,1338,345,1249,329,1172,320,1041,314,909,312,832,307,741,297,729,296"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="729,290,742,292,848,297,1025,302,1200,314,1262,325,1283,332,1297,341,1306,360,1303,381,1294,402,1282,421,1278,418,1289,400,1298,380,1300,361,1293,344,1281,337,1261,330,1199,320,1025,307,848,302,741,297,729,296"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="712,350,787,375"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="690,293,731,338,727,341,686,297"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="330,350,417,375"/>
+<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="626,297,534,318,429,345,419,348,417,343,427,340,533,313,625,291"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1001,350,1093,375"/>
+<area shape="poly" id="edge15_Node000011_Node000014" title=" " alt="" coords="729,290,989,340,1001,343,1000,349,987,345,728,295"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="441,350,501,375"/>
+<area shape="poly" id="edge16_Node000011_Node000015" title=" " alt="" coords="645,297,514,345,510,347,508,342,512,340,643,292"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="238,350,306,375"/>
+<area shape="poly" id="edge17_Node000011_Node000016" title=" " alt="" coords="626,291,486,309,402,325,318,345,310,348,309,343,317,340,400,320,485,304,626,285"/>
+<area shape="rect" id="Node000017" href="$source__location_8h.html" title="C++17&#45;compatible source_location implementation." alt="" coords="525,343,688,383"/>
+<area shape="poly" id="edge18_Node000011_Node000017" title=" " alt="" coords="669,297,635,334,631,331,665,293"/>
+<area shape="rect" id="Node000022" href="$error__category_8h.html" title="Decentralized error category system for improved system isolation." alt="" coords="811,343,976,383"/>
+<area shape="poly" id="edge25_Node000011_Node000022" title=" " alt="" coords="710,292,829,335,827,340,708,297"/>
+<area shape="rect" id="Node000018" href="$feature__flags_8h.html" title="Unified feature flags header for common_system." alt="" coords="519,431,694,456"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="609,383,609,417,604,417,604,383"/>
+<area shape="rect" id="Node000019" href="$feature__flags__core_8h.html" title="Core KCENON_* macro definitions for feature detection." alt="" coords="529,577,684,603"/>
+<area shape="poly" id="edge20_Node000018_Node000019" title=" " alt="" coords="579,458,547,477,533,490,522,505,520,524,529,541,546,556,567,569,565,573,543,560,525,544,514,524,518,503,529,486,544,473,576,454"/>
+<area shape="rect" id="Node000020" href="$feature__detection_8h.html" title="Compiler and standard library feature detection." alt="" coords="532,504,681,529"/>
+<area shape="poly" id="edge21_Node000018_Node000020" title=" " alt="" coords="609,456,609,490,604,490,604,456"/>
+<area shape="rect" id="Node000021" href="$feature__system__deps_8h.html" title="System module integration flags." alt="" coords="706,504,881,529"/>
+<area shape="poly" id="edge23_Node000018_Node000021" title=" " alt="" coords="638,454,751,497,749,501,636,459"/>
+<area shape="poly" id="edge22_Node000020_Node000019" title=" " alt="" coords="609,530,609,564,604,564,604,530"/>
+<area shape="poly" id="edge24_Node000021_Node000019" title=" " alt="" coords="764,532,651,575,649,570,762,527"/>
+<area shape="poly" id="edge26_Node000022_Node000004" title=" " alt="" coords="880,385,851,421,847,418,876,381"/>
+<area shape="poly" id="edge27_Node000022_Node000008" title=" " alt="" coords="977,379,1218,430,1217,436,976,384"/>
+<area shape="rect" id="Node000023" title=" " alt="" coords="906,431,1003,456"/>
+<area shape="poly" id="edge28_Node000022_Node000023" title=" " alt="" coords="910,381,939,418,935,421,906,385"/>
+<area shape="poly" id="edge30_Node000024_Node000011" title=" " alt="" coords="599,219,652,259,649,263,596,223"/>
+<area shape="poly" id="edge35_Node000024_Node000013" title=" " alt="" coords="576,223,548,258,507,297,462,325,417,347,415,342,459,321,504,293,544,255,572,220"/>
+<area shape="poly" id="edge37_Node000024_Node000015" title=" " alt="" coords="583,223,573,257,553,296,529,323,502,344,499,340,525,319,548,293,568,255,578,221"/>
+<area shape="poly" id="edge38_Node000024_Node000016" title=" " alt="" coords="521,222,449,241,411,255,375,272,328,305,292,341,289,338,325,301,372,267,409,250,447,236,520,217"/>
+<area shape="poly" id="edge31_Node000024_Node000025" title=" " alt="" coords="618,219,748,262,747,267,616,224"/>
+<area shape="rect" id="Node000027" title=" " alt="" coords="386,269,494,295"/>
+<area shape="poly" id="edge36_Node000024_Node000027" title=" " alt="" coords="561,224,477,265,474,261,559,219"/>
+<area shape="rect" id="Node000026" href="$error__codes_8h.html" title="Centralized error code registry for all systems." alt="" coords="1117,343,1283,383"/>
+<area shape="poly" id="edge32_Node000025_Node000026" title=" " alt="" coords="837,289,1104,340,1103,345,836,294"/>
+<area shape="poly" id="edge33_Node000026_Node000008" title=" " alt="" coords="1217,381,1245,418,1241,421,1212,385"/>
+<area shape="poly" id="edge34_Node000026_Node000023" title=" " alt="" coords="1142,385,1004,429,1002,424,1140,380"/>
+</map>

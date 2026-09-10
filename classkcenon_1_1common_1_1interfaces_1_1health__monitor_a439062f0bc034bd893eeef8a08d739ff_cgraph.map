@@ -1,0 +1,5 @@
+<map id="kcenon::common::interfaces::health_monitor::has_check" name="kcenon::common::interfaces::health_monitor::has_check">
+<area shape="rect" id="Node000001" title="Check if a health check is registered." alt="" coords="5,13,212,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#a3803de16d893423bece57b9043e3d84a" title="Check if a node exists." alt="" coords="260,5,467,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="212,30,246,30,246,35,212,35"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="kcenon::common::interfaces::health_monitor::add_dependency" name="kcenon::common::interfaces::health_monitor::add_dependency">
+<area shape="rect" id="Node000001" title="Add a dependency between health checks." alt="" coords="5,30,252,70"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#a170ababd8214f5548f57e54b0aefff24" title="Add a dependency between two nodes." alt="" coords="300,23,507,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,47,286,47,286,53,252,53"/>
+<area shape="rect" id="Node000003" href="$namespacekcenon_1_1common.html#a908ab82f8a0977c5dd212942bb175ad1" title="Create a successful void result." alt="" coords="583,5,741,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="507,35,569,27,569,32,507,40"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1health__dependency__graph.html#a22f83ad57f993f363ec499b36af6c2b4" title=" " alt="" coords="555,55,769,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="507,60,541,64,541,70,507,65"/>
+</map>

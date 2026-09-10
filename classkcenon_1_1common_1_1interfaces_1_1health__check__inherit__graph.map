@@ -1,0 +1,13 @@
+<map id="kcenon::common::interfaces::health_check" name="kcenon::common::interfaces::health_check">
+<area shape="rect" id="Node000001" title="Abstract base class for health checks." alt="" coords="378,5,577,285"/>
+<area shape="rect" id="Node000002" href="$classapp__liveness__check.html" title=" " alt="" coords="5,451,149,576"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="367,195,315,221,261,254,209,292,163,335,142,362,125,392,98,451,93,449,120,389,138,359,159,332,206,288,258,249,312,217,364,190"/>
+<area shape="rect" id="Node000003" href="$classcache__readiness__check.html" title=" " alt="" coords="173,431,365,596"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="394,299,318,432,313,429,389,297"/>
+<area shape="rect" id="Node000004" href="$classdatabase__dependency__check.html" title=" " alt="" coords="390,426,565,601"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="480,300,480,426,475,426,475,300"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1composite__health__check.html" title="Aggregates multiple health checks into a single check." alt="" coords="589,333,789,693"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="567,296,592,338,587,341,563,299"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1lambda__health__check.html" title="Health check implementation using a lambda function." alt="" coords="813,383,1011,643"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="590,192,699,251,753,289,803,331,845,381,841,385,799,335,750,293,696,256,588,196"/>
+</map>

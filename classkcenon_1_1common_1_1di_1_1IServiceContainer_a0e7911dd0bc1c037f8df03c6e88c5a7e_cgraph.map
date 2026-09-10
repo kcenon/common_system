@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::IServiceContainer::register_simple_factory" name="kcenon::common::di::IServiceContainer::register_simple_factory">
+<area shape="rect" id="Node000001" title="Register a simple factory function without container access." alt="" coords="5,5,189,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#ab95cf4898b236e00082a6a5c677fcd19" title="Internal factory registration (type&#45;erased)." alt="" coords="237,5,428,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,30,223,30,223,35,190,35"/>
+</map>

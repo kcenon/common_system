@@ -1,0 +1,5 @@
+<map id="kcenon::common::resilience::circuit_breaker::record_success" name="kcenon::common::resilience::circuit_breaker::record_success">
+<area shape="rect" id="Node000001" title="Record a successful operation. May trigger state transition from HALF_OPEN to CLOSED." alt="" coords="259,5,464,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker_1_1guard.html#a80b44511cdec1fc19afd332de65a7248" title="Explicitly mark operation as successful. Prevents automatic failure recording on destruction." alt="" coords="5,5,211,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,35,211,35,211,30,245,30"/>
+</map>

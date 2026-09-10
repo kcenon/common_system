@@ -1,0 +1,7 @@
+<map id="kcenon::common::resilience::circuit_breaker::should_attempt_reset" name="kcenon::common::resilience::circuit_breaker::should_attempt_reset">
+<area shape="rect" id="Node000001" title="Check if circuit should attempt reset to HALF_OPEN. Must be called with mutex locked." alt="" coords="361,5,567,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#aa80127bd0df0025c110d27eac44694a9" title="Check if request should be allowed through the circuit." alt="" coords="108,5,313,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="347,35,314,35,314,30,347,30"/>
+<area shape="rect" id="Node000003" href="$circuit__breaker__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,20,60,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,35,60,35,60,30,94,30"/>
+</map>

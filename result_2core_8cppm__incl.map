@@ -1,0 +1,17 @@
+<map id="src/modules/result/core.cppm" name="src/modules/result/core.cppm">
+<area shape="rect" id="Node000001" title="C++20 module partition for Result&lt;T&gt; core types." alt="" coords="273,5,415,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,80,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,48,94,94,93,89,272,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="104,93,179,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,48,185,91,183,86,294,43"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="203,93,290,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="322,48,273,87,270,82,319,43"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="315,93,373,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="347,46,347,79,341,79,341,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="398,93,490,119"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="370,43,420,82,417,87,367,48"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="514,93,574,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="393,43,503,86,501,91,391,48"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="598,93,666,119"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="414,43,586,89,584,94,412,48"/>
+</map>

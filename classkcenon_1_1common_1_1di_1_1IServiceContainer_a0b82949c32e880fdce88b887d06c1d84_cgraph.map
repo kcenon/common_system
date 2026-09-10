@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::IServiceContainer::is_registered" name="kcenon::common::di::IServiceContainer::is_registered">
+<area shape="rect" id="Node000001" title="Check if a service type is registered." alt="" coords="5,5,160,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a926001899223f6ec8cb685b84eeeb1d3" title="Internal registration check (type&#45;erased)." alt="" coords="208,5,379,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,30,194,30,194,35,160,35"/>
+</map>

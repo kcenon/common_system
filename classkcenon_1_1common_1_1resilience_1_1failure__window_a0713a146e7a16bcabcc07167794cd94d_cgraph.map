@@ -1,0 +1,5 @@
+<map id="kcenon::common::resilience::failure_window::is_empty" name="kcenon::common::resilience::failure_window::is_empty">
+<area shape="rect" id="Node000001" title="Check if window is empty (no recent failures)." alt="" coords="5,13,211,53"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1resilience_1_1failure__window.html#a862f619f95ba381714dffef68bfe46d8" title="Remove failures outside the time window. Must be called with mutex locked." alt="" coords="259,5,464,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,30,245,30,245,35,211,35"/>
+</map>

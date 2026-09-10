@@ -1,0 +1,16 @@
+<map id="kcenon::common::interfaces::stats_snapshot" name="kcenon::common::interfaces::stats_snapshot">
+<area shape="rect" id="Node000001" title="Point&#45;in&#45;time snapshot of component statistics." alt="" coords="139,463,338,543"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="218,155,297,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="271,220,279,251,292,346,291,388,280,439,277,449,272,447,275,438,286,387,287,346,273,253,266,221"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="107,305,251,400"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="244,222,211,292,206,289,240,220"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="192,5,323,85"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="260,100,260,155,255,155,255,100"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="200,399,219,446,214,448,195,401"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,148,149,228"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="75,241,78,261,85,280,108,308,104,312,80,283,73,263,70,242"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="42,13,65,78"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="54,78,57,124,59,132,54,133,52,124,49,78"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="118,13,141,78"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="120,78,100,133,95,131,115,76"/>
+</map>

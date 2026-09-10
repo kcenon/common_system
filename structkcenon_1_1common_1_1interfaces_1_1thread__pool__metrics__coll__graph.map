@@ -1,0 +1,19 @@
+<map id="kcenon::common::interfaces::thread_pool_metrics" name="kcenon::common::interfaces::thread_pool_metrics">
+<area shape="rect" id="Node000001" title="Specialized metrics for thread pool monitoring." alt="" coords="5,733,204,873"/>
+<area shape="rect" id="Node000002" href="$structkcenon_1_1common_1_1interfaces_1_1metric__value.html" title="Standard metric value structure with type information." alt="" coords="120,463,319,583"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,584,142,719,137,717,193,582"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="152,155,231,221"/>
+<area shape="poly" id="edge9_Node000001_Node000003" title=" " alt="" coords="181,222,147,312,115,425,103,501,98,578,100,717,95,717,93,578,98,500,110,423,142,310,176,220"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="195,221,206,400,211,446,206,446,201,400,190,221"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="269,305,413,400"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="214,219,260,280,273,292,269,296,256,283,209,223"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="126,5,257,85"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="194,100,194,155,189,155,189,100"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="309,402,274,451,270,447,305,399"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="271,148,415,228"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="345,242,344,305,339,305,340,242"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="415,13,437,78"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="419,79,399,125,392,136,387,134,394,123,414,77"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="307,13,329,78"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="319,78,322,124,324,132,319,133,317,124,313,78"/>
+</map>

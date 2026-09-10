@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::unified_bootstrapper::register_module" name="kcenon::common::di::unified_bootstrapper::register_module">
+<area shape="rect" id="Node000001" title="Register a module&#39;s service registration function." alt="" coords="217,5,381,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a019f0e89c9bdf5ab2347c2271b1bb99f" title="Register a class&#45;based module registrar." alt="" coords="5,5,169,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,35,169,35,169,30,204,30"/>
+</map>

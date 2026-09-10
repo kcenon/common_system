@@ -1,0 +1,15 @@
+<map id="kcenon::common::di::ServiceContainer" name="kcenon::common::di::ServiceContainer">
+<area shape="rect" id="Node000001" title="Simple thread&#45;safe service container implementation." alt="" coords="205,843,355,1017"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html" title="Abstract interface for dependency injection containers." alt="" coords="5,291,213,765"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,777,246,841,241,844,213,779"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="238,495,322,561"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,561,283,826,277,826,277,561"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="347,471,504,585"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="417,586,389,696,370,759,346,820,342,829,337,827,342,818,365,757,384,694,411,585"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="353,133,497,213"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="428,227,428,471,423,471,423,227"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="377,5,399,71"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="388,71,392,109,395,118,390,119,387,110,383,71"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="453,5,475,71"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="457,72,444,118,439,117,452,70"/>
+</map>

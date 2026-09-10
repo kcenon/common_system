@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::health_monitor::get_overall_status_internal" name="kcenon::common::interfaces::health_monitor::get_overall_status_internal">
+<area shape="rect" id="Node000001" title=" " alt="" coords="564,5,775,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a76ce4552669cf3d8b1f848fc8ead8349" title=" " alt="" coords="305,5,516,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="550,35,516,35,516,30,550,30"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#a8c9268a91d99e4b9735ddcf39fd649e8" title="Get a formatted health report." alt="" coords="5,13,257,53"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="292,35,258,35,258,30,292,30"/>
+</map>

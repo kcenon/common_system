@@ -1,0 +1,19 @@
+<map id="kcenon::common::Result::is_ok" name="kcenon::common::Result::is_ok">
+<area shape="rect" id="Node000001" title="Check if result contains a successful value." alt="" coords="759,92,941,132"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1Result.html#a939484b7d01cda1f5cb772f214cdc82a" title="Map a function that returns a Result (flatMap/bind)" alt="" coords="509,5,692,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="787,89,710,60,673,48,674,43,712,55,789,84"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1Result.html#a59c1599134bc523ddbdde0b9504e8c0d" title="Map a function over a successful result." alt="" coords="491,70,711,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="745,102,708,98,709,93,745,97"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1Result.html#a87f6ccd9f48b00310a1caa6dd4d8ff06" title="Provide alternative value if error." alt="" coords="509,120,692,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="746,126,693,132,692,127,745,121"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1Result.html#af69cb1d69a1b197fede62e3375fdcd8e" title="Get value or return default." alt="" coords="509,184,692,224"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="795,140,712,174,676,186,674,181,710,170,793,135"/>
+<area shape="rect" id="Node000006" href="$concepts__showcase__example_8cpp.html#a54e096f5ff47ebb4ccc6dc31685eeaed" title=" " alt="" coords="299,161,404,186"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="495,194,404,182,405,177,496,188"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1Result.html#a4b8c6dc10092478b622652bedd40dc6c" title="Get value or return default (C++23 std::expected compatible)" alt="" coords="260,212,443,252"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="496,218,443,224,443,219,496,213"/>
+<area shape="rect" id="Node000007" href="$concepts__showcase__example_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="81,158,136,183"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="285,175,136,174,136,168,285,170"/>
+<area shape="rect" id="Node000009" href="$classkcenon_1_1common_1_1interfaces_1_1health__monitor.html#ae56546419eea733a0be9659eb25e2b0f" title=" " alt="" coords="5,207,212,262"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="246,236,212,236,212,231,246,230"/>
+</map>

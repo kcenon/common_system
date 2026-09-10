@@ -1,0 +1,5 @@
+<map id="kcenon::common::typed_error_code" name="kcenon::common::typed_error_code">
+<area shape="rect" id="Node000001" title="A type&#45;safe error code that carries its category." alt="" coords="5,368,176,688"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1error__category.html" title="Abstract base class for error code categories." alt="" coords="8,5,173,305"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,306,93,352,88,352,88,306"/>
+</map>

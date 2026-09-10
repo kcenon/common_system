@@ -1,0 +1,7 @@
+<map id="include/kcenon/common/resilience/circuit_breaker.h" name="include/kcenon/common/resilience/circuit_breaker.h">
+<area shape="rect" id="Node000001" title="Circuit breaker pattern for fault tolerance and resilience." alt="" coords="103,5,303,45"/>
+<area shape="rect" id="Node000002" href="$circuit__breaker__example_8cpp.html" title=" " alt="" coords="5,93,192,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,56,123,95,120,91,167,52"/>
+<area shape="rect" id="Node000003" href="$resilience_8h.html" title="Umbrella header for resilience patterns." alt="" coords="216,93,397,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,52,285,91,282,95,235,56"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::IStats::name" name="kcenon::common::interfaces::IStats::name">
+<area shape="rect" id="Node000001" title="Get component name for identification." alt="" coords="513,5,720,45"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1IStats.html#a7b4e5d738a96a77540ec00597992b84e" title="Get a complete statistics snapshot with metadata." alt="" coords="259,5,465,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,28,466,28,466,23,500,23"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1resilience_1_1circuit__breaker.html#a2f23a946564db8f3bfb5bc045ba4b55e" title="Get statistics as JSON string." alt="" coords="5,5,211,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="245,28,211,28,211,23,245,23"/>
+</map>

@@ -1,0 +1,14 @@
+<map id="kcenon::common::interfaces::get_logger" name="kcenon::common::interfaces::get_logger">
+<area shape="rect" id="Node000001" title="Get a named logger from the global registry." alt="" coords="5,131,212,171"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#acfe6a50d2403679133b32727da354d5b" title="Get a logger by name." alt="" coords="260,72,467,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,129,246,120,247,126,208,134"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a02c8b4e1a985960aca55e21ff2267d55" title="Get the singleton instance of GlobalLoggerRegistry." alt="" coords="260,175,467,229"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="210,169,247,176,246,181,209,174"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a21a9fa4ef9786553111fc65d602ffe25" title="Create logger from factory if available." alt="" coords="515,5,721,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="466,70,501,61,502,66,467,75"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#a7359ad05bf4d6d0bf11a094cbc3f3ebd" title="Get the shared NullLogger instance." alt="" coords="515,84,721,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="467,102,501,103,501,108,467,107"/>
+<area shape="poly" id="edge6_Node000005_Node000005" title=" " alt="" coords="314,175,314,164,323,156,340,150,363,148,392,151,408,159,406,164,390,156,363,153,341,155,326,160,319,166,319,175"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1interfaces_1_1GlobalLoggerRegistry.html#af1a784a19fb001281f6f340c8aa9dd7a" title=" " alt="" coords="515,175,721,229"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="467,199,501,199,501,205,467,205"/>
+</map>

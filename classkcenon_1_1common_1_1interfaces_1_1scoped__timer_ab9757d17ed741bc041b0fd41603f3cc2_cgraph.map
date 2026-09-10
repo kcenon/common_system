@@ -1,0 +1,7 @@
+<map id="kcenon::common::interfaces::scoped_timer::~scoped_timer" name="kcenon::common::interfaces::scoped_timer::~scoped_timer">
+<area shape="rect" id="Node000001" title="Destructor reports elapsed time to the collector." alt="" coords="5,37,231,77"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1interfaces_1_1scoped__timer.html#a58248cf2aab96f6ffe644247d70c8afd" title="Get elapsed time since timer started." alt="" coords="279,5,485,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,41,265,37,266,42,231,46"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1interfaces_1_1IMetricCollector.html#abb85eb1b3567e85f6c8dc43f1055b4cb" title="Record a timing measurement." alt="" coords="279,69,485,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,68,266,73,265,78,231,74"/>
+</map>

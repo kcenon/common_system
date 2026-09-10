@@ -1,0 +1,5 @@
+<map id="include/kcenon/common/config/feature_system_deps.h" name="include/kcenon/common/config/feature_system_deps.h">
+<area shape="rect" id="Node000001" title="System module integration flags." alt="" coords="5,5,187,60"/>
+<area shape="rect" id="Node000002" href="$feature__flags__core_8h.html" title="Core KCENON_* macro definitions for feature detection." alt="" coords="19,108,173,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,60,99,94,93,94,93,60"/>
+</map>

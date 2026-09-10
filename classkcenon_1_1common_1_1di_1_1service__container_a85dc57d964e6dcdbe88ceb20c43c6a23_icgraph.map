@@ -1,0 +1,28 @@
+<map id="kcenon::common::di::service_container::is_frozen" name="kcenon::common::di::service_container::is_frozen">
+<area shape="rect" id="Node000001" title="Check if the container is frozen." alt="" coords="751,183,905,237"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#aa88e3771e49a2df6aa1691ae7e6a28d5" title="Check if container is frozen and log audit event if so." alt="" coords="480,84,703,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="748,180,656,141,659,136,750,175"/>
+<area shape="rect" id="Node000007" href="$classkcenon_1_1common_1_1di_1_1service__container.html#ac7d894384d4fb698e08e70ae29d76eaa" title="Clear all registrations." alt="" coords="514,183,669,237"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="736,213,669,213,669,207,736,207"/>
+<area shape="rect" id="Node000012" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a435b8a2a06ba4d3968742c9c3db042ea" title="Internal unregistration (type&#45;erased)." alt="" coords="514,300,669,355"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="761,246,648,302,646,298,758,241"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a014fe0fa5d082ea952f676c53404fcf1" title="Internal factory registration (type&#45;erased)." alt="" coords="237,5,428,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="487,82,423,63,424,58,488,77"/>
+<area shape="rect" id="Node000005" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a72d186c5efa0c6f5d0778be2e200819f" title="Internal instance registration (type&#45;erased)." alt="" coords="233,84,432,139"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="467,114,432,114,432,109,467,109"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a820d69330f6fce98e133543f6f870fe2" title="Internal factory registration (type&#45;erased)." alt="" coords="5,5,185,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="224,35,185,35,185,30,224,30"/>
+<area shape="rect" id="Node000006" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a70a63b470b90d74b6b500e48a28124c7" title="Internal instance registration (type&#45;erased)." alt="" coords="5,84,185,139"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="220,114,185,114,185,109,220,109"/>
+<area shape="rect" id="Node000008" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#aeda5e02f04c8a871b548d7f6379f895c" title="Initialize the unified system." alt="" coords="251,163,415,217"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="500,206,415,199,415,194,501,200"/>
+<area shape="rect" id="Node000010" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#adbac84d0feaad0b42c26bc9eb8eda947" title="Shutdown the unified system gracefully." alt="" coords="251,241,415,296"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="501,233,415,253,414,248,500,228"/>
+<area shape="rect" id="Node000009" href="$main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627" title=" " alt="" coords="68,184,123,209"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="237,195,123,199,123,193,237,190"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="237,242,122,207,124,202,238,237"/>
+<area shape="rect" id="Node000011" href="$classkcenon_1_1common_1_1di_1_1unified__bootstrapper.html#a414fa6bda0fcc1f2543123a2e41aa8d7" title="Request graceful shutdown." alt="" coords="13,241,177,296"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="237,271,178,271,178,266,237,266"/>
+<area shape="rect" id="Node000013" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a61ec9b028c01735769d33dafcc804be4" title="Internal unregistration (type&#45;erased)." alt="" coords="235,320,431,375"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="500,337,431,342,431,337,500,332"/>
+</map>

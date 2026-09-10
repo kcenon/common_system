@@ -1,0 +1,5 @@
+<map id="kcenon::common::di::IServiceContainer::resolve" name="kcenon::common::di::IServiceContainer::resolve">
+<area shape="rect" id="Node000001" title="Resolve a service by its interface type." alt="" coords="208,5,363,60"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1IServiceContainer.html#a0cbbb8a8d7c5fd42a6c315d749b58f1c" title="Try to resolve a service, returning nullptr if not found." alt="" coords="5,5,160,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,35,161,35,161,30,194,30"/>
+</map>

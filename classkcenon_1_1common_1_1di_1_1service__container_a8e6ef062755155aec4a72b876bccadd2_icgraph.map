@@ -1,0 +1,9 @@
+<map id="kcenon::common::di::service_container::push_resolution" name="kcenon::common::di::service_container::push_resolution">
+<area shape="rect" id="Node000001" title="Push type onto resolution stack." alt="" coords="461,45,616,100"/>
+<area shape="rect" id="Node000002" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a70c68eb04143cbd63a3ab4c38b091afc" title="Resolve a service with circular dependency detection." alt="" coords="232,45,413,100"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="447,75,414,75,414,70,447,70"/>
+<area shape="rect" id="Node000003" href="$classkcenon_1_1common_1_1di_1_1service__container.html#a5743615039585d3526308332c79a60f9" title="Internal service resolution (type&#45;erased)." alt="" coords="17,5,172,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="218,57,172,49,173,44,219,52"/>
+<area shape="rect" id="Node000004" href="$classkcenon_1_1common_1_1di_1_1service__scope.html#a8cfab84d4064f396b5522eedd8a20e48" title="Internal service resolution (type&#45;erased)." alt="" coords="5,84,184,139"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="219,93,185,99,184,94,218,88"/>
+</map>
