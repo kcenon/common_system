@@ -97,7 +97,6 @@ practices:
   - {id: COM-RELEASE,    file: RELEASING.md,              title: "Releasing",                     keywords: [release, process], lines: 172}
   - {id: COM-README-TPL, file: README_TEMPLATE.md,        title: "README Template",               keywords: [template, readme], lines: 255}
   - {id: COM-IMPROVE,    file: IMPROVEMENT_PROPOSAL.md,   title: "Improvement Proposal",          keywords: [proposal, improvement], lines: 554}
-  - {id: COM-RUST,       file: RUST_PARITY.md,            title: "Rust Parity",                   keywords: [rust, parity, comparison], lines: 1481}
 
 # ============================================================================
 # Reference / Ecosystem / Compliance
