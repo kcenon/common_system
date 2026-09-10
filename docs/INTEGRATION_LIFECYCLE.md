@@ -640,7 +640,6 @@ cmake --build .
 - [Architecture Overview](ARCHITECTURE.md) - System design philosophy
 - [Dependency Matrix](advanced/DEPENDENCY_MATRIX.md) - Detailed dependency analysis
 - [API Reference](API_REFERENCE.md) - Interface specifications
-- [Rust/C++ Parity Matrix](RUST_PARITY.md) - Feature comparison between C++ and Rust ports
 - [Error Code Registry](ERROR_CODE_REGISTRY.md) - Complete error code reference
 
 ---

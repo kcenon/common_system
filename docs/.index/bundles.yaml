@@ -78,10 +78,6 @@ performance:
   name: "Performance & Benchmarks"
   files: [BENCHMARKS.md, ECOSYSTEM_BENCHMARKS.md]
 
-rust-parity:
-  name: "Rust Parity"
-  files: [RUST_PARITY.md]
-
 deprecation:
   name: "Deprecation Policy"
   files: [DEPRECATION.md]

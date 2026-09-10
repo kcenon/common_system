@@ -96,7 +96,6 @@ Total documents: **86**
 | 75 | COM-PROJ-008 | Common System - 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
 | 76 | COM-PROJ-009 | Common System - Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
 | 77 | COM-PROJ-010 | Releasing common_system | [RELEASING.md](./RELEASING.md) | Released |
-| 78 | COM-PROJ-011 | Rust/C++ Feature Parity Matrix | [RUST_PARITY.md](./RUST_PARITY.md) | Released |
 | 79 | COM-PROJ-012 | SOUP Inventory — kcenon Ecosystem | [SOUP-LIST.md](./SOUP-LIST.md) | Released |
 | 80 | COM-PROJ-013 | SOUP List &mdash; common_system | [SOUP.md](./SOUP.md) | Released |
 | 81 | COM-PROJ-014 | Dependency Matrix - 상세 분석 | [DEPENDENCY_MATRIX.kr.md](./advanced/DEPENDENCY_MATRIX.kr.md) | Released |
@@ -239,7 +238,6 @@ Total documents: **86**
 | COM-PROJ-008 | Common System - 프로젝트 구조 | [PROJECT_STRUCTURE.kr.md](./PROJECT_STRUCTURE.kr.md) | Released |
 | COM-PROJ-009 | Common System - Project Structure | [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) | Released |
 | COM-PROJ-010 | Releasing common_system | [RELEASING.md](./RELEASING.md) | Released |
-| COM-PROJ-011 | Rust/C++ Feature Parity Matrix | [RUST_PARITY.md](./RUST_PARITY.md) | Released |
 | COM-PROJ-012 | SOUP Inventory — kcenon Ecosystem | [SOUP-LIST.md](./SOUP-LIST.md) | Released |
 | COM-PROJ-013 | SOUP List &mdash; common_system | [SOUP.md](./SOUP.md) | Released |
 | COM-PROJ-014 | Dependency Matrix - 상세 분석 | [DEPENDENCY_MATRIX.kr.md](./advanced/DEPENDENCY_MATRIX.kr.md) | Released |
