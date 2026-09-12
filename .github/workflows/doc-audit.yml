@@ -7,6 +7,9 @@ on:
       - 'README.md'
       - 'README.kr.md'
       - 'CLAUDE.md'
+      - 'scripts/readme_lint.py'
+      - 'scripts/tests/**'
+      - '.github/workflows/**'
 
 permissions:
   contents: read
@@ -26,6 +29,12 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+
+      - name: Test README lint
+        run: python3 -m unittest discover -s scripts/tests -p 'test_readme_lint.py'
+
+      - name: Lint READMEs
+        run: python3 scripts/readme_lint.py README.md README.kr.md
 
       - name: Install dependencies
         run: pip install pyyaml
