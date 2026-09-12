@@ -40,12 +40,11 @@ A foundational C++20 header-only library providing essential interfaces and desi
 - **C++20 Module support**: Optional module-based build for faster compilation
 - **Ecosystem foundation**: Powers thread_system, network_system, database_system, and more
 
-**v1.0.0** — Stable API release. All public headers are frozen under SemVer guarantees.
-Breaking changes will only occur in future major versions (v2.0+).
+**Release status:** The latest published release is [v0.2.0](https://github.com/kcenon/common_system/releases/tag/v0.2.0). Version `1.0.0` is recorded in [VERSION](VERSION), [CHANGELOG.md](CHANGELOG.md), and [vcpkg.json](vcpkg.json), but has not yet been tagged or published.
 
 ### API Stability
 
-Starting with v1.0.0, common_system provides the following guarantees:
+The following API stability policy applies once v1.0.0 is tagged:
 
 - **No breaking changes** to public headers within the same major version
 - **No removal** of public functions, classes, or type aliases without a major version bump
@@ -81,22 +80,18 @@ See [VERSIONING.md](VERSIONING.md) for the full versioning policy and release pr
 
 using namespace kcenon::common;
 
-Result<Config> load_config(const std::string& path) {
-    if (!std::filesystem::exists(path)) {
-        return make_error<Config>(
-            error_codes::NOT_FOUND,
-            "Configuration file not found",
-            "config_loader"
-        );
+Result<int> validate_port(int port) {
+    if (port < 1 || port > 65535) {
+        return make_error<int>(error_codes::INVALID_ARGUMENT,
+                               "Port must be between 1 and 65535");
     }
-    auto config = parse_json_file(path);
-    return ok(config);
+    return ok(port);
 }
 
-// Usage with monadic operations
-auto result = load_config("app.conf")
-    .and_then(validate_config)
-    .map(apply_defaults);
+int main() {
+    auto result = validate_port(8080);
+    return result.is_ok() && result.value() == 8080 ? 0 : 1;
+}
 ```
 
 [Full Getting Started Guide](docs/guides/QUICK_START.md)
@@ -108,7 +103,7 @@ auto result = load_config("app.conf")
 | Dependency | Version | Required | Description |
 |------------|---------|----------|-------------|
 | C++20 Compiler | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | Yes | C++20 features (concepts) |
-| CMake | 3.28+ | Yes | Build system |
+| CMake | 3.20+ for current `main` header builds; 3.28+ for v0.2.0 and C++20 modules | For CMake builds | Direct header inclusion does not require CMake |
 
 ### Compiler Requirements
 
@@ -160,11 +155,13 @@ common_system (Foundation Layer - No Dependencies)
 
 ### Installation via vcpkg
 
+From a checkout of this repository, use the bundled [overlay port](vcpkg-ports/kcenon-common-system/):
+
 ```bash
-vcpkg install kcenon-common-system
+vcpkg install kcenon-common-system --overlay-ports=./vcpkg-ports --classic
 ```
 
-In your `CMakeLists.txt`:
+Configure your application with `-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake`, replacing `/path/to/vcpkg` with your vcpkg checkout. In your `CMakeLists.txt`, after defining `your_target`:
 ```cmake
 find_package(common_system CONFIG REQUIRED)
 target_link_libraries(your_target PRIVATE kcenon::common_system)
@@ -198,10 +195,23 @@ git clone https://github.com/kcenon/common_system.git
 
 ### C++20 Modules
 
+This experimental build requires a supported compiler and its module dependency scanner; Apple Clang is unsupported. Link importing consumers to `kcenon::common_modules` from a source build with modules enabled.
+
 ```bash
 # Build with C++20 module support (requires CMake 3.28+, Ninja, Clang 16+/GCC 14+)
 cmake -G Ninja -B build -DCOMMON_BUILD_MODULES=ON
 cmake --build build
+```
+
+In a consuming CMake project, after adding common_system from source with modules enabled and defining `your_target`, match the module's C++20 compilation mode:
+
+```cmake
+set_target_properties(your_target PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS OFF
+)
+target_link_libraries(your_target PRIVATE kcenon::common_modules)
 ```
 
 ```cpp
@@ -209,10 +219,7 @@ import kcenon.common;
 
 int main() {
     auto result = kcenon::common::ok(42);
-    if (result.is_ok()) {
-        std::cout << result.value() << std::endl;
-    }
-    return 0;
+    return result.is_ok() && result.value() == 42 ? 0 : 1;
 }
 ```
 
@@ -279,43 +286,67 @@ The kcenon ecosystem follows a canonical directory, build-system, and test-infra
 Type-safe error handling without exceptions, inspired by Rust:
 
 ```cpp
-auto result = load_config("app.conf")
-    .and_then(validate_config)
-    .map(apply_defaults)
-    .or_else([](const auto& error) {
-        log_error(error);
-        return load_fallback_config();
-    });
+#include <kcenon/common/patterns/result.h>
+
+using namespace kcenon::common;
+
+int main() {
+    auto result = ok(21)
+        .and_then([](int value) { return ok(value * 2); })
+        .map([](int value) { return value + 1; })
+        .or_else([](const error_info&) { return ok(0); });
+    return result.is_ok() && result.value() == 43 ? 0 : 1;
+}
 ```
 
 ### IExecutor Interface
 
-Universal task execution abstraction for any threading backend:
+Submit a job through an executor supplied by your application. The returned `Result` reports submission errors; its future represents job completion.
 
 ```cpp
-class MyService {
-    std::shared_ptr<common::interfaces::IExecutor> executor_;
+#include <kcenon/common/interfaces/executor_interface.h>
+#include <future>
+#include <memory>
+
+namespace common = kcenon::common;
+
+class example_job final : public common::interfaces::IJob {
 public:
-    void process_async(const Data& data) {
-        auto future = executor_->submit([data]() { return process(data); });
-    }
+    common::VoidResult execute() override { return common::ok(); }
 };
+
+common::Result<std::future<void>> schedule(common::interfaces::IExecutor& executor) {
+    return executor.execute(std::make_unique<example_job>());
+}
 ```
 
 ### Health Monitoring
 
-Comprehensive health check system with dependency graph:
+Create, register, and run a sample health check. Replace the callback with your application's check logic.
 
 ```cpp
-auto& monitor = global_health_monitor();
-auto db_check = health_check_builder()
-    .name("database")
-    .type(health_check_type::dependency)
-    .timeout(std::chrono::seconds{5})
-    .with_check([]() { /* check logic */ })
-    .build();
-monitor.register_check("database", db_check.value());
-monitor.add_dependency("api", "database");
+#include <kcenon/common/interfaces/monitoring.h>
+#include <chrono>
+
+using namespace kcenon::common::interfaces;
+
+int main() {
+    health_monitor monitor;
+    auto check = health_check_builder()
+        .name("sample")
+        .type(health_check_type::dependency)
+        .timeout(std::chrono::seconds{5})
+        .with_check([]() {
+            health_check_result result;
+            result.status = health_status::healthy;
+            return result;
+        }).build();
+    if (check.is_err()) return 1;
+    auto registered = monitor.register_check("sample", check.value());
+    if (registered.is_err() || !registered.value()) return 1;
+    auto result = monitor.check("sample");
+    return result.is_ok() && result.value().is_healthy() ? 0 : 1;
+}
 ```
 
 ### Error Code Registry
@@ -334,14 +365,30 @@ Centralized error code registry providing system-specific ranges:
 
 ### Circuit Breaker
 
-Resilience pattern for fault tolerance:
+Protect an operation with a circuit breaker. Keep the breaker alive across requests so it can track failures.
 
 ```cpp
-auto breaker = circuit_breaker("db_connection", {
-    .failure_threshold = 5,
-    .recovery_timeout = std::chrono::seconds{30}
-});
-auto result = breaker.execute([&]() { return db.query("SELECT 1"); });
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/resilience/circuit_breaker.h>
+#include <chrono>
+
+using namespace kcenon::common;
+using namespace kcenon::common::resilience;
+
+Result<int> perform_operation() { return ok(42); } // Sample application operation.
+
+int main() {
+    circuit_breaker breaker(circuit_breaker_config{
+        .failure_threshold = 5,
+        .timeout = std::chrono::seconds{30}
+    });
+    if (!breaker.allow_request()) return 1;
+    auto guard = breaker.make_guard();
+    auto result = perform_operation();
+    if (result.is_err()) return 1; // The guard records failure on destruction.
+    guard.record_success();
+    return 0;
+}
 ```
 
 ---
@@ -391,7 +438,7 @@ cmake --build build
 | Result<T> creation | 2.3 | 0 | Stack-only operation |
 | Result<T> error check | 0.8 | 0 | Single bool check |
 | IExecutor submit | 45.2 | 1 | Task queue insertion |
-| Event publish | 12.4 | 0 | Lock-free operation |
+| Event publish | 12.4 | 0 | Mutex-protected synchronous dispatch |
 
 **Key Performance Characteristics:**
 - Result<T> is 400x faster than exceptions in error paths
@@ -443,7 +490,7 @@ Downstream consumers should pin against a known-good set of port versions. The c
 
 ### Ecosystem CI Verification
 
-The [Ecosystem vcpkg Integration](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml) workflow validates that all 8 ecosystem ports install and build correctly as a consumer would experience them. It tests each port in bottom-up dependency order (Layer 0 through Layer 7) on Ubuntu and macOS, running on every PR that touches vcpkg ports and nightly at 03:00 UTC.
+The [Ecosystem vcpkg Integration](https://github.com/kcenon/common_system/actions/workflows/ecosystem-vcpkg-integration.yml) workflow validates that all 8 ecosystem ports install and build correctly as a consumer would experience them. It tests each port in bottom-up dependency order (Layer 0 through Layer 7) on Ubuntu and macOS. It runs on pull requests targeting `main` that change `vcpkg-ports/**`, `vcpkg.json`, `vcpkg-configuration.json`, `tests/ecosystem-consumer/**`, or the workflow itself, and is scheduled weekly on Wednesday at 03:43 UTC. It also supports manual dispatch.
 
 This common system serves as the foundational layer (Tier 0) that all other system modules build upon:
 
@@ -462,16 +509,22 @@ common_system (Tier 0 - Foundation)
 ### Integration Example
 
 ```cpp
-// Any ecosystem project can use common_system interfaces
 #include <kcenon/common/patterns/result.h>
-#include <kcenon/common/interfaces/executor_interface.h>
+#include <iostream>
 
-// Result<T> is the universal error handling pattern
-auto result = do_something();
-if (result.is_err()) {
-    // Consistent error handling across all projects
-    auto error = result.error();
-    std::cerr << error.message << " (code: " << error.code << ")\n";
+// Sample application operation returning an error.
+kcenon::common::Result<int> do_something() {
+    return kcenon::common::make_error<int>(
+        kcenon::common::error_codes::NOT_FOUND, "Resource not found");
+}
+
+int main() {
+    auto result = do_something();
+    if (result.is_err()) {
+        const auto& error = result.error();
+        std::cerr << error.message << " (code: " << error.code << ")\n";
+    }
+    return 0;
 }
 ```
 
@@ -516,7 +569,6 @@ We welcome contributions! Please see [CONTRIBUTING.md](docs/contributing/CONTRIB
 ### Support
 
 - **Issues**: [GitHub Issues](https://github.com/kcenon/common_system/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/kcenon/common_system/discussions)
 - **Email**: kcenon@naver.com
 
 ---
