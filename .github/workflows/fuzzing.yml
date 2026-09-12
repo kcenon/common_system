@@ -1,9 +1,7 @@
 name: Fuzzing
 
 on:
-  schedule:
-    # Weekly run, Mondays at 05:17 UTC (off-peak to avoid the top-of-hour rush).
-    - cron: '17 5 * * 1'
+  # Schedule paused (#723) until CMake registers result_error_fuzzer.
   workflow_dispatch:
     inputs:
       max_total_time:
