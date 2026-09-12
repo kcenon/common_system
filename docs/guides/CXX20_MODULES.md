@@ -1,12 +1,24 @@
+---
+doc_id: "COM-GUID-028"
+doc_title: "C++20 Modules: Dual-Build Strategy"
+doc_version: "1.0.0"
+doc_date: "2026-09-12"
+doc_status: "Released"
+project: "common_system"
+category: "GUID"
+---
+
 # C++20 Modules: Dual-Build Strategy
 
 > **Language:** **English** | See also: [Module Migration Guide](MODULE_MIGRATION.md)
 
 ## Overview
 
-common_system provides two build modes: **header-only** (default) and **C++20 modules**
-(opt-in). Both modes expose the same public API — the choice affects compilation
-performance and toolchain requirements, not runtime behavior.
+common_system provides **header-only** mode by default and experimental
+**C++20 modules** as an opt-in source build. Modules require a supported compiler
+and its dependency scanner (for example, `clang-scan-deps` beside `clang++`).
+The table describes current source targets; the published v0.2.0 FetchContent
+example uses `kcenon::common`, as shown in the [README](../../README.md#getting-started).
 
 | Mode | CMake Target | Import Style | Default |
 |------|-------------|-------------|---------|
@@ -22,14 +34,13 @@ performance and toolchain requirements, not runtime behavior.
 - You need sanitizer builds (ASan, TSan, UBSan) — module support under sanitizers
   is not yet validated in CI
 - You are distributing a library consumed by projects with varying toolchains
-- You want the simplest possible integration (zero build cost, no generator constraints)
+- You want to use headers with your existing build generator
 
 **Use C++20 modules** when:
 
 - You have a supported compiler and CMake 3.28+
 - You use the Ninja or Visual Studio generator
-- You want faster incremental builds (modules are compiled once and imported,
-  rather than re-parsed per translation unit)
+- You want to evaluate compilation behavior with separately compiled module units
 - You want stronger encapsulation (non-exported symbols are not visible)
 
 ## Compiler and CMake Matrix
@@ -50,6 +61,10 @@ performance and toolchain requirements, not runtime behavior.
 | CMake version | 3.20+ | **3.28+** |
 | Generator | Any | **Ninja** or **Visual Studio** |
 | `CXX_SCAN_FOR_MODULES` | N/A | Set automatically |
+
+The header CMake minimum above applies to current source. The published v0.2.0
+release requires CMake 3.28+ even in header mode. Downstream compiler requirements
+are listed in the [setup guide](QUICK_START.md#compiler-requirements).
 
 ## Enabling Module Builds
 
@@ -74,12 +89,16 @@ When enabled, CMake performs these checks at configure time:
 1. **CMake version** >= 3.28 — if not, disables with a warning
 2. **Compiler** is not Apple Clang — if so, disables with a warning
 3. **Generator** is Ninja or Visual Studio — if not, disables with a warning
-4. **Compiler version** meets module minimums — checked via `kcenon_check_compiler_requirements(MODULES)`
+4. **Compiler version** meets module minimums — checked via `kcenon_check_compiler_requirements(MODULES)`; a version below the minimum is a configuration error
 
-If any check fails, `COMMON_BUILD_MODULES` is set to `OFF` and the build continues
-in header-only mode. No manual intervention required.
+The first three checks disable module creation with a warning. Compiler-version
+failure stops configuration. Missing scanners can also prevent generation or
+building. Inspect [common-modules.cmake](../../cmake/common-modules.cmake) for the checks.
 
 ### Consuming the Module Target
+
+This pins an existing source commit with module support, rather than the staged,
+unpublished v1.0.0. Save the following files as `CMakeLists.txt` and `main.cpp`.
 
 ```cmake
 cmake_minimum_required(VERSION 3.28)
@@ -87,20 +106,26 @@ project(my_project CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(FetchContent)
+set(COMMON_BUILD_MODULES ON CACHE BOOL "" FORCE)
+set(COMMON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(COMMON_BUILD_INTEGRATION_TESTS OFF CACHE BOOL "" FORCE)
+set(COMMON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(COMMON_BUILD_BENCHMARKS OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v1.0.0
+    GIT_TAG 8558128033457ffb4635f564b0d495dddd6f8807
 )
 FetchContent_MakeAvailable(common_system)
 
+if(NOT TARGET kcenon::common_modules)
+    message(FATAL_ERROR "This example requires the module target; check the toolchain")
+endif()
 add_executable(my_app main.cpp)
-
-# Choose one:
-# target_link_libraries(my_app PRIVATE kcenon::common)          # header-only
-target_link_libraries(my_app PRIVATE kcenon::common_modules)    # modules
+target_link_libraries(my_app PRIVATE kcenon::common_modules)
 ```
 
 ```cpp
@@ -109,9 +134,22 @@ import kcenon.common;
 
 int main() {
     auto result = kcenon::common::ok(42);
-    return result.is_ok() ? 0 : 1;
+    return result.is_ok() && result.value() == 42 ? 0 : 1;
 }
 ```
+
+Configure with Ninja and your upstream Clang installation, whose `clang-scan-deps`
+must be available, then build and run:
+
+```bash
+cmake -S . -B build -G Ninja -DCMAKE_CXX_COMPILER=/path/to/llvm/bin/clang++
+cmake --build build --target my_app
+./build/my_app
+```
+
+Replace `/path/to/llvm` with your compiler installation. The consumer and module
+both use C++20 with extensions disabled. A header fallback cannot satisfy this
+example: it explicitly requires the module target and compiles an `import`.
 
 ## Fallback Behavior
 
@@ -130,7 +168,7 @@ cmake configure
         │       kcenon::common (headers)
         │       kcenon::common_modules (modules)
         │
-        └─ Any check fails
+        └─ CMake / Apple Clang / generator check fails
             └─ Warning printed, COMMON_BUILD_MODULES set to OFF
                 └─ Header-only target only (graceful fallback)
 ```
@@ -139,7 +177,8 @@ Key points:
 
 - The header-only target (`kcenon::common`) is **always** built regardless of module settings
 - Enabling modules adds `kcenon::common_modules` as an **additional** target
-- If the toolchain cannot support modules, the build silently falls back to header-only
+- CMake / Apple Clang / generator rejection produces a warning and leaves only headers;
+  an insufficient compiler version is fatal, and an absent scanner can fail the build
 - You can mix headers and modules in different parts of the same project
 
 ## Known Limitations
