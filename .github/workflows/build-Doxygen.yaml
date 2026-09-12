@@ -1,7 +1,5 @@
-# Thin CALLER for the canonical Doxygen workflow.
-# This file only maps repository events to the reusable workflow `doxygen.yml`
-# (the single source of truth for documentation build/deploy). Keep this file
-# trigger-only; do not add build steps here — edit `doxygen.yml` instead.
+# Repository events and Pages deployment for common_system.
+# Doxygen generation remains in the reusable workflow.
 name: Generate-Documentation
 
 on:
@@ -12,9 +10,34 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: documentation-pages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   docs:
-    uses: kcenon/common_system/.github/workflows/doxygen.yml@main
-    secrets: inherit
+    permissions:
+      contents: read
+    uses: ./.github/workflows/doxygen.yml
+    with:
+      pages-artifact: true
+
+  deploy:
+    needs: docs
+    if: >-
+      github.repository == 'kcenon/common_system' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
