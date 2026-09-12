@@ -1,8 +1,7 @@
-# SSOT: Canonical Doxygen build/deploy logic for common_system.
-# This is a REUSABLE workflow (workflow_call only) — it has no event triggers
-# of its own. The thin caller `build-Doxygen.yaml` wires repository events
-# (push/pull_request/workflow_dispatch) to this workflow. Do not duplicate the
-# build/deploy steps in the caller; keep all generation logic here.
+# Canonical Doxygen generation with optional Pages artifact output.
+# Existing external callers retain legacy branch publication by default.
+# Permissions are inherited from the caller: artifact builds need contents: read;
+# legacy publishers need contents: write. Pages deployment lives in the caller.
 name: Doxygen Documentation
 
 on:
@@ -23,11 +22,14 @@ on:
         required: false
         type: string
         default: './documents/html'
+      pages-artifact:
+        description: 'Upload a Pages artifact instead of publishing a branch'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   generate-and-deploy:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
 
     steps:
@@ -69,8 +71,24 @@ jobs:
       - name: Generate documentation
         run: doxygen Doxyfile
 
-      - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Verify Pages output
+        if: ${{ inputs.pages-artifact }}
+        env:
+          PUBLISH_DIR: ${{ inputs.publish-dir }}
+        run: test -s "$PUBLISH_DIR/index.html"
+
+      - name: Upload Pages artifact
+        if: ${{ inputs.pages-artifact }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: ${{ inputs.publish-dir }}
+
+      - name: Deploy to GitHub Pages for legacy consumers
+        if: >-
+          !inputs.pages-artifact &&
+          github.repository != 'kcenon/common_system' &&
+          github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
