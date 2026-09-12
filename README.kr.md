@@ -38,12 +38,11 @@
 - **C++20 모듈 지원**: 더 빠른 컴파일을 위한 선택적 모듈 기반 빌드
 - **생태계 기반**: thread_system, network_system, database_system 등을 지원
 
-**v1.0.0** — 안정 API 릴리스. 모든 공개 헤더가 SemVer 보증 하에 동결됩니다.
-주요 변경은 향후 메이저 버전(v2.0+)에서만 발생합니다.
+**릴리스 상태:** 최신 공개 릴리스는 [v0.2.0](https://github.com/kcenon/common_system/releases/tag/v0.2.0)입니다. `1.0.0`은 [VERSION](VERSION), [CHANGELOG.md](CHANGELOG.md), [vcpkg.json](vcpkg.json)에 반영되어 있지만, 아직 해당 Git 태그와 GitHub 릴리스는 생성되지 않았습니다.
 
 ### API 안정성
 
-v1.0.0부터 common_system은 다음 보증을 제공합니다:
+다음 API 안정성 정책은 v1.0.0 태그가 생성된 이후 적용됩니다:
 
 - 동일 메이저 버전 내에서 공개 헤더에 대한 **호환성 파괴 변경 없음**
 - 메이저 버전 범프 없이 공개 함수, 클래스, 타입 별칭 **제거 없음**
@@ -77,7 +76,7 @@ v1.0.0부터 common_system은 다음 보증을 제공합니다:
 | 의존성 | 버전 | 필수 | 설명 |
 |--------|------|------|------|
 | C++20 컴파일러 | GCC 11+ / Clang 14+ / MSVC 2022+ / Apple Clang 14+ | 예 | C++20 기능 (concepts) |
-| CMake | 3.28+ | 예 | 빌드 시스템 |
+| CMake | 현재 `main`의 헤더 빌드는 3.20+; v0.2.0 및 C++20 모듈은 3.28+ | CMake 빌드 시 | 헤더를 직접 포함하는 경우 CMake 불필요 |
 
 ### 컴파일러 요구사항
 
@@ -126,22 +125,18 @@ common_system (기반 계층 - 의존성 없음)
 
 using namespace kcenon::common;
 
-Result<Config> load_config(const std::string& path) {
-    if (!std::filesystem::exists(path)) {
-        return make_error<Config>(
-            error_codes::NOT_FOUND,
-            "Configuration file not found",
-            "config_loader"
-        );
+Result<int> validate_port(int port) {
+    if (port < 1 || port > 65535) {
+        return make_error<int>(error_codes::INVALID_ARGUMENT,
+                               "Port must be between 1 and 65535");
     }
-    auto config = parse_json_file(path);
-    return ok(config);
+    return ok(port);
 }
 
-// Monadic 연산 사용
-auto result = load_config("app.conf")
-    .and_then(validate_config)
-    .map(apply_defaults);
+int main() {
+    auto result = validate_port(8080);
+    return result.is_ok() && result.value() == 8080 ? 0 : 1;
+}
 ```
 
 [전체 시작 가이드](docs/guides/QUICK_START.md)
@@ -152,11 +147,13 @@ auto result = load_config("app.conf")
 
 ### vcpkg를 통한 설치
 
+이 저장소를 체크아웃한 디렉터리에서 함께 제공되는 [오버레이 포트](vcpkg-ports/kcenon-common-system/)를 사용하세요:
+
 ```bash
-vcpkg install kcenon-common-system
+vcpkg install kcenon-common-system --overlay-ports=./vcpkg-ports --classic
 ```
 
-`CMakeLists.txt`에서:
+애플리케이션을 구성할 때 `-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake`를 지정하고 `/path/to/vcpkg`를 실제 vcpkg 체크아웃 경로로 바꾸세요. `CMakeLists.txt`에서 `your_target`을 정의한 뒤:
 ```cmake
 find_package(common_system CONFIG REQUIRED)
 target_link_libraries(your_target PRIVATE kcenon::common_system)
@@ -169,7 +166,7 @@ include(FetchContent)
 FetchContent_Declare(
     common_system
     GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v1.0.0
+    GIT_TAG v0.2.0
 )
 FetchContent_MakeAvailable(common_system)
 
@@ -190,9 +187,23 @@ git clone https://github.com/kcenon/common_system.git
 
 ### C++20 모듈
 
+이 실험적 빌드에는 지원되는 컴파일러와 모듈 의존성 스캐너가 필요하며, Apple Clang은 지원되지 않습니다. 모듈을 활성화한 소스 빌드에서 모듈을 사용하는 타겟을 `kcenon::common_modules`에 연결하세요.
+
 ```bash
+# CMake 3.28+, Ninja, Clang 16+/GCC 14+ 필요
 cmake -G Ninja -B build -DCOMMON_BUILD_MODULES=ON
 cmake --build build
+```
+
+사용하는 CMake 프로젝트에서 모듈을 활성화한 common_system 소스를 추가하고 `your_target`을 정의한 뒤, 모듈의 C++20 컴파일 모드와 일치하도록 설정하세요:
+
+```cmake
+set_target_properties(your_target PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS OFF
+)
+target_link_libraries(your_target PRIVATE kcenon::common_modules)
 ```
 
 ```cpp
@@ -200,12 +211,11 @@ import kcenon.common;
 
 int main() {
     auto result = kcenon::common::ok(42);
-    if (result.is_ok()) {
-        std::cout << result.value() << std::endl;
-    }
-    return 0;
+    return result.is_ok() && result.value() == 42 ? 0 : 1;
 }
 ```
+
+> 빌드 모드, 컴파일러/CMake 요구사항 및 대체 빌드 동작은 [C++20 모듈 가이드](docs/guides/CXX20_MODULES.md)를 참조하세요.
 
 ---
 
@@ -263,42 +273,67 @@ include/kcenon/common/
 Rust에서 영감을 받은 예외 없는 타입 안전한 오류 처리:
 
 ```cpp
-auto result = load_config("app.conf")
-    .and_then(validate_config)
-    .map(apply_defaults)
-    .or_else([](const auto& error) {
-        log_error(error);
-        return load_fallback_config();
-    });
+#include <kcenon/common/patterns/result.h>
+
+using namespace kcenon::common;
+
+int main() {
+    auto result = ok(21)
+        .and_then([](int value) { return ok(value * 2); })
+        .map([](int value) { return value + 1; })
+        .or_else([](const error_info&) { return ok(0); });
+    return result.is_ok() && result.value() == 43 ? 0 : 1;
+}
 ```
 
 ### IExecutor 인터페이스
 
-모든 스레딩 백엔드를 위한 범용 작업 실행 추상화:
+애플리케이션이 제공하는 실행기를 통해 작업을 제출합니다. 반환된 `Result`는 제출 오류를 나타내며, 그 안의 future는 작업 완료를 나타냅니다.
 
 ```cpp
-class MyService {
-    std::shared_ptr<common::interfaces::IExecutor> executor_;
+#include <kcenon/common/interfaces/executor_interface.h>
+#include <future>
+#include <memory>
+
+namespace common = kcenon::common;
+
+class example_job final : public common::interfaces::IJob {
 public:
-    void process_async(const Data& data) {
-        auto future = executor_->submit([data]() { return process(data); });
-    }
+    common::VoidResult execute() override { return common::ok(); }
 };
+
+common::Result<std::future<void>> schedule(common::interfaces::IExecutor& executor) {
+    return executor.execute(std::make_unique<example_job>());
+}
 ```
 
 ### 상태 모니터링
 
-의존성 그래프를 포함한 상태 체크 시스템:
+샘플 상태 체크를 생성하고 등록한 뒤 실행합니다. 콜백을 애플리케이션의 실제 상태 체크 로직으로 바꾸세요.
 
 ```cpp
-auto& monitor = global_health_monitor();
-auto db_check = health_check_builder()
-    .name("database")
-    .type(health_check_type::dependency)
-    .timeout(std::chrono::seconds{5})
-    .with_check([]() { /* 체크 로직 */ })
-    .build();
-monitor.register_check("database", db_check.value());
+#include <kcenon/common/interfaces/monitoring.h>
+#include <chrono>
+
+using namespace kcenon::common::interfaces;
+
+int main() {
+    health_monitor monitor;
+    auto check = health_check_builder()
+        .name("sample")
+        .type(health_check_type::dependency)
+        .timeout(std::chrono::seconds{5})
+        .with_check([]() {
+            health_check_result result;
+            result.status = health_status::healthy;
+            return result;
+        }).build();
+    if (check.is_err()) return 1;
+    auto registered = monitor.register_check("sample", check.value());
+    if (registered.is_err() || !registered.value()) return 1;
+    auto result = monitor.check("sample");
+    return result.is_ok() && result.value().is_healthy() ? 0 : 1;
+}
 ```
 
 ### 오류 코드 레지스트리
@@ -315,14 +350,30 @@ monitor.register_check("database", db_check.value());
 
 ### 서킷 브레이커
 
-장애 허용을 위한 복원력 패턴:
+서킷 브레이커로 작업을 보호합니다. 실패를 누적해서 추적할 수 있도록 여러 요청에 걸쳐 같은 서킷 브레이커를 유지하세요.
 
 ```cpp
-auto breaker = circuit_breaker("db_connection", {
-    .failure_threshold = 5,
-    .recovery_timeout = std::chrono::seconds{30}
-});
-auto result = breaker.execute([&]() { return db.query("SELECT 1"); });
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/resilience/circuit_breaker.h>
+#include <chrono>
+
+using namespace kcenon::common;
+using namespace kcenon::common::resilience;
+
+Result<int> perform_operation() { return ok(42); } // 샘플 애플리케이션 작업.
+
+int main() {
+    circuit_breaker breaker(circuit_breaker_config{
+        .failure_threshold = 5,
+        .timeout = std::chrono::seconds{30}
+    });
+    if (!breaker.allow_request()) return 1;
+    auto guard = breaker.make_guard();
+    auto result = perform_operation();
+    if (result.is_err()) return 1; // 가드가 소멸할 때 실패를 기록합니다.
+    guard.record_success();
+    return 0;
+}
 ```
 
 ---
@@ -370,7 +421,7 @@ cmake --build build
 | Result<T> 생성 | 2.3 | 0 | 스택 전용 작업 |
 | Result<T> 오류 확인 | 0.8 | 0 | 단일 bool 확인 |
 | IExecutor submit | 45.2 | 1 | 작업 큐 삽입 |
-| Event publish | 12.4 | 0 | Lock-free 작업 |
+| Event publish | 12.4 | 0 | 뮤텍스를 사용하는 동기 디스패치 |
 
 **주요 성능 특성:**
 - Result<T>는 오류 경로에서 예외보다 400배 빠름
@@ -409,14 +460,21 @@ common_system (Tier 0 - 기반)
 
 ```cpp
 #include <kcenon/common/patterns/result.h>
-#include <kcenon/common/interfaces/executor_interface.h>
+#include <iostream>
 
-// Result<T>는 범용 오류 처리 패턴
-auto result = do_something();
-if (result.is_err()) {
-    // 모든 프로젝트에서 일관된 오류 처리
-    auto error = result.error();
-    std::cerr << error.message << " (code: " << error.code << ")\n";
+// 오류를 반환하는 샘플 애플리케이션 작업.
+kcenon::common::Result<int> do_something() {
+    return kcenon::common::make_error<int>(
+        kcenon::common::error_codes::NOT_FOUND, "Resource not found");
+}
+
+int main() {
+    auto result = do_something();
+    if (result.is_err()) {
+        const auto& error = result.error();
+        std::cerr << error.message << " (code: " << error.code << ")\n";
+    }
+    return 0;
 }
 ```
 
@@ -447,7 +505,6 @@ if (result.is_err()) {
 ### 지원
 
 - **이슈**: [GitHub Issues](https://github.com/kcenon/common_system/issues)
-- **토론**: [GitHub Discussions](https://github.com/kcenon/common_system/discussions)
 - **이메일**: kcenon@naver.com
 
 ---
