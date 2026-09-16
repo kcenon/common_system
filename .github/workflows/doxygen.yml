@@ -79,7 +79,7 @@ jobs:
 
       - name: Upload Pages artifact
         if: ${{ inputs.pages-artifact }}
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages
           path: ${{ inputs.publish-dir }}
