@@ -43,6 +43,17 @@ class EcosystemBuildTests(unittest.TestCase):
                 workflow.prepare({"action":"wrong","client_payload":{}},"repository_dispatch",Path(tmp),Path(tmp),"a"*40)
             api.assert_not_called()
 
+    def test_final_source_audit_retains_dirty_input_and_observes_new_head(self):
+        entry = {"sha": "a"*40, "worktree_changes": True}
+        with patch.object(build, "output", side_effect=["", "b"*40]):
+            build.record_source_state(entry, Path("source"))
+        self.assertTrue(entry["worktree_changes"])
+        self.assertEqual(entry["sha"], "b"*40)
+        with patch.object(build, "output", side_effect=OSError("checkout removed")):
+            build.record_source_state(entry, Path("source"))
+        self.assertIsNone(entry["worktree_changes"])
+        self.assertIn("checkout removed", entry["error"])
+
     def test_bootstrap_is_manual_and_explicit(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

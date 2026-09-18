@@ -45,6 +45,8 @@ def validate_repositories(repositories):
 
 
 def validate_evidence(evidence, repositories, profile):
+    if evidence.get("exploratory", False) is not False:
+        raise ValueError("exploratory runs cannot qualify an accepted lock")
     if evidence.get("schema_version") != 1 or evidence.get("repositories") != repositories:
         raise ValueError("build evidence does not identify the exact source tuple")
     if evidence.get("profile") != profile or not evidence.get("toolchain"):
@@ -135,6 +137,28 @@ def promote(candidate, evidence, current_digest):
                 validation=evidence)
 
 
+def write_promotion(candidate, evidence, path):
+    """Serialize local promotions and reject a lock changed during verification."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mutex = path.with_suffix(".json.promoting")
+    try:
+        handle = mutex.open("x")
+    except FileExistsError as exc:
+        raise ValueError(f"another promotion owns {mutex}; inspect it before retrying") from exc
+    temporary = path.with_suffix(".json.tmp")
+    try:
+        with handle:
+            before = digest(path)
+            result = promote(candidate, evidence, before)
+            if digest(path) != before:
+                raise ValueError("accepted lock changed while promotion was being verified")
+            temporary.write_text(json.dumps(result, indent=2) + "\n")
+            temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+        mutex.unlink()
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -170,14 +194,7 @@ def main(argv=None):
             args.output.write_text(json.dumps(result, indent=2) + "\n")
             print(json.dumps(result, indent=2))
         else:
-            before = digest(args.lock)
-            result = promote(read(args.candidate), read(args.evidence), before)
-            if digest(args.lock) != before:
-                raise ValueError("accepted lock changed while promotion was being verified")
-            args.lock.parent.mkdir(parents=True, exist_ok=True)
-            temporary = args.lock.with_suffix(".json.tmp")
-            temporary.write_text(json.dumps(result, indent=2) + "\n")
-            temporary.replace(args.lock)
+            write_promotion(read(args.candidate), read(args.evidence), args.lock)
             print(f"Prepared accepted lock: {args.lock}; review before committing")
         return 0
     except (ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError) as exc:
