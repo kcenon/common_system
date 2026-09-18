@@ -38,7 +38,7 @@ Development metadata may describe an unreleased version; do not create or move
 release tags just to pass a gate. Generated release port hashes are verified
 before registry sync; a post-publication check is detection, not release approval.
 
-`ci/coherence-source.json` records the shared source revision and file hashes.
+Each downstream `ci/coherence-source.json` records the shared source revision and file hashes.
 Update shared scripts/helper tests in common first, run their behavior tests,
 then propagate identical copies and refresh the manifest in every repository.
 
