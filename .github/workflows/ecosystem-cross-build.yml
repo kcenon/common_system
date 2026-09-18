@@ -90,7 +90,7 @@ jobs:
   eligibility:
     name: Ecosystem lock eligibility
     needs: build
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-24.04
     steps:
       - name: Require a completed build (including every raw tier)
