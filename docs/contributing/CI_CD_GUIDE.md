@@ -1,8 +1,8 @@
 ---
 doc_id: "COM-GUID-011"
 doc_title: "CI/CD Guide - common_system"
-doc_version: "1.0.0"
-doc_date: "2026-04-04"
+doc_version: "1.1.0"
+doc_date: "2026-09-18"
 doc_status: "Released"
 project: "common_system"
 category: "GUID"
@@ -18,6 +18,7 @@ This document describes the Continuous Integration and Continuous Deployment (CI
 
 1. [Overview](#overview)
 2. [Workflow Triggers](#workflow-triggers)
+   - [Scheduled workflows](#scheduled-workflows)
 3. [CI Pipeline](#ci-pipeline)
 4. [Static Analysis Pipeline](#static-analysis-pipeline)
 5. [Integration Tests Pipeline](#integration-tests-pipeline)
@@ -107,6 +108,120 @@ The common_system project uses GitHub Actions for automated CI/CD. All workflows
 1. Generates API documentation using Doxygen
 2. Uploads documentation as artifacts
 3. Deploys to GitHub Pages (only on push to main)
+
+### Scheduled workflows
+
+[PR #728](https://github.com/kcenon/common_system/pull/728) established seven weekly
+schedules and removed the two daily schedules. All times below are UTC. Each
+scheduled workflow also supports `workflow_dispatch`.
+
+| Workflow | Cron | Weekly execution time |
+| --- | --- | --- |
+| [CVE Security Scan](../../.github/workflows/cve-scan.yml) | `31 2 * * 2` | Tuesday 02:31 |
+| [Ecosystem Documentation Audit](../../.github/workflows/doc-audit-ecosystem.yml) | `23 3 * * 1` | Monday 03:23 |
+| [Ecosystem vcpkg Integration](../../.github/workflows/ecosystem-vcpkg-integration.yml) | `43 3 * * 3` | Wednesday 03:43 |
+| [OSV Vulnerability Scan](../../.github/workflows/osv-scanner.yml) | `17 3 * * 0` | Sunday 03:17 |
+| [Port Sync Check](../../.github/workflows/port-sync-check.yml) | `0 7 * * 1` | Monday 07:00 |
+| [SBOM Generation](../../.github/workflows/sbom.yml) | `0 3 * * 0` | Sunday 03:00 |
+| [vcpkg Registry Consumption Test](../../.github/workflows/vcpkg-consume-test.yml) | `0 6 * * 1` | Monday 06:00 |
+
+[Fuzzing](../../.github/workflows/fuzzing.yml) is manual-only while its separate
+CMake target-registration defect remains unresolved. Removing its schedule did
+not repair `result_error_fuzzer`; restore scheduled execution only after that
+repair and successful manual validation.
+
+#### Scheduled failure reporting
+
+Each retained schedule has a terminal `notify-scheduled-failure` job that depends
+directly on all other jobs, including summaries. It runs when the event is
+`schedule` and at least one dependency failed, even if downstream jobs were
+skipped. With job-level `issues: write`, it creates, updates, or reopens one issue
+identified by the workflow filename. The report records the run URL, attempt,
+commit, cron, and individual job results, preserving human notes outside its
+generated block.
+
+Successful scheduled runs and manual dispatches skip the reporter. Existing
+advisory scanner policies remain in effect: a successful job does not establish
+that there were no vulnerability findings. Reporter behavior can be checked with
+mocked API calls; a green manual run does not exercise production issue creation.
+
+#### Verifying the observation window
+
+[Issue #723](https://github.com/kcenon/common_system/issues/723) requires seven
+consecutive days without a failed scheduled run, with successful scheduled
+coverage for all seven retained workflows. Its
+[rollout record](https://github.com/kcenon/common_system/issues/723#issuecomment-5642477724)
+starts the window at **2026-09-12 01:13:34 UTC**. The earliest acceptance review is
+**2026-09-19 01:13:34 UTC / 10:13:34 KST**. Manual smoke runs do not replace this
+elapsed-time requirement.
+
+From an empty evidence directory, use an authenticated `gh` CLI and `jq` to save
+all workflow states and scheduled runs through the actual collection time. These
+Bash commands make read-only API requests and write local evidence files:
+
+```bash
+set -euo pipefail
+AUDIT_REPO='kcenon/common_system'
+AUDIT_BRANCH=$(gh api "repos/$AUDIT_REPO" --jq '.default_branch')
+AUDIT_SHA=$(gh api "repos/$AUDIT_REPO/branches/$AUDIT_BRANCH" --jq '.commit.sha')
+AUDIT_START_UTC='2026-09-12T01:13:34Z'
+AUDIT_END_UTC=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+jq -n --arg repo "$AUDIT_REPO" --arg branch "$AUDIT_BRANCH" --arg sha "$AUDIT_SHA" \
+  --arg start "$AUDIT_START_UTC" --arg end "$AUDIT_END_UTC" \
+  '{repo: $repo, branch: $branch, sha: $sha, start: $start, end: $end}' > audit-window.json
+
+gh api --paginate --slurp "repos/$AUDIT_REPO/actions/workflows?per_page=100" \
+  > workflow-pages.json
+jq -r '.[].workflows[] | select(.state != "active") | .path' workflow-pages.json
+
+gh api --method GET --paginate --slurp "repos/$AUDIT_REPO/actions/runs" \
+  -f event=schedule -f "branch=$AUDIT_BRANCH" \
+  -f "created=${AUDIT_START_UTC}..${AUDIT_END_UTC}" -f per_page=100 \
+  > scheduled-run-pages.json
+jq '[.[].workflow_runs[]] | unique_by(.id) | sort_by(.created_at)' \
+  scheduled-run-pages.json > scheduled-runs.json
+```
+
+The inactive-workflow query should print nothing. `audit-window.json` records
+the window bounds and reviewed default-branch SHA. Check complete pagination;
+the [workflow runs API](https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-repository)
+limits filtered searches to 1,000 results, so split longer ranges when necessary.
+An empty result or a failed request is not acceptance evidence.
+
+Inspect every attempt and its jobs, including earlier attempts of a successful
+rerun. Continuing in the same Bash session:
+
+```bash
+jq -r '.[] | [.id, .run_attempt] | @tsv' scheduled-runs.json |
+while IFS=$'\t' read -r AUDIT_RUN_ID AUDIT_MAX_ATTEMPT; do
+  for ((AUDIT_ATTEMPT=1; AUDIT_ATTEMPT<=AUDIT_MAX_ATTEMPT; AUDIT_ATTEMPT++)); do
+    AUDIT_RUN_PATH="repos/$AUDIT_REPO/actions/runs/$AUDIT_RUN_ID/attempts/$AUDIT_ATTEMPT"
+    gh api "$AUDIT_RUN_PATH" > "run-$AUDIT_RUN_ID-attempt-$AUDIT_ATTEMPT.json"
+    gh api --paginate --slurp "$AUDIT_RUN_PATH/jobs?per_page=100" \
+      > "run-$AUDIT_RUN_ID-attempt-$AUDIT_ATTEMPT-jobs.json"
+  done
+done
+```
+
+Before marking the issue complete:
+
+- Require at least seven full days after rollout and completed, successful
+  scheduled coverage for every workflow in the table. GitHub
+  [can delay scheduled runs](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule),
+  so check recorded executions rather than assuming they occurred at cron time.
+- Check original jobs and matrix coverage, and distinguish expected reporter
+  skips from unexpectedly skipped work. Preserve each run's event, branch, head
+  SHA, attempt, timestamps, conclusion, and URL. Later default-branch commits may
+  carry the implementation; do not restrict evidence to the merge SHA.
+- Treat failed attempts as failures even when a later retry succeeds. Resolve
+  cancellations, timeouts, unfinished runs, and missing coverage before closure.
+  After a failure, diagnose recovery and establish a new clean seven-day window.
+- Recheck the current seven weekly schedules, manual-only Fuzzing, reporter
+  configuration, unique workflow display names/content hashes, and active API
+  states. Reconcile dynamic API entries with the actual workflow files.
+- Refresh the run history immediately before the decision. Keep #723 and its
+  parent epic entry open until both the elapsed time and execution checks pass.
+  Preserve existing failure policies and the independent Pages work under #724.
 
 ## CI Pipeline
 
