@@ -77,9 +77,11 @@ This C++20 header profile builds common, thread, container, logger, network,
 monitoring, database, then PACS, installing each before compiling, linking and
 running its public-header consumer. Dependencies are imported from that prefix
 before legacy discovery. Database enables SQLite and container/thread/monitoring
-integration; PACS enables storage and every pinned sibling. Optional image
+integration; PACS enables file-backed SQLite storage and every pinned sibling. Optional image
 codecs, REST frameworks, PostgreSQL and C++ modules are outside this profile.
 Logger binding remains at runtime where that is the repository's default.
+The existing in-memory SQLite path in PACS delegates to an unimplemented DAL
+backend and is outside this profile, as are the domain backend projects in #684.
 
 Every raw gate/configure/build/consumer result is recorded, including explicit
 missing results after a failed prerequisite. A failed, skipped, cancelled,

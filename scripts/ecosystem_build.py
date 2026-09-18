@@ -39,7 +39,7 @@ CONSUMERS = {
     "network_system": "kcenon::network::facade::tcp_facade facade; return facade.create_client({}).is_err() ? 0 : 1;",
     "monitoring_system": "kcenon::monitoring::performance_monitor monitor; return monitor.get_name().empty() ? 1 : 0;",
     "database_system": "auto context = std::make_shared<kcenon::database::database_context>(); kcenon::database::database_manager manager(context); auto built = kcenon::database::integrated::unified_database_system::create_builder().build(); return 0;",
-    "pacs_system": "kcenon::pacs::core::dicom_dataset dataset; kcenon::pacs::storage::pacs_database_adapter database(\":memory:\"); auto result = database.connect(); return dataset.empty() && result.is_ok() ? 0 : 1;",
+    "pacs_system": "kcenon::pacs::core::dicom_dataset dataset; int code = 1; { kcenon::pacs::storage::pacs_database_adapter database(\"coherence-consumer.sqlite\"); auto result = database.connect(); if (result.is_ok()) { code = database.execute(\"CREATE TABLE smoke (value INTEGER)\").is_ok() && dataset.empty() ? 0 : 1; } } std::filesystem::remove(\"coherence-consumer.sqlite\"); return code;",
 }
 OPTIONS = {
     "common_system": {"COMMON_BUILD_TESTS": False, "COMMON_BUILD_EXAMPLES": False, "COMMON_BUILD_BENCHMARKS": False,

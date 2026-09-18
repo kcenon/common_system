@@ -47,3 +47,5 @@ pass on current `develop` HEAD. Promotion is a separate change: remove advisory
 handling via policy, verify negative fixtures fail, then add the exact emitted
 check names to required-check settings. Preserve existing protections. YAML
 changes alone do not apply repository settings.
+
+See [ecosystem operations](ECOSYSTEM_COHERENCE.md) for immutable snapshots, dispatch, release boundaries and guarded gate promotion.
