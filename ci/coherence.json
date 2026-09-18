@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "modes": {
+    "conformance": "enforcing",
+    "version-drift": "enforcing",
+    "tag-reality": "advisory"
+  },
+  "matrix": "DEPENDENCY_MATRIX.md",
+  "no_comparisons_reason": "common_system uses installed GTest and Benchmark and has no FetchContent declarations; the ecosystem matrix checks both manifest overrides."
+}

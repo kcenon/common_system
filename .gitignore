@@ -91,3 +91,6 @@ DartConfiguration.tcldocs/api/
 
 # API documentation
 docs/api/
+
+# Coherence gate reports
+coherence-results/

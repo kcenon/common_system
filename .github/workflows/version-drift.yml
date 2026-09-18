@@ -1,49 +1,28 @@
 name: SOUP Version Drift Check
-
 on:
   push:
-    branches: [ main, phase-* ]
-    paths:
-      - 'VERSION'
-      - 'vcpkg.json'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
-      - 'DEPENDENCY_MATRIX.md'
+    branches: [main, develop, 'phase-*']
   pull_request:
-    branches: [ main ]
-    paths:
-      - 'VERSION'
-      - 'vcpkg.json'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
-      - 'DEPENDENCY_MATRIX.md'
+    branches: [main, develop]
   workflow_dispatch:
-
+permissions:
+  contents: read
 jobs:
-  version-drift:
+  version_drift:
     name: SOUP Version Drift Detection
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Run version-drift with recorded policy and raw results
+        run: python3 scripts/run_coherence.py version-drift -- --no-color --verbose
 
-    - name: Set up Python
-      uses: actions/setup-python@v6
-      with:
-        python-version: '3.x'
-
-    - name: Run version drift check
-      run: |
-        python3 scripts/check_version_drift.py \
-          --no-color \
-          --verbose
-
-    - name: Run matrix consistency check
-      if: always()
-      run: |
-        python3 scripts/check_version_drift.py \
-          --no-color \
-          --verbose \
-          --matrix DEPENDENCY_MATRIX.md
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: version-drift-results
+          path: coherence-results/
+          if-no-files-found: error

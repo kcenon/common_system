@@ -1,0 +1,35 @@
+name: Coherence Downstream Fanout
+on:
+  push:
+    branches: [main, develop]
+    paths: ['cmake/**', 'include/**', 'ci/**', 'scripts/**', '.github/workflows/**', 'vcpkg-ports/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fanout:
+    name: Dispatch downstream checks and await raw results
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Fan out the common candidate against the accepted lock
+        env:
+          GH_TOKEN: ${{ secrets.ECOSYSTEM_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::Configure ECOSYSTEM_DISPATCH_TOKEN with target repositories contents write and actions read permissions"
+            exit 1
+          fi
+          python3 scripts/coherence_dispatch.py fanout --repository common_system --sha "$GITHUB_SHA" --lock-revision "$GITHUB_SHA" --output dispatch-runs.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: downstream-dispatch-runs
+          path: dispatch-runs.json

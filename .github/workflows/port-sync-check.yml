@@ -1,298 +1,150 @@
 name: Port Sync Check
-
+run-name: "coherence/${{ github.event.client_payload.correlation || github.run_id }}"
 on:
   schedule:
-    # Weekly Monday 7am UTC
     - cron: '0 7 * * 1'
+  repository_dispatch:
+    types: [coherence-change-v1]
   workflow_dispatch:
-
+    inputs:
+      lock_revision:
+        description: Full common commit containing the accepted lock
+        type: string
+      bootstrap:
+        description: Audit the explicit ci/ecosystem-candidate.json before a lock exists
+        type: boolean
+        default: false
 permissions:
   contents: read
-
 jobs:
   check-port-sync:
     name: Detect port drift between projects and vcpkg-registry
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
-
-    env:
-      GH_TOKEN: ${{ github.token }}
-
+    timeout-minutes: 15
     steps:
-    - name: Check port sync status
-      run: |
-        declare -A PROJECTS=(
-          ["common_system"]="kcenon-common-system"
-          ["thread_system"]="kcenon-thread-system"
-          ["logger_system"]="kcenon-logger-system"
-          ["container_system"]="kcenon-container-system"
-          ["monitoring_system"]="kcenon-monitoring-system"
-          ["database_system"]="kcenon-database-system"
-          ["network_system"]="kcenon-network-system"
-          ["pacs_system"]="kcenon-pacs-system"
-        )
-
-        DRIFT_COUNT=0
-        SYNC_COUNT=0
-        ERROR_COUNT=0
-
-        echo "## Port Sync Check Results" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-        echo "| Project | Port | portfile.cmake | vcpkg.json | Status |" >> "$GITHUB_STEP_SUMMARY"
-        echo "|---------|------|----------------|------------|--------|" >> "$GITHUB_STEP_SUMMARY"
-
-        for PROJECT in "${!PROJECTS[@]}"; do
-          PORT="${PROJECTS[$PROJECT]}"
-
-          # Get SHAs from project repo (source of truth: vcpkg-ports/)
-          PROJECT_PORTFILE_SHA=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/portfile.cmake" \
-            --jq '.sha' 2>/dev/null) || PROJECT_PORTFILE_SHA="NOT_FOUND"
-          PROJECT_VCPKG_JSON_SHA=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/vcpkg.json" \
-            --jq '.sha' 2>/dev/null) || PROJECT_VCPKG_JSON_SHA="NOT_FOUND"
-
-          # Get SHAs from vcpkg-registry
-          REGISTRY_PORTFILE_SHA=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/portfile.cmake" \
-            --jq '.sha' 2>/dev/null) || REGISTRY_PORTFILE_SHA="NOT_FOUND"
-          REGISTRY_VCPKG_JSON_SHA=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/vcpkg.json" \
-            --jq '.sha' 2>/dev/null) || REGISTRY_VCPKG_JSON_SHA="NOT_FOUND"
-
-          # Compare
-          PORTFILE_STATUS="--"
-          VCPKG_JSON_STATUS="--"
-          ROW_STATUS=""
-
-          if [ "$PROJECT_PORTFILE_SHA" = "NOT_FOUND" ] || [ "$REGISTRY_PORTFILE_SHA" = "NOT_FOUND" ]; then
-            PORTFILE_STATUS="missing"
-          elif [ "$PROJECT_PORTFILE_SHA" = "$REGISTRY_PORTFILE_SHA" ]; then
-            PORTFILE_STATUS="synced"
-          else
-            PORTFILE_STATUS="**DRIFT**"
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+      - name: Resolve immutable source and registry revisions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/coherence_workflow.py prepare
+      - name: Compare bytes, package/config paths, usage targets and versions
+        id: raw
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          python3 scripts/check_port_sync.py --snapshot coherence-input/snapshot.json --output port-sync.json
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          # Keep the existing scheduled/manual advisory policy. A dispatch
+          # acknowledgement still requires raw zero via its result artifact.
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::Port sync raw exit is $code; inspect port-sync.json"
           fi
+      - name: Record dispatch result
+        if: always() && steps.raw.outputs.code != ''
+        env:
+          RAW_CODE: ${{ steps.raw.outputs.code }}
+        run: python3 scripts/coherence_workflow.py result --code "$RAW_CODE"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coherence-result
+          path: dispatch-result.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: pinned-port-sync
+          path: |
+            port-sync.json
+            coherence-input/
 
-          if [ "$PROJECT_VCPKG_JSON_SHA" = "NOT_FOUND" ] || [ "$REGISTRY_VCPKG_JSON_SHA" = "NOT_FOUND" ]; then
-            VCPKG_JSON_STATUS="missing"
-          elif [ "$PROJECT_VCPKG_JSON_SHA" = "$REGISTRY_VCPKG_JSON_SHA" ]; then
-            VCPKG_JSON_STATUS="synced"
-          else
-            VCPKG_JSON_STATUS="**DRIFT**"
-          fi
+  # Report once after all jobs, including matrices and summaries, finish.
+  notify-scheduled-failure:
+    name: Report scheduled failure
+    needs:
+      - check-port-sync
+    if: ${{ always() && github.event_name == 'schedule' && contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    concurrency:
+      group: scheduled-failure-port-sync-check
+      cancel-in-progress: false
+    steps:
+      - name: Open or update failure issue
+        uses: actions/github-script@v9
+        env:
+          WORKFLOW_FILE: port-sync-check.yml
+          NEEDS_JSON: ${{ toJSON(needs) }}
+        with:
+          script: |
+            if (context.eventName !== 'schedule') return;
+            const results = JSON.parse(process.env.NEEDS_JSON);
+            if (!Object.values(results).some(job => job.result === 'failure')) return;
 
-          if [ "$PORTFILE_STATUS" = "missing" ] || [ "$VCPKG_JSON_STATUS" = "missing" ]; then
-            ROW_STATUS="Error"
-            ERROR_COUNT=$((ERROR_COUNT + 1))
-          elif [ "$PORTFILE_STATUS" = "**DRIFT**" ] || [ "$VCPKG_JSON_STATUS" = "**DRIFT**" ]; then
-            ROW_STATUS="Drift detected"
-            DRIFT_COUNT=$((DRIFT_COUNT + 1))
-          else
-            ROW_STATUS="In sync"
-            SYNC_COUNT=$((SYNC_COUNT + 1))
-          fi
+            const file = process.env.WORKFLOW_FILE;
+            const marker = `<!-- scheduled-ci-failure:${file} -->`;
+            const endMarker = `<!-- /scheduled-ci-failure:${file} -->`;
+            const title = `[Scheduled CI] ${file} failed`;
+            const attempt = process.env.GITHUB_RUN_ATTEMPT;
+            const repoUrl = `${process.env.GITHUB_SERVER_URL}/${context.repo.owner}/${context.repo.repo}`;
+            const runUrl = `${repoUrl}/actions/runs/${context.runId}/attempts/${attempt}`;
+            const report = [
+              marker,
+              '## Scheduled workflow failure',
+              '',
+              `**Workflow:** ${context.workflow} (\`.github/workflows/${file}\`)`,
+              `**Schedule (UTC):** \`${context.payload.schedule}\``,
+              `**Ref:** \`${context.ref}\``,
+              `**Commit:** [\`${context.sha}\`](${repoUrl}/commit/${context.sha})`,
+              `**Run:** [${context.runId}, attempt ${attempt}](${runUrl})`,
+              '',
+              '| Job | Result |',
+              '| --- | --- |',
+              ...Object.entries(results).map(([job, value]) => `| \`${job}\` | ${value.result} |`),
+              '',
+              'Skipped downstream jobs are listed separately from failures.',
+              'This block is updated automatically; keep investigation notes outside it.',
+              endMarker
+            ].join('\n');
 
-          echo "| ${PROJECT} | ${PORT} | ${PORTFILE_STATUS} | ${VCPKG_JSON_STATUS} | ${ROW_STATUS} |" >> "$GITHUB_STEP_SUMMARY"
-        done
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo,
+              state: 'all',
+              sort: 'created',
+              direction: 'desc',
+              per_page: 100
+            });
+            const matches = issues.filter(issue =>
+              !issue.pull_request &&
+              (issue.body || '').split('\n').some(line => line.trim() === marker)
+            );
+            const existing = matches.find(issue => issue.state === 'open') || matches[0];
 
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-        echo "### Summary" >> "$GITHUB_STEP_SUMMARY"
-        echo "- **In sync**: ${SYNC_COUNT}" >> "$GITHUB_STEP_SUMMARY"
-        echo "- **Drift detected**: ${DRIFT_COUNT}" >> "$GITHUB_STEP_SUMMARY"
-        echo "- **Errors**: ${ERROR_COUNT}" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        if [ "$DRIFT_COUNT" -gt 0 ]; then
-          echo "> **Note**: Port drift detected. Run the sync workflow or manually update the vcpkg-registry." >> "$GITHUB_STEP_SUMMARY"
-        fi
-
-        if [ "$ERROR_COUNT" -gt 0 ]; then
-          echo "> **Warning**: Some ports could not be found. Verify repository and path names." >> "$GITHUB_STEP_SUMMARY"
-        fi
-
-        # Informational only - do not fail the workflow on drift
-        echo "Port sync check complete: ${SYNC_COUNT} synced, ${DRIFT_COUNT} drifted, ${ERROR_COUNT} errors"
-
-    - name: Semantic content validation
-      run: |
-        declare -A PROJECTS=(
-          ["common_system"]="kcenon-common-system"
-          ["thread_system"]="kcenon-thread-system"
-          ["logger_system"]="kcenon-logger-system"
-          ["container_system"]="kcenon-container-system"
-          ["monitoring_system"]="kcenon-monitoring-system"
-          ["database_system"]="kcenon-database-system"
-          ["network_system"]="kcenon-network-system"
-          ["pacs_system"]="kcenon-pacs-system"
-        )
-
-        WARN_COUNT=0
-
-        echo "## Semantic Content Validation" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        # --- Validation 1: PACKAGE_NAME consistency ---
-        echo "### PACKAGE_NAME / CONFIG_PATH Validation" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-        echo "| Port | Source | PACKAGE_NAME | CONFIG_PATH | Status |" >> "$GITHUB_STEP_SUMMARY"
-        echo "|------|--------|--------------|-------------|--------|" >> "$GITHUB_STEP_SUMMARY"
-
-        for PROJECT in "${!PROJECTS[@]}"; do
-          PORT="${PROJECTS[$PROJECT]}"
-
-          for SOURCE in "project" "registry"; do
-            if [ "$SOURCE" = "project" ]; then
-              PORTFILE_CONTENT=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/portfile.cmake" \
-                --jq '.content' 2>/dev/null | base64 -d 2>/dev/null) || PORTFILE_CONTENT=""
-              SOURCE_LABEL="source"
-            else
-              PORTFILE_CONTENT=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/portfile.cmake" \
-                --jq '.content' 2>/dev/null | base64 -d 2>/dev/null) || PORTFILE_CONTENT=""
-              SOURCE_LABEL="registry"
-            fi
-
-            if [ -z "$PORTFILE_CONTENT" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | -- | -- | skipped (not found) |" >> "$GITHUB_STEP_SUMMARY"
-              continue
-            fi
-
-            # Extract PACKAGE_NAME from vcpkg_cmake_config_fixup(PACKAGE_NAME ...)
-            PKG_NAME=$(echo "$PORTFILE_CONTENT" | grep -oP 'PACKAGE_NAME\s+\K[^\s)]+' | head -1)
-            # Extract CONFIG_PATH from vcpkg_cmake_config_fixup(... CONFIG_PATH ...)
-            CFG_PATH=$(echo "$PORTFILE_CONTENT" | grep -oP 'CONFIG_PATH\s+\K[^\s)]+' | head -1)
-
-            if [ -z "$PKG_NAME" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | -- | ${CFG_PATH:---} | skipped (no PACKAGE_NAME) |" >> "$GITHUB_STEP_SUMMARY"
-              continue
-            fi
-
-            STATUS="ok"
-            ISSUES=""
-
-            # Check snake_case: must not contain uppercase letters
-            if echo "$PKG_NAME" | grep -qP '[A-Z]'; then
-              ISSUES="PACKAGE_NAME has uppercase"
-              STATUS="**WARNING**"
-              WARN_COUNT=$((WARN_COUNT + 1))
-            fi
-
-            # Check CONFIG_PATH matches lib/cmake/<PACKAGE_NAME>
-            EXPECTED_CFG="lib/cmake/${PKG_NAME}"
-            if [ -n "$CFG_PATH" ] && [ "$CFG_PATH" != "$EXPECTED_CFG" ]; then
-              if [ -n "$ISSUES" ]; then ISSUES="${ISSUES}; "; fi
-              ISSUES="${ISSUES}CONFIG_PATH mismatch (expected ${EXPECTED_CFG})"
-              STATUS="**WARNING**"
-              WARN_COUNT=$((WARN_COUNT + 1))
-            fi
-
-            if [ "$STATUS" = "ok" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | ${PKG_NAME} | ${CFG_PATH} | ok |" >> "$GITHUB_STEP_SUMMARY"
-            else
-              echo "| ${PORT} | ${SOURCE_LABEL} | ${PKG_NAME} | ${CFG_PATH} | ${STATUS}: ${ISSUES} |" >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-        done
-
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        # --- Validation 2: Usage file target names ---
-        echo "### Usage File Target Validation" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-        echo "| Port | Source | Target | Status |" >> "$GITHUB_STEP_SUMMARY"
-        echo "|------|--------|--------|--------|" >> "$GITHUB_STEP_SUMMARY"
-
-        for PROJECT in "${!PROJECTS[@]}"; do
-          PORT="${PROJECTS[$PROJECT]}"
-
-          for SOURCE in "project" "registry"; do
-            if [ "$SOURCE" = "project" ]; then
-              USAGE_CONTENT=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/usage" \
-                --jq '.content' 2>/dev/null | base64 -d 2>/dev/null) || USAGE_CONTENT=""
-              SOURCE_LABEL="source"
-            else
-              USAGE_CONTENT=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/usage" \
-                --jq '.content' 2>/dev/null | base64 -d 2>/dev/null) || USAGE_CONTENT=""
-              SOURCE_LABEL="registry"
-            fi
-
-            if [ -z "$USAGE_CONTENT" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | -- | skipped (not found) |" >> "$GITHUB_STEP_SUMMARY"
-              continue
-            fi
-
-            # Extract target from target_link_libraries(main PRIVATE <target>)
-            TARGET=$(echo "$USAGE_CONTENT" | grep -oP 'target_link_libraries\([^)]*PRIVATE\s+\K[^\s)]+' | head -1)
-
-            if [ -z "$TARGET" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | -- | skipped (no target found) |" >> "$GITHUB_STEP_SUMMARY"
-              continue
-            fi
-
-            STATUS="ok"
-            ISSUES=""
-
-            # Check namespace::target pattern
-            if ! echo "$TARGET" | grep -qP '^[a-z_]+::[a-z_]+$'; then
-              # Check specifically for PascalCase
-              if echo "$TARGET" | grep -qP '[A-Z]'; then
-                ISSUES="PascalCase in target name"
-              else
-                ISSUES="unexpected target format"
-              fi
-              STATUS="**WARNING**"
-              WARN_COUNT=$((WARN_COUNT + 1))
-            fi
-
-            if [ "$STATUS" = "ok" ]; then
-              echo "| ${PORT} | ${SOURCE_LABEL} | ${TARGET} | ok |" >> "$GITHUB_STEP_SUMMARY"
-            else
-              echo "| ${PORT} | ${SOURCE_LABEL} | ${TARGET} | ${STATUS}: ${ISSUES} |" >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-        done
-
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        # --- Validation 3: Version consistency ---
-        echo "### Version Consistency" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-        echo "| Port | Source Version | Registry Version | Status |" >> "$GITHUB_STEP_SUMMARY"
-        echo "|------|----------------|------------------|--------|" >> "$GITHUB_STEP_SUMMARY"
-
-        for PROJECT in "${!PROJECTS[@]}"; do
-          PORT="${PROJECTS[$PROJECT]}"
-
-          # Get version from source repo vcpkg.json
-          SRC_VERSION=$(gh api "repos/kcenon/${PROJECT}/contents/vcpkg-ports/${PORT}/vcpkg.json" \
-            --jq '.content' 2>/dev/null | base64 -d 2>/dev/null \
-            | grep -oP '"version-semver"\s*:\s*"\K[^"]+' | head -1) || SRC_VERSION=""
-
-          # Get version from registry vcpkg.json
-          REG_VERSION=$(gh api "repos/kcenon/vcpkg-registry/contents/ports/${PORT}/vcpkg.json" \
-            --jq '.content' 2>/dev/null | base64 -d 2>/dev/null \
-            | grep -oP '"version-semver"\s*:\s*"\K[^"]+' | head -1) || REG_VERSION=""
-
-          if [ -z "$SRC_VERSION" ] || [ -z "$REG_VERSION" ]; then
-            echo "| ${PORT} | ${SRC_VERSION:---} | ${REG_VERSION:---} | skipped (version not found) |" >> "$GITHUB_STEP_SUMMARY"
-            continue
-          fi
-
-          if [ "$SRC_VERSION" = "$REG_VERSION" ]; then
-            echo "| ${PORT} | ${SRC_VERSION} | ${REG_VERSION} | ok |" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "| ${PORT} | ${SRC_VERSION} | ${REG_VERSION} | **WARNING**: version drift |" >> "$GITHUB_STEP_SUMMARY"
-            WARN_COUNT=$((WARN_COUNT + 1))
-          fi
-        done
-
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        # --- Summary ---
-        echo "### Semantic Validation Summary" >> "$GITHUB_STEP_SUMMARY"
-        echo "- **Warnings**: ${WARN_COUNT}" >> "$GITHUB_STEP_SUMMARY"
-        echo "" >> "$GITHUB_STEP_SUMMARY"
-
-        if [ "$WARN_COUNT" -gt 0 ]; then
-          echo "> **Note**: Semantic issues detected. Review PACKAGE_NAME casing, usage targets, and version consistency." >> "$GITHUB_STEP_SUMMARY"
-        else
-          echo "> All semantic checks passed." >> "$GITHUB_STEP_SUMMARY"
-        fi
-
-        # Informational only - do not fail the workflow
-        echo "Semantic validation complete: ${WARN_COUNT} warnings"
+            if (!existing) {
+              const { data } = await github.rest.issues.create({
+                ...context.repo, title, body: report
+              });
+              core.info(`Scheduled failure tracked in ${data.html_url}`);
+            } else {
+              const start = existing.body.indexOf(marker);
+              const end = existing.body.indexOf(endMarker, start + marker.length);
+              if (end === -1) {
+                throw new Error(`Issue #${existing.number} has an incomplete report block; preserving its body.`);
+              }
+              const body = existing.body.slice(0, start) + report +
+                existing.body.slice(end + endMarker.length);
+              if (existing.state !== 'open' || existing.title !== title || existing.body !== body) {
+                await github.rest.issues.update({
+                  ...context.repo, issue_number: existing.number, state: 'open', title, body
+                });
+              }
+              core.info(`Scheduled failure tracked in ${existing.html_url}`);
+            }
