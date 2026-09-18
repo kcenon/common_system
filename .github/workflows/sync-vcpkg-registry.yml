@@ -47,6 +47,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   sync:
@@ -91,6 +92,10 @@ jobs:
         # Derive GitHub repo name from port name
         # e.g., kcenon-common-system -> common_system
         SYSTEM_NAME=$(echo "${PORT_NAME}" | sed 's/^kcenon-//' | sed 's/-/_/g')
+        if [ "$GITHUB_REPOSITORY" != "kcenon/$SYSTEM_NAME" ]; then
+          echo "::error::Port does not belong to the calling repository"
+          exit 1
+        fi
         echo "repo=kcenon/${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
         echo "system-name=${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
 
