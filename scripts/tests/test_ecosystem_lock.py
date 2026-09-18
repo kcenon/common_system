@@ -3,6 +3,7 @@ import importlib.util
 import json
 import io
 import zipfile
+import tempfile
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -79,6 +80,32 @@ class EcosystemLockTests(unittest.TestCase):
             run.update(event=event,conclusion=conclusion)
             with patch.object(lock.subprocess, "check_output", return_value=json.dumps(run)):
                 with self.assertRaises(ValueError): lock.promote(candidate,self.evidence,"old")
+
+    def test_exploratory_evidence_is_rejected_even_when_every_check_passes(self):
+        evidence = dict(self.evidence, exploratory=True)
+        with self.assertRaisesRegex(ValueError, "exploratory"):
+            lock.validate_evidence(evidence, self.repos, lock.PROFILES[0])
+
+    def test_concurrent_promotion_cannot_replace_a_lock(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "lock.json"
+            mutex = path.with_suffix(".json.promoting")
+            mutex.write_text("other promotion")
+            with self.assertRaisesRegex(ValueError, "another promotion"):
+                lock.write_promotion({}, {}, path)
+            self.assertEqual(mutex.read_text(), "other promotion")
+            self.assertFalse(path.exists())
+
+    def test_promotion_preserves_an_external_edit_and_cleans_its_mutex(self):
+        candidate = dict(lock.select(self.accepted), base_lock_digest=None)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "lock.json"
+            with patch.object(lock, "verify_run", side_effect=lambda evidence: path.write_text("external edit")):
+                with self.assertRaisesRegex(ValueError, "changed while"):
+                    lock.write_promotion(candidate, self.evidence, path)
+            self.assertEqual(path.read_text(), "external edit")
+            self.assertFalse(path.with_suffix(".json.promoting").exists())
+            self.assertFalse(path.with_suffix(".json.tmp").exists())
 
 
 if __name__ == "__main__":

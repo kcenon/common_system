@@ -194,6 +194,17 @@ def consumer(repo, prefix, root, jobs):
     return code
 
 
+def record_source_state(entry, source):
+    """Retain any dirty observation and reject missing or changed checkouts."""
+    try:
+        dirty = bool(output(["git", "status", "--porcelain", "--untracked-files=normal"], source))
+        entry["worktree_changes"] = entry.get("worktree_changes") is True or dirty
+        entry["sha"] = output(["git", "rev-parse", "HEAD"], source)
+    except (OSError, subprocess.SubprocessError) as exc:
+        entry["worktree_changes"] = None
+        entry["error"] = f"source verification failed: {exc}"
+
+
 def build(snapshot, workspace, source_root, jobs, allow_dirty=False):
     validate(snapshot, allow_candidate=True)
     workspace.mkdir(parents=True, exist_ok=False)
@@ -201,7 +212,8 @@ def build(snapshot, workspace, source_root, jobs, allow_dirty=False):
     report = {"schema_version": 1, "profile": snapshot["profile"], "repositories": snapshot["repositories"],
               "registry_sha": snapshot["registry_sha"], "toolchain": toolchain(snapshot["profile"]),
               "run_url": os.environ.get("ECOSYSTEM_RUN_URL"),
-              "orchestrator_sha": os.environ.get("ECOSYSTEM_ORCHESTRATOR_SHA"), "results": {}}
+              "orchestrator_sha": os.environ.get("ECOSYSTEM_ORCHESTRATOR_SHA"),
+              "exploratory": allow_dirty, "results": {}}
     for repo in REPOSITORIES:
         report["results"][repo] = {"sha": snapshot["repositories"][repo], "worktree_changes": None,
                                    "checks": {name: None for name in CHECKS},
@@ -250,9 +262,12 @@ def build(snapshot, workspace, source_root, jobs, allow_dirty=False):
             print(f"{repo}: {exc}", file=sys.stderr, flush=True)
         finally:
             if (source / ".git").exists():
-                entry["worktree_changes"] = bool(output(["git", "status", "--porcelain", "--untracked-files=normal"], source))
-                entry["sha"] = output(["git", "rev-parse", "HEAD"], source)
+                record_source_state(entry, source)
             save()
+    # A later dependency build may have touched a repository checked earlier.
+    for repo in REPOSITORIES:
+        record_source_state(report["results"][repo], source_root / repo)
+    save()
     try:
         validate_evidence(report, snapshot["repositories"], snapshot["profile"])
         return 0

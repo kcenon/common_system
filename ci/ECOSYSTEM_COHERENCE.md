@@ -87,6 +87,9 @@ Every raw gate/configure/build/consumer result is recorded, including explicit
 missing results after a failed prerequisite. A failed, skipped, cancelled,
 dirty or advisory-failed repository cannot qualify. The `skip-cross-build` PR
 label skips execution and fails lock eligibility; it never advances a lock.
+The runner audits every source checkout again after the last build and retains
+any earlier dirty observation. `--allow-dirty` marks the whole run exploratory,
+even when its final worktrees happen to be clean.
 
 For hosted validation, dispatch `ecosystem-cross-build.yml` at the reviewed implementation ref with
 `bootstrap=true`. After the complete run succeeds, download its
@@ -102,6 +105,9 @@ It rejects evidence from PR runs and stale lock digests. Review the resulting
 lock in a PR. Failed candidates leave the accepted lock unchanged. Roll back
 by restoring a previously reviewed accepted lock and reproducing its tuple.
 The lock-containing revision is distinct from all source revisions it records.
+Concurrent local promotions are serialized by a `.json.promoting` sidecar. If
+an interrupted process leaves that file behind, confirm the process has ended
+before removing it and retrying against the current accepted lock.
 
 ## Dispatch routes and credentials
 
@@ -120,7 +126,8 @@ ID. Requests also identify the receiver's exact selected SHA. Notifications and
 results are separate: receivers never notify, preventing fan-out loops. Retries
 reuse correlated runs; concurrent duplicate checks have no mutation side effects.
 
-Configure an authorized `ECOSYSTEM_DISPATCH_TOKEN` in each sending repository.
+The selected automation identity is an existing fine-grained personal access
+token. Configure it as `ECOSYSTEM_DISPATCH_TOKEN` in each sending repository.
 It needs target repository contents write (repository_dispatch) and actions read
 (run/artifact inspection). A GitHub App installation token can be supplied through
 the same environment after an App-token setup step; do not store a short-lived
