@@ -91,3 +91,6 @@ DartConfiguration.tcldocs/api/
 
 # API documentation
 docs/api/
+coherence-results/
+
+!ci/*.json

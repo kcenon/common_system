@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "candidate",
+  "profile": "ubuntu-24.04-gcc13",
+  "repositories": {
+    "common_system": "5c2b7ac4dabbc3cc3d5b4d8341081ed332a97232",
+    "thread_system": "c4e1cef231d5271eba729272b073a624ccd27d23",
+    "container_system": "c6e049533ac9df91c79fbdbb0391f86f36e02ee2",
+    "logger_system": "9764fbc7a99774843d03648adf642e409484ec9c",
+    "network_system": "1cd833034082b6d6f0f8ded27a7eb8fda28ca2b5",
+    "monitoring_system": "feb8d0843a6e2a5659f2e24cb627d87f62928348",
+    "database_system": "75ad1221bc338b72f54729ade41bfb6c28219411",
+    "pacs_system": "bc3f5ca1e4e7f329dc43bfed6a948760a86b67e7"
+  },
+  "registry_sha": "40632164c62b2256579a27eda228c48b057cbee9"
+}
