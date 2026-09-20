@@ -24,6 +24,7 @@ on:
         type: string
 permissions:
   contents: read
+  actions: read # Verify the original build artifact when introducing the first lock.
 concurrency:
   group: cross-build-${{ github.event.client_payload.correlation || github.ref }}
   cancel-in-progress: false

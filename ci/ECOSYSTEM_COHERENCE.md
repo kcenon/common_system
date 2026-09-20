@@ -30,9 +30,12 @@ logger option remains disabled; logger uses thread as an optional backend.
 
 ## Bootstrap and reproduce a snapshot
 
-`ci/ecosystem-lock.json` is deliberately absent until all eight repositories
-have passing evidence. Create a reviewed `ci/ecosystem-candidate.json` with this
-schema and resolve every chosen source and registry branch to a full SHA once:
+`ci/ecosystem-lock.json` records the first accepted snapshot from the successful
+[bootstrap run](https://github.com/kcenon/common_system/actions/runs/35370213715).
+Its original artifact proves all 40 checks passed on clean sources. To bootstrap
+an installation without an accepted lock, create a reviewed
+`ci/ecosystem-candidate.json` with this schema and resolve every chosen source
+and registry branch to a full SHA once:
 
 ```json
 {
@@ -105,6 +108,15 @@ It rejects evidence from PR runs and stale lock digests. Review the resulting
 lock in a PR. Failed candidates leave the accepted lock unchanged. Roll back
 by restoring a previously reviewed accepted lock and reproducing its tuple.
 The lock-containing revision is distinct from all source revisions it records.
+PR builds normally select the accepted lock from the exact base commit. When
+that file is absent (HTTP 404), the first-lock PR may supply an accepted lock
+from its checkout. The resolver verifies its completed trusted Actions run and
+original evidence artifact before replacing only common's source pin with the
+PR head SHA. It records the checkout's merge SHA as the lock revision. This path
+requires Actions read permission; it rejects candidate-only locks, invalid
+evidence and API errors other than 404. An existing base lock always wins over
+PR changes to the lock. Push, manual and dispatch runs still require the lock
+at their requested immutable revision, unless explicitly bootstrapping manually.
 Concurrent local promotions are serialized by a `.json.promoting` sidecar. If
 an interrupted process leaves that file behind, confirm the process has ended
 before removing it and retrying against the current accepted lock.

@@ -1,6 +1,8 @@
 import copy
 import importlib.util
+import json
 from pathlib import Path
+import subprocess
 import unittest
 from unittest.mock import patch
 
@@ -15,6 +17,24 @@ class DispatchTests(unittest.TestCase):
         self.run = {"id": 17, "html_url": "https://github.com/kcenon/thread_system/actions/runs/17",
                     "status": "completed", "conclusion": "success"}
         self.result = dict(self.value, repository="thread_system", source_sha="a"*40, raw_exit_code=0)
+
+    def test_api_errors_preserve_structured_http_status(self):
+        for status in (401, 403, 404, 500):
+            with self.subTest(status=status):
+                response = subprocess.CompletedProcess([], 1, json.dumps({"status": str(status)}).encode(), b"request failed")
+                with patch.object(dispatch.subprocess, "run", return_value=response):
+                    with self.assertRaises(dispatch.GitHubAPIError) as raised:
+                        dispatch.api("repos/kcenon/common_system/contents/ci/ecosystem-lock.json")
+                self.assertEqual(raised.exception.status, status)
+
+    def test_api_errors_without_http_status_are_not_not_found(self):
+        for output in (b"", b"not JSON", b"[]", b'{"message":"connection failed"}'):
+            with self.subTest(output=output):
+                response = subprocess.CompletedProcess([], 1, output, b"request failed")
+                with patch.object(dispatch.subprocess, "run", return_value=response):
+                    with self.assertRaises(dispatch.GitHubAPIError) as raised:
+                        dispatch.api("repos/kcenon/common_system/contents/ci/ecosystem-lock.json")
+                self.assertIsNone(raised.exception.status)
 
     def test_allowlist_pins_origin_and_correlation(self):
         for key, value in [("candidate_repository", "elsewhere"), ("candidate_sha", "develop"),

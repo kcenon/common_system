@@ -8,8 +8,8 @@ from pathlib import Path
 import subprocess
 import sys
 
-from coherence_dispatch import CHANGE, api, correlation, validate_payload
-from ecosystem_lock import digest, read, select, sha, validate
+from coherence_dispatch import CHANGE, GitHubAPIError, api, correlation, validate_payload
+from ecosystem_lock import digest, read, select, sha, validate, verify_run
 
 
 def prepare(event, name, root, destination, head):
@@ -42,8 +42,20 @@ def prepare(event, name, root, destination, head):
             raise ValueError("bootstrap snapshot must be labeled candidate")
         candidate["base_lock_digest"] = digest(root / "ci/ecosystem-lock.json")
     else:
-        item = api(f"repos/kcenon/common_system/contents/ci/ecosystem-lock.json?ref={revision}")
-        lock_path.write_bytes(base64.b64decode(item["content"]))
+        try:
+            item = api(f"repos/kcenon/common_system/contents/ci/ecosystem-lock.json?ref={revision}")
+        except GitHubAPIError as exc:
+            if name != "pull_request" or exc.status != 404:
+                raise
+            # The first lock cannot exist on the PR's base yet. Require the
+            # proposed accepted lock and its original trusted Actions evidence;
+            # an unvalidated candidate is never an automatic bootstrap input.
+            lock_path.write_bytes((root / "ci/ecosystem-lock.json").read_bytes())
+            lock = validate(read(lock_path))
+            verify_run(lock["validation"])
+            revision = sha(head)
+        else:
+            lock_path.write_bytes(base64.b64decode(item["content"]))
         candidate = select(read(lock_path), repo, commit)
         candidate["base_lock_digest"] = digest(lock_path)
     candidate["lock_revision"] = revision

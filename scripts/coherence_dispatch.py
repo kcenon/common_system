@@ -20,6 +20,12 @@ REQUEST = "coherence-check-v1"
 CHANGE = "coherence-change-v1"
 
 
+class GitHubAPIError(ValueError):
+    def __init__(self, message, status=None):
+        super().__init__(message)
+        self.status = status
+
+
 def sha(value):
     if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{40}", value):
         raise ValueError("dispatch pins must be full lowercase commit SHAs")
@@ -33,7 +39,15 @@ def api(endpoint, data=None, binary=False):
     result = subprocess.run(command, input=json.dumps(data).encode() if data is not None else None,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
     if result.returncode:
-        raise ValueError(f"GitHub API failed for {endpoint}: {result.stderr.decode(errors='replace').strip()}")
+        status = None
+        try:
+            error = json.loads(result.stdout)
+            if isinstance(error, dict):
+                status = int(error.get("status"))
+        except (ValueError, TypeError):
+            pass
+        raise GitHubAPIError(
+            f"GitHub API failed for {endpoint}: {result.stderr.decode(errors='replace').strip()}", status)
     if binary:
         return result.stdout
     return json.loads(result.stdout) if result.stdout else None
