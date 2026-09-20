@@ -16,6 +16,7 @@ across the ecosystem.
 cmake/template/
 ├── README.md            # This file
 ├── VERSION              # Template version — track adoption per system
+├── dependency_options.cmake # Canonical sibling options and legacy aliases
 ├── options.cmake        # Standard option set + small utility helpers
 ├── compiler.cmake       # C++ standard / build-type / IDE baseline
 ├── dependencies.cmake   # find_package / FetchContent helpers
@@ -240,3 +241,7 @@ template.
   [#660](https://github.com/kcenon/common_system/issues/660)
 * Template extraction: this directory was extracted in
   [#659](https://github.com/kcenon/common_system/issues/659)
+
+## Sibling dependency options (template 1.4.0)
+
+Use `kcenon_dependency_option(KCENON_WITH_THREAD_SYSTEM LEGACY_THREAD_OPTION "Thread integration" OFF)` before dependency discovery. Canonical inputs take precedence over legacy inputs, with a warning on conflicts. Defaults and mandatory-dependency guards remain the responsibility of the caller. Effective values are mirrored as normal variables; existing cache entries and parent variables are not forcibly rewritten. An inferred canonical default is not cached, so legacy-only cache reconfiguration keeps working. An explicitly cached canonical input remains authoritative until removed with `cmake -U KCENON_WITH_THREAD_SYSTEM`. Copy this module unchanged from common_system.
