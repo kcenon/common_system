@@ -27,6 +27,19 @@ on:
         description: 'Release version (e.g., v0.2.0 or 0.2.0)'
         required: true
         type: string
+      coherence-tools-ref:
+        description: 'Reviewed immutable common commit containing coherence validators'
+        default: '6f76d9b9480d0dffc9167dc4a2ca564cde708b4b'
+        required: false
+        type: string
+      tag-reality-mode:
+        description: 'advisory until repository release promotion is approved; enforcing afterwards'
+        default: advisory
+        type: string
+      release-commit:
+        description: 'Independent release merge SHA; otherwise derive from merged release PR evidence'
+        default: ''
+        type: string
     secrets:
       REGISTRY_PAT:
         description: 'PAT with write access to kcenon/vcpkg-registry'
@@ -34,6 +47,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   sync:
@@ -46,7 +60,16 @@ jobs:
       env:
         PORT_NAME: ${{ inputs.port-name }}
         VERSION: ${{ inputs.version }}
+        TOOLS_REF: ${{ inputs.coherence-tools-ref }}
+        TAG_MODE: ${{ inputs.tag-reality-mode }}
       run: |
+        case "$PORT_NAME" in
+          kcenon-common-system|kcenon-thread-system|kcenon-container-system|kcenon-logger-system|kcenon-network-system|kcenon-monitoring-system|kcenon-database-system|kcenon-pacs-system) ;;
+          *) echo "::error::Port is outside the ecosystem"; exit 1 ;;
+        esac
+        [[ "$TOOLS_REF" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::Validator revision must be an immutable SHA"; exit 1; }
+        [[ "$VERSION" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([-+][A-Za-z0-9.-]+)?$ ]] || { echo "::error::Invalid release version"; exit 1; }
+        [[ "$TAG_MODE" == advisory || "$TAG_MODE" == enforcing ]] || { echo "::error::Invalid tag mode"; exit 1; }
         if [[ -z "${PORT_NAME}" ]]; then
           echo "::error::port-name input is required"
           exit 1
@@ -69,6 +92,10 @@ jobs:
         # Derive GitHub repo name from port name
         # e.g., kcenon-common-system -> common_system
         SYSTEM_NAME=$(echo "${PORT_NAME}" | sed 's/^kcenon-//' | sed 's/-/_/g')
+        if [ "$GITHUB_REPOSITORY" != "kcenon/$SYSTEM_NAME" ]; then
+          echo "::error::Port does not belong to the calling repository"
+          exit 1
+        fi
         echo "repo=kcenon/${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
         echo "system-name=${SYSTEM_NAME}" >> "$GITHUB_OUTPUT"
 
@@ -80,18 +107,41 @@ jobs:
       uses: actions/checkout@v7
       with:
         path: source
+        fetch-depth: 0
+        persist-credentials: false
+
+    - name: Checkout reviewed coherence validators
+      uses: actions/checkout@v7
+      with:
+        repository: kcenon/common_system
+        ref: ${{ inputs.coherence-tools-ref }}
+        path: coherence-tools
+        persist-credentials: false
+
+    - name: Verify independent release tag identity before port generation
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ steps.meta.outputs.repo }}
+        TAG: ${{ inputs.version }}
+        EXPECTED_COMMIT: ${{ inputs.release-commit }}
+        TAG_MODE: ${{ inputs.tag-reality-mode }}
+      run: |
+        args=()
+        if [ -n "$EXPECTED_COMMIT" ]; then args+=(--release-commit "$EXPECTED_COMMIT"); fi
+        python3 coherence-tools/scripts/run_coherence.py tag-reality --root source --script-root coherence-tools --mode "$TAG_MODE" --output release-evidence/identity.json -- --root "$GITHUB_WORKSPACE/source" --repo "$REPO" --tag "$TAG" --identity-only "${args[@]}"
 
     - name: Download release archive and compute SHA512
       id: sha
       env:
         VERSION: ${{ steps.meta.outputs.version }}
+        RELEASE_TAG: ${{ inputs.version }}
         REPO: ${{ steps.meta.outputs.repo }}
       run: |
-        TAG="v${VERSION}"
+        TAG="$RELEASE_TAG"
         URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
 
         echo "Downloading archive from ${URL}..."
-        HTTP_CODE=$(curl -sL -o /tmp/source.tar.gz -w "%{http_code}" "${URL}")
+        HTTP_CODE=$(curl --fail --connect-timeout 15 --max-time 120 --max-filesize 536870912 -sL -o /tmp/source.tar.gz -w "%{http_code}" "${URL}")
 
         if [[ "${HTTP_CODE}" != "200" ]]; then
           echo "::error::Failed to download release archive (HTTP ${HTTP_CODE}): ${URL}"
@@ -106,6 +156,7 @@ jobs:
     - name: Verify SHA512 against actual GitHub archive
       env:
         VERSION: ${{ steps.meta.outputs.version }}
+        RELEASE_TAG: ${{ inputs.version }}
         REPO: ${{ steps.meta.outputs.repo }}
         NEW_SHA: ${{ steps.sha.outputs.sha512 }}
       run: |
@@ -114,7 +165,7 @@ jobs:
         # to portfile.cmake and the bytes a vcpkg consumer will actually fetch.
         # See kcenon/common_system#675 (parent EPIC #674) and microsoft/vcpkg#51511.
         set -euo pipefail
-        TAG="v${VERSION}"
+        TAG="$RELEASE_TAG"
         ARCHIVE_URL="https://github.com/${REPO}/archive/refs/tags/${TAG}.tar.gz"
         VERIFY_FILE="/tmp/verify-archive.tar.gz"
 
@@ -122,7 +173,7 @@ jobs:
         # Use --fail so curl returns non-zero on HTTP errors; download to a
         # file (rather than piping into sha512sum) so a fetch failure cannot
         # silently produce the empty-input hash cf83e1357eefb8bdf...
-        if ! curl -fsSL --retry 3 --retry-delay 2 -o "${VERIFY_FILE}" "${ARCHIVE_URL}"; then
+        if ! curl -fsSL --connect-timeout 15 --max-time 120 --max-filesize 536870912 --retry 3 --retry-delay 2 -o "${VERIFY_FILE}" "${ARCHIVE_URL}"; then
           echo "::error::Failed to download release archive for verification: ${ARCHIVE_URL}"
           exit 1
         fi
@@ -195,6 +246,26 @@ jobs:
 
         echo "=== Updated vcpkg.json ==="
         cat "${VCPKG_JSON}"
+
+    - name: Validate the generated port against the actual tagged archive
+      env:
+        GH_TOKEN: ${{ github.token }}
+        REPO: ${{ steps.meta.outputs.repo }}
+        TAG: ${{ inputs.version }}
+        EXPECTED_COMMIT: ${{ inputs.release-commit }}
+        TAG_MODE: ${{ inputs.tag-reality-mode }}
+        PORT_NAME: ${{ inputs.port-name }}
+      run: |
+        args=()
+        if [ -n "$EXPECTED_COMMIT" ]; then args+=(--release-commit "$EXPECTED_COMMIT"); fi
+        python3 coherence-tools/scripts/run_coherence.py tag-reality --root source --script-root coherence-tools --mode "$TAG_MODE" --output release-evidence/generated-port.json -- --root "$GITHUB_WORKSPACE/source" --repo "$REPO" --tag "$TAG" --port-dir "$GITHUB_WORKSPACE/source/vcpkg-ports/$PORT_NAME" "${args[@]}"
+
+    - name: Retain raw release identity and stored-hash results
+      if: always()
+      uses: actions/upload-artifact@v7
+      with:
+        name: release-coherence-evidence
+        path: release-evidence/
 
     - name: Verify port installs correctly
       env:
@@ -327,6 +398,7 @@ jobs:
         GH_TOKEN: ${{ secrets.REGISTRY_PAT }}
         PORT_NAME: ${{ inputs.port-name }}
         VERSION: ${{ steps.meta.outputs.version }}
+        RELEASE_TAG: ${{ inputs.version }}
         REPO: ${{ steps.meta.outputs.repo }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
