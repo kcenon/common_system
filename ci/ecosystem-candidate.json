@@ -6,11 +6,11 @@
     "common_system": "6c17c0a82f0c2f614f695983e3981c28e4176546",
     "thread_system": "ec5fdf3351e1bddd852f8ae4f51501a1d8dac4f1",
     "container_system": "605a0afd76ad78de97fc28ff6d416d5d08430b78",
-    "logger_system": "20bf67e3ac47b87b52aef984bc21424fe39bc06a",
-    "network_system": "49df559ea3df74d567a8532b6711a7d5df06f6fb",
+    "logger_system": "02eafd95640bc24799a36ed043c3e6a16c688832",
+    "network_system": "47cf31923ad2c883a96577fb52c7261ec191980f",
     "monitoring_system": "e8c4b2e333f9766511120a9cab063f73c7b970bb",
-    "database_system": "450d4fa22c74e71a0e0448ab9c4cf471b549d6fd",
-    "pacs_system": "90978d02110185fecf7a52ef1e2174eee2a4c04b"
+    "database_system": "0c0ad764a2c80ae3be5757b72f12299a1a2a7fd7",
+    "pacs_system": "04c92957888245586bc3b78659357c6c8c95a9b2"
   },
   "registry_sha": "40632164c62b2256579a27eda228c48b057cbee9"
 }
