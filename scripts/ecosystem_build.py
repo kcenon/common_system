@@ -26,7 +26,8 @@ DEPENDENCIES = {
     "pacs_system": REPOSITORIES[:-1],
 }
 TARGETS = {repo: f"{repo}::{repo}" for repo in REPOSITORIES}
-TARGETS.update(common_system="kcenon::common_system", logger_system="logger_system::logger")
+TARGETS.update(common_system="kcenon::common_system", logger_system="logger_system::logger",
+               pacs_system="pacs_system::storage")
 HEADERS = dict(zip(REPOSITORIES, (
     "common/patterns/result.h", "thread/core/thread_pool.h", "container/container.h",
     "logger/core/logger.h", "network/network_system.h", "monitoring/core/performance_monitor.h",
@@ -38,7 +39,7 @@ CONSUMERS = {
     "logger_system": "kcenon::logger::logger logger(false); return 0;",
     "network_system": "kcenon::network::facade::tcp_facade facade; return facade.create_client({}).is_err() ? 0 : 1;",
     "monitoring_system": "kcenon::monitoring::performance_monitor monitor; return monitor.get_name().empty() ? 1 : 0;",
-    "database_system": "auto context = std::make_shared<kcenon::database::database_context>(); kcenon::database::database_manager manager(context); auto built = kcenon::database::integrated::unified_database_system::create_builder().build(); return 0;",
+    "database_system": "auto context = std::make_shared<database::database_context>(); database::database_manager manager(context); auto built = database::integrated::unified_database_system::create_builder().build(); return 0;",
     "pacs_system": "kcenon::pacs::core::dicom_dataset dataset; int code = 1; { kcenon::pacs::storage::pacs_database_adapter database(\"coherence-consumer.sqlite\"); auto result = database.connect(); if (result.is_ok()) { code = database.execute(\"CREATE TABLE smoke (value INTEGER)\").is_ok() && dataset.empty() ? 0 : 1; } } std::filesystem::remove(\"coherence-consumer.sqlite\"); return code;",
 }
 OPTIONS = {
@@ -53,7 +54,7 @@ OPTIONS = {
     "logger_system": {"BUILD_TESTS": False, "BUILD_SAMPLES": False, "BUILD_BENCHMARKS": False,
                       "LOGGER_BUILD_INTEGRATION_TESTS": False, "NO_VCPKG": True,
                       "KCENON_WITH_COMMON_SYSTEM": True, "KCENON_WITH_THREAD_SYSTEM": True},
-    "network_system": {"BUILD_TESTS": False, "BUILD_EXAMPLES": False,
+    "network_system": {"BUILD_TESTS": False, "BUILD_SAMPLES": False,
                        "NETWORK_BUILD_INTEGRATION_TESTS": False, "NETWORK_BUILD_BENCHMARKS": False,
                        "KCENON_WITH_COMMON_SYSTEM": True, "KCENON_WITH_THREAD_SYSTEM": True,
                        "KCENON_WITH_CONTAINER_SYSTEM": True, "KCENON_WITH_LOGGER_SYSTEM": False},

@@ -20,6 +20,8 @@ class EcosystemBuildTests(unittest.TestCase):
             seen.add(repository)
         self.assertFalse(build.OPTIONS["thread_system"]["KCENON_WITH_LOGGER_SYSTEM"])
         self.assertTrue(build.OPTIONS["database_system"]["USE_SQLITE"])
+        self.assertFalse(build.OPTIONS["network_system"]["BUILD_SAMPLES"])
+        self.assertEqual(build.TARGETS["pacs_system"], "pacs_system::storage")
 
     def test_failed_command_retains_real_exit_and_log(self):
         with tempfile.TemporaryDirectory() as tmp:
