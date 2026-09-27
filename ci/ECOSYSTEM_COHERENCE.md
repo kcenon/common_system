@@ -183,6 +183,28 @@ content drift remains a finding. The scheduled/manual workflow stays advisory;
 dispatch result acceptance still requires raw zero. The existing default-branch
 scheduled-failure reporter is retained.
 
+Current source overlays retain canonical package/config names and snake_case
+usage targets. Registry releases predating that naming convention use the
+reviewed interfaces in `ci/registry-package-contracts.json`. A contract applies
+only to the recorded repository, release version, tag and archive SHA512;
+port-version increments retain the same source interface. Unknown releases
+retain the canonical checks. Package paths, `find_package`, and every documented
+link target must match the release contract. Version differences do not waive
+these checks, and same-version byte differences still fail.
+
+The initial contracts were checked against these immutable release sources:
+
+| Release | Package / target | Source evidence |
+| --- | --- | --- |
+| container 0.1.0 | `ContainerSystem` / `ContainerSystem::container` | [CMakeLists.txt](https://github.com/kcenon/container_system/blob/44ff95f96ff975279e39be5102347d0fd2b178db/CMakeLists.txt#L594) |
+| logger 0.1.3 | `LoggerSystem` / `LoggerSystem::logger` | [CMakeLists.txt](https://github.com/kcenon/logger_system/blob/6110bd56b095c903f1dd162026e8baff33b4244c/CMakeLists.txt#L652) |
+| network 0.1.1 | `NetworkSystem` / `NetworkSystem::NetworkSystem`, `NetworkSystem::network-all` | [install rules](https://github.com/kcenon/network_system/blob/082a99914947c82d8354c7f7d9dacc99dbb6a135/cmake/NetworkSystemInstall.cmake#L13), [umbrella export](https://github.com/kcenon/network_system/blob/082a99914947c82d8354c7f7d9dacc99dbb6a135/libs/network-all/CMakeLists.txt#L114) |
+
+The network umbrella library joins the parent's export set in a full build;
+its standalone `kcenon::network-all` namespace does not describe this port.
+Archive identity and release provenance remain covered by the separate
+tag-reality gate.
+
 ## Enforcement and required statuses
 
 After remediation lands, rerun raw conformance and version drift against the

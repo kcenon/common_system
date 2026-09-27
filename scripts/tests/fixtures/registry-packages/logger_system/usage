@@ -1,0 +1,6 @@
+The package kcenon-logger-system provides CMake targets:
+
+    find_package(LoggerSystem CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE LoggerSystem::logger)
+
+Available features: encryption, otlp
