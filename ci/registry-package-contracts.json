@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "repositories": {
+    "container_system": {
+      "0.1.0": {
+        "source_revision": "44ff95f96ff975279e39be5102347d0fd2b178db",
+        "archive_sha512": "3cf36f0beb9a8f7d01f2504126ecb8472fa27ed5d0091192e078846309c1e66abd87e8b02bccd41af1412b81053d053ac57f3810b202f70a9b91d1c3ca8a5b4e",
+        "package_name": "ContainerSystem",
+        "config_path": "lib/cmake/ContainerSystem",
+        "targets": [
+          "ContainerSystem::container"
+        ]
+      }
+    },
+    "logger_system": {
+      "0.1.3": {
+        "source_revision": "6110bd56b095c903f1dd162026e8baff33b4244c",
+        "archive_sha512": "4ffc4b2457066ba8345389a3222b6f1d739485e46f35f26c57f7f02c67e0377e2a6d0c8c591bd79dcd5f76c9b28373202055b73f123e0fa51043b9e98a96e531",
+        "package_name": "LoggerSystem",
+        "config_path": "lib/cmake/LoggerSystem",
+        "targets": [
+          "LoggerSystem::logger"
+        ]
+      }
+    },
+    "network_system": {
+      "0.1.1": {
+        "source_revision": "082a99914947c82d8354c7f7d9dacc99dbb6a135",
+        "archive_sha512": "8a723086ee2481ef4e8e46ec61b1b8e063e48f53549147893f0d7e88d2e16978a604709bec10bf5312470c0c9ed6d3c2366b75df8aa3715691aa03dc6871e758",
+        "package_name": "NetworkSystem",
+        "config_path": "lib/cmake/NetworkSystem",
+        "targets": [
+          "NetworkSystem::NetworkSystem",
+          "NetworkSystem::network-all"
+        ]
+      }
+    }
+  }
+}
