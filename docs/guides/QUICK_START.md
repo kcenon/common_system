@@ -1,348 +1,283 @@
 ---
 doc_id: "COM-GUID-021"
 doc_title: "Quick Start Guide - common_system"
-doc_version: "1.0.0"
-doc_date: "2026-04-04"
+doc_version: "1.1.0"
+doc_date: "2026-09-12"
 doc_status: "Released"
 project: "common_system"
 category: "GUID"
 ---
 
-# Quick Start Guide - common_system
+# Setup and API Examples
 
-> **SSOT**: This document is the single source of truth for **Quick Start Guide - common_system**.
+This guide holds the setup details and examples linked from the
+[English](../../README.md) and [Korean](../../README.kr.md) READMEs.
+The examples target current source headers unless a release is explicitly pinned.
 
-**5-minute guide** to get started with the header-only common_system library for C++20.
+## Requirements
 
-## Prerequisites
+Use a C++20 compiler. Current source header builds require CMake 3.20+;
+the published v0.2.0 release and named modules require CMake 3.28+.
+Direct inclusion needs an include path and C++20 mode, but no CMake invocation.
 
-- **Compiler**: C++20 compatible (GCC 11+, Clang 14+, MSVC 2022+, Apple Clang 14+)
-- **Build System**: CMake 3.20+ (3.28+ required for C++20 modules; optional for header-only usage)
+### Compiler Requirements
+
+common_system enforces minimum compiler versions at CMake configure time via
+`KcenonCompilerRequirements.cmake`. Downstream systems can include this module
+for consistent enforcement.
+
+| Build Mode | GCC | Clang | MSVC | Apple Clang |
+|------------|-----|-------|------|-------------|
+| **Header-only** (default) | 11+ | 14+ | 2022 (19.30+) | 14+ |
+| **C++20 Modules** (optional) | 14+ | 16+ | 2022 17.4 (19.34+) | Not supported |
+
+### Ecosystem-Wide Compiler Requirements
+
+When using multiple systems together, use the **highest** requirement from your dependency chain:
+
+| Usage Scenario | GCC | Clang | MSVC | Apple Clang | Notes |
+|----------------|-----|-------|------|-------------|-------|
+| common_system only | 11+ | 14+ | 2022+ | 14+ | Baseline |
+| + thread_system | **13+** | **17+** | 2022+ | 14+ | Higher requirements |
+| + logger_system | 11+ | 14+ | 2022+ | 14+ | Optional thread_system |
+| + container_system | 11+ | 14+ | 2022+ | 14+ | Uses common_system |
+| + monitoring_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
+| + database_system | **13+** | **17+** | 2022+ | 14+ | Full ecosystem |
+| + network_system | **13+** | **17+** | 2022+ | 14+ | Requires thread_system |
+
+> **Note**: If using any system that depends on thread_system, you need GCC 13+ or Clang 17+.
+> All systems can include `KcenonCompilerRequirements.cmake` from common_system for
+> automated version enforcement at configure time.
 
 ## Installation
 
-### Option 1: Copy Headers (Fastest)
+### Published Release with FetchContent
+
+Use the complete `CMakeLists.txt` and `main.cpp` in the
+[README](../../README.md#getting-started). It pins v0.2.0 and links
+`kcenon::common`, the target available from that release.
+The `1.0.0` in current repository metadata is staged; see
+[VERSION](../../VERSION) and [versioning](../../VERSIONING.md).
+
+### vcpkg Overlay
+
+From a checkout of this repository, use the bundled
+[overlay port](../../vcpkg-ports/kcenon-common-system/):
 
 ```bash
-# Clone the repository
-git clone https://github.com/kcenon/common_system.git
-cd common_system
-
-# Copy include directory to your project
-cp -r include/kcenon /path/to/your/project/include/
+vcpkg install kcenon-common-system --overlay-ports=./vcpkg-ports --classic
 ```
 
-Add to your compiler flags:
-```bash
--I/path/to/your/project/include
-```
-
-### Option 2: CMake FetchContent (Recommended)
+Configure your application with
+`-DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake`,
+replacing `/path/to/vcpkg` with your vcpkg checkout. In your `CMakeLists.txt`,
+after defining `your_target`:
 
 ```cmake
-# In your CMakeLists.txt
-include(FetchContent)
-
-FetchContent_Declare(
-    common_system
-    GIT_REPOSITORY https://github.com/kcenon/common_system.git
-    GIT_TAG v0.2.0  # Pin to a specific release tag; do NOT use main
-    GIT_SHALLOW TRUE
-)
-FetchContent_MakeAvailable(common_system)
-
-# Link to your target
-target_link_libraries(your_target PRIVATE kcenon::common)
+find_package(common_system CONFIG REQUIRED)
+target_link_libraries(your_target PRIVATE kcenon::common_system)
 ```
 
-### Option 3: vcpkg Integration
+### Direct Headers and Source Targets
 
 ```bash
-# Add to your vcpkg manifest
-vcpkg install common_system
+git clone https://github.com/kcenon/common_system.git
+c++ -std=c++20 -I./common_system/include main.cpp -o example
+./example
 ```
 
-## First Program: Using Result<T>
+Use the README's `main.cpp` for this command. A current source build also exposes
+`common_system::common_system`, `kcenon::common_system`, and `kcenon::common`.
+Do not assume these aliases all exist in older releases.
 
-Create `main.cpp`:
+### Experimental Named Modules
+
+Use the [C++20 Modules Guide](CXX20_MODULES.md) for explicit enablement,
+compiler/scanner requirements, target selection, and C++20 mode matching.
+Apple Clang is unsupported. A successful header fallback does not validate an import.
+
+## API Examples
+
+### Result<T> Pattern
+
+Compose success values or propagate errors with `Result<T>`. Check the result before
+accessing its value; `unwrap()` throws when used on an error.
 
 ```cpp
 #include <kcenon/common/patterns/result.h>
-#include <iostream>
-#include <string>
 
 using namespace kcenon::common;
 
-// Function that returns Result<T>
-Result<int> divide(int a, int b) {
-    if (b == 0) {
-        return make_error<int>(
-            error_codes::INVALID_ARGUMENT,
-            "Cannot divide by zero",
-            "math_module"
-        );
-    }
-    return ok(a / b);
-}
-
 int main() {
-    // Case 1: Success
-    auto result = divide(10, 2);
-    if (is_ok(result)) {
-        std::cout << "10 / 2 = " << get_value(result) << "\n";
-    }
-
-    // Case 2: Failure
-    auto error_result = divide(10, 0);
-    if (is_error(error_result)) {
-        auto& err = get_error(error_result);
-        std::cout << "Error: " << err.message
-                  << " (code: " << err.code << ")\n";
-    }
-
-    return 0;
+    auto result = ok(21)
+        .and_then([](int value) { return ok(value * 2); })
+        .map([](int value) { return value + 1; })
+        .or_else([](const error_info&) { return ok(0); });
+    return result.is_ok() && result.value() == 43 ? 0 : 1;
 }
 ```
 
-Compile:
-```bash
-g++ -std=c++17 -I./include main.cpp -o main
-./main
-# Output:
-# 10 / 2 = 5
-# Error: Cannot divide by zero (code: -1)
-```
+### IExecutor Interface
 
-## Error Handling Example
-
-Type-safe error handling without exceptions:
-
-```cpp
-#include <kcenon/common/patterns/result.h>
-#include <iostream>
-#include <fstream>
-
-using namespace kcenon::common;
-
-Result<std::string> read_config(const std::string& path) {
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        return make_error<std::string>(
-            error_codes::NOT_FOUND,
-            "Config file not found",
-            "config_loader"
-        );
-    }
-
-    std::string content((std::istreambuf_iterator<char>(file)),
-                       std::istreambuf_iterator<char>());
-    return ok(content);
-}
-
-int main() {
-    // Basic check and handle
-    auto result = read_config("app.conf");
-    if (is_ok(result)) {
-        std::cout << "Config size: " << get_value(result).length()
-                  << " bytes\n";
-    } else {
-        auto& err = get_error(result);
-        std::cerr << "Failed: " << err.message << "\n";
-    }
-
-    return 0;
-}
-```
-
-### Result API Checklist
-
-Before copying Result snippets into other repositories, verify the following:
-
-1. **Factory usage** – Prefer `Result<T>::ok(...)` / `Result<T>::err(...)` (or helpers `ok(...)`, `make_error(...)`) instead of invoking constructors directly.
-2. **Error access** – Use `result.error()` or `common::get_error(result)`; avoid obsolete `.get_error()` member calls.
-3. **Void specialization** – For `Result<void>` return paths, call `Result<void>::err(error_info)` rather than `result_void::error(...)`.
-4. **Migration reference** – If an integrating module wraps the Result API (e.g., `thread::result`), consult that module’s header to confirm supported helpers.
-
-Including this quick check in your workflow keeps downstream documentation synchronized with the latest Result semantics.
-
-## RAII Example
-
-Using IExecutor interface with automatic resource management:
+Submit a job through an executor supplied by your application. The returned `Result` reports submission errors; its future represents job completion.
 
 ```cpp
 #include <kcenon/common/interfaces/executor_interface.h>
-#include <iostream>
-#include <thread>
-#include <vector>
-#include <queue>
-#include <mutex>
-#include <condition_variable>
-#include <atomic>
+#include <future>
+#include <memory>
+
+namespace common = kcenon::common;
+
+class example_job final : public common::interfaces::IJob {
+public:
+    common::VoidResult execute() override { return common::ok(); }
+};
+
+common::Result<std::future<void>> schedule(common::interfaces::IExecutor& executor) {
+    return executor.execute(std::make_unique<example_job>());
+}
+```
+
+### Health Monitoring
+
+Create, register, and run a sample health check. Replace the callback with your application's check logic.
+
+```cpp
+#include <kcenon/common/interfaces/monitoring.h>
+#include <chrono>
 
 using namespace kcenon::common::interfaces;
 
-// Simple thread pool (RAII-compliant)
-class ThreadPool : public IExecutor {
-    std::vector<std::thread> workers_;
-    std::queue<std::function<void()>> tasks_;
-    std::mutex mtx_;
-    std::condition_variable cv_;
-    std::atomic<bool> running_{true};
+int main() {
+    health_monitor monitor;
+    auto check = health_check_builder()
+        .name("sample")
+        .type(health_check_type::dependency)
+        .timeout(std::chrono::seconds{5})
+        .with_check([]() {
+            health_check_result result;
+            result.status = health_status::healthy;
+            return result;
+        }).build();
+    if (check.is_err()) return 1;
+    auto registered = monitor.register_check("sample", check.value());
+    if (registered.is_err() || !registered.value()) return 1;
+    auto result = monitor.check("sample");
+    return result.is_ok() && result.value().is_healthy() ? 0 : 1;
+}
+```
 
-public:
-    ThreadPool(size_t num_threads) {
-        for (size_t i = 0; i < num_threads; ++i) {
-            workers_.emplace_back([this] { work(); });
-        }
-    }
+### Error Code Registry
 
-    ~ThreadPool() { shutdown(true); }
+Centralized error code registry providing system-specific ranges:
 
-    std::future<void> submit(std::function<void()> task) override {
-        auto promise = std::make_shared<std::promise<void>>();
-        auto future = promise->get_future();
+| System | Range | Purpose |
+|--------|-------|---------|
+| common_system | -1 to -99 | Core errors |
+| thread_system | -100 to -199 | Threading errors |
+| logger_system | -200 to -299 | Logging errors |
+| monitoring_system | -300 to -399 | Monitoring errors |
+| container_system | -400 to -499 | Container errors |
+| database_system | -500 to -599 | Database errors |
+| network_system | -600 to -699 | Network errors |
 
-        {
-            std::lock_guard<std::mutex> lock(mtx_);
-            tasks_.emplace([t = std::move(task), p = promise]() {
-                try { t(); p->set_value(); }
-                catch(...) { p->set_exception(std::current_exception()); }
-            });
-        }
-        cv_.notify_one();
-        return future;
-    }
+### Circuit Breaker
 
-    // Other required interface methods...
-    std::future<void> submit_delayed(std::function<void()>,
-                                     std::chrono::milliseconds) override
-    { return submit([] {}); }
+Protect an operation with a circuit breaker. Keep the breaker alive across requests so it can track failures.
 
-    Result<std::future<void>> execute(std::unique_ptr<IJob>&&) override
-    { return error<std::future<void>>(0, "Not implemented", ""); }
+```cpp
+#include <kcenon/common/patterns/result.h>
+#include <kcenon/common/resilience/circuit_breaker.h>
+#include <chrono>
 
-    Result<std::future<void>> execute_delayed(std::unique_ptr<IJob>&&,
-                                              std::chrono::milliseconds) override
-    { return error<std::future<void>>(0, "Not implemented", ""); }
+using namespace kcenon::common;
+using namespace kcenon::common::resilience;
 
-    size_t worker_count() const override { return workers_.size(); }
-    bool is_running() const override { return running_; }
-    size_t pending_tasks() const override { return tasks_.size(); }
-
-    void shutdown(bool wait) override {
-        running_ = false;
-        cv_.notify_all();
-        for (auto& w : workers_) {
-            if (w.joinable()) w.join();
-        }
-    }
-
-private:
-    void work() {
-        while (running_) {
-            std::function<void()> task;
-            {
-                std::unique_lock<std::mutex> lock(mtx_);
-                cv_.wait(lock, [this] {
-                    return !tasks_.empty() || !running_;
-                });
-                if (!tasks_.empty()) {
-                    task = std::move(tasks_.front());
-                    tasks_.pop();
-                }
-            }
-            if (task) task();
-        }
-    }
-};
+Result<int> perform_operation() { return ok(42); } // Sample application operation.
 
 int main() {
-    // RAII: ThreadPool destroyed and cleaned up automatically
-    ThreadPool pool(4);
-
-    auto future1 = pool.submit([] {
-        std::cout << "Task 1\n";
+    circuit_breaker breaker(circuit_breaker_config{
+        .failure_threshold = 5,
+        .timeout = std::chrono::seconds{30}
     });
-
-    auto future2 = pool.submit([] {
-        std::cout << "Task 2\n";
-    });
-
-    future1.wait();
-    future2.wait();
-
-    // Automatic cleanup when pool goes out of scope
+    if (!breaker.allow_request()) return 1;
+    auto guard = breaker.make_guard();
+    auto result = perform_operation();
+    if (result.is_err()) return 1; // The guard records failure on destruction.
+    guard.record_success();
     return 0;
 }
 ```
 
-## Key Components at a Glance
+### Handling an Error
 
-| Component | Header | Purpose |
-|-----------|--------|---------|
-| **Result<T>** | `patterns/result.h` | Type-safe error handling (no exceptions) |
-| **IExecutor** | `interfaces/executor_interface.h` | Async task execution abstraction |
-| **error_codes** | `error/error_codes.h` | Centralized error code registry |
-| **Event Bus** | `patterns/event_bus.h` | Event-driven communication |
-
-## Next Steps
-
-1. **[Error Handling Guide](./ERROR_HANDLING.md)** - Deep dive into Result<T> patterns and best practices
-2. **[RAII Guidelines](./RAII_GUIDELINES.md)** - Resource management patterns
-3. **[Integration Guide](./INTEGRATION.md)** - Using common_system with other libraries
-4. **[Architecture Guide](../ARCHITECTURE.md)** - System design and module interaction
-5. **[FAQ](./FAQ.md)** - Common questions and troubleshooting
-
-## Common Tasks
-
-### Check if Result succeeded
 ```cpp
-if (is_ok(result)) { }              // Check for success
-if (is_error(result)) { }           // Check for error
-auto value = get_value(result);     // Get value (safe)
-auto ref = result.value();          // Get reference directly
-```
+#include <kcenon/common/patterns/result.h>
+#include <iostream>
 
-### Get Error Details
-```cpp
-auto& error = get_error(result);
-std::cout << error.code << "\n";      // Error code (-1 to -699)
-std::cout << error.message << "\n";   // Error message
-std::cout << error.module << "\n";    // Source module
-if (error.details.has_value()) {
-    std::cout << error.details.value() << "\n";  // Optional details
+// Sample application operation returning an error.
+kcenon::common::Result<int> do_something() {
+    return kcenon::common::make_error<int>(
+        kcenon::common::error_codes::NOT_FOUND, "Resource not found");
+}
+
+int main() {
+    auto result = do_something();
+    if (result.is_err()) {
+        const auto& error = result.error();
+        std::cerr << error.message << " (code: " << error.code << ")\n";
+    }
+    return 0;
 }
 ```
 
-### Handle with Defaults
-```cpp
-// Get value with fallback
-int value = result.unwrap_or(0);     // Default value if error
-int value = result.value_or(-1);     // Alternative name (C++23 compatible)
+## Event Dispatch
+
+`simple_event_bus` snapshots handlers while holding a mutex, then calls the
+handlers synchronously after releasing it. Handler work therefore runs on the
+publishing thread. See the [implementation](../../include/kcenon/common/patterns/event_bus.h)
+and [recorded measurements](../BENCHMARKS.md); allocation behavior is not established
+by the retained timing output.
+
+## Running Repository Examples
+
+From the repository root:
+
+```bash
+cmake -B build -DCOMMON_BUILD_EXAMPLES=ON
+cmake --build build
+./build/examples/result_example
 ```
+
+The [executor example](../../examples/executor_example.cpp) supplies an executor;
+the submission function above intentionally accepts one supplied by the application.
+Other examples cover [ABI versions](../../examples/abi_version_example.cpp),
+[unwrapping](../../examples/unwrap_demo.cpp), and
+[multiple systems](../../examples/multi_system_app/).
+
+## Architecture and Ecosystem
+
+The [architecture guide](../ARCHITECTURE.md) contains the layer and dependency
+diagrams. The [ecosystem overview](../ECOSYSTEM_OVERVIEW.md) maps consumers and
+provides a [version baseline](../ECOSYSTEM_OVERVIEW.md#versions).
+Use the highest compiler requirement in your dependency chain.
+
+The [ecosystem vcpkg workflow](../../.github/workflows/ecosystem-vcpkg-integration.yml)
+builds consumer ports in dependency order on Ubuntu and macOS. It runs on pull
+requests to `main` touching the overlay ports, vcpkg manifests/configuration,
+ecosystem consumer tests, or that workflow. It also runs on Wednesday at 03:43 UTC
+and supports manual dispatch.
 
 ## Troubleshooting
 
-**Q: Compiler can't find headers**
-- Ensure include path is correct: `-I/path/to/common_system/include`
-- Check namespace: use `kcenon::common`, not `common` (deprecated alias exists)
-- Verify header file exists: `ls include/kcenon/common/patterns/result.h`
+- Missing headers: check the include path and use C++20 mode.
+- Result errors: construct failures with `make_error<T>()`, inspect `is_err()`,
+  and read `error()` before trying to access a success value.
+- Executor integration: pass an `IJob` to `execute()` and check the returned
+  `Result<std::future<void>>` for submission errors.
+- Module configuration: check that `kcenon::common_modules` was actually created
+  and that your compiler's dependency scanner is installed.
 
-**Q: Result<T> API errors**
-- Use `make_error<T>()` to create errors, not `error<T>()`
-- Use `is_ok()` and `is_error()` helper functions (not `.is_ok()` method)
-- Use `get_value()` and `get_error()` to access contents
-- `.unwrap()` throws exceptions on error - use `.unwrap_or()` for safe defaults
-
-**Q: How do I use IExecutor?**
-- Implement the interface or use a third-party executor adapter
-- Call `submit()` with a `std::function<void()>` to queue tasks
-- Use the returned `std::future<void>` to wait for completion
-- Check thread_system for production implementations
-
-**Q: Compilation with warnings**
-- Ignore deprecation warnings from internal Result implementation
-- Use C++17 or higher: `-std=c++17`
-- If using C++20, additional features like `source_location` are automatically enabled
-
-See [Full Documentation](../) for complete reference.
+See the [troubleshooting guide](TROUBLESHOOTING.md),
+[error-code guidelines](ERROR_CODE_GUIDELINES.md), and
+[documentation index](../README.md) for further topics.
