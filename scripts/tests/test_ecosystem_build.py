@@ -1,6 +1,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -21,7 +22,36 @@ class EcosystemBuildTests(unittest.TestCase):
         self.assertFalse(build.OPTIONS["thread_system"]["KCENON_WITH_LOGGER_SYSTEM"])
         self.assertTrue(build.OPTIONS["database_system"]["USE_SQLITE"])
         self.assertFalse(build.OPTIONS["network_system"]["BUILD_SAMPLES"])
+        self.assertFalse(build.OPTIONS["network_system"]["BUILD_EXAMPLES"])
         self.assertEqual(build.TARGETS["pacs_system"], "pacs_system::storage")
+
+    @unittest.skipUnless(shutil.which("c++"), "C++ compiler is required")
+    def test_database_consumer_accepts_historical_and_canonical_namespaces(self):
+        # These two published header contracts differ only in namespace. Compile
+        # the actual consumer expression so either naming regression fails here.
+        declarations = """
+struct database_context {};
+struct database_manager {
+    explicit database_manager(std::shared_ptr<database_context>) {}
+};
+namespace integrated {
+struct unified_database_system {
+    struct builder { int build() { return 0; } };
+    static builder create_builder() { return {}; }
+};
+}
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for namespace in ("database", "kcenon::database"):
+                with self.subTest(namespace=namespace):
+                    source = root / "consumer.cpp"
+                    source.write_text("#include <memory>\nnamespace kcenon {}\n"
+                                      f"namespace {namespace} {{ {declarations} }}\n"
+                                      f"int main() {{ {build.CONSUMERS['database_system']} }}\n")
+                    result = subprocess.run(["c++", "-std=c++20", "-fsyntax-only", str(source)],
+                                            text=True, capture_output=True, timeout=60)
+                    self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_failed_command_retains_real_exit_and_log(self):
         with tempfile.TemporaryDirectory() as tmp:

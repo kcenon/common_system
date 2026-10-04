@@ -43,7 +43,14 @@ project(common_system VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 # checklist; the calls below mirror that checklist 1-to-1. Project-specific
 # layers (common-* modules) live directly under cmake/ and are included
 # explicitly.
-list(APPEND CMAKE_MODULE_PATH
+#
+# Prepend (INSERT 0) rather than APPEND: when common_system is built from
+# source via add_subdirectory by a consumer, the consumer's cmake/ is already
+# on CMAKE_MODULE_PATH. The bare include(<module>) calls below (options,
+# dependencies, targets, ...) must resolve to common_system's OWN template
+# modules, not the consumer's same-named modules; prepending gives common's
+# paths precedence.
+list(INSERT CMAKE_MODULE_PATH 0
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/template"
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
 )

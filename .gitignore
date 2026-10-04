@@ -91,6 +91,9 @@ DartConfiguration.tcldocs/api/
 
 # API documentation
 docs/api/
+
+# Coherence gate reports
 coherence-results/
 
+# Reviewed coherence inputs and provenance.
 !ci/*.json

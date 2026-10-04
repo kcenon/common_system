@@ -2368,7 +2368,6 @@ cmake --build .
 - [아키텍처 개요](ARCHITECTURE.md) - 시스템 설계 철학
 - [의존성 매트릭스](advanced/DEPENDENCY_MATRIX.md) - 상세한 의존성 분석
 - [API 참조](API_REFERENCE.md) - 인터페이스 사양
-- [Rust/C++ Parity Matrix](RUST_PARITY.md) - C++와 Rust 포트 간 기능 비교
 - [에러 코드 레지스트리](ERROR_CODE_REGISTRY.md) - 완전한 에러 코드 참조
 
 ---

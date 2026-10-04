@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+- Add strict coherence validators and canonical sibling dependency option aliases; template 1.4.0 adds `dependency_options.cmake` ([#701](https://github.com/kcenon/common_system/issues/701)).
 - **Modernized Doxygen documentation** (#581)
   - Integrated doxygen-awesome-css theme with dark mode toggle support
   - Added `docs/header.html` with doxygen-awesome-css script initialization
