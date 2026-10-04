@@ -1,0 +1,20 @@
+{
+  "name": "kcenon-container-system",
+  "version-semver": "0.1.0",
+  "port-version": 8,
+  "description": "Advanced C++20 Container System with Thread-Safe Operations and Messaging Integration",
+  "homepage": "https://github.com/kcenon/container_system",
+  "license": "BSD-3-Clause",
+  "supports": "!(uwp | xbox)",
+  "dependencies": [
+    "kcenon-common-system",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}

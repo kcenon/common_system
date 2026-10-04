@@ -1,0 +1,58 @@
+{
+  "name": "kcenon-logger-system",
+  "version-semver": "0.1.3",
+  "port-version": 10,
+  "description": "High-performance C++20 async logging framework with 4.34M msg/sec throughput, 148ns latency, and modular architecture",
+  "homepage": "https://github.com/kcenon/logger_system",
+  "license": "BSD-3-Clause",
+  "supports": "!(uwp | xbox)",
+  "dependencies": [
+    "kcenon-common-system",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ],
+  "features": {
+    "encryption": {
+      "description": "Enable encrypted log writer with AES-256-GCM",
+      "dependencies": [
+        {
+          "name": "openssl",
+          "version>=": "3.3.0"
+        }
+      ]
+    },
+    "otlp": {
+      "description": "Enable OpenTelemetry (OTLP) integration",
+      "dependencies": [
+        {
+          "name": "opentelemetry-cpp",
+          "default-features": false,
+          "features": [
+            "otlp-http",
+            "otlp-grpc"
+          ]
+        },
+        {
+          "name": "protobuf",
+          "version>=": "3.21.12"
+        },
+        {
+          "name": "grpc",
+          "version>=": "1.51.1"
+        }
+      ]
+    },
+    "thread-system": {
+      "description": "Enable thread_system integration for async executor",
+      "dependencies": [
+        "kcenon-thread-system"
+      ]
+    }
+  }
+}

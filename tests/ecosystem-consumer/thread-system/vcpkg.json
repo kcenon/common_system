@@ -1,8 +1,5 @@
 {
   "name": "test-thread-system",
   "version-string": "0.0.0",
-  "dependencies": ["kcenon-thread-system"],
-  "overrides": [
-    { "name": "kcenon-thread-system", "version": "0.3.2" }
-  ]
+  "dependencies": ["kcenon-thread-system"]
 }
