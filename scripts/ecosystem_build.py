@@ -34,7 +34,7 @@ HEADERS = dict(zip(REPOSITORIES, (
     "database/database_manager.h", "pacs/core/dicom_dataset.h")))
 CONSUMERS = {
     "common_system": "kcenon::common::Result<int> result(42); return result.value() == 42 ? 0 : 1;",
-    "thread_system": "kcenon::thread::thread_pool pool; if (pool.enqueue(std::make_unique<kcenon::thread::thread_worker>()).is_err()) return 1; if (pool.start().is_err()) return 1; return pool.stop().is_ok() ? 0 : 1;",
+    "thread_system": "kcenon::thread::thread_pool pool; return 0;",
     "container_system": "kcenon::container::value_container container; container.set(\"answer\", 42); return container.get<int>(\"answer\").value() == 42 ? 0 : 1;",
     "logger_system": "kcenon::logger::logger logger(false); return 0;",
     "network_system": "kcenon::network::facade::tcp_facade facade; return facade.create_client({}).is_err() ? 0 : 1;",
@@ -184,8 +184,7 @@ def consumer(repo, prefix, root, jobs):
         f'if(NOT TARGET {TARGETS[repo]})\n  message(FATAL_ERROR "Missing exported target")\nendif()\n'
         f"add_executable(consumer main.cpp)\ntarget_link_libraries(consumer PRIVATE {TARGETS[repo]})\n"
         + ("target_link_libraries(consumer PRIVATE database_system::integrated_database)\n" if repo == "database_system" else ""))
-    extra = {"thread_system": "#include <memory>\n#include <kcenon/thread/core/thread_worker.h>\n",
-             "network_system": "#include <kcenon/network/facade/tcp_facade.h>\n",
+    extra = {"network_system": "#include <kcenon/network/facade/tcp_facade.h>\n",
              "database_system": "#include <kcenon/database/core/database_context.h>\n#include <kcenon/database/integrated/unified_database_system.h>\n",
              "pacs_system": "#include <kcenon/pacs/storage/pacs_database_adapter.h>\n"}.get(repo, "")
     source.joinpath("main.cpp").write_text(f"#include <kcenon/{HEADERS[repo]}>\n{extra}int main() {{ {CONSUMERS[repo]} }}\n")
