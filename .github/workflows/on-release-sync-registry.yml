@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   sync:
-    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@4aa24d2650c1d3d8446f7e9f681824bec12b5112
+    uses: kcenon/common_system/.github/workflows/sync-vcpkg-registry.yml@6381e60176116ab3f08c1c830bfc6ec009271f19
     with:
       port-name: kcenon-common-system
       version: ${{ github.event.release.tag_name }}
