@@ -228,52 +228,28 @@ TEST_F(ResultPerformanceTest, MemoryOverhead) {
         << "Result<LargeStruct> has excessive overhead";
 }
 
-TEST_F(ResultPerformanceTest, MoveVsCopyPerformance) {
+TEST_F(ResultPerformanceTest, MoveTransfersPayloadWithoutCopy) {
     struct LargeData {
         std::vector<int> data;
         LargeData() : data(1000, 42) {}
     };
 
-    const int iterations = 1000;
+    // Check the allocation-saving property directly. Discarded operations
+    // timed individually can be optimized away or round to zero clock ticks;
+    // a relative nanosecond threshold is not a portable regression verdict.
+    LargeData copy_source;
+    auto copied = Result<LargeData>::ok(copy_source);
+    ASSERT_TRUE(copied.is_ok());
+    EXPECT_EQ(copied.value().data, copy_source.data);
+    EXPECT_NE(copied.value().data.data(), copy_source.data.data());
+    copied.value().data[0] = 7;
+    EXPECT_EQ(copy_source.data[0], 42);
 
-    // Measure copy performance
-    std::vector<std::chrono::nanoseconds> copy_latencies;
-    copy_latencies.reserve(iterations);
-
-    for (int i = 0; i < iterations; ++i) {
-        LargeData source;
-        auto latency = measure_execution_time([&]() {
-            auto result = Result<LargeData>::ok(source);
-            (void)result;
-        });
-        copy_latencies.push_back(latency);
-    }
-
-    // Measure move performance
-    std::vector<std::chrono::nanoseconds> move_latencies;
-    move_latencies.reserve(iterations);
-
-    for (int i = 0; i < iterations; ++i) {
-        LargeData source;
-        auto latency = measure_execution_time([&]() {
-            auto result = Result<LargeData>::ok(std::move(source));
-            (void)result;
-        });
-        move_latencies.push_back(latency);
-    }
-
-    auto copy_p50 = calculate_percentile(copy_latencies, 50);
-    auto move_p50 = calculate_percentile(move_latencies, 50);
-
-    std::cout << "Move vs Copy performance:\n"
-              << "  Copy P50: " << copy_p50.count() << " ns\n"
-              << "  Move P50: " << move_p50.count() << " ns\n"
-              << "  Speedup: " << (static_cast<double>(copy_p50.count()) / move_p50.count()) << "x\n";
-
-    // Move should not be significantly slower than copy for large objects
-    // Note: Allow 10% tolerance for measurement noise and compiler optimizations
-    // Differences of 1-2 ns are not meaningful and can vary between runs
-    auto tolerance = static_cast<int64_t>(copy_p50.count() * 0.1);
-    EXPECT_LE(move_p50.count(), copy_p50.count() + tolerance)
-        << "Move significantly slower than copy (beyond 10% tolerance)";
+    LargeData move_source;
+    const auto* original_buffer = move_source.data.data();
+    const auto expected_contents = move_source.data;
+    auto moved = Result<LargeData>::ok(std::move(move_source));
+    ASSERT_TRUE(moved.is_ok());
+    EXPECT_EQ(moved.value().data.data(), original_buffer);
+    EXPECT_EQ(moved.value().data, expected_contents);
 }
