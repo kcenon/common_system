@@ -39,7 +39,8 @@ QUALIFIER = re.compile(
 )
 NUMBER = r"(?<![\w.])\d[\d,]*(?:\.\d+)?"
 MEASUREMENT = re.compile(
-    rf"{NUMBER}\s*(?:x\b|×|배)|"
+    # A following number denotes dimensions (128 × 128), not a speedup.
+    rf"{NUMBER}\s*(?:(?:x\b|×)(?!\s*\d)|배)|"
     rf"{NUMBER}\s*(?:ns|us|µs|μs|ms)\b|"
     rf"{NUMBER}\s*[kmg]?\s*(?:ops|msg|req|operations|messages|requests|items|"
     rf"bytes|[kmgt]?i?b)\s*(?:/\s*(?:s|sec|second)\b|per\s+second\b)|"

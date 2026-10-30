@@ -110,6 +110,26 @@ class ReadmeLintTests(unittest.TestCase):
             with self.subTest(claim=claim):
                 self.assertIn("unsourced-measurement", self.rules(self.check(claim)))
 
+    def test_image_dimensions_are_not_speedup_claims(self):
+        for dimensions in ("128×128", "128x128", "128 × 128", "128 x 128",
+                           "128× 128", "128 x128", "128 X 128", "1,024 × 768",
+                           "12.5 × 6.25", "128×128×3", "128 x 128 x 3"):
+            for body in (f"Image size: {dimensions} pixels.",
+                         f"Image size: `{dimensions}` pixels.",
+                         f"| Image | Dimensions |\n|---|---|\n| CT | {dimensions} |"):
+                with self.subTest(body=body):
+                    report = self.check(body)
+                    self.assertNotIn("unsourced-measurement", self.rules(report))
+                    self.assertEqual(report.claim_lines, set())
+
+    def test_speedups_still_require_sources_next_to_dimensions(self):
+        for claim in ("2× faster", "2x faster", "2 × faster", "2 x faster",
+                      "2.5× faster", "2배 빠름", "128×128 images process 2× faster",
+                      "2x faster on 128 x 128 images"):
+            with self.subTest(claim=claim):
+                self.assertIn("unsourced-measurement", self.rules(self.check(claim)))
+                self.assertNotIn("unsourced-measurement", self.rules(self.check(f"{claim} {MARKER}")))
+
     def test_inline_code_and_visible_labels_do_not_hide_claims(self):
         for claim in ("`Result<T>` is `400x` faster", "`2.3 ns`", "[400x faster](docs/BENCHMARKS.md)",
                       "![400x faster](diagram.png)", '<span>**400x**</span> faster',
