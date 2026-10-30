@@ -14,7 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        # Keep GCC/gcov and lcov on the verified Ubuntu 24.04 toolchain.
+        os: [ubuntu-24.04, macos-latest]
         build_type: [Debug, Release]
 
     steps:
@@ -50,9 +51,9 @@ jobs:
         run: cmake --build build --target common_integration_tests
 
       - name: Run integration tests
-        working-directory: build
+        working-directory: build/integration_tests
         run: |
-          ctest --output-on-failure --tests-regex "integration_" --verbose
+          ctest --output-on-failure --no-tests=error --verbose
 
       - name: Generate coverage report
         if: matrix.build_type == 'Debug' && runner.os == 'Linux'
@@ -84,7 +85,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-24.04, macos-latest]
 
     steps:
       - name: Checkout code
@@ -113,9 +114,9 @@ jobs:
         run: cmake --build build --target common_integration_tests
 
       - name: Run performance benchmarks
-        working-directory: build
+        working-directory: build/integration_tests
         run: |
-          ctest --output-on-failure --tests-regex ".*Performance.*" --verbose
+          ctest --output-on-failure --no-tests=error --tests-regex ".*Performance.*" --verbose
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v7
