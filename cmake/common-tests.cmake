@@ -3,8 +3,8 @@
 # -----------------------------------------------------------------------------
 # Responsibility
 #   Wire the unit-test and integration-test subdirectories. Calls the template
-#   helper kcenon_template_setup_testing(), which sets up GTest discovery and
-#   invokes enable_testing() at the root scope (per layout standard rule R-34).
+#   helper kcenon_template_setup_testing() for GTest discovery. Enables testing
+#   in directory scope so CTest files are generated (layout standard rule R-34).
 #   Subdirectories are included only when GTest was located, so a missing
 #   GTest does not break configuration.
 #
@@ -18,6 +18,9 @@
 # =============================================================================
 
 if(COMMON_BUILD_TESTS OR COMMON_BUILD_INTEGRATION_TESTS)
+    # The helper is a function: enable_testing() inside it does not retain
+    # CMAKE_TESTING_ENABLED in this directory or its test subdirectories.
+    enable_testing()
     kcenon_template_setup_testing()
     if(KCENON_TEMPLATE_GTEST_FOUND)
         if(COMMON_BUILD_TESTS)
