@@ -72,6 +72,9 @@ target_link_libraries(common_integration_tests PRIVATE
 
 # Set C++20 standard
 target_compile_features(common_integration_tests PRIVATE cxx_std_20)
+if(ENABLE_COVERAGE)
+    target_compile_definitions(common_integration_tests PRIVATE COMMON_INTEGRATION_COVERAGE=1)
+endif()
 set_target_properties(common_integration_tests PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
