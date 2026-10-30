@@ -17,7 +17,19 @@ using namespace kcenon::common;
  */
 class ResultPerformanceTest : public PerformanceIntegrationTest {};
 
-TEST_F(ResultPerformanceTest, ResultCreationLatency) {
+// Timing budgets describe uninstrumented Release builds. Functional properties
+// below remain in ResultPerformanceTest and run in every configuration.
+class ResultTimingPerformanceTest : public ResultPerformanceTest {
+protected:
+    void SetUp() override {
+        ResultPerformanceTest::SetUp();
+#if !defined(NDEBUG) || defined(COMMON_INTEGRATION_COVERAGE)
+        GTEST_SKIP() << "Timing thresholds require an uninstrumented Release build";
+#endif
+    }
+};
+
+TEST_F(ResultTimingPerformanceTest, ResultCreationLatency) {
     const int iterations = 10000;
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
@@ -45,7 +57,7 @@ TEST_F(ResultPerformanceTest, ResultCreationLatency) {
     EXPECT_LT(p99.count(), 10000) << "P99 latency too high";
 }
 
-TEST_F(ResultPerformanceTest, MapOperationOverhead) {
+TEST_F(ResultTimingPerformanceTest, MapOperationOverhead) {
     const int iterations = 10000;
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
@@ -73,7 +85,7 @@ TEST_F(ResultPerformanceTest, MapOperationOverhead) {
     EXPECT_LT(p99.count(), 20000) << "P99 map latency too high";
 }
 
-TEST_F(ResultPerformanceTest, AndThenChainingOverhead) {
+TEST_F(ResultTimingPerformanceTest, AndThenChainingOverhead) {
     const int iterations = 10000;
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
@@ -103,7 +115,7 @@ TEST_F(ResultPerformanceTest, AndThenChainingOverhead) {
     EXPECT_LT(p99.count(), 30000) << "P99 and_then latency too high";
 }
 
-TEST_F(ResultPerformanceTest, ComplexChainPerformance) {
+TEST_F(ResultTimingPerformanceTest, ComplexChainPerformance) {
     const int iterations = 10000;
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
@@ -137,7 +149,7 @@ TEST_F(ResultPerformanceTest, ComplexChainPerformance) {
     EXPECT_LT(p99.count(), 100000) << "P99 complex chain latency too high";
 }
 
-TEST_F(ResultPerformanceTest, ErrorPathPerformance) {
+TEST_F(ResultTimingPerformanceTest, ErrorPathPerformance) {
     const int iterations = 10000;
     std::vector<std::chrono::nanoseconds> latencies;
     latencies.reserve(iterations);
@@ -167,7 +179,7 @@ TEST_F(ResultPerformanceTest, ErrorPathPerformance) {
     EXPECT_LT(p99.count(), 30000) << "P99 error recovery latency too high";
 }
 
-TEST_F(ResultPerformanceTest, Throughput) {
+TEST_F(ResultTimingPerformanceTest, Throughput) {
     const int total_operations = 1000000;
     const auto start = std::chrono::steady_clock::now();
 
