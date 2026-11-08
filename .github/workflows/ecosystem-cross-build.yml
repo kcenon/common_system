@@ -5,10 +5,17 @@ on:
     branches: [main, develop, 'phase-*']
   pull_request:
     branches: [main, develop]
+  schedule:
+    # Pull current main revisions without distributing cross-repository tokens.
+    - cron: '23 2 * * 4'
   repository_dispatch:
     types: [coherence-change-v1]
   workflow_dispatch:
     inputs:
+      current_heads:
+        description: Build current main revisions as an unaccepted candidate snapshot
+        type: boolean
+        default: false
       bootstrap:
         description: Validate the reviewed ci/ecosystem-candidate.json; never accept it automatically
         type: boolean

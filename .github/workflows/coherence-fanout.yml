@@ -9,7 +9,7 @@ permissions:
 jobs:
   fanout:
     name: Dispatch downstream checks and await raw results
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    if: vars.ECOSYSTEM_DISPATCH_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
