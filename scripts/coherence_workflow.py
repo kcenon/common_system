@@ -9,12 +9,17 @@ import subprocess
 import sys
 
 from coherence_dispatch import CHANGE, GitHubAPIError, api, correlation, validate_payload
-from ecosystem_lock import digest, read, select, sha, validate, verify_run
+from ecosystem_lock import REPOSITORIES, digest, read, select, sha, validate, verify_run
 
 
 def prepare(event, name, root, destination, head):
     context = {"repository": "common_system"}
     inputs = event.get("inputs", {})
+    current_heads = name == "schedule" or (
+        name == "workflow_dispatch" and inputs.get("current_heads") in (True, "true"))
+    if current_heads and (inputs.get("bootstrap") in (True, "true")
+                          or inputs.get("candidate_repository") or inputs.get("candidate_sha")):
+        raise ValueError("current heads cannot be combined with bootstrap or candidate overrides")
     revision = sha(inputs.get("lock_revision") or head)
     repo, commit = None, None
     if name == "repository_dispatch":
@@ -58,6 +63,17 @@ def prepare(event, name, root, destination, head):
             lock_path.write_bytes(base64.b64decode(item["content"]))
         candidate = select(read(lock_path), repo, commit)
         candidate["base_lock_digest"] = digest(lock_path)
+        if current_heads:
+            # Capture every revision before building. Keep the orchestrator at
+            # this run's immutable SHA even if main advances during resolution.
+            candidate["repositories"] = {
+                repository: sha(head) if repository == "common_system" else sha(
+                    api(f"repos/kcenon/{repository}/git/ref/heads/main")["object"]["sha"])
+                for repository in REPOSITORIES
+            }
+            candidate["registry_sha"] = sha(
+                api("repos/kcenon/vcpkg-registry/git/ref/heads/main")["object"]["sha"])
+            context["snapshot_mode"] = "current_main_heads"
     candidate["lock_revision"] = revision
     context.update(candidate_repository=repo, candidate_sha=commit, lock_revision=revision,
                    correlation=correlation(repo, commit, revision))

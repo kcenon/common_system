@@ -141,6 +141,64 @@ class CoherenceWorkflowTests(unittest.TestCase):
                 verify.assert_not_called()
         self.assertFalse((self.destination / "snapshot.json").exists())
 
+    def current_heads_response(self, endpoint):
+        if "/contents/" in endpoint:
+            return self.response(self.accepted)
+        repository = endpoint.split("/")[2]
+        return {"object": {"sha": self.latest[repository]}}
+
+    def test_pull_checks_capture_current_heads_without_accepting_the_lock(self):
+        self.latest = {repo: format(i + 20, "040x") for i, repo in enumerate(REPOSITORIES)}
+        self.latest["vcpkg-registry"] = "f" * 40
+        original = self.local_lock.read_bytes()
+        for name, event in (("schedule", {}),
+                            ("workflow_dispatch", {"inputs": {"current_heads": True}})):
+            with self.subTest(name=name), \
+                 patch.object(workflow, "api", side_effect=self.current_heads_response) as api:
+                selected = self.prepare(event, name)
+                expected = {repo: self.latest[repo] for repo in REPOSITORIES}
+                expected["common_system"] = self.merge
+                self.assertEqual(selected["repositories"], expected)
+                self.assertEqual(selected["registry_sha"], self.latest["vcpkg-registry"])
+                self.assertEqual(selected["status"], "candidate")
+                self.assertEqual(self.local_lock.read_bytes(), original)
+                self.assertEqual(len(api.call_args_list), 9)
+                self.assertFalse(any("common_system/git/ref/" in call.args[0]
+                                     for call in api.call_args_list))
+                context = json.loads((self.destination / "context.json").read_text())
+                self.assertEqual(context["snapshot_mode"], "current_main_heads")
+
+    def test_manual_default_still_checks_the_accepted_tuple(self):
+        with patch.object(workflow, "api", return_value=self.response(self.accepted)) as api:
+            selected = self.prepare({}, "workflow_dispatch")
+        api.assert_called_once()
+        self.assertEqual(selected["repositories"], self.accepted["repositories"])
+        self.assertEqual(selected["registry_sha"], self.accepted["registry_sha"])
+
+    def test_pull_resolution_failures_never_emit_a_successful_snapshot(self):
+        for error in (GitHubAPIError("branch unavailable", 404),
+                      GitHubAPIError("API unavailable", 503)):
+            with self.subTest(error=str(error)), patch.object(
+                    workflow, "api", side_effect=[self.response(self.accepted), error]):
+                with self.assertRaises(GitHubAPIError):
+                    self.prepare({}, "schedule")
+            self.assertFalse((self.destination / "snapshot.json").exists())
+
+    def test_pull_checks_reject_nonimmutable_revisions(self):
+        with patch.object(workflow, "api", side_effect=[self.response(self.accepted),
+                                                       {"object": {"sha": "main"}}]):
+            with self.assertRaisesRegex(ValueError, "immutable SHA"):
+                self.prepare({}, "schedule")
+        self.assertFalse((self.destination / "snapshot.json").exists())
+
+    def test_current_heads_cannot_hide_a_candidate_or_bootstrap_request(self):
+        for extra in ({"bootstrap": True}, {"candidate_repository": "thread_system"},
+                      {"candidate_sha": self.head}):
+            with self.subTest(extra=extra), patch.object(workflow, "api") as api:
+                with self.assertRaisesRegex(ValueError, "cannot be combined"):
+                    self.prepare({"inputs": dict(current_heads=True, **extra)}, "workflow_dispatch")
+                api.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
